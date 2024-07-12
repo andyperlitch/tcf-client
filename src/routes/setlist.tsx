@@ -1,15 +1,20 @@
 import { useCallback, useMemo, useState } from "react";
-import { SONGS } from "../consts/songs";
 import "./setlist.css";
+import { useSetList } from "../hooks/useSetList";
 
 export { SetList };
 
 function SetList() {
+  console.log("SetList rendered");
+  const { songs, loading } = useSetList();
+  console.log(`loading`, loading);
+
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  const currentSong = useMemo(
-    () => SONGS[currentSongIndex],
-    [currentSongIndex]
-  );
+  const currentSong = useMemo(() => {
+    if (songs && songs.length) {
+      return songs[currentSongIndex];
+    }
+  }, [currentSongIndex, songs]);
 
   const onBack = useCallback(() => {
     setCurrentSongIndex((prevIndex) => {
@@ -21,12 +26,20 @@ function SetList() {
   }, []);
   const onForward = useCallback(() => {
     setCurrentSongIndex((prevIndex) => {
-      if (prevIndex >= SONGS.length - 1) {
-        return SONGS.length - 1;
+      if (prevIndex >= songs.length - 1) {
+        return songs.length - 1;
       }
       return prevIndex + 1;
     });
-  }, []);
+  }, [songs]);
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
+
+  if (!currentSong) {
+    return <div>no songs</div>;
+  }
 
   return (
     <div className="setlistRoot">
