@@ -5,10 +5,7 @@ import { useSetList } from "../hooks/useSetList";
 export { SetList };
 
 function SetList() {
-  console.log("SetList rendered");
   const { songs, loading } = useSetList();
-  console.log(`loading`, loading);
-
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const currentSong = useMemo(() => {
     if (songs && songs.length) {
