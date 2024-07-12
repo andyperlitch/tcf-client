@@ -1,0 +1,25 @@
+.setlistRoot {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+.setlistCtl {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 1px solid #ffffff11;
+}
+
+.prevNextBtn {
+  margin: 0.5rem;
+  font-size: 200%;
+  line-height: 1;
+  color: white;
+  padding: 0 1.5rem;
+}
+
+.leadSheetFrame {
+  flex-grow: 1;
+}
