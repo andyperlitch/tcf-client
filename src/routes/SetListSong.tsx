@@ -30,18 +30,32 @@ export function SetListSong() {
   return (
     <div className="setlistRoot">
       <div className="setlistCtl">
-        <Link to={`/setlist/${previousIndex}`}>
-          <button
-            disabled={previousIndex === songIndex}
-            className="prevNextBtn"
-            type="button"
-          >
-            👈
-          </button>
-        </Link>
+        <div className="setlistCtlLeft">
+          <Link to={`/setlist/${previousIndex}`}>
+            <button
+              disabled={previousIndex === songIndex}
+              className="prevNextBtn"
+              type="button"
+            >
+              👈
+            </button>
+          </Link>
+
+          <Link to={`/setlist`}>
+            <button className="prevNextBtn homeBtn" type="button">
+              🏠
+            </button>
+          </Link>
+        </div>
+
         <h3>
           {songIndex + 1}. {currentSong.Title}
         </h3>
+
+        <span className="songKey">{currentSong.Key}</span>
+
+        <span className="songTempo">{currentSong.Tempo} bpm</span>
+
         <Link to={`/setlist/${nextIndex}`}>
           <button
             disabled={nextIndex === songIndex}
@@ -63,6 +77,9 @@ export function SetListSong() {
           className="leadSheetHtml"
           dangerouslySetInnerHTML={{ __html: leadSheetHtml }}
         ></div>
+      )}
+      {!leadSheetHtml && !USE_IFRAME && (
+        <div className="noLeadSheet">No lead sheet available</div>
       )}
     </div>
   );

@@ -15,13 +15,16 @@ function SetList() {
         {loading ? (
           <div>loading...</div>
         ) : (
-          <ul>
-            {firstGigSet.map((song, i) => (
-              <li key={i}>
-                <Link to={`/setlist/${i}`}>{song.Title}</Link>
-              </li>
-            ))}
-          </ul>
+          <>
+            <h2>Setlist</h2>
+            <ol className="setlist">
+              {firstGigSet.map((song, i) => (
+                <li key={i}>
+                  <Link to={`/setlist/${i}`}>{song.Title}</Link>
+                </li>
+              ))}
+            </ol>
+          </>
         )}
       </div>
     </div>

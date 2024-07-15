@@ -8,10 +8,16 @@
   background-color: #000000;
   display: flex;
   flex-direction: row;
-  align-items: stretch;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
   border-bottom: 1px solid #ffffff11;
+}
+
+.setlistCtlLeft {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .prevNextBtn {
@@ -19,11 +25,33 @@
   font-size: 200%;
   color: white;
   padding: 0 1.5rem;
-  height: calc(100% - 1rem);
+}
+
+.homeBtn {
+  font-size: 150%;
+  line-height: 1.5;
+  width: 60px;
+  text-align: center;
+  padding: 0;
 }
 
 .prevNextBtn[disabled] {
   opacity: 0;
+}
+
+.songTempo {
+  font-style: italic;
+}
+
+.songKey {
+  font-weight: bold;
+  font-size: 120%;
+}
+
+.noLeadSheet {
+  width: 100%;
+  text-align: center;
+  padding: 4rem 0 0;
 }
 
 .leadSheetFrame {

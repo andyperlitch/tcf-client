@@ -1,6 +1,7 @@
 export interface SetListSong {
   ID: string;
   Title: string;
+  Tempo: string;
   Writer: string;
   FirstGigSet: string;
   FirstGigOrder: number;
