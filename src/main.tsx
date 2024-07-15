@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 
 import "./index.css";
 import Root from "./routes/root";
 import ErrorPage from "./error-page";
-import { SetList } from "./routes/setlist";
+import { SetList } from "./routes/SetList";
+import { SetListSong } from "./routes/SetListSong";
+import { SetListProvider } from "./providers/SetListProvider";
 
 const router = createBrowserRouter([
   {
@@ -14,8 +16,21 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/setlist",
-    element: <SetList />,
+    element: (
+      <SetListProvider>
+        <Outlet />
+      </SetListProvider>
+    ),
+    children: [
+      {
+        path: "/setlist",
+        element: <SetList />,
+      },
+      {
+        path: "/setlist/:songIndex",
+        element: <SetListSong />,
+      },
+    ],
   },
 ]);
 

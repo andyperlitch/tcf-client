@@ -1,7 +1,9 @@
 export interface SetListSong {
+  ID: string;
   Title: string;
   Writer: string;
   FirstGigSet: string;
+  FirstGigOrder: number;
   SongLink: string;
   Duration: string;
   Key: string;
@@ -12,4 +14,9 @@ export interface SetListSong {
   AndyVocal: string;
   FemaleVocal: string;
   MarkKeys: string;
+}
+
+export interface SetListContextType {
+  songs: SetListSong[];
+  loading: boolean;
 }

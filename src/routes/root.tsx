@@ -1,7 +1,9 @@
+import "./root.css";
+
 export default function Root() {
   return (
     <>
-      <div id="sidebar">
+      <div className="rootContainer">
         <h1>The Casual Funk</h1>
         <nav>
           <ul>
