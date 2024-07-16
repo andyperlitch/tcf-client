@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./root.css";
 
 export default function Root() {
@@ -8,7 +9,7 @@ export default function Root() {
         <nav>
           <ul>
             <li>
-              <a href={`/setlist`}>Set List</a>
+              <Link to={`/setlist`}>Set List</Link>
             </li>
           </ul>
         </nav>
