@@ -1,9 +1,9 @@
 import { Link, useParams } from "react-router-dom";
-import "./SetListSong.css";
-import { useSetList } from "../hooks/useSetList";
+import "./set-list-song.css";
+import { useSetList } from "../hooks/use-set-list";
 import { useMemo } from "react";
-import { useFirstGigSet } from "../hooks/useFirstGigSet";
-import { useLeadSheetHtml } from "../hooks/useLeadSheetHtml";
+import { useFirstGigSet } from "../hooks/use-first-gig-set";
+import { useLeadSheetHtml } from "../hooks/use-lead-sheet-html";
 
 const USE_IFRAME = false;
 

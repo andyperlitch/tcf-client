@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { SetListSong } from "../types/setlist";
 import { SETLIST_CSV_URL } from "../consts/songs";
-import { setListContext } from "../contexts/setListContext";
+import { setListContext } from "../contexts/set-list-context";
 
 export function SetListProvider({ children }: { children: React.ReactNode }) {
   const [songs, setSongs] = useState<SetListSong[]>([]);

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useSetList } from "./useSetList";
+import { useSetList } from "./use-set-list";
 
 export function useFirstGigSet() {
   const { songs } = useSetList();
