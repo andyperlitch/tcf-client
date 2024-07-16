@@ -8,4 +8,8 @@
 
 .rootContainer h1 {
   font-size: 6rem;
+  background: top center no-repeat url("/logo.svg");
+  background-size: 200px;
+  padding-top: 200px;
+  margin-bottom: 1rem;
 }
