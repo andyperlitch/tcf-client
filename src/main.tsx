@@ -6,7 +6,7 @@ import "./index.css";
 import Root from "./routes/root";
 import ErrorPage from "./error-page";
 import { SetList } from "./routes/set-list";
-import { SetListSong } from "./routes/set-list-song";
+import { SetListSong } from "./routes/SetListSong";
 import { SetListProvider } from "./providers/set-list-provider";
 
 const router = createBrowserRouter([

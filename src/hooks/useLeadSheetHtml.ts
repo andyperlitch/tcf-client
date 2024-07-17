@@ -4,14 +4,16 @@ const TABLE_ONLY = true;
 
 export function useLeadSheetHtml({ url }: { url: string | undefined }) {
   const [html, setHtml] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   // load the html of the lead sheet
   useEffect(() => {
     setHtml("");
     if (!url) {
+      setLoading(false);
       return;
     }
-
+    setLoading(true);
     const abortController = new AbortController();
     fetch(url, {
       signal: abortController.signal,
@@ -54,6 +56,37 @@ export function useLeadSheetHtml({ url }: { url: string | undefined }) {
           }
         });
 
+        // add "sectionTitle" class to every h3 inside of the first column
+        const h3s = doc.querySelectorAll("table tr td:first-child h3");
+        h3s.forEach((h3) => {
+          h3.classList.add("sectionTitle");
+        });
+
+        // add "recordingTimestamp" class to every 2nd span inside of an h3 in the first column
+        const h3Spans = doc.querySelectorAll(
+          "table tr td:first-child h3 span:nth-child(2)"
+        );
+        h3Spans.forEach((span) => {
+          span.classList.add("recordingTimestamp");
+        });
+
+        // "unwrap" all img tags from their parent span tags
+        const imagesInSpans = doc.querySelectorAll("span > img");
+        imagesInSpans.forEach((img) => {
+          const parent = img.parentElement;
+          parent?.replaceWith(img);
+        });
+
+        // for all images in a p tag text around it, add the inlineImage class
+        const imagesInPs = doc.querySelectorAll("p img");
+        imagesInPs.forEach((img) => {
+          const parent = img.parentElement;
+          const textContent = (parent?.textContent || "").trim();
+          if (textContent) {
+            img.classList.add("inlineImage");
+          }
+        });
+
         // remove height, width, and style attributes from images
         const images = doc.querySelectorAll("img");
         images.forEach((img) => {
@@ -78,6 +111,9 @@ export function useLeadSheetHtml({ url }: { url: string | undefined }) {
           return;
         }
         console.log(`Failed fetching lead sheet. Error: ${e.message}`);
+      })
+      .finally(() => {
+        setLoading(false);
       });
 
     return () => {
@@ -85,5 +121,5 @@ export function useLeadSheetHtml({ url }: { url: string | undefined }) {
     };
   }, [url]);
 
-  return html;
+  return { html, loading };
 }

@@ -46,6 +46,15 @@
 .songKey {
   font-weight: bold;
   font-size: 120%;
+  background-color: white;
+  color: black;
+  padding: 0 0.3em;
+  margin: 0 1rem;
+  border-radius: 4px;
+}
+
+.songNumber {
+  color: #ffffff55;
 }
 
 .noLeadSheet {
@@ -102,4 +111,19 @@
 
 .leadSheetTable img {
   max-width: 200px;
+}
+
+.sectionTitle {
+  padding: 0;
+}
+
+.recordingTimestamp {
+  font-weight: lighter;
+  font-size: 70%;
+  color: #aaa;
+}
+
+.inlineImage {
+  height: 4rem;
+  vertical-align: middle;
 }
