@@ -6,10 +6,35 @@
   height: 100vh;
 }
 
+.rootContainer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: url("/logo.svg");
+  background-size: 200%;
+  background-position: 100% 50%;
+  background-repeat: no-repeat;
+  opacity: 0.04; /* Change this to adjust opacity */
+  z-index: 1;
+}
+
 .rootContainer h1 {
   font-size: 6rem;
   background: top center no-repeat url("/logo.svg");
-  background-size: 200px;
+  background-size: 180px;
+  text-shadow: 0 2px black;
   padding-top: 200px;
   margin-bottom: 1rem;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .rootContainer h1 {
+    font-size: 5rem;
+    background-size: 160px;
+    padding-top: 200px;
+  }
 }
