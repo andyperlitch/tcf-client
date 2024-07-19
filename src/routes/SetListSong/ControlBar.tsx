@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
+import cn from "clsx";
 import { SetListSong } from "../../types/setlist";
 import { SongViewType } from "./types";
-import { ChangeEvent, useCallback } from "react";
 
 import "./ControlBar.css";
 
 const VIEW_SELECT_OPTIONS = [
-  { value: "leadsheet", label: "Leadsheet" },
-  { value: "lyrics", label: "Lyrics" },
-  { value: "info", label: "Info" },
+  { value: "leadsheet" as SongViewType, label: "Leadsheet", icon: "📋" },
+  { value: "lyrics" as SongViewType, label: "Lyrics", icon: "🎤" },
+  { value: "info" as SongViewType, label: "Info", icon: "ℹ️" },
 ];
 
 interface ControlBarProps {
@@ -28,13 +28,6 @@ export function ControlBar({
   songView,
   setSongView,
 }: ControlBarProps) {
-  const handleViewChange = useCallback(
-    (event: ChangeEvent<HTMLSelectElement>) => {
-      setSongView(event.target.value as SongViewType);
-    },
-    [setSongView]
-  );
-
   return (
     <div className="setlistCtl">
       <div className="setlistCtlLeft">
@@ -47,33 +40,35 @@ export function ControlBar({
             👈
           </button>
         </Link>
-        <h3>
-          <span className="songNumber">{songIndex + 1}.</span>{" "}
-          {currentSong.Title}
-        </h3>
-        <span className="songKey">{currentSong.Key}</span>
-
-        <span className="songTempo">{currentSong.Tempo} bpm</span>
-      </div>
-
-      <div className="setlistCtlMiddle">
-        <select
-          className="songViewSelect"
-          onChange={handleViewChange}
-          value={songView}
-        >
-          {VIEW_SELECT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        <div className="songTitleInfo">
+          <h3 className="songTitle">
+            <span className="songNumber">{songIndex + 1}.</span>{" "}
+            {currentSong.Title}
+          </h3>
+          <div className="songInfo">
+            <span className="songKey">{currentSong.Key}</span>
+            <span className="songTempo">{currentSong.Tempo} bpm</span>
+          </div>
+        </div>
       </div>
 
       <div className="setlistCtlRight">
+        {VIEW_SELECT_OPTIONS.map((option) => (
+          <button
+            className={cn("viewSelectBtn", {
+              active: songView === option.value,
+            })}
+            key={option.value}
+            onClick={() => {
+              setSongView(option.value);
+            }}
+          >
+            {option.icon}
+          </button>
+        ))}
         <Link to={`/setlist`}>
           <button className="prevNextBtn homeBtn" type="button">
-            📋
+            🏠
           </button>
         </Link>
         <Link to={`/setlist/${nextIndex}`}>

@@ -32,8 +32,6 @@ export function useLeadSheetHtml({ url }: { url: string | undefined }) {
         // delete scripts and styles
         const scripts = doc.querySelectorAll("script");
         scripts.forEach((script) => script.remove());
-        // const styles = doc.querySelectorAll("style");
-        // styles.forEach((style) => style.remove());
 
         // delete banners
         doc.getElementById("banners")?.remove();

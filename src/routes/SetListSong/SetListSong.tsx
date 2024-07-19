@@ -6,6 +6,7 @@ import { useFirstGigSet } from "../../hooks/use-first-gig-set";
 import { LeadSheet } from "./LeadSheet";
 import { ControlBar } from "./ControlBar";
 import { SongViewType } from "./types";
+import { Lyrics } from "./Lyrics";
 
 const USE_IFRAME = false;
 
@@ -50,7 +51,7 @@ export function SetListSong() {
           {!USE_IFRAME && <LeadSheet leadsheetUrl={currentSong.LeadSheet} />}
         </>
       )}
-      {/* {songView === "lyrics" && <Lyrics lyricsUrl={currentSong.Lyrics} />} */}
+      {songView === "lyrics" && <Lyrics lyricsUrl={currentSong.Lyrics} />}
     </div>
   );
 }
