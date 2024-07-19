@@ -45,7 +45,7 @@ export function ControlBar({
             <span className="songNumber">{songIndex + 1}.</span>{" "}
             {currentSong.Title}
           </h3>
-          <div className="songInfo">
+          <div className="songInfoLine">
             <span className="songKey">{currentSong.Key}</span>
             <span className="songTempo">{currentSong.Tempo} bpm</span>
           </div>
