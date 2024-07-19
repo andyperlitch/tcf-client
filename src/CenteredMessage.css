@@ -1,0 +1,12 @@
+.centeredMessage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.centeredMessage h3 {
+  font-size: 20px;
+}

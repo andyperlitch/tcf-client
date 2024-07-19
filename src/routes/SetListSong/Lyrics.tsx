@@ -1,3 +1,4 @@
+import { CenteredMessage } from "../../CenteredMessage";
 import { useLyricsHtml } from "../../hooks/useLyricsHtml";
 
 export interface LyricsProps {
@@ -8,11 +9,11 @@ export function Lyrics({ lyricsUrl }: LyricsProps) {
   const { html, loading } = useLyricsHtml({ url: lyricsUrl });
 
   if (!lyricsUrl) {
-    return <p>No lyrics available</p>;
+    return <CenteredMessage>No lyrics available</CenteredMessage>;
   }
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <CenteredMessage>Loading...</CenteredMessage>;
   }
 
   return (

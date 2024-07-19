@@ -1,3 +1,4 @@
+import { CenteredMessage } from "../../CenteredMessage";
 import { useLeadSheetHtml } from "../../hooks/useLeadSheetHtml";
 
 export function LeadSheet({
@@ -10,11 +11,11 @@ export function LeadSheet({
   });
 
   if (!leadsheetUrl) {
-    return <p>No leadsheet available</p>;
+    return <CenteredMessage>No leadsheet available</CenteredMessage>;
   }
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <CenteredMessage>Loading...</CenteredMessage>;
   }
 
   return (

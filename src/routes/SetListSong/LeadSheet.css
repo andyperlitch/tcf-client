@@ -1,0 +1,8 @@
+.leadSheetEditLink {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  z-index: 2;
+}
