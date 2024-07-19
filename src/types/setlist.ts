@@ -1,12 +1,14 @@
 export interface SetListSong {
   ID: string;
   Title: string;
-  Tempo: string;
+  Tempo: number;
   Writer: string;
   FirstGigSet: string;
+  Lyrics: string;
+  Feel: string;
   FirstGigOrder: number;
   SongLink: string;
-  Duration: string;
+  Duration: number;
   Key: string;
   PracticePriority: string;
   Chart: string;

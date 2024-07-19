@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import Papa from "papaparse";
 import { SetListSong } from "../types/setlist";
 import { SETLIST_CSV_URL } from "../consts/songs";
 import { setListContext } from "../contexts/set-list-context";
+
+type ParsedSong = Record<keyof SetListSong, string>;
+const NUMERIC_FIELDS = ["FirstGigOrder", "Tempo", "Duration"] as const;
 
 export function SetListProvider({ children }: { children: React.ReactNode }) {
   const [songs, setSongs] = useState<SetListSong[]>([]);
@@ -24,35 +28,23 @@ export function SetListProvider({ children }: { children: React.ReactNode }) {
         throw new Error("Could not fetch set list from google sheets");
       })
       .then((rawCsv) => {
-        // split on lines
-        const lines = rawCsv.split("\n");
-        if (!lines || lines.length === 0) {
-          throw new Error("Sheet not in expected format");
+        const parseResult = Papa.parse<ParsedSong>(rawCsv, { header: true });
+
+        if (parseResult.errors.length) {
+          throw new Error("Failed to parse CSV");
         }
 
-        // OK to assume at least one line (!)
-        const headersLine = lines.shift()!;
-
-        // get the headers, strip \r
-        const headers = headersLine.replace(/\\r/g, "").split(",");
-
-        // convert lines to songs
-        const songs = lines
-          .map((line) => {
-            const fields = line.split(",");
-            return headers.reduce((song, header, i) => {
-              const typedHeader = header as keyof SetListSong;
-              if (typedHeader === "FirstGigOrder") {
-                song[typedHeader] = fields[i].length
-                  ? parseInt(fields[i], 10)
-                  : 999;
-              } else {
-                song[typedHeader] = fields[i].replace(/\\r/g, "");
-              }
-              return song;
-            }, {} as SetListSong);
-          })
-          .filter((song) => song?.Title !== "TOTALS");
+        const songs = parseResult.data
+          .filter((song) => song?.Title !== "TOTALS")
+          .map((song) => {
+            return {
+              ...song,
+              ...NUMERIC_FIELDS.reduce((acc, field) => {
+                acc[field] = parseInt(song[field], 10);
+                return acc;
+              }, {} as SetListSong),
+            };
+          });
 
         // set the songs
         setSongs(songs);
