@@ -3,7 +3,7 @@ import "./SetListSong.css";
 import { useSetList } from "../../hooks/use-set-list";
 import { useMemo, useState } from "react";
 import { useFirstGigSet } from "../../hooks/use-first-gig-set";
-import { InlineLeadSheet } from "./InlineLeadSheet";
+import { LeadSheet } from "./LeadSheet";
 import { ControlBar } from "./ControlBar";
 import { SongViewType } from "./types";
 
@@ -28,6 +28,7 @@ export function SetListSong() {
   if (loading || !songs.length || !currentSong) {
     return <div>loading...</div>;
   }
+
   return (
     <div className="setlistRoot">
       <ControlBar
@@ -38,13 +39,18 @@ export function SetListSong() {
         songView={songView}
         setSongView={setSongView}
       />
-      {currentSong.LeadSheet && USE_IFRAME && (
-        <iframe
-          className="leadSheetFrame"
-          src={`${currentSong.LeadSheet}?embedded=true`}
-        />
+      {songView === "leadsheet" && (
+        <>
+          {currentSong.LeadSheet && USE_IFRAME && (
+            <iframe
+              className="leadSheetFrame"
+              src={`${currentSong.LeadSheet}?embedded=true`}
+            />
+          )}
+          {!USE_IFRAME && <LeadSheet leadsheetUrl={currentSong.LeadSheet} />}
+        </>
       )}
-      {!USE_IFRAME && <InlineLeadSheet leadsheetUrl={currentSong.LeadSheet} />}
+      {/* {songView === "lyrics" && <Lyrics lyricsUrl={currentSong.Lyrics} />} */}
     </div>
   );
 }

@@ -95,6 +95,14 @@ export function useLeadSheetHtml({ url }: { url: string | undefined }) {
           img.removeAttribute("style");
         });
 
+        // add the "chords" class too all p tags in the 3rd column which begin with the character "|"
+        const chords = doc.querySelectorAll("table tr td:nth-child(3) p");
+        chords.forEach((chord) => {
+          if (chord.textContent?.startsWith("|")) {
+            chord.classList.add("chords");
+          }
+        });
+
         // Extract the content of the body tag
         const content =
           doc.getElementsByClassName("doc-content")[0]?.innerHTML ||

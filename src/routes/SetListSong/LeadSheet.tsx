@@ -1,6 +1,6 @@
 import { useLeadSheetHtml } from "../../hooks/useLeadSheetHtml";
 
-export function InlineLeadSheet({
+export function LeadSheet({
   leadsheetUrl,
 }: {
   leadsheetUrl: string | undefined;
