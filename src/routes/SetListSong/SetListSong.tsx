@@ -9,6 +9,9 @@ import { SongViewType } from "./types";
 import { Lyrics } from "./Lyrics";
 import { SongInfo } from "./SongInfo";
 import { useSwipeable } from "react-swipeable";
+import { SET_BREAK_TITLE } from "../../consts/songs";
+import { CenteredMessage } from "../../CenteredMessage";
+import { getPatOnTheBack } from "../../utils/getPatOnTheBack";
 
 const USE_IFRAME = false;
 
@@ -61,19 +64,27 @@ export function SetListSong() {
         songView={songView}
         setSongView={setSongView}
       />
-      {songView === "leadsheet" && (
+      {currentSong.Title === SET_BREAK_TITLE ? (
+        <CenteredMessage>{getPatOnTheBack()}</CenteredMessage>
+      ) : (
         <>
-          {currentSong.LeadSheet && USE_IFRAME && (
-            <iframe
-              className="leadSheetFrame"
-              src={`${currentSong.LeadSheet}?embedded=true`}
-            />
+          {songView === "leadsheet" && (
+            <>
+              {currentSong.LeadSheet && USE_IFRAME && (
+                <iframe
+                  className="leadSheetFrame"
+                  src={`${currentSong.LeadSheet}?embedded=true`}
+                />
+              )}
+              {!USE_IFRAME && (
+                <LeadSheet leadsheetUrl={currentSong.LeadSheet} />
+              )}
+            </>
           )}
-          {!USE_IFRAME && <LeadSheet leadsheetUrl={currentSong.LeadSheet} />}
+          {songView === "lyrics" && <Lyrics lyricsUrl={currentSong.Lyrics} />}
+          {songView === "info" && <SongInfo song={currentSong} />}
         </>
       )}
-      {songView === "lyrics" && <Lyrics lyricsUrl={currentSong.Lyrics} />}
-      {songView === "info" && <SongInfo song={currentSong} />}
     </div>
   );
 }
