@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./SetListSong.css";
 import { useSetList } from "../../hooks/use-set-list";
 import { useMemo, useState } from "react";
@@ -8,36 +8,56 @@ import { ControlBar } from "./ControlBar";
 import { SongViewType } from "./types";
 import { Lyrics } from "./Lyrics";
 import { SongInfo } from "./SongInfo";
+import { useSwipeable } from "react-swipeable";
 
 const USE_IFRAME = false;
 
 export function SetListSong() {
   const params = useParams();
+  const navigate = useNavigate();
   const [songView, setSongView] = useState<SongViewType>("leadsheet");
-  const songIndex = parseInt(params.songIndex || "0", 10);
+  const currentIndex = parseInt(params.songIndex || "0", 10);
   const { loading } = useSetList();
   const songs = useFirstGigSet();
 
   const currentSong = useMemo(() => {
     if (songs && songs.length) {
-      return songs[songIndex];
+      return songs[currentIndex];
     }
-  }, [songIndex, songs]);
+  }, [currentIndex, songs]);
 
-  const previousIndex = Math.max(0, songIndex - 1);
-  const nextIndex = Math.min(songs.length - 1, songIndex + 1);
+  const previousIndex = Math.max(0, currentIndex - 1);
+  const nextIndex = Math.min(songs.length - 1, currentIndex + 1);
+
+  const swipeHandlers = useSwipeable(
+    useMemo(
+      () => ({
+        onSwipedRight: () => {
+          if (previousIndex !== currentIndex) {
+            navigate(`/setlist/${previousIndex}`);
+          }
+        },
+        onSwipedLeft: () => {
+          if (nextIndex !== currentIndex) {
+            navigate(`/setlist/${nextIndex}`);
+          }
+        },
+      }),
+      [currentIndex, navigate, nextIndex, previousIndex]
+    )
+  );
 
   if (loading || !songs.length || !currentSong) {
     return <div>loading...</div>;
   }
 
   return (
-    <div className="setlistRoot">
+    <div className="setlistRoot" {...swipeHandlers}>
       <ControlBar
         previousIndex={previousIndex}
         nextIndex={nextIndex}
         currentSong={currentSong}
-        songIndex={songIndex}
+        currentIndex={currentIndex}
         songView={songView}
         setSongView={setSongView}
       />

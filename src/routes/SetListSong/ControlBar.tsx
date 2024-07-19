@@ -12,7 +12,7 @@ const VIEW_SELECT_OPTIONS = [
 ];
 
 interface ControlBarProps {
-  songIndex: number;
+  currentIndex: number;
   currentSong: SetListSong;
   previousIndex: number;
   nextIndex: number;
@@ -21,7 +21,7 @@ interface ControlBarProps {
 }
 
 export function ControlBar({
-  songIndex,
+  currentIndex: songIndex,
   currentSong,
   previousIndex,
   nextIndex,
