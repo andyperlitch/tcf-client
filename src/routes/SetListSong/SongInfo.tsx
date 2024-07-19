@@ -34,6 +34,18 @@ export function SongInfo({ song }: { song: SetListSong }) {
           Andy's Notes: <strong>{song.AndyNotes}</strong>
         </p>
       )}
+      {song.LeadSheetEditLink && (
+        <p>
+          <a
+            className="leadSheetEditLink"
+            href={song.LeadSheetEditLink}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Lead Sheet GDoc ✏️
+          </a>
+        </p>
+      )}
     </div>
   );
 }

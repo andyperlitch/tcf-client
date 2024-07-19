@@ -13,6 +13,7 @@ export interface SetListSong {
   PracticePriority: string;
   Chart: string;
   LeadSheet: string;
+  LeadSheetEditLink: string;
   AndyNotes: string;
   AndyVocal: string;
   FemaleVocal: string;
