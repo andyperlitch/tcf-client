@@ -7,6 +7,7 @@ import { LeadSheet } from "./LeadSheet";
 import { ControlBar } from "./ControlBar";
 import { SongViewType } from "./types";
 import { Lyrics } from "./Lyrics";
+import { SongInfo } from "./SongInfo";
 
 const USE_IFRAME = false;
 
@@ -52,6 +53,7 @@ export function SetListSong() {
         </>
       )}
       {songView === "lyrics" && <Lyrics lyricsUrl={currentSong.Lyrics} />}
+      {songView === "info" && <SongInfo song={currentSong} />}
     </div>
   );
 }
