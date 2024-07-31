@@ -3,6 +3,7 @@ import "./root.css";
 export default function Root() {
   return (
     <>
+      <div className="rootBackground" />
       <div className="rootContainer">
         <h1>The Casual Funk</h1>
         <h2>Santa Cruz, CA</h2>

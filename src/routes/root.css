@@ -4,10 +4,11 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
+  position: relative;
+  z-index: 2;
 }
 
-.rootContainer::before {
-  content: "";
+.rootBackground {
   position: absolute;
   top: 0;
   right: 0;
@@ -17,7 +18,7 @@
   background-size: 200%;
   background-position: 100% 50%;
   background-repeat: no-repeat;
-  opacity: 0.04; /* Change this to adjust opacity */
+  opacity: 0.04;
   z-index: 1;
 }
 
