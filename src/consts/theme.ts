@@ -1,0 +1,7 @@
+export const THEME = {
+  BRAND_RED: "#B01C21",
+  BRAND_ORANGE: "#E1502D",
+  BRAND_YELLOW: "#FFC332",
+  BRAND_LBLUE: "#1D91F9",
+  BRAND_DBLUE: "#2C2E59",
+};
