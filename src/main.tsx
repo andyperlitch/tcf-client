@@ -7,6 +7,7 @@ import Root from "./routes/root";
 import ErrorPage from "./error-page";
 import { SetList } from "./routes/set-list";
 import { SetListSong } from "./routes/SetListSong";
+import { Event } from "./routes/event";
 import { SetListProvider } from "./providers/set-list-provider";
 
 const router = createBrowserRouter([
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "/setlist/:songIndex",
         element: <SetListSong />,
+      },
+      {
+        path: "/event/:eventId",
+        element: <Event />,
       },
     ],
   },
