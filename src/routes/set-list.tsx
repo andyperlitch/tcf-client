@@ -1,6 +1,6 @@
-import { useSetList } from "../hooks/use-set-list";
+import { useSetList } from "../hooks/useSetList";
 import "./set-list.css";
-import { useFirstGigSet } from "../hooks/use-first-gig-set";
+import { useFirstGigSet } from "../hooks/useFirstGigSet";
 import { Link } from "react-router-dom";
 
 export { SetList };

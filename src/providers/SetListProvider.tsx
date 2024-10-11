@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import Papa from "papaparse";
 import { SetListSong } from "../types/setlist";
 import { SETLIST_CSV_URL } from "../consts/songs";
-import { setListContext } from "../contexts/set-list-context";
+import { setListContext } from "../contexts/SetListContext";
 
 type ParsedSong = Record<keyof SetListSong, string>;
 const NUMERIC_FIELDS = ["FirstGigOrder", "Tempo", "Duration"] as const;

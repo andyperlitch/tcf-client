@@ -8,7 +8,8 @@ import ErrorPage from "./error-page";
 import { SetList } from "./routes/set-list";
 import { SetListSong } from "./routes/SetListSong";
 import { Event } from "./routes/event";
-import { SetListProvider } from "./providers/set-list-provider";
+import { SetListProvider } from "./providers/SetListProvider";
+import { ThemeProvider } from "./providers/ThemeProvider";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider defaultTheme="dark" storageKey="tcf-ui-theme">
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 );

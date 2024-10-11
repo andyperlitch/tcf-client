@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import "./SetListSong.css";
-import { useSetList } from "../../hooks/use-set-list";
+import { useSetList } from "../../hooks/useSetList";
 import { useMemo, useState } from "react";
-import { useFirstGigSet } from "../../hooks/use-first-gig-set";
+import { useFirstGigSet } from "../../hooks/useFirstGigSet";
 import { LeadSheet } from "./LeadSheet";
 import { ControlBar } from "./ControlBar";
 import { SongViewType } from "./types";
