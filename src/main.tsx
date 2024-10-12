@@ -25,11 +25,11 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/setlist",
+        path: "/sets/:setSlug",
         element: <SetList />,
       },
       {
-        path: "/setlist/:songIndex",
+        path: "/sets/:setSlug/:songIndex",
         element: <SetListSong />,
       },
       {

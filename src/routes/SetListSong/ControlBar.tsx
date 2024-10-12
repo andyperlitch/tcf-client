@@ -12,6 +12,7 @@ const VIEW_SELECT_OPTIONS = [
 ];
 
 interface ControlBarProps {
+  setSlug: string;
   currentIndex: number;
   currentSong: SetListSong;
   previousIndex: number;
@@ -24,6 +25,7 @@ export function ControlBar({
   currentIndex: songIndex,
   currentSong,
   previousIndex,
+  setSlug,
   nextIndex,
   songView,
   setSongView,
@@ -31,7 +33,7 @@ export function ControlBar({
   return (
     <div className="setlistCtl">
       <div className="setlistCtlLeft">
-        <Link to={`/setlist/${previousIndex}`}>
+        <Link to={`/sets/${setSlug}/${previousIndex}`}>
           <button
             disabled={previousIndex === songIndex}
             className="prevNextBtn"
@@ -66,12 +68,12 @@ export function ControlBar({
             {option.icon}
           </button>
         ))}
-        <Link to={`/setlist`}>
+        <Link to={`/sets/${setSlug}`}>
           <button className="prevNextBtn homeBtn" type="button">
             🏠
           </button>
         </Link>
-        <Link to={`/setlist/${nextIndex}`}>
+        <Link to={`/sets/${setSlug}/${nextIndex}`}>
           <button
             disabled={nextIndex === songIndex}
             className="prevNextBtn"

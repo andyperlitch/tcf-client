@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./SetListSong.css";
 import { useSetList } from "../../hooks/useSetList";
 import { useMemo, useState } from "react";
-import { useFirstGigSet } from "../../hooks/useFirstGigSet";
+import { useGigSet } from "../../hooks/useGigSet";
 import { LeadSheet } from "./LeadSheet";
 import { ControlBar } from "./ControlBar";
 import { SongViewType } from "./types";
@@ -21,7 +21,7 @@ export function SetListSong() {
   const [songView, setSongView] = useState<SongViewType>("leadsheet");
   const currentIndex = parseInt(params.songIndex || "0", 10);
   const { loading } = useSetList();
-  const songs = useFirstGigSet();
+  const songs = useGigSet(params.setSlug!);
 
   const currentSong = useMemo(() => {
     if (songs && songs.length) {
@@ -37,16 +37,16 @@ export function SetListSong() {
       () => ({
         onSwipedRight: () => {
           if (previousIndex !== currentIndex) {
-            navigate(`/setlist/${previousIndex}`);
+            navigate(`/sets/${params.setSlug}/${previousIndex}`);
           }
         },
         onSwipedLeft: () => {
           if (nextIndex !== currentIndex) {
-            navigate(`/setlist/${nextIndex}`);
+            navigate(`/sets/${params.setSlug}/${nextIndex}`);
           }
         },
       }),
-      [currentIndex, navigate, nextIndex, previousIndex]
+      [currentIndex, navigate, nextIndex, previousIndex, params.setSlug]
     )
   );
 
@@ -58,6 +58,7 @@ export function SetListSong() {
     <div className="setlistRoot font-inter" {...swipeHandlers}>
       <ControlBar
         previousIndex={previousIndex}
+        setSlug={params.setSlug!}
         nextIndex={nextIndex}
         currentSong={currentSong}
         currentIndex={currentIndex}

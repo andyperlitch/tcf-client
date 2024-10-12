@@ -1,11 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import Papa from "papaparse";
-import { SetListSong } from "../types/setlist";
+import { SetListSong, SetListSongNumericField } from "../types/setlist";
 import { SETLIST_CSV_URL } from "../consts/songs";
 import { setListContext } from "../contexts/SetListContext";
+import { SETS } from "@/consts/sets";
 
 type ParsedSong = Record<keyof SetListSong, string>;
-const NUMERIC_FIELDS = ["FirstGigOrder", "Tempo", "Duration"] as const;
+const NUMERIC_FIELDS: SetListSongNumericField[] = [
+  ...SETS.map((s) => s.fieldName),
+  "Tempo",
+  "Duration",
+];
 
 export function SetListProvider({ children }: { children: React.ReactNode }) {
   const [songs, setSongs] = useState<SetListSong[]>([]);
@@ -40,10 +45,11 @@ export function SetListProvider({ children }: { children: React.ReactNode }) {
             return {
               ...song,
               ...NUMERIC_FIELDS.reduce((acc, field) => {
-                acc[field] = parseInt(song[field], 10);
+                acc[field] = parseFloat(song[field]);
                 return acc;
-              }, {} as SetListSong),
-            };
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              }, {} as any),
+            } as SetListSong;
           });
 
         // set the songs
