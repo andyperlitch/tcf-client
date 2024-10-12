@@ -37,7 +37,7 @@
 .leadSheetTable th,
 .leadSheetTable td {
   border: 1px solid #ffffff11;
-  padding: 0 0.5rem;
+  padding: 1rem 0.5rem;
   text-align: left;
   white-space: nowrap;
 }
@@ -64,6 +64,7 @@
 
 .sectionTitle {
   padding: 0;
+  @apply text-2xl font-bold;
 }
 
 .recordingTimestamp {
