@@ -26,7 +26,7 @@ function SetList() {
             </h2>
             <ol className="setlist">
               {gigSet.map((song, i) => (
-                <li key={i} className="text-5xl">
+                <li key={i} className="text-3xl">
                   <Link to={`/sets/${setSlug}/${i}`} className="pl-8 p-2 block">
                     {i + 1}. {song.Title}
                   </Link>
