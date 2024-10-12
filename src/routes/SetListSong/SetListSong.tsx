@@ -55,7 +55,7 @@ export function SetListSong() {
   }
 
   return (
-    <div className="setlistRoot" {...swipeHandlers}>
+    <div className="setlistRoot font-inter" {...swipeHandlers}>
       <ControlBar
         previousIndex={previousIndex}
         nextIndex={nextIndex}
