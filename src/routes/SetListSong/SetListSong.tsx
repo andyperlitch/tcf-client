@@ -12,6 +12,7 @@ import { useSwipeable } from "react-swipeable";
 import { SET_BREAK_TITLE } from "../../consts/songs";
 import { CenteredMessage } from "../../CenteredMessage";
 import { getPatOnTheBack } from "../../utils/getPatOnTheBack";
+import { HomeButton } from "@/components/HomeButton";
 
 const USE_IFRAME = false;
 
@@ -56,6 +57,7 @@ export function SetListSong() {
 
   return (
     <div className="setlistRoot font-inter" {...swipeHandlers}>
+      <HomeButton />
       <ControlBar
         previousIndex={previousIndex}
         setSlug={params.setSlug!}

@@ -5,7 +5,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Root from "./routes/root";
 import ErrorPage from "./error-page";
-import { SetList } from "./routes/set-list";
+import { SetList } from "./routes/SetList";
 import { SetListSong } from "./routes/SetListSong";
 import { Event } from "./routes/event";
 import { SetListProvider } from "./providers/SetListProvider";
