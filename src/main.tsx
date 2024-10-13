@@ -1,6 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  RouterProvider,
+} from "react-router-dom";
 
 import "./index.css";
 import Root from "./routes/root";
@@ -35,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: "/event/:eventId",
         element: <Event />,
+      },
+      {
+        path: "/setlist",
+        element: <Navigate to="/sets/funks-giving" />,
       },
     ],
   },
