@@ -15,6 +15,7 @@ import { SetListSong } from "./routes/SetListSong";
 import { Event } from "./routes/event";
 import { SetListProvider } from "./providers/SetListProvider";
 import { ThemeProvider } from "./providers/ThemeProvider";
+import { Sets } from "./routes/Sets";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "/sets/:setSlug/:songIndex",
         element: <SetListSong />,
+      },
+      {
+        path: "/sets",
+        element: <Sets />,
       },
       {
         path: "/event/:eventId",

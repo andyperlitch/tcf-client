@@ -14,8 +14,6 @@ import { CenteredMessage } from "../../CenteredMessage";
 import { getPatOnTheBack } from "../../utils/getPatOnTheBack";
 import { HomeButton } from "@/components/HomeButton";
 
-const USE_IFRAME = false;
-
 export function SetListSong() {
   const params = useParams();
   const navigate = useNavigate();
@@ -72,17 +70,7 @@ export function SetListSong() {
       ) : (
         <>
           {songView === "leadsheet" && (
-            <>
-              {currentSong.LeadSheet && USE_IFRAME && (
-                <iframe
-                  className="leadSheetFrame"
-                  src={`${currentSong.LeadSheet}?embedded=true`}
-                />
-              )}
-              {!USE_IFRAME && (
-                <LeadSheet leadsheetUrl={currentSong.LeadSheet} />
-              )}
-            </>
+            <LeadSheet leadsheetUrl={currentSong.LeadSheet} />
           )}
           {songView === "lyrics" && <Lyrics lyricsUrl={currentSong.Lyrics} />}
           {songView === "info" && <SongInfo song={currentSong} />}
