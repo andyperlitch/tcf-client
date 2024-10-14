@@ -16,11 +16,18 @@ import { Event } from "./routes/event";
 import { SetListProvider } from "./providers/SetListProvider";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { Sets } from "./routes/Sets";
+import { ApolloProvider } from "./providers/ApolloProvider";
+import { Login } from "./routes/Login";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
     errorElement: <ErrorPage />,
   },
   {
@@ -56,8 +63,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="tcf-ui-theme">
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <ApolloProvider>
+      <ThemeProvider defaultTheme="dark" storageKey="tcf-ui-theme">
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </ApolloProvider>
   </React.StrictMode>
 );
