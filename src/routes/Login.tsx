@@ -1,9 +1,10 @@
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Button } from "@/components/ui/button";
 import { LoginMutation, LoginMutationVariables, Role } from "@/gql/graphql";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const USE_LOGIN_MUTATION = gql`
   mutation Login($email: String!, $password: String!) {
@@ -25,6 +26,9 @@ const HOME_ROUTES: Record<Role, string> = {
 
 export function Login() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { setUser, user } = useAuth();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, { loading, error }] = useMutation<
@@ -48,16 +52,24 @@ export function Login() {
           password,
         },
       });
-      console.log("Result", result);
 
       if (result.data?.login) {
-        // use react-router to route to the home page based on the user's role
-        navigate(HOME_ROUTES[result.data.login.role]);
+        // set the user in the auth context
+        setUser(result.data.login);
       }
     } catch (e) {
       console.error(e);
     }
   };
+
+  useEffect(() => {
+    console.log(`andy user`, user);
+
+    if (user && user.role) {
+      console.log("wtf");
+      navigate(searchParams.get("redirect") || HOME_ROUTES[user.role]);
+    }
+  }, [navigate, searchParams, user]);
 
   return (
     <div className="flex flex-col items-center justify-center relative z-[2] min-h-screen">

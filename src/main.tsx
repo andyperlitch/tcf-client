@@ -18,6 +18,9 @@ import { ThemeProvider } from "./providers/ThemeProvider";
 import { Sets } from "./routes/Sets";
 import { ApolloProvider } from "./providers/ApolloProvider";
 import { Login } from "./routes/Login";
+import { ProtectedArea } from "./components/ProtectedArea";
+import { AdminHome } from "./routes/AdminHome";
+import { AuthProvider } from "./providers/AuthProvider";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +34,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    // Set List pages
     element: (
       <SetListProvider>
         <Outlet />
@@ -59,14 +63,30 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    // Admin pages
+    element: (
+      <ProtectedArea roles={["ADMIN"]} redirectTo="/login?redirect=$path">
+        <Outlet />
+      </ProtectedArea>
+    ),
+    children: [
+      {
+        path: "/admin",
+        element: <AdminHome />,
+      },
+    ],
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ApolloProvider>
-      <ThemeProvider defaultTheme="dark" storageKey="tcf-ui-theme">
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </ApolloProvider>
+    <AuthProvider>
+      <ApolloProvider>
+        <ThemeProvider defaultTheme="dark" storageKey="tcf-ui-theme">
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </ApolloProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
