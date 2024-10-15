@@ -16,18 +16,18 @@ function SetList() {
   return (
     <>
       <HomeButton />
-      <div className="max-w-5xl mx-auto justify-center relative z-[2] p-4">
+      <div className="relative z-[2] mx-auto max-w-5xl justify-center p-4">
         {loading ? (
           <div>loading...</div>
         ) : (
           <>
-            <h2 className="text-6xl text-center pt-8 mb-8 font-hand">
+            <h2 className="mb-8 pt-8 text-center font-hand text-6xl">
               <span className="text-gray-500">Setlist:</span> {setMeta.label}
             </h2>
             <ol className="setlist">
               {gigSet.map((song, i) => (
                 <li key={i} className="text-3xl">
-                  <Link to={`/sets/${setSlug}/${i}`} className="pl-8 p-2 block">
+                  <Link to={`/sets/${setSlug}/${i}`} className="block p-2 pl-8">
                     {i + 1}. {song.Title}
                   </Link>
                 </li>

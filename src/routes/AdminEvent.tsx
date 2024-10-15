@@ -1,3 +1,4 @@
+import { AdminContainer } from "@/components/AdminContainer";
 import { GetEventQuery, GetEventQueryVariables } from "@/gql/graphql";
 import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
@@ -35,8 +36,8 @@ export function AdminEvent() {
   });
 
   return (
-    <div>
-      <h1>{data?.event?.name}</h1>
-    </div>
+    <AdminContainer section="events">
+      <h1 className="text-3xl">{data?.event?.name}</h1>
+    </AdminContainer>
   );
 }
