@@ -16,6 +16,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  mutation CreateEvent($input: CreateEventInput!) {\n    createEvent(data: $input) {\n      id\n      name\n      location\n      date\n      description\n      slug\n      createdAt\n    }\n  }\n": types.CreateEventDocument,
     "\n  query Events {\n    events {\n      id\n      name\n      date\n      location\n      description\n      slug\n      activeEngagement {\n        id\n      }\n      activeEngagementId\n      engagements {\n        id\n        title\n        description\n        startTime\n        endTime\n        viewType\n        allowSubmissions\n        status\n        order\n        createdAt\n        updatedAt\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": types.EventsDocument,
+    "\n  query GetEvent($slug: String!) {\n    event(slug: $slug) {\n      id\n      name\n      location\n      date\n      description\n      slug\n      createdAt\n      updatedAt\n      engagements {\n        id\n        description\n        viewType\n        createdAt\n        updatedAt\n        startTime\n        endTime\n      }\n    }\n  }\n": types.GetEventDocument,
     "\n  mutation Login($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      id\n      email\n      name\n      username\n      role\n    }\n  }\n": types.LoginDocument,
 };
 
@@ -41,6 +42,10 @@ export function graphql(source: "\n  mutation CreateEvent($input: CreateEventInp
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query Events {\n    events {\n      id\n      name\n      date\n      location\n      description\n      slug\n      activeEngagement {\n        id\n      }\n      activeEngagementId\n      engagements {\n        id\n        title\n        description\n        startTime\n        endTime\n        viewType\n        allowSubmissions\n        status\n        order\n        createdAt\n        updatedAt\n      }\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query Events {\n    events {\n      id\n      name\n      date\n      location\n      description\n      slug\n      activeEngagement {\n        id\n      }\n      activeEngagementId\n      engagements {\n        id\n        title\n        description\n        startTime\n        endTime\n        viewType\n        allowSubmissions\n        status\n        order\n        createdAt\n        updatedAt\n      }\n      createdAt\n      updatedAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetEvent($slug: String!) {\n    event(slug: $slug) {\n      id\n      name\n      location\n      date\n      description\n      slug\n      createdAt\n      updatedAt\n      engagements {\n        id\n        description\n        viewType\n        createdAt\n        updatedAt\n        startTime\n        endTime\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetEvent($slug: String!) {\n    event(slug: $slug) {\n      id\n      name\n      location\n      date\n      description\n      slug\n      createdAt\n      updatedAt\n      engagements {\n        id\n        description\n        viewType\n        createdAt\n        updatedAt\n        startTime\n        endTime\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

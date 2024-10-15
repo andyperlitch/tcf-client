@@ -1,4 +1,6 @@
+import { GetEventQuery, GetEventQueryVariables } from "@/gql/graphql";
 import { gql, useQuery } from "@apollo/client";
+import { useParams } from "react-router-dom";
 
 const GET_EVENT = gql`
   query GetEvent($slug: String!) {
@@ -25,11 +27,16 @@ const GET_EVENT = gql`
 `;
 
 export function AdminEvent() {
-  const { data } = useQuery(GET_EVENT);
+  const { slug } = useParams();
+  const { data } = useQuery<GetEventQuery, GetEventQueryVariables>(GET_EVENT, {
+    variables: {
+      slug: slug || "",
+    },
+  });
 
   return (
     <div>
-      <h1></h1>
+      <h1>{data?.event?.name}</h1>
     </div>
   );
 }
