@@ -1,12 +1,14 @@
 import { AdminContainer } from "@/components/AdminContainer";
-import { GetEventQuery, GetEventQueryVariables } from "@/gql/graphql";
+import { format } from "date-fns";
+import { GetAdminEventQuery, GetAdminEventQueryVariables } from "@/gql/graphql";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { ReactNode } from "react";
 import { useParams } from "react-router-dom";
 import { LiveSwitch } from "./LiveSwitch";
+import { CreateNewEngagementButton } from "@/components/CreateNewEngagementButton";
 
 const GET_EVENT = gql`
-  query GetEvent($slug: String!) {
+  query GetAdminEvent($slug: String!) {
     event(slug: $slug) {
       id
       name
@@ -20,9 +22,8 @@ const GET_EVENT = gql`
       engagements {
         id
         description
-        viewType
-        createdAt
-        updatedAt
+        viewData
+        viewConfig
         startTime
         endTime
       }
@@ -45,7 +46,8 @@ const UPDATE_EVENT = gql`
       engagements {
         id
         description
-        viewType
+        viewData
+        viewConfig
         createdAt
         updatedAt
         startTime
@@ -58,8 +60,8 @@ const UPDATE_EVENT = gql`
 export function AdminEvent() {
   const { slug } = useParams();
   const { data, loading, error } = useQuery<
-    GetEventQuery,
-    GetEventQueryVariables
+    GetAdminEventQuery,
+    GetAdminEventQueryVariables
   >(GET_EVENT, {
     variables: {
       slug: slug || "",
@@ -89,7 +91,7 @@ export function AdminEvent() {
     content = <p className="text-red-500">Error: {error.message}</p>;
   } else if (data?.event) {
     content = (
-      <>
+      <div className="flex flex-col space-y-8">
         <h1 className="flex items-baseline space-x-5 text-3xl">
           <span>{data.event.name}</span>{" "}
           <LiveSwitch
@@ -98,11 +100,19 @@ export function AdminEvent() {
             loading={updateLoading}
           />
         </h1>
+        <div className="flex flex-col space-y-2">
+          <p className="text-foreground">📍 {data.event.location}</p>
+          <p className="text-foreground">📆 {format(data.event.date, "PPP")}</p>
+        </div>
 
-        {/* live switch */}
-
-        {/* date picker */}
-      </>
+        <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
+          <span>Engagements</span>{" "}
+          <CreateNewEngagementButton
+            eventId={data.event.id}
+            eventSlug={data.event.slug}
+          />
+        </h2>
+      </div>
     );
   }
 

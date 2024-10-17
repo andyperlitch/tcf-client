@@ -30,8 +30,8 @@ const USE_EVENTS_QUERY = gql`
         description
         startTime
         endTime
-        viewType
-        allowSubmissions
+        viewData
+        viewConfig
         status
         order
         createdAt

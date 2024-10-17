@@ -40,7 +40,7 @@ export function AdminContainer({
       </nav>
 
       <main className={`w-3/4`}>
-        <div className="space-y-4 rounded-lg p-8 shadow-lg">{children}</div>
+        <div className="rounded-lg p-8 shadow-lg">{children}</div>
         <ModeToggle />
       </main>
     </div>
