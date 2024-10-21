@@ -100,7 +100,8 @@ export function AdminEvent() {
             loading={updateLoading}
           />
         </h1>
-        <div className="flex flex-col space-y-2">
+        <p className="text-foreground">{data.event.description}</p>
+        <div className="flex flex-col space-y-3">
           <p className="text-foreground">📍 {data.event.location}</p>
           <p className="text-foreground">📆 {format(data.event.date, "PPP")}</p>
         </div>
