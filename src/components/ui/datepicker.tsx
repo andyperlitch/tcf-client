@@ -5,13 +5,16 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "./calendar";
+import { forwardRef } from "react";
 
-export function DatePicker<T extends FieldValues>({
-  value,
-  onChange,
-}: ControllerRenderProps<T>) {
+export const DatePicker = forwardRef<
+  HTMLDivElement, // the type of the DOM element the ref will be forwarded to
+  ControllerRenderProps<FieldValues> // the props type of the component
+>(({ value, onChange }, ref) => {
   return (
-    <div>
+    <div
+      ref={ref} // forward the ref to the Button component
+    >
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -36,4 +39,4 @@ export function DatePicker<T extends FieldValues>({
       </Popover>
     </div>
   );
-}
+});

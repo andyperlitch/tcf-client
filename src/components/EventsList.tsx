@@ -47,7 +47,6 @@ export function EventsList() {
   const { loading, error, data } = useQuery<EventsQuery, EventsQueryVariables>(
     USE_EVENTS_QUERY
   );
-  console.log(`andy { loading, error, data }`, { loading, error, data });
 
   return (
     <Table>

@@ -14,7 +14,6 @@ export function ProtectedArea({
 }: ProtectedAreaProps) {
   const { user } = useAuth();
   const path = useLocation().pathname;
-  console.log(`andy user`, user);
 
   if (!user || !roles.includes(user.role)) {
     return (
