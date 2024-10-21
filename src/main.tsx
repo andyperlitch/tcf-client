@@ -19,10 +19,10 @@ import { Sets } from "./routes/Sets";
 import { ApolloProvider } from "./providers/ApolloProvider";
 import { Login } from "./routes/Login";
 import { ProtectedArea } from "./components/ProtectedArea";
-import { AdminHome } from "./routes/AdminHome";
+import { AdminHome } from "./routes/admin/home";
 import { AuthProvider } from "./providers/AuthProvider";
-import { AdminEvent } from "./routes/AdminEvent";
-import { AdminEvents } from "./routes/AdminEvents";
+import { AdminEvent } from "./routes/admin/event";
+import { AdminEvents } from "./routes/admin/events";
 
 const router = createBrowserRouter([
   {
