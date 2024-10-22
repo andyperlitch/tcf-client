@@ -9,6 +9,7 @@ import {
   useAdminUpdateEventMutation,
 } from "@/gql/graphql";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
+import { CrumbMeta, SimpleCrumbs } from "@/components/SimpleCrumbs";
 
 export function AdminEvent() {
   const { slug } = useParamsSafe("slug");
@@ -41,30 +42,40 @@ export function AdminEvent() {
   } else if (error) {
     content = <p className="text-red-500">Error: {error.message}</p>;
   } else if (data?.event) {
+    const crumbs: CrumbMeta[] = [["/admin/events", "Events"]];
     content = (
       <div className="flex flex-col space-y-8">
-        <h1 className="flex items-baseline space-x-5 text-3xl">
-          <span>{data.event.name}</span>{" "}
-          <LiveSwitch
-            live={data.event.live}
-            setLive={setLive}
-            loading={updateLoading}
-          />
-        </h1>
+        <div className="flex flex-col space-y-2">
+          <SimpleCrumbs crumbs={crumbs} />
+          <h1 className="flex items-baseline space-x-5 text-3xl">
+            <span>{data.event.name}</span>{" "}
+            <LiveSwitch
+              live={data.event.live}
+              setLive={setLive}
+              loading={updateLoading}
+            />
+          </h1>
+        </div>
+
         <p className="text-foreground">{data.event.description}</p>
         <div className="flex flex-col space-y-3">
           <p className="text-foreground">📍 {data.event.location}</p>
           <p className="text-foreground">📆 {format(data.event.date, "PPP")}</p>
         </div>
 
-        <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
-          <span>Engagements</span>{" "}
-          <CreateNewEngagementButton
-            eventId={data.event.id}
+        <div className="flex flex-col space-y-2">
+          <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
+            <span>Engagements</span>{" "}
+            <CreateNewEngagementButton
+              eventId={data.event.id}
+              eventSlug={data.event.slug}
+            />
+          </h2>
+          <EngagementsList
             eventSlug={data.event.slug}
+            eventId={data.event.id}
           />
-        </h2>
-        <EngagementsList eventSlug={data.event.slug} eventId={data.event.id} />
+        </div>
       </div>
     );
   }
