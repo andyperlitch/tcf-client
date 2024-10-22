@@ -22,6 +22,7 @@ import { ProtectedArea } from "./components/ProtectedArea";
 import { AdminHome } from "./routes/admin/home";
 import { AuthProvider } from "./providers/AuthProvider";
 import { AdminEvent } from "./routes/admin/event";
+import { AdminEngagement } from "./routes/admin/event/engagement";
 import { AdminEvents } from "./routes/admin/events";
 
 const router = createBrowserRouter([
@@ -84,6 +85,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/events/:slug",
         element: <AdminEvent />,
+      },
+      {
+        path: "/admin/events/:slug/engagements/:engagementId",
+        element: <AdminEngagement />,
       },
     ],
   },

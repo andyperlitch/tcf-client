@@ -1,15 +1,16 @@
 import { useSetList } from "../hooks/useSetList";
 import { useGigSet } from "../hooks/useGigSet";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ModeToggle } from "@/components/ModeToggle";
 import { SETS_BY_SLUG } from "@/consts/sets";
 import { HomeButton } from "@/components/HomeButton";
+import { useParamsSafe } from "@/hooks/useParamsSafe";
 
 export { SetList };
 
 function SetList() {
   const { loading } = useSetList();
-  const { setSlug } = useParams();
+  const { setSlug } = useParamsSafe("setSlug");
   const gigSet = useGigSet(setSlug);
   const setMeta = SETS_BY_SLUG[setSlug!];
 

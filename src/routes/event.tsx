@@ -1,7 +1,8 @@
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { Funksgiving } from "./Funksgiving";
 import { FC } from "react";
 import { GetEventQuery, useGetEventQuery } from "@/gql/graphql";
+import { useParamsSafe } from "@/hooks/useParamsSafe";
 
 const CUSTOM_EVENT_PAGES: Record<
   string,
@@ -11,11 +12,7 @@ const CUSTOM_EVENT_PAGES: Record<
 };
 
 export function Event() {
-  const { slug } = useParams();
-
-  if (!slug) {
-    throw new Error("No slug found in parameters");
-  }
+  const { slug } = useParamsSafe("slug");
 
   const { loading, error, data } = useGetEventQuery({
     variables: { slug },

@@ -1,7 +1,6 @@
 import { AdminContainer } from "@/components/AdminContainer";
 import { format } from "date-fns";
 import { ReactNode } from "react";
-import { useParams } from "react-router-dom";
 import { LiveSwitch } from "./LiveSwitch";
 import { CreateNewEngagementButton } from "@/components/CreateNewEngagementButton";
 import { EngagementsList } from "@/components/EngagementsList";
@@ -9,9 +8,10 @@ import {
   useAdminGetEventQuery,
   useAdminUpdateEventMutation,
 } from "@/gql/graphql";
+import { useParamsSafe } from "@/hooks/useParamsSafe";
 
 export function AdminEvent() {
-  const { slug } = useParams();
+  const { slug } = useParamsSafe("slug");
   const { data, loading, error } = useAdminGetEventQuery({
     variables: {
       slug: slug || "",
