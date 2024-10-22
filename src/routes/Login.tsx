@@ -40,6 +40,8 @@ export function Login() {
       if (result.data?.login) {
         // set the user in the auth context
         setUser(result.data.login);
+      } else {
+        throw new Error(`response data: ${JSON.stringify(result.data)}`);
       }
     } catch (e) {
       console.error(e);
@@ -47,10 +49,7 @@ export function Login() {
   };
 
   useEffect(() => {
-    console.log(`andy user`, user);
-
     if (user && user.role) {
-      console.log("wtf");
       navigate(searchParams.get("redirect") || HOME_ROUTES[user.role]);
     }
   }, [navigate, searchParams, user]);

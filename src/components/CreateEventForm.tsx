@@ -70,6 +70,7 @@ export function CreateEventForm() {
 
   return (
     <Form {...form}>
+      {error && <p className="text-red-500">{error.message}</p>}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
