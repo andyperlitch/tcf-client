@@ -1,6 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
 import { format } from "date-fns";
-import { EventsQuery, EventsQueryVariables } from "@/gql/graphql.ts";
 import {
   Table,
   TableBody,
@@ -10,43 +8,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
-
-const USE_EVENTS_QUERY = gql`
-  query Events {
-    events {
-      id
-      name
-      date
-      location
-      description
-      slug
-      activeEngagement {
-        id
-      }
-      activeEngagementId
-      engagements {
-        id
-        title
-        description
-        startTime
-        endTime
-        viewData
-        viewConfig
-        status
-        order
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
+import { useAdminGetEventsQuery } from "@/gql/graphql";
 
 export function EventsList() {
-  const { loading, error, data } = useQuery<EventsQuery, EventsQueryVariables>(
-    USE_EVENTS_QUERY
-  );
+  const { /* loading, error,  */ data } = useAdminGetEventsQuery();
 
   return (
     <Table>

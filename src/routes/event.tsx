@@ -1,30 +1,23 @@
-import ErrorPage from "@/error-page";
-import { gql, useQuery } from "@apollo/client";
 import { Navigate, useParams } from "react-router-dom";
 import { Funksgiving } from "./Funksgiving";
 import { FC } from "react";
+import { GetEventQuery, useGetEventQuery } from "@/gql/graphql";
 
-const USE_EVENT = gql`
-  query useEvent($slug: String!) {
-    event(slug: $slug) {
-      id
-      name
-      live
-      description
-      date
-      location
-    }
-  }
-`;
-
-const CUSTOM_EVENT_PAGES: Record<string, FC<{ event: Event }>> = {
+const CUSTOM_EVENT_PAGES: Record<
+  string,
+  FC<{ event: GetEventQuery["event"] }>
+> = {
   funksgiving: Funksgiving,
 };
 
 export function Event() {
   const { slug } = useParams();
 
-  const { loading, error, data } = useQuery(USE_EVENT, {
+  if (!slug) {
+    throw new Error("No slug found in parameters");
+  }
+
+  const { loading, error, data } = useGetEventQuery({
     variables: { slug },
   });
 
@@ -33,7 +26,7 @@ export function Event() {
   }
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-  if (data.event.live !== true) {
+  if (data?.event?.live !== true) {
     return (
       <div
         className={`
@@ -49,6 +42,6 @@ export function Event() {
 
   if (CUSTOM_EVENT_PAGES[slug]) {
     const CustomEventPage = CUSTOM_EVENT_PAGES[slug];
-    return <CustomEventPage />;
+    return <CustomEventPage event={data.event} />;
   }
 }

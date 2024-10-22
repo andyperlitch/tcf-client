@@ -1,74 +1,25 @@
 import { AdminContainer } from "@/components/AdminContainer";
 import { format } from "date-fns";
-import { GetAdminEventQuery, GetAdminEventQueryVariables } from "@/gql/graphql";
-import { gql, useMutation, useQuery } from "@apollo/client";
 import { ReactNode } from "react";
 import { useParams } from "react-router-dom";
 import { LiveSwitch } from "./LiveSwitch";
 import { CreateNewEngagementButton } from "@/components/CreateNewEngagementButton";
-
-const GET_EVENT = gql`
-  query GetAdminEvent($slug: String!) {
-    event(slug: $slug) {
-      id
-      name
-      location
-      date
-      description
-      live
-      slug
-      createdAt
-      updatedAt
-      engagements {
-        id
-        description
-        viewData
-        viewConfig
-        startTime
-        endTime
-      }
-    }
-  }
-`;
-
-const UPDATE_EVENT = gql`
-  mutation UpdateEvent($id: Int!, $data: UpdateEventInput!) {
-    updateEvent(eventId: $id, data: $data) {
-      id
-      name
-      location
-      date
-      description
-      live
-      slug
-      createdAt
-      updatedAt
-      engagements {
-        id
-        description
-        viewData
-        viewConfig
-        createdAt
-        updatedAt
-        startTime
-        endTime
-      }
-    }
-  }
-`;
+import { EngagementsList } from "@/components/EngagementsList";
+import {
+  useAdminGetEventQuery,
+  useAdminUpdateEventMutation,
+} from "@/gql/graphql";
 
 export function AdminEvent() {
   const { slug } = useParams();
-  const { data, loading, error } = useQuery<
-    GetAdminEventQuery,
-    GetAdminEventQueryVariables
-  >(GET_EVENT, {
+  const { data, loading, error } = useAdminGetEventQuery({
     variables: {
       slug: slug || "",
     },
   });
 
-  const [updateEvent, { loading: updateLoading }] = useMutation(UPDATE_EVENT);
+  const [updateEvent, { loading: updateLoading }] =
+    useAdminUpdateEventMutation();
 
   const setLive = (live: boolean) => {
     if (data?.event) {
@@ -113,6 +64,7 @@ export function AdminEvent() {
             eventSlug={data.event.slug}
           />
         </h2>
+        <EngagementsList eventSlug={data.event.slug} eventId={data.event.id} />
       </div>
     );
   }

@@ -1,22 +1,9 @@
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import { gql, useMutation } from "@apollo/client";
 import { Button } from "@/components/ui/button";
-import { LoginMutation, LoginMutationVariables, Role } from "@/gql/graphql";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-
-const USE_LOGIN_MUTATION = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      id
-      email
-      name
-      username
-      role
-    }
-  }
-`;
+import { Role, useLoginMutation } from "@/gql/graphql";
 
 const HOME_ROUTES: Record<Role, string> = {
   ADMIN: "/admin",
@@ -31,10 +18,7 @@ export function Login() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [login, { loading, error }] = useMutation<
-    LoginMutation,
-    LoginMutationVariables
-  >(USE_LOGIN_MUTATION);
+  const [login, { loading, error }] = useLoginMutation();
 
   const updateUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -72,10 +56,14 @@ export function Login() {
   }, [navigate, searchParams, user]);
 
   return (
-    <div className="flex flex-col items-center justify-center relative z-[2] min-h-screen">
-      <h1 className="text-3xl mb-4">Login</h1>
+    <div
+      className={`
+        relative z-[2] flex min-h-screen flex-col items-center justify-center
+      `}
+    >
+      <h1 className="mb-4 text-3xl">Login</h1>
       <form onSubmit={doLogin} className="text-center">
-        {error && <div className="text-red-500 mb-3">{error.message}</div>}
+        {error && <div className="mb-3 text-red-500">{error.message}</div>}
         <Input
           className="mb-3"
           type="text"

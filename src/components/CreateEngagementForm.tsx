@@ -1,4 +1,3 @@
-import { gql, useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -27,19 +26,12 @@ import {
 } from "./ui/select";
 import { EngagementDefinitions, ViewType } from "@/consts/engagements";
 import { useState } from "react";
+import { useAdminCreateEngagementMutation } from "@/gql/graphql";
 
 const formSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
 });
-
-const CREATE_ENGAGEMENT_MUTATION = gql`
-  mutation CreateEngagement($eventId: Int!, $input: CreateEngagementInput!) {
-    createEngagement(eventId: $eventId, data: $input) {
-      id
-    }
-  }
-`;
 
 const engagementTypeDefs = [ViewType.VoteFor, ViewType.PhotoCarousel].map(
   (type) => EngagementDefinitions[type]
@@ -52,9 +44,8 @@ export function CreateEngagementForm({
   eventId: number;
   eventSlug: string;
 }) {
-  const [createEngagement, { loading /* , error */ }] = useMutation(
-    CREATE_ENGAGEMENT_MUTATION
-  );
+  const [createEngagement, { loading /* , error */ }] =
+    useAdminCreateEngagementMutation();
   const navigate = useNavigate();
   const [selectedType, setSelectedType] = useState<string>(
     ViewType.PhotoCarousel
@@ -81,7 +72,7 @@ export function CreateEngagementForm({
       },
     }).then((res) => {
       // go to the engagement page
-      navigate(`/admin/events/${eventSlug}/${res.data.createEngagement.id}`);
+      navigate(`/admin/events/${eventSlug}/${res.data?.createEngagement.id}`);
       console.log(res);
     });
   }
