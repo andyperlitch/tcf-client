@@ -259,13 +259,43 @@ export type User = {
   username?: Maybe<Scalars['String']['output']>;
 };
 
+export type AdminEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, order: number };
+
+export type AdminEventFragment = { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, status: EngagementStatus, order: number, createdAt: any, updatedAt: any }> };
+
+export type UserEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null };
+
 export type AdminCreateEngagementMutationVariables = Exact<{
   eventId: Scalars['Int']['input'];
   input: CreateEngagementInput;
 }>;
 
 
-export type AdminCreateEngagementMutation = { __typename?: 'Mutation', createEngagement: { __typename?: 'Engagement', id: number } };
+export type AdminCreateEngagementMutation = { __typename?: 'Mutation', createEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, order: number } };
+
+export type AdminUpdateEventMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  data: UpdateEventInput;
+}>;
+
+
+export type AdminUpdateEventMutation = { __typename?: 'Mutation', updateEvent: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, status: EngagementStatus, order: number, createdAt: any, updatedAt: any }> } };
+
+export type AdminUpdateEventActiveEngagementMutationVariables = Exact<{
+  eventId: Scalars['Int']['input'];
+  engagementId: Scalars['Int']['input'];
+}>;
+
+
+export type AdminUpdateEventActiveEngagementMutation = { __typename?: 'Mutation', updateEventActiveEngagement: { __typename?: 'Event', id: number, activeEngagementId?: number | null } };
+
+export type LoginMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'User', id: number, email?: string | null, name?: string | null, username?: string | null, role: Role } | null };
 
 export type AdminGetEngagementQueryVariables = Exact<{
   engagementId: Scalars['Int']['input'];
@@ -286,28 +316,12 @@ export type AdminGetEventQueryVariables = Exact<{
 }>;
 
 
-export type AdminGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, location?: string | null, date?: any | null, description?: string | null, live: boolean, slug: string, createdAt: any, updatedAt: any, activeEngagementId?: number | null, engagements: Array<{ __typename?: 'Engagement', id: number, description?: string | null, viewData?: any | null, viewConfig?: any | null, startTime?: any | null, endTime?: any | null }> } | null };
+export type AdminGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, status: EngagementStatus, order: number, createdAt: any, updatedAt: any }> } | null };
 
 export type AdminGetEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AdminGetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, activeEngagementId?: number | null, createdAt: any, updatedAt: any, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, status: EngagementStatus, order: number, createdAt: any, updatedAt: any }> }> };
-
-export type AdminUpdateEventMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
-  data: UpdateEventInput;
-}>;
-
-
-export type AdminUpdateEventMutation = { __typename?: 'Mutation', updateEvent: { __typename?: 'Event', id: number, name: string, location?: string | null, date?: any | null, description?: string | null, live: boolean, slug: string, createdAt: any, updatedAt: any, activeEngagementId?: number | null, engagements: Array<{ __typename?: 'Engagement', id: number, description?: string | null, viewData?: any | null, viewConfig?: any | null, createdAt: any, updatedAt: any, startTime?: any | null, endTime?: any | null }> } };
-
-export type AdminUpdateEventActiveEngagementMutationVariables = Exact<{
-  eventId: Scalars['Int']['input'];
-  engagementId: Scalars['Int']['input'];
-}>;
-
-
-export type AdminUpdateEventActiveEngagementMutation = { __typename?: 'Mutation', updateEventActiveEngagement: { __typename?: 'Event', id: number, activeEngagementId?: number | null } };
+export type AdminGetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, status: EngagementStatus, order: number, createdAt: any, updatedAt: any }> }> };
 
 export type GetEventQueryVariables = Exact<{
   slug: Scalars['String']['input'];
@@ -316,22 +330,68 @@ export type GetEventQueryVariables = Exact<{
 
 export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null } | null };
 
-export type LoginMutationVariables = Exact<{
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-}>;
-
-
-export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'User', id: number, email?: string | null, name?: string | null, username?: string | null, role: Role } | null };
-
-
-export const AdminCreateEngagementDocument = gql`
-    mutation adminCreateEngagement($eventId: Int!, $input: CreateEngagementInput!) {
-  createEngagement(eventId: $eventId, data: $input) {
+export const AdminEngagementFragmentDoc = gql`
+    fragment AdminEngagement on Engagement {
+  id
+  createdAt
+  updatedAt
+  title
+  description
+  startTime
+  endTime
+  viewConfig
+  viewData
+  status
+  order
+}
+    `;
+export const AdminEventFragmentDoc = gql`
+    fragment AdminEvent on Event {
+  id
+  name
+  date
+  location
+  description
+  slug
+  live
+  createdAt
+  updatedAt
+  activeEngagement {
     id
+  }
+  activeEngagementId
+  engagements {
+    id
+    title
+    description
+    startTime
+    endTime
+    viewData
+    viewConfig
+    status
+    order
+    createdAt
+    updatedAt
   }
 }
     `;
+export const UserEventFragmentDoc = gql`
+    fragment UserEvent on Event {
+  id
+  name
+  live
+  description
+  date
+  location
+}
+    `;
+export const AdminCreateEngagementDocument = gql`
+    mutation adminCreateEngagement($eventId: Int!, $input: CreateEngagementInput!) {
+  createEngagement(eventId: $eventId, data: $input) {
+    ...AdminEngagement
+  }
+}
+    ${AdminEngagementFragmentDoc}`;
 export type AdminCreateEngagementMutationFn = Apollo.MutationFunction<AdminCreateEngagementMutation, AdminCreateEngagementMutationVariables>;
 
 /**
@@ -359,252 +419,13 @@ export function useAdminCreateEngagementMutation(baseOptions?: Apollo.MutationHo
 export type AdminCreateEngagementMutationHookResult = ReturnType<typeof useAdminCreateEngagementMutation>;
 export type AdminCreateEngagementMutationResult = Apollo.MutationResult<AdminCreateEngagementMutation>;
 export type AdminCreateEngagementMutationOptions = Apollo.BaseMutationOptions<AdminCreateEngagementMutation, AdminCreateEngagementMutationVariables>;
-export const AdminGetEngagementDocument = gql`
-    query adminGetEngagement($engagementId: Int!) {
-  engagement(id: $engagementId) {
-    id
-    createdAt
-    updatedAt
-    title
-    description
-    startTime
-    endTime
-    viewConfig
-    viewData
-    status
-    order
-  }
-}
-    `;
-
-/**
- * __useAdminGetEngagementQuery__
- *
- * To run a query within a React component, call `useAdminGetEngagementQuery` and pass it any options that fit your needs.
- * When your component renders, `useAdminGetEngagementQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAdminGetEngagementQuery({
- *   variables: {
- *      engagementId: // value for 'engagementId'
- *   },
- * });
- */
-export function useAdminGetEngagementQuery(baseOptions: Apollo.QueryHookOptions<AdminGetEngagementQuery, AdminGetEngagementQueryVariables> & ({ variables: AdminGetEngagementQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AdminGetEngagementQuery, AdminGetEngagementQueryVariables>(AdminGetEngagementDocument, options);
-      }
-export function useAdminGetEngagementLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminGetEngagementQuery, AdminGetEngagementQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AdminGetEngagementQuery, AdminGetEngagementQueryVariables>(AdminGetEngagementDocument, options);
-        }
-export function useAdminGetEngagementSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdminGetEngagementQuery, AdminGetEngagementQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AdminGetEngagementQuery, AdminGetEngagementQueryVariables>(AdminGetEngagementDocument, options);
-        }
-export type AdminGetEngagementQueryHookResult = ReturnType<typeof useAdminGetEngagementQuery>;
-export type AdminGetEngagementLazyQueryHookResult = ReturnType<typeof useAdminGetEngagementLazyQuery>;
-export type AdminGetEngagementSuspenseQueryHookResult = ReturnType<typeof useAdminGetEngagementSuspenseQuery>;
-export type AdminGetEngagementQueryResult = Apollo.QueryResult<AdminGetEngagementQuery, AdminGetEngagementQueryVariables>;
-export const AdminGetEngagementsDocument = gql`
-    query adminGetEngagements($eventId: Int!) {
-  engagements(eventId: $eventId) {
-    id
-    createdAt
-    updatedAt
-    title
-    description
-    startTime
-    endTime
-    viewConfig
-    viewData
-    status
-    order
-  }
-}
-    `;
-
-/**
- * __useAdminGetEngagementsQuery__
- *
- * To run a query within a React component, call `useAdminGetEngagementsQuery` and pass it any options that fit your needs.
- * When your component renders, `useAdminGetEngagementsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAdminGetEngagementsQuery({
- *   variables: {
- *      eventId: // value for 'eventId'
- *   },
- * });
- */
-export function useAdminGetEngagementsQuery(baseOptions: Apollo.QueryHookOptions<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables> & ({ variables: AdminGetEngagementsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables>(AdminGetEngagementsDocument, options);
-      }
-export function useAdminGetEngagementsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables>(AdminGetEngagementsDocument, options);
-        }
-export function useAdminGetEngagementsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables>(AdminGetEngagementsDocument, options);
-        }
-export type AdminGetEngagementsQueryHookResult = ReturnType<typeof useAdminGetEngagementsQuery>;
-export type AdminGetEngagementsLazyQueryHookResult = ReturnType<typeof useAdminGetEngagementsLazyQuery>;
-export type AdminGetEngagementsSuspenseQueryHookResult = ReturnType<typeof useAdminGetEngagementsSuspenseQuery>;
-export type AdminGetEngagementsQueryResult = Apollo.QueryResult<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables>;
-export const AdminGetEventDocument = gql`
-    query adminGetEvent($slug: String!) {
-  event(slug: $slug) {
-    id
-    name
-    location
-    date
-    description
-    live
-    slug
-    createdAt
-    updatedAt
-    activeEngagementId
-    engagements {
-      id
-      description
-      viewData
-      viewConfig
-      startTime
-      endTime
-    }
-  }
-}
-    `;
-
-/**
- * __useAdminGetEventQuery__
- *
- * To run a query within a React component, call `useAdminGetEventQuery` and pass it any options that fit your needs.
- * When your component renders, `useAdminGetEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAdminGetEventQuery({
- *   variables: {
- *      slug: // value for 'slug'
- *   },
- * });
- */
-export function useAdminGetEventQuery(baseOptions: Apollo.QueryHookOptions<AdminGetEventQuery, AdminGetEventQueryVariables> & ({ variables: AdminGetEventQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AdminGetEventQuery, AdminGetEventQueryVariables>(AdminGetEventDocument, options);
-      }
-export function useAdminGetEventLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminGetEventQuery, AdminGetEventQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AdminGetEventQuery, AdminGetEventQueryVariables>(AdminGetEventDocument, options);
-        }
-export function useAdminGetEventSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdminGetEventQuery, AdminGetEventQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AdminGetEventQuery, AdminGetEventQueryVariables>(AdminGetEventDocument, options);
-        }
-export type AdminGetEventQueryHookResult = ReturnType<typeof useAdminGetEventQuery>;
-export type AdminGetEventLazyQueryHookResult = ReturnType<typeof useAdminGetEventLazyQuery>;
-export type AdminGetEventSuspenseQueryHookResult = ReturnType<typeof useAdminGetEventSuspenseQuery>;
-export type AdminGetEventQueryResult = Apollo.QueryResult<AdminGetEventQuery, AdminGetEventQueryVariables>;
-export const AdminGetEventsDocument = gql`
-    query adminGetEvents {
-  events {
-    id
-    name
-    date
-    location
-    description
-    slug
-    activeEngagement {
-      id
-    }
-    activeEngagementId
-    engagements {
-      id
-      title
-      description
-      startTime
-      endTime
-      viewData
-      viewConfig
-      status
-      order
-      createdAt
-      updatedAt
-    }
-    createdAt
-    updatedAt
-  }
-}
-    `;
-
-/**
- * __useAdminGetEventsQuery__
- *
- * To run a query within a React component, call `useAdminGetEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useAdminGetEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAdminGetEventsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useAdminGetEventsQuery(baseOptions?: Apollo.QueryHookOptions<AdminGetEventsQuery, AdminGetEventsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AdminGetEventsQuery, AdminGetEventsQueryVariables>(AdminGetEventsDocument, options);
-      }
-export function useAdminGetEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminGetEventsQuery, AdminGetEventsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AdminGetEventsQuery, AdminGetEventsQueryVariables>(AdminGetEventsDocument, options);
-        }
-export function useAdminGetEventsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdminGetEventsQuery, AdminGetEventsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AdminGetEventsQuery, AdminGetEventsQueryVariables>(AdminGetEventsDocument, options);
-        }
-export type AdminGetEventsQueryHookResult = ReturnType<typeof useAdminGetEventsQuery>;
-export type AdminGetEventsLazyQueryHookResult = ReturnType<typeof useAdminGetEventsLazyQuery>;
-export type AdminGetEventsSuspenseQueryHookResult = ReturnType<typeof useAdminGetEventsSuspenseQuery>;
-export type AdminGetEventsQueryResult = Apollo.QueryResult<AdminGetEventsQuery, AdminGetEventsQueryVariables>;
 export const AdminUpdateEventDocument = gql`
     mutation adminUpdateEvent($id: Int!, $data: UpdateEventInput!) {
   updateEvent(eventId: $id, data: $data) {
-    id
-    name
-    location
-    date
-    description
-    live
-    slug
-    createdAt
-    updatedAt
-    activeEngagementId
-    engagements {
-      id
-      description
-      viewData
-      viewConfig
-      createdAt
-      updatedAt
-      startTime
-      endTime
-    }
+    ...AdminEvent
   }
 }
-    `;
+    ${AdminEventFragmentDoc}`;
 export type AdminUpdateEventMutationFn = Apollo.MutationFunction<AdminUpdateEventMutation, AdminUpdateEventMutationVariables>;
 
 /**
@@ -667,51 +488,6 @@ export function useAdminUpdateEventActiveEngagementMutation(baseOptions?: Apollo
 export type AdminUpdateEventActiveEngagementMutationHookResult = ReturnType<typeof useAdminUpdateEventActiveEngagementMutation>;
 export type AdminUpdateEventActiveEngagementMutationResult = Apollo.MutationResult<AdminUpdateEventActiveEngagementMutation>;
 export type AdminUpdateEventActiveEngagementMutationOptions = Apollo.BaseMutationOptions<AdminUpdateEventActiveEngagementMutation, AdminUpdateEventActiveEngagementMutationVariables>;
-export const GetEventDocument = gql`
-    query getEvent($slug: String!) {
-  event(slug: $slug) {
-    id
-    name
-    live
-    description
-    date
-    location
-  }
-}
-    `;
-
-/**
- * __useGetEventQuery__
- *
- * To run a query within a React component, call `useGetEventQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEventQuery({
- *   variables: {
- *      slug: // value for 'slug'
- *   },
- * });
- */
-export function useGetEventQuery(baseOptions: Apollo.QueryHookOptions<GetEventQuery, GetEventQueryVariables> & ({ variables: GetEventQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
-      }
-export function useGetEventLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
-        }
-export function useGetEventSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
-        }
-export type GetEventQueryHookResult = ReturnType<typeof useGetEventQuery>;
-export type GetEventLazyQueryHookResult = ReturnType<typeof useGetEventLazyQuery>;
-export type GetEventSuspenseQueryHookResult = ReturnType<typeof useGetEventSuspenseQuery>;
-export type GetEventQueryResult = Apollo.QueryResult<GetEventQuery, GetEventQueryVariables>;
 export const LoginDocument = gql`
     mutation login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
@@ -750,3 +526,202 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const AdminGetEngagementDocument = gql`
+    query adminGetEngagement($engagementId: Int!) {
+  engagement(id: $engagementId) {
+    ...AdminEngagement
+  }
+}
+    ${AdminEngagementFragmentDoc}`;
+
+/**
+ * __useAdminGetEngagementQuery__
+ *
+ * To run a query within a React component, call `useAdminGetEngagementQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminGetEngagementQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminGetEngagementQuery({
+ *   variables: {
+ *      engagementId: // value for 'engagementId'
+ *   },
+ * });
+ */
+export function useAdminGetEngagementQuery(baseOptions: Apollo.QueryHookOptions<AdminGetEngagementQuery, AdminGetEngagementQueryVariables> & ({ variables: AdminGetEngagementQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminGetEngagementQuery, AdminGetEngagementQueryVariables>(AdminGetEngagementDocument, options);
+      }
+export function useAdminGetEngagementLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminGetEngagementQuery, AdminGetEngagementQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminGetEngagementQuery, AdminGetEngagementQueryVariables>(AdminGetEngagementDocument, options);
+        }
+export function useAdminGetEngagementSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdminGetEngagementQuery, AdminGetEngagementQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AdminGetEngagementQuery, AdminGetEngagementQueryVariables>(AdminGetEngagementDocument, options);
+        }
+export type AdminGetEngagementQueryHookResult = ReturnType<typeof useAdminGetEngagementQuery>;
+export type AdminGetEngagementLazyQueryHookResult = ReturnType<typeof useAdminGetEngagementLazyQuery>;
+export type AdminGetEngagementSuspenseQueryHookResult = ReturnType<typeof useAdminGetEngagementSuspenseQuery>;
+export type AdminGetEngagementQueryResult = Apollo.QueryResult<AdminGetEngagementQuery, AdminGetEngagementQueryVariables>;
+export const AdminGetEngagementsDocument = gql`
+    query adminGetEngagements($eventId: Int!) {
+  engagements(eventId: $eventId) {
+    ...AdminEngagement
+  }
+}
+    ${AdminEngagementFragmentDoc}`;
+
+/**
+ * __useAdminGetEngagementsQuery__
+ *
+ * To run a query within a React component, call `useAdminGetEngagementsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminGetEngagementsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminGetEngagementsQuery({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useAdminGetEngagementsQuery(baseOptions: Apollo.QueryHookOptions<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables> & ({ variables: AdminGetEngagementsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables>(AdminGetEngagementsDocument, options);
+      }
+export function useAdminGetEngagementsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables>(AdminGetEngagementsDocument, options);
+        }
+export function useAdminGetEngagementsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables>(AdminGetEngagementsDocument, options);
+        }
+export type AdminGetEngagementsQueryHookResult = ReturnType<typeof useAdminGetEngagementsQuery>;
+export type AdminGetEngagementsLazyQueryHookResult = ReturnType<typeof useAdminGetEngagementsLazyQuery>;
+export type AdminGetEngagementsSuspenseQueryHookResult = ReturnType<typeof useAdminGetEngagementsSuspenseQuery>;
+export type AdminGetEngagementsQueryResult = Apollo.QueryResult<AdminGetEngagementsQuery, AdminGetEngagementsQueryVariables>;
+export const AdminGetEventDocument = gql`
+    query adminGetEvent($slug: String!) {
+  event(slug: $slug) {
+    ...AdminEvent
+  }
+}
+    ${AdminEventFragmentDoc}`;
+
+/**
+ * __useAdminGetEventQuery__
+ *
+ * To run a query within a React component, call `useAdminGetEventQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminGetEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminGetEventQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useAdminGetEventQuery(baseOptions: Apollo.QueryHookOptions<AdminGetEventQuery, AdminGetEventQueryVariables> & ({ variables: AdminGetEventQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminGetEventQuery, AdminGetEventQueryVariables>(AdminGetEventDocument, options);
+      }
+export function useAdminGetEventLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminGetEventQuery, AdminGetEventQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminGetEventQuery, AdminGetEventQueryVariables>(AdminGetEventDocument, options);
+        }
+export function useAdminGetEventSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdminGetEventQuery, AdminGetEventQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AdminGetEventQuery, AdminGetEventQueryVariables>(AdminGetEventDocument, options);
+        }
+export type AdminGetEventQueryHookResult = ReturnType<typeof useAdminGetEventQuery>;
+export type AdminGetEventLazyQueryHookResult = ReturnType<typeof useAdminGetEventLazyQuery>;
+export type AdminGetEventSuspenseQueryHookResult = ReturnType<typeof useAdminGetEventSuspenseQuery>;
+export type AdminGetEventQueryResult = Apollo.QueryResult<AdminGetEventQuery, AdminGetEventQueryVariables>;
+export const AdminGetEventsDocument = gql`
+    query adminGetEvents {
+  events {
+    ...AdminEvent
+  }
+}
+    ${AdminEventFragmentDoc}`;
+
+/**
+ * __useAdminGetEventsQuery__
+ *
+ * To run a query within a React component, call `useAdminGetEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminGetEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminGetEventsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAdminGetEventsQuery(baseOptions?: Apollo.QueryHookOptions<AdminGetEventsQuery, AdminGetEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminGetEventsQuery, AdminGetEventsQueryVariables>(AdminGetEventsDocument, options);
+      }
+export function useAdminGetEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminGetEventsQuery, AdminGetEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminGetEventsQuery, AdminGetEventsQueryVariables>(AdminGetEventsDocument, options);
+        }
+export function useAdminGetEventsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdminGetEventsQuery, AdminGetEventsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AdminGetEventsQuery, AdminGetEventsQueryVariables>(AdminGetEventsDocument, options);
+        }
+export type AdminGetEventsQueryHookResult = ReturnType<typeof useAdminGetEventsQuery>;
+export type AdminGetEventsLazyQueryHookResult = ReturnType<typeof useAdminGetEventsLazyQuery>;
+export type AdminGetEventsSuspenseQueryHookResult = ReturnType<typeof useAdminGetEventsSuspenseQuery>;
+export type AdminGetEventsQueryResult = Apollo.QueryResult<AdminGetEventsQuery, AdminGetEventsQueryVariables>;
+export const GetEventDocument = gql`
+    query getEvent($slug: String!) {
+  event(slug: $slug) {
+    ...UserEvent
+  }
+}
+    ${UserEventFragmentDoc}`;
+
+/**
+ * __useGetEventQuery__
+ *
+ * To run a query within a React component, call `useGetEventQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEventQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetEventQuery(baseOptions: Apollo.QueryHookOptions<GetEventQuery, GetEventQueryVariables> & ({ variables: GetEventQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
+      }
+export function useGetEventLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
+        }
+export function useGetEventSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
+        }
+export type GetEventQueryHookResult = ReturnType<typeof useGetEventQuery>;
+export type GetEventLazyQueryHookResult = ReturnType<typeof useGetEventLazyQuery>;
+export type GetEventSuspenseQueryHookResult = ReturnType<typeof useGetEventSuspenseQuery>;
+export type GetEventQueryResult = Apollo.QueryResult<GetEventQuery, GetEventQueryVariables>;

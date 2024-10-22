@@ -14,6 +14,7 @@ import { CrumbMeta, SimpleCrumbs } from "@/components/SimpleCrumbs";
 export function AdminEvent() {
   const { slug } = useParamsSafe("slug");
   const { data, loading, error } = useAdminGetEventQuery({
+    fetchPolicy: "network-only",
     variables: {
       slug: slug || "",
     },

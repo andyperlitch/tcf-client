@@ -11,7 +11,7 @@ export function ToggleActiveEngagementButton({
   activeId?: number | null;
   eventId: number;
 }) {
-  const [updateEvent, { loading, error, data }] =
+  const [updateEvent, { loading /* , error, data */ }] =
     useAdminUpdateEventActiveEngagementMutation();
 
   const setActive = useCallback(() => {

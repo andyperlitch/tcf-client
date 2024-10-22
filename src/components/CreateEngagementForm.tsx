@@ -26,7 +26,12 @@ import {
 } from "./ui/select";
 import { EngagementDefinitions, ViewType } from "@/consts/engagements";
 import { useState } from "react";
-import { useAdminCreateEngagementMutation } from "@/gql/graphql";
+import {
+  AdminGetEventDocument,
+  AdminGetEventQuery,
+  AdminGetEventQueryVariables,
+  useAdminCreateEngagementMutation,
+} from "@/gql/graphql";
 
 const formSchema = z.object({
   title: z.string(),
@@ -45,7 +50,35 @@ export function CreateEngagementForm({
   eventSlug: string;
 }) {
   const [createEngagement, { loading /* , error */ }] =
-    useAdminCreateEngagementMutation();
+    useAdminCreateEngagementMutation({
+      update(cache, { data }) {
+        const existingEvent = cache.readQuery<
+          AdminGetEventQuery,
+          AdminGetEventQueryVariables
+        >({
+          query: AdminGetEventDocument,
+          variables: { slug: eventSlug },
+        });
+
+        if (existingEvent?.event) {
+          console.log("existing event found");
+          cache.writeQuery({
+            query: AdminGetEventDocument,
+            data: {
+              event: {
+                ...existingEvent,
+                engagements: [
+                  ...existingEvent.event.engagements,
+                  data?.createEngagement,
+                ],
+              },
+            },
+            variables: { eventId },
+          });
+        }
+      },
+    });
+
   const navigate = useNavigate();
   const [selectedType, setSelectedType] = useState<string>(
     ViewType.PhotoCarousel

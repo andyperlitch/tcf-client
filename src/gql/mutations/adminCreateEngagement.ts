@@ -6,7 +6,7 @@ export const adminCreateEngagement = gql`
     $input: CreateEngagementInput!
   ) {
     createEngagement(eventId: $eventId, data: $input) {
-      id
+      ...AdminEngagement
     }
   }
 `;
