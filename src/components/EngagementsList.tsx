@@ -12,6 +12,7 @@ import {
   useAdminGetEventQuery,
 } from "@/gql/graphql";
 import { ToggleActiveEngagementButton } from "./ToggleActiveEngagementButton";
+import { DeleteEngagementButton } from "./DeleteEngagementButton";
 
 export function EngagementsList({
   eventId,
@@ -79,7 +80,14 @@ export function EngagementsList({
                 {engagement.title}
               </Link>
             </TableCell>
-            <TableCell>actions..</TableCell>
+            <TableCell>
+              <DeleteEngagementButton
+                id={engagement.id}
+                disabled={
+                  eventData?.event?.activeEngagementId === engagement.id
+                }
+              />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

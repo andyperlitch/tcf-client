@@ -12,6 +12,8 @@
 [X] breadcrumbs
 [X] make engagement active
 [X] fragments
-[ ] ensure engagement gets added to event when created
+[X] ensure engagement gets added to event when created
+[X] delete engagement
+[ ] make engagement inactive
 [ ] update event form
 [ ] toast messages

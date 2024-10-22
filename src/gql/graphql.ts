@@ -82,6 +82,7 @@ export type Mutation = {
   createEvent: Event;
   createReaction: Reaction;
   createSubmission: Submission;
+  deleteEngagement: Engagement;
   login?: Maybe<User>;
   updateEngagement: Engagement;
   updateEngagementStatus: Engagement;
@@ -112,6 +113,11 @@ export type MutationCreateSubmissionArgs = {
   data: Scalars['Json']['input'];
   engagementId: Scalars['Int']['input'];
   userId?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type MutationDeleteEngagementArgs = {
+  engagementId: Scalars['Int']['input'];
 };
 
 
@@ -273,6 +279,13 @@ export type AdminCreateEngagementMutationVariables = Exact<{
 
 export type AdminCreateEngagementMutation = { __typename?: 'Mutation', createEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, order: number } };
 
+export type AdminDeleteEngagementMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type AdminDeleteEngagementMutation = { __typename?: 'Mutation', deleteEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, order: number } };
+
 export type AdminUpdateEventMutationVariables = Exact<{
   id: Scalars['Int']['input'];
   data: UpdateEventInput;
@@ -419,6 +432,39 @@ export function useAdminCreateEngagementMutation(baseOptions?: Apollo.MutationHo
 export type AdminCreateEngagementMutationHookResult = ReturnType<typeof useAdminCreateEngagementMutation>;
 export type AdminCreateEngagementMutationResult = Apollo.MutationResult<AdminCreateEngagementMutation>;
 export type AdminCreateEngagementMutationOptions = Apollo.BaseMutationOptions<AdminCreateEngagementMutation, AdminCreateEngagementMutationVariables>;
+export const AdminDeleteEngagementDocument = gql`
+    mutation adminDeleteEngagement($id: Int!) {
+  deleteEngagement(engagementId: $id) {
+    ...AdminEngagement
+  }
+}
+    ${AdminEngagementFragmentDoc}`;
+export type AdminDeleteEngagementMutationFn = Apollo.MutationFunction<AdminDeleteEngagementMutation, AdminDeleteEngagementMutationVariables>;
+
+/**
+ * __useAdminDeleteEngagementMutation__
+ *
+ * To run a mutation, you first call `useAdminDeleteEngagementMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminDeleteEngagementMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminDeleteEngagementMutation, { data, loading, error }] = useAdminDeleteEngagementMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useAdminDeleteEngagementMutation(baseOptions?: Apollo.MutationHookOptions<AdminDeleteEngagementMutation, AdminDeleteEngagementMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminDeleteEngagementMutation, AdminDeleteEngagementMutationVariables>(AdminDeleteEngagementDocument, options);
+      }
+export type AdminDeleteEngagementMutationHookResult = ReturnType<typeof useAdminDeleteEngagementMutation>;
+export type AdminDeleteEngagementMutationResult = Apollo.MutationResult<AdminDeleteEngagementMutation>;
+export type AdminDeleteEngagementMutationOptions = Apollo.BaseMutationOptions<AdminDeleteEngagementMutation, AdminDeleteEngagementMutationVariables>;
 export const AdminUpdateEventDocument = gql`
     mutation adminUpdateEvent($id: Int!, $data: UpdateEventInput!) {
   updateEvent(eventId: $id, data: $data) {
