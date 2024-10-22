@@ -41,7 +41,7 @@ export function Login() {
         // set the user in the auth context
         setUser(result.data.login);
       } else {
-        throw new Error(`response data: ${JSON.stringify(result.data)}`);
+        throw new Error(`Login: response from server not in expected format`);
       }
     } catch (e) {
       console.error(e);
