@@ -7,7 +7,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
-import { useAdminGetEngagementsQuery } from "@/gql/graphql";
+import {
+  useAdminGetEngagementsQuery,
+  useAdminGetEventQuery,
+} from "@/gql/graphql";
+import { ToggleActiveEngagementButton } from "./ToggleActiveEngagementButton";
 
 export function EngagementsList({
   eventId,
@@ -16,16 +20,42 @@ export function EngagementsList({
   eventId: number;
   eventSlug: string;
 }) {
-  const { data /* , loading, error */ } = useAdminGetEngagementsQuery({
+  const { data, loading, error } = useAdminGetEngagementsQuery({
     variables: {
       eventId,
     },
   });
+  const {
+    data: eventData,
+    loading: eventLoading,
+    error: eventError,
+  } = useAdminGetEventQuery({
+    variables: {
+      slug: eventSlug,
+    },
+  });
+
+  if (loading || eventLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error.message}</p>;
+  }
+
+  if (eventError) {
+    return <p>{eventError.message}</p>;
+  }
+
+  if (!data?.engagements || !eventData?.event) {
+    return <p>No engagements or event data found.</p>;
+  }
 
   return (
     <Table>
       <TableHead>
         <TableRow>
+          <TableHeader>Active</TableHeader>
           <TableHeader>Title</TableHeader>
           <TableHeader>Actions</TableHeader>
         </TableRow>
@@ -33,6 +63,13 @@ export function EngagementsList({
       <TableBody>
         {data?.engagements.map((engagement) => (
           <TableRow key={engagement.id}>
+            <TableCell>
+              <ToggleActiveEngagementButton
+                id={engagement.id}
+                activeId={eventData?.event?.activeEngagementId}
+                eventId={eventId}
+              />
+            </TableCell>
             <TableCell>
               <Link
                 to={`/admin/events/${eventSlug}/engagements/${engagement.id}`}

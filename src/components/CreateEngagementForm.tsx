@@ -72,7 +72,9 @@ export function CreateEngagementForm({
       },
     }).then((res) => {
       // go to the engagement page
-      navigate(`/admin/events/${eventSlug}/${res.data?.createEngagement.id}`);
+      navigate(
+        `/admin/events/${eventSlug}/engagements/${res.data?.createEngagement.id}`
+      );
       console.log(res);
     });
   }

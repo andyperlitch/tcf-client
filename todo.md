@@ -10,5 +10,5 @@
 [X] create-engagement modal
 [X] admin engagement route
 [X] breadcrumbs
-[ ] make engagement active
+[X] make engagement active
 [ ] update event form

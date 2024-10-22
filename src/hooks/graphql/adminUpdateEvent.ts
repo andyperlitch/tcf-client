@@ -12,6 +12,7 @@ export const adminUpdateEvent = gql`
       slug
       createdAt
       updatedAt
+      activeEngagementId
       engagements {
         id
         description
