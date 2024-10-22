@@ -4,8 +4,20 @@ import {
   ApolloProvider as SuperApolloProvider,
 } from "@apollo/client";
 
+let uri: string;
+if (import.meta.env.VITE_GRAPHQL_API_URL) {
+  uri = import.meta.env.VITE_GRAPHQL_API_URL;
+} else {
+  const hostname = window.location.hostname;
+  if (hostname === "thecasualfunk.com") {
+    uri = "https://api.thecasualfunk.com/graphql";
+  } else {
+    uri = `http://${hostname}:3000/graphql`;
+  }
+}
+
 const client = new ApolloClient({
-  uri: import.meta.env.VITE_GRAPHQL_API_URL, // Use the correct API URL for the environment
+  uri, // Use the correct API URL for the environment
   cache: new InMemoryCache(),
   credentials: "include", // Include credentials like cookies (JWT)
 });

@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 export const adminUpdateEventActiveEngagement = gql`
   mutation adminUpdateEventActiveEngagement(
     $eventId: Int!
-    $engagementId: Int!
+    $engagementId: Int
   ) {
     updateEventActiveEngagement(
       engagementId: $engagementId
@@ -11,6 +11,7 @@ export const adminUpdateEventActiveEngagement = gql`
     ) {
       id
       activeEngagementId
+      createdAt
     }
   }
 `;

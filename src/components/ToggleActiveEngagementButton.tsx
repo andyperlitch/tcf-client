@@ -18,10 +18,10 @@ export function ToggleActiveEngagementButton({
     updateEvent({
       variables: {
         eventId,
-        engagementId: id,
+        engagementId: id === activeId ? null : id,
       },
     });
-  }, [eventId, id, updateEvent]);
+  }, [activeId, eventId, id, updateEvent]);
 
   return (
     <Switch

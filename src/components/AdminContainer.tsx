@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ModeToggle } from "./ModeToggle";
 import { buttonVariants } from "./ui/button";
 
-export const ADMIN_NAV_ITEMS = [
+const ADMIN_NAV_ITEMS = [
   {
     id: "events",
     title: "Events",
@@ -54,7 +54,7 @@ function AdminSideNav({ currentSection }: { currentSection: string }) {
         `
           flex space-y-2 p-6
 
-          lg:flex-col lg:space-x-0 lg:space-y-1
+          md:flex-col md:space-x-0 md:space-y-1
         `
       )}
     >

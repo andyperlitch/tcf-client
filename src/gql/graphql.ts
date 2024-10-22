@@ -146,7 +146,7 @@ export type MutationUpdateEventArgs = {
 
 
 export type MutationUpdateEventActiveEngagementArgs = {
-  engagementId: Scalars['Int']['input'];
+  engagementId?: InputMaybe<Scalars['Int']['input']>;
   eventId: Scalars['Int']['input'];
 };
 
@@ -296,11 +296,11 @@ export type AdminUpdateEventMutation = { __typename?: 'Mutation', updateEvent: {
 
 export type AdminUpdateEventActiveEngagementMutationVariables = Exact<{
   eventId: Scalars['Int']['input'];
-  engagementId: Scalars['Int']['input'];
+  engagementId?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type AdminUpdateEventActiveEngagementMutation = { __typename?: 'Mutation', updateEventActiveEngagement: { __typename?: 'Event', id: number, activeEngagementId?: number | null } };
+export type AdminUpdateEventActiveEngagementMutation = { __typename?: 'Mutation', updateEventActiveEngagement: { __typename?: 'Event', id: number, activeEngagementId?: number | null, createdAt: any } };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -500,10 +500,11 @@ export type AdminUpdateEventMutationHookResult = ReturnType<typeof useAdminUpdat
 export type AdminUpdateEventMutationResult = Apollo.MutationResult<AdminUpdateEventMutation>;
 export type AdminUpdateEventMutationOptions = Apollo.BaseMutationOptions<AdminUpdateEventMutation, AdminUpdateEventMutationVariables>;
 export const AdminUpdateEventActiveEngagementDocument = gql`
-    mutation adminUpdateEventActiveEngagement($eventId: Int!, $engagementId: Int!) {
+    mutation adminUpdateEventActiveEngagement($eventId: Int!, $engagementId: Int) {
   updateEventActiveEngagement(engagementId: $engagementId, eventId: $eventId) {
     id
     activeEngagementId
+    createdAt
   }
 }
     `;
