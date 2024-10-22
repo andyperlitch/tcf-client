@@ -27,9 +27,9 @@ import {
 import { EngagementDefinitions, ViewType } from "@/consts/engagements";
 import { useState } from "react";
 import {
-  AdminGetEventDocument,
-  AdminGetEventQuery,
-  AdminGetEventQueryVariables,
+  AdminGetEngagementsDocument,
+  AdminGetEngagementsQuery,
+  AdminGetEngagementsQueryVariables,
   useAdminCreateEngagementMutation,
 } from "@/gql/graphql";
 
@@ -52,26 +52,22 @@ export function CreateEngagementForm({
   const [createEngagement, { loading /* , error */ }] =
     useAdminCreateEngagementMutation({
       update(cache, { data }) {
-        const existingEvent = cache.readQuery<
-          AdminGetEventQuery,
-          AdminGetEventQueryVariables
+        const existingEngagements = cache.readQuery<
+          AdminGetEngagementsQuery,
+          AdminGetEngagementsQueryVariables
         >({
-          query: AdminGetEventDocument,
-          variables: { slug: eventSlug },
+          query: AdminGetEngagementsDocument,
+          variables: { eventId },
         });
-
-        if (existingEvent?.event) {
-          console.log("existing event found");
+        if (existingEngagements?.engagements) {
           cache.writeQuery({
-            query: AdminGetEventDocument,
+            query: AdminGetEngagementsDocument,
             data: {
-              event: {
-                ...existingEvent,
-                engagements: [
-                  ...existingEvent.event.engagements,
-                  data?.createEngagement,
-                ],
-              },
+              ...existingEngagements,
+              engagements: [
+                ...existingEngagements.engagements,
+                data?.createEngagement,
+              ],
             },
             variables: { eventId },
           });

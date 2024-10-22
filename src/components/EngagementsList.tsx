@@ -51,6 +51,8 @@ export function EngagementsList({
     return <p>No engagements or event data found.</p>;
   }
 
+  console.log(`andy data`, data);
+
   return (
     <Table>
       <TableHead>
