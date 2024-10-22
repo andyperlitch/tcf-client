@@ -6,8 +6,7 @@
 [X] admin navigation: events
 [X] events route
 [X] create-event modal
-[ ] admin event route
-[ ] update event form
-[ ]
-[ ] create-engagement modal
+[X] admin event route
+[X] create-engagement modal
 [ ] admin engagement route
+[ ] update event form

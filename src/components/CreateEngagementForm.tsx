@@ -2,6 +2,7 @@ import { gql, useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Form,
   FormControl,
@@ -14,13 +15,22 @@ import { Input } from "@/components/ui/input";
 
 import { z } from "zod";
 import { Textarea } from "./ui/textarea";
-import { DatePicker } from "./ui/datepicker";
 import { useNavigate } from "react-router-dom";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { EngagementDefinitions, ViewType } from "@/consts/engagements";
+import { useState } from "react";
 
 const formSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
-  viewConfig: z.any(),
 });
 
 const CREATE_ENGAGEMENT_MUTATION = gql`
@@ -31,6 +41,10 @@ const CREATE_ENGAGEMENT_MUTATION = gql`
   }
 `;
 
+const engagementTypeDefs = [ViewType.VoteFor, ViewType.PhotoCarousel].map(
+  (type) => EngagementDefinitions[type]
+);
+
 export function CreateEngagementForm({
   eventId,
   eventSlug,
@@ -38,10 +52,13 @@ export function CreateEngagementForm({
   eventId: number;
   eventSlug: string;
 }) {
-  const [createEngagement, { loading, error }] = useMutation(
+  const [createEngagement, { loading /* , error */ }] = useMutation(
     CREATE_ENGAGEMENT_MUTATION
   );
   const navigate = useNavigate();
+  const [selectedType, setSelectedType] = useState<string>(
+    ViewType.PhotoCarousel
+  );
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,16 +66,18 @@ export function CreateEngagementForm({
     defaultValues: {
       title: "",
       description: "",
-      viewConfig: {},
     },
   });
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
+    const viewConfig =
+      EngagementDefinitions[selectedType as ViewType].defaultConfig();
+
     createEngagement({
       variables: {
         eventId,
-        input: values,
+        input: { ...values, viewConfig },
       },
     }).then((res) => {
       // go to the engagement page
@@ -98,9 +117,28 @@ export function CreateEngagementForm({
             </FormItem>
           )}
         />
+        {/* type */}
+        <div className="space-y-2">
+          <Label>View Type</Label>
+          <Select value={selectedType} onValueChange={setSelectedType}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Engagement Types</SelectLabel>
+                {engagementTypeDefs.map((typeDef) => (
+                  <SelectItem key={typeDef.type} value={typeDef.type}>
+                    {typeDef.title}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
 
         <Button type="submit" disabled={loading}>
-          Create Event
+          Create Engagement
         </Button>
       </form>
     </Form>
