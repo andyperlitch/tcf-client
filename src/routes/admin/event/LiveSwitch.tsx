@@ -15,6 +15,7 @@ export function LiveSwitch({ live, setLive, loading }: LiveSwitchProps) {
         checked={live}
         onCheckedChange={setLive}
         disabled={loading}
+        className="data-[state=checked]:bg-constructive"
       />
       <Label htmlFor="event-live">Live</Label>
     </div>

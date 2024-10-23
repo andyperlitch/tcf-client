@@ -1,6 +1,6 @@
 import { AdminContainer } from "@/components/AdminContainer";
 import { format } from "date-fns";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { LiveSwitch } from "./LiveSwitch";
 import { CreateNewEngagementButton } from "@/components/CreateNewEngagementButton";
 import { EngagementsList } from "@/components/EngagementsList";
@@ -11,8 +11,11 @@ import {
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { CrumbMeta, SimpleCrumbs } from "@/components/SimpleCrumbs";
 import { EditableText } from "@/components/EditableText";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 export function AdminEvent() {
+  const [lockEdits, setLockEdits] = useState(false);
   const { slug } = useParamsSafe("slug");
   const { data, loading, error } = useAdminGetEventQuery({
     fetchPolicy: "network-only",
@@ -81,6 +84,7 @@ export function AdminEvent() {
             <div className={`flex items-baseline justify-between space-x-5`}>
               <div className="flex items-baseline space-x-2">
                 <EditableText
+                  locked={lockEdits}
                   element="h1"
                   elementProps={{ className: "text-3xl" }}
                   value={data.event.name}
@@ -89,6 +93,7 @@ export function AdminEvent() {
                 <div className="flex space-x-0">
                   <pre className="text-muted text-md">/events/</pre>
                   <EditableText
+                    locked={lockEdits}
                     element="pre"
                     elementProps={{
                       className: "text-md text-muted-foreground",
@@ -98,15 +103,28 @@ export function AdminEvent() {
                   />
                 </div>
               </div>
-              <LiveSwitch
-                live={data.event.live}
-                setLive={setLive}
-                loading={updateLoading}
-              />
+              <div className="flex items-center space-x-2">
+                <LiveSwitch
+                  live={data.event.live}
+                  setLive={setLive}
+                  loading={updateLoading}
+                />
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="edits-locked"
+                    checked={lockEdits}
+                    onCheckedChange={setLockEdits}
+                    disabled={loading}
+                    className="data-[state=checked]:bg-destructive"
+                  />
+                  <Label htmlFor="edits-locked">Lock</Label>
+                </div>
+              </div>
             </div>
           </div>
 
           <EditableText
+            locked={lockEdits}
             element="div"
             elementProps={{ className: "text-foreground" }}
             value={data.event.description || ""}
@@ -116,6 +134,7 @@ export function AdminEvent() {
             <div className="flex space-x-1 text-foreground">
               <div>📍</div>
               <EditableText
+                locked={lockEdits}
                 element="div"
                 elementProps={{ className: "text-foreground" }}
                 value={data.event.location || ""}

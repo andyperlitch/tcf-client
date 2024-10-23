@@ -9,6 +9,7 @@ interface EditableTextProps<T extends keyof JSX.IntrinsicElements> {
   setValue: (value: string) => void | Promise<any>;
   element: T; // The HTML tag (key of JSX Intrinsic Elements)
   elementProps?: Omit<JSX.IntrinsicElements[T], "onClick">; // Props for the element, except onClick
+  locked?: boolean;
 }
 
 export function EditableText<T extends keyof JSX.IntrinsicElements>({
@@ -16,6 +17,7 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
   setValue,
   element: Element,
   elementProps = {} as JSX.IntrinsicElements[T],
+  locked = false,
 }: EditableTextProps<T>) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState(false);
@@ -64,7 +66,10 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
 
   return React.createElement(
     Element,
-    { ...elementProps, onClick: () => !editing && setEditing(true) }, // Spread elementProps and handle click
+    {
+      ...elementProps,
+      onClick: () => !editing && !locked && setEditing(true), // Spread elementProps and handle click
+    }, // Spread elementProps and handle click
     editing ? (
       <ResizableInput
         className={`
