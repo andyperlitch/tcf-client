@@ -1,4 +1,3 @@
-import { gql, useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,8 @@ import { z } from "zod";
 import { Textarea } from "./ui/textarea";
 import { DatePicker } from "./ui/datepicker";
 import { useNavigate } from "react-router-dom";
+import { CreateEventInput, useAdminCreateEventMutation } from "@/gql/graphql";
+import { WithoutNull } from "@/types/common";
 
 const formSchema = z.object({
   name: z.string(),
@@ -25,26 +26,14 @@ const formSchema = z.object({
   location: z.string().optional(),
 });
 
-const CREATE_EVENT_MUTATION = gql`
-  mutation CreateEvent($input: CreateEventInput!) {
-    createEvent(data: $input) {
-      id
-      name
-      location
-      date
-      description
-      slug
-      createdAt
-    }
-  }
-`;
+type CreateEventFormInput = WithoutNull<CreateEventInput>;
 
 export function CreateEventForm() {
-  const [createEvent, { loading, error }] = useMutation(CREATE_EVENT_MUTATION);
+  const [createEvent, { loading, error }] = useAdminCreateEventMutation();
   const navigate = useNavigate();
 
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<CreateEventFormInput>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -56,15 +45,18 @@ export function CreateEventForm() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: CreateEventFormInput) {
     createEvent({
       variables: {
         input: values,
       },
     }).then((res) => {
+      if (!res?.data?.createEvent.slug) {
+        throw new Error("createEvent mutation did not return expected format");
+      }
+
       // go to the event page
       navigate(`/admin/events/${res.data.createEvent.slug}`);
-      console.log(res);
     });
   }
 

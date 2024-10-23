@@ -14,6 +14,6 @@
 [X] fragments
 [X] ensure engagement gets added to event when created
 [X] delete engagement
-[ ] make engagement inactive
-[ ] update event form
+[X] make engagement inactive
+[ ] update event form/mode
 [ ] toast messages
