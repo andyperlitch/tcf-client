@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import cn from "clsx";
+import { cn } from "@/lib/utils";
 import { SetListSong } from "../../types/setlist";
 import { SongViewType } from "./types";
 

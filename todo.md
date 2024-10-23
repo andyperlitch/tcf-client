@@ -15,5 +15,6 @@
 [X] ensure engagement gets added to event when created
 [X] delete engagement
 [X] make engagement inactive
-[ ] update event form/mode
+[X] update event form/mode
+[ ] lock event from being updated while engagement is active
 [ ] toast messages

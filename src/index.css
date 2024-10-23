@@ -99,6 +99,8 @@ button:focus-visible {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --constructive: 143 68% 30%;
+    --constructive-foreground: 0 0% 9%;
   }
   .dark {
     --background: 19.4 88.6% 2.4%;
@@ -125,6 +127,8 @@ button:focus-visible {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --constructive: 143 68% 30%;
+    --constructive-foreground: 0 0% 98%;
   }
 }
 
