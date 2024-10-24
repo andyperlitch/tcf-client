@@ -16,12 +16,12 @@ export function Login() {
   const [searchParams] = useSearchParams();
   const { setUser, user } = useAuth();
 
-  const [username, setUsername] = useState("");
+  const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, { loading, error }] = useLoginMutation();
 
-  const updateUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
+  const updateEmailOrUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmailOrUsername(e.target.value);
   };
   const updatePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -32,7 +32,7 @@ export function Login() {
     try {
       const result = await login({
         variables: {
-          email: username,
+          emailOrUsername,
           password,
         },
       });
@@ -66,9 +66,9 @@ export function Login() {
         <Input
           className="mb-3"
           type="text"
-          value={username}
-          placeholder="Username"
-          onChange={updateUsername}
+          value={emailOrUsername}
+          placeholder="Email or Username"
+          onChange={updateEmailOrUsername}
         />
         <Input
           className="mb-3"

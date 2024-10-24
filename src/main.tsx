@@ -96,12 +96,12 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AuthProvider>
-      <ApolloProvider>
+    <ApolloProvider>
+      <AuthProvider>
         <ThemeProvider defaultTheme="dark" storageKey="tcf-ui-theme">
           <RouterProvider router={router} />
         </ThemeProvider>
-      </ApolloProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </ApolloProvider>
   </React.StrictMode>
 );
