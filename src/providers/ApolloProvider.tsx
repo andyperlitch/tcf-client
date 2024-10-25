@@ -31,6 +31,8 @@ const httpLink = new HttpLink({
 const wsLink = new GraphQLWsLink(
   createClient({
     url: wsUri,
+    retryAttempts: 5, // Maximum number of retry attempts
+    shouldRetry: () => true, // Always attempt to retry the connection
   })
 );
 
