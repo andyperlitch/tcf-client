@@ -5,15 +5,11 @@ import {
 } from "@apollo/client";
 
 let uri: string;
-if (import.meta.env.VITE_GRAPHQL_API_URL) {
-  uri = import.meta.env.VITE_GRAPHQL_API_URL;
+const hostname = window.location.hostname;
+if (hostname === "thecasualfunk.com") {
+  uri = "https://api.thecasualfunk.com/graphql";
 } else {
-  const hostname = window.location.hostname;
-  if (hostname === "thecasualfunk.com") {
-    uri = "https://api.thecasualfunk.com/graphql";
-  } else {
-    uri = `http://${hostname}:3000/graphql`;
-  }
+  uri = `http://${hostname}:3000/graphql`;
 }
 
 const client = new ApolloClient({
