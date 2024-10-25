@@ -14,7 +14,7 @@ import { EditableText } from "@/components/EditableText";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
-export function AdminEvent() {
+export function AdminEventPage() {
   const [lockEdits, setLockEdits] = useState(false);
   const { slug } = useParamsSafe("slug");
   const { data, loading, error } = useAdminGetEventQuery({

@@ -21,10 +21,11 @@ import { Login } from "./routes/Login";
 import { ProtectedArea } from "./components/ProtectedArea";
 import { AdminHome } from "./routes/admin/home";
 import { AuthProvider } from "./providers/AuthProvider";
-import { AdminEvent } from "./routes/admin/event";
+import { AdminEventPage } from "./routes/admin/event";
 import { AdminEngagement } from "./routes/admin/event/engagement";
 import { AdminEvents } from "./routes/admin/events";
 import { EventStageScreen } from "./routes/stage/EventStageScreen";
+import { Toaster } from "./components/ui/toaster";
 
 const router = createBrowserRouter([
   {
@@ -90,7 +91,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/events/:slug",
-        element: <AdminEvent />,
+        element: <AdminEventPage />,
       },
       {
         path: "/admin/events/:slug/engagements/:engagementId",
@@ -106,6 +107,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <ThemeProvider defaultTheme="dark" storageKey="tcf-ui-theme">
           <RouterProvider router={router} />
+          <Toaster />
         </ThemeProvider>
       </AuthProvider>
     </ApolloProvider>

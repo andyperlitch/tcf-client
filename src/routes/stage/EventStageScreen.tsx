@@ -18,7 +18,7 @@ export function EventStageScreen() {
   useOnActiveEngagementChangedSubscription({
     variables: { eventSlug: slug },
     onData: ({ client, data }) => {
-      if (data?.data?.activeEngagementChanged) {
+      if (data?.data?.activeEngagementChanged !== undefined) {
         // Update the Apollo cache with the new active engagement
         client.cache.updateQuery<StageGetEventQuery>(
           {
@@ -31,7 +31,7 @@ export function EventStageScreen() {
             return {
               event: {
                 ...cachedData.event,
-                activeEngagement: data.data?.activeEngagementChanged,
+                activeEngagement: data.data?.activeEngagementChanged || null,
               },
             };
           }

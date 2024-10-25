@@ -1,1 +1,1 @@
-export * from "./AdminEvent";
+export * from "./AdminEventPage";
