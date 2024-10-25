@@ -23,7 +23,6 @@ export type CreateEngagementInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   endTime?: InputMaybe<Scalars['DateTime']['input']>;
   startTime?: InputMaybe<Scalars['DateTime']['input']>;
-  status?: InputMaybe<EngagementStatus>;
   title: Scalars['String']['input'];
   viewConfig?: InputMaybe<Scalars['Json']['input']>;
   viewData?: InputMaybe<Scalars['Json']['input']>;
@@ -54,7 +53,6 @@ export type Engagement = {
   id: Scalars['Int']['output'];
   order: Scalars['Int']['output'];
   startTime?: Maybe<Scalars['DateTime']['output']>;
-  status: EngagementStatus;
   submissions: Array<Submission>;
   title: Scalars['String']['output'];
   type: EngagementType;
@@ -62,12 +60,6 @@ export type Engagement = {
   viewConfig?: Maybe<Scalars['Json']['output']>;
   viewData?: Maybe<Scalars['Json']['output']>;
 };
-
-export enum EngagementStatus {
-  Finished = 'FINISHED',
-  InProgress = 'IN_PROGRESS',
-  NotStarted = 'NOT_STARTED'
-}
 
 export enum EngagementType {
   PhotoCarousel = 'PHOTO_CAROUSEL',
@@ -103,7 +95,6 @@ export type Mutation = {
   login?: Maybe<User>;
   signup: User;
   updateEngagement: Engagement;
-  updateEngagementStatus: Engagement;
   updateEvent: Event;
   updateReaction: Reaction;
   updateSubmission: Submission;
@@ -168,12 +159,6 @@ export type MutationSignupArgs = {
 export type MutationUpdateEngagementArgs = {
   data: UpdateEngagementInput;
   engagementId: Scalars['Int']['input'];
-};
-
-
-export type MutationUpdateEngagementStatusArgs = {
-  engagementId: Scalars['Int']['input'];
-  status: EngagementStatus;
 };
 
 
@@ -273,7 +258,6 @@ export type UpdateEngagementInput = {
   endTime?: InputMaybe<Scalars['DateTime']['input']>;
   order?: InputMaybe<Scalars['Int']['input']>;
   startTime?: InputMaybe<Scalars['DateTime']['input']>;
-  status?: InputMaybe<EngagementStatus>;
   title?: InputMaybe<Scalars['String']['input']>;
   viewConfig?: InputMaybe<Scalars['Json']['input']>;
   viewData?: InputMaybe<Scalars['Json']['input']>;
@@ -307,15 +291,15 @@ export type User = {
   username?: Maybe<Scalars['String']['output']>;
 };
 
-export type AdminEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, order: number };
+export type AdminEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, order: number };
 
-export type AdminEventFragment = { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, status: EngagementStatus, order: number, createdAt: any, updatedAt: any }> };
+export type AdminEventFragment = { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, order: number, createdAt: any, updatedAt: any }> };
 
-export type StageEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> };
+export type StageEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> };
 
-export type StageEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null };
+export type StageEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null };
 
-export type UserEngagementFragmentFragment = { __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, type: EngagementType };
+export type UserEngagementFragmentFragment = { __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType };
 
 export type UserEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null };
 
@@ -333,21 +317,21 @@ export type AdminCreateEngagementMutationVariables = Exact<{
 }>;
 
 
-export type AdminCreateEngagementMutation = { __typename?: 'Mutation', createEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, order: number } };
+export type AdminCreateEngagementMutation = { __typename?: 'Mutation', createEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, order: number } };
 
 export type AdminCreateEventMutationVariables = Exact<{
   input: CreateEventInput;
 }>;
 
 
-export type AdminCreateEventMutation = { __typename?: 'Mutation', createEvent: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, status: EngagementStatus, order: number, createdAt: any, updatedAt: any }> } };
+export type AdminCreateEventMutation = { __typename?: 'Mutation', createEvent: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, order: number, createdAt: any, updatedAt: any }> } };
 
 export type AdminDeleteEngagementMutationVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
 
-export type AdminDeleteEngagementMutation = { __typename?: 'Mutation', deleteEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, order: number } };
+export type AdminDeleteEngagementMutation = { __typename?: 'Mutation', deleteEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, order: number } };
 
 export type AdminUpdateEventMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -355,7 +339,7 @@ export type AdminUpdateEventMutationVariables = Exact<{
 }>;
 
 
-export type AdminUpdateEventMutation = { __typename?: 'Mutation', updateEvent: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, status: EngagementStatus, order: number, createdAt: any, updatedAt: any }> } };
+export type AdminUpdateEventMutation = { __typename?: 'Mutation', updateEvent: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, order: number, createdAt: any, updatedAt: any }> } };
 
 export type LoginMutationVariables = Exact<{
   emailOrUsername: Scalars['String']['input'];
@@ -370,26 +354,26 @@ export type AdminGetEngagementQueryVariables = Exact<{
 }>;
 
 
-export type AdminGetEngagementQuery = { __typename?: 'Query', engagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, order: number } | null };
+export type AdminGetEngagementQuery = { __typename?: 'Query', engagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, order: number } | null };
 
 export type AdminGetEngagementsQueryVariables = Exact<{
   eventId: Scalars['Int']['input'];
 }>;
 
 
-export type AdminGetEngagementsQuery = { __typename?: 'Query', engagements: Array<{ __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, order: number }> };
+export type AdminGetEngagementsQuery = { __typename?: 'Query', engagements: Array<{ __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, order: number }> };
 
 export type AdminGetEventQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type AdminGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, status: EngagementStatus, order: number, createdAt: any, updatedAt: any }> } | null };
+export type AdminGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, order: number, createdAt: any, updatedAt: any }> } | null };
 
 export type AdminGetEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AdminGetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, status: EngagementStatus, order: number, createdAt: any, updatedAt: any }> }> };
+export type AdminGetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, order: number, createdAt: any, updatedAt: any }> }> };
 
 export type GetEventQueryVariables = Exact<{
   slug: Scalars['String']['input'];
@@ -403,7 +387,7 @@ export type StageGetEventQueryVariables = Exact<{
 }>;
 
 
-export type StageGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null } | null };
+export type StageGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null } | null };
 
 export type WhoamiQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -415,7 +399,7 @@ export type OnActiveEngagementChangedSubscriptionVariables = Exact<{
 }>;
 
 
-export type OnActiveEngagementChangedSubscription = { __typename?: 'Subscription', activeEngagementChanged?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null };
+export type OnActiveEngagementChangedSubscription = { __typename?: 'Subscription', activeEngagementChanged?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null };
 
 export const AdminEngagementFragmentDoc = gql`
     fragment AdminEngagement on Engagement {
@@ -428,7 +412,6 @@ export const AdminEngagementFragmentDoc = gql`
   endTime
   viewConfig
   viewData
-  status
   order
 }
     `;
@@ -455,7 +438,6 @@ export const AdminEventFragmentDoc = gql`
     endTime
     viewData
     viewConfig
-    status
     order
     createdAt
     updatedAt
@@ -473,7 +455,6 @@ export const StageEngagementFragmentDoc = gql`
   endTime
   viewConfig
   viewData
-  status
   type
   order
   submissions {
@@ -515,7 +496,6 @@ export const UserEngagementFragmentFragmentDoc = gql`
   endTime
   viewConfig
   viewData
-  status
   type
 }
     `;

@@ -9,7 +9,6 @@ export const UserEngagementFragment = gql`
     endTime
     viewConfig
     viewData
-    status
     type
   }
 `;

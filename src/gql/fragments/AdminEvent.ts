@@ -23,7 +23,6 @@ export const AdminEvent = gql`
       endTime
       viewData
       viewConfig
-      status
       order
       createdAt
       updatedAt

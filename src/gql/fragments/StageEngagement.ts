@@ -11,7 +11,6 @@ export const StageEngagement = gql`
     endTime
     viewConfig
     viewData
-    status
     type
     order
     submissions {

@@ -11,7 +11,6 @@ export const AdminEngagement = gql`
     endTime
     viewConfig
     viewData
-    status
     order
   }
 `;
