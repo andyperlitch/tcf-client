@@ -24,6 +24,7 @@ import { AuthProvider } from "./providers/AuthProvider";
 import { AdminEvent } from "./routes/admin/event";
 import { AdminEngagement } from "./routes/admin/event/engagement";
 import { AdminEvents } from "./routes/admin/events";
+import { EventStageScreen } from "./routes/stage/EventStageScreen";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,11 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/stage/:slug",
+    element: <EventStageScreen />,
     errorElement: <ErrorPage />,
   },
   {

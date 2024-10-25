@@ -91,7 +91,7 @@ export function AdminEvent() {
                   setValue={updateEventName}
                 />
                 <div className="flex space-x-0">
-                  <pre className="text-muted text-md">/events/</pre>
+                  <pre className="text-muted text-md">/event/</pre>
                   <EditableText
                     locked={lockEdits}
                     element="pre"

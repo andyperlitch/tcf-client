@@ -1,4 +1,4 @@
-import { useAdminUpdateEventActiveEngagementMutation } from "@/gql/graphql";
+import { useAdminChangeEventActiveEngagementMutation } from "@/gql/graphql";
 import { Switch } from "./ui/switch";
 import { useCallback } from "react";
 
@@ -11,17 +11,17 @@ export function ToggleActiveEngagementButton({
   activeId?: number | null;
   eventId: number;
 }) {
-  const [updateEvent, { loading /* , error, data */ }] =
-    useAdminUpdateEventActiveEngagementMutation();
+  const [changeEvent, { loading /* , error, data */ }] =
+    useAdminChangeEventActiveEngagementMutation();
 
   const setActive = useCallback(() => {
-    updateEvent({
+    changeEvent({
       variables: {
         eventId,
         engagementId: id === activeId ? null : id,
       },
     });
-  }, [activeId, eventId, id, updateEvent]);
+  }, [activeId, eventId, id, changeEvent]);
 
   return (
     <Switch

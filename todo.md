@@ -18,3 +18,4 @@
 [X] update event form/mode
 [ ] lock event from being updated while engagement is active
 [ ] toast messages
+[ ] engagement status switcher

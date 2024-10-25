@@ -92,6 +92,7 @@ export type Event = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  changeEventActiveEngagement: Event;
   createEngagement: Engagement;
   createEvent: Event;
   createReaction: Reaction;
@@ -104,9 +105,14 @@ export type Mutation = {
   updateEngagement: Engagement;
   updateEngagementStatus: Engagement;
   updateEvent: Event;
-  updateEventActiveEngagement: Event;
   updateReaction: Reaction;
   updateSubmission: Submission;
+};
+
+
+export type MutationChangeEventActiveEngagementArgs = {
+  engagementId?: InputMaybe<Scalars['Int']['input']>;
+  eventId: Scalars['Int']['input'];
 };
 
 
@@ -173,12 +179,6 @@ export type MutationUpdateEngagementStatusArgs = {
 
 export type MutationUpdateEventArgs = {
   data?: InputMaybe<UpdateEventInput>;
-  eventId: Scalars['Int']['input'];
-};
-
-
-export type MutationUpdateEventActiveEngagementArgs = {
-  engagementId?: InputMaybe<Scalars['Int']['input']>;
   eventId: Scalars['Int']['input'];
 };
 
@@ -261,29 +261,11 @@ export type Submission = {
 export type Subscription = {
   __typename?: 'Subscription';
   activeEngagementChanged?: Maybe<Engagement>;
-  engagementStatusChanged?: Maybe<EngagementStatus>;
-  newReaction?: Maybe<Reaction>;
-  newSubmission?: Maybe<Submission>;
 };
 
 
 export type SubscriptionActiveEngagementChangedArgs = {
-  eventId: Scalars['Int']['input'];
-};
-
-
-export type SubscriptionEngagementStatusChangedArgs = {
-  engagementId: Scalars['Int']['input'];
-};
-
-
-export type SubscriptionNewReactionArgs = {
-  engagementId: Scalars['Int']['input'];
-};
-
-
-export type SubscriptionNewSubmissionArgs = {
-  engagementId: Scalars['Int']['input'];
+  eventSlug: Scalars['String']['input'];
 };
 
 export type UpdateEngagementInput = {
@@ -329,7 +311,17 @@ export type AdminEngagementFragment = { __typename?: 'Engagement', id: number, c
 
 export type AdminEventFragment = { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, status: EngagementStatus, order: number, createdAt: any, updatedAt: any }> };
 
+export type StageEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, order: number };
+
 export type UserEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null };
+
+export type AdminChangeEventActiveEngagementMutationVariables = Exact<{
+  eventId: Scalars['Int']['input'];
+  engagementId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type AdminChangeEventActiveEngagementMutation = { __typename?: 'Mutation', changeEventActiveEngagement: { __typename?: 'Event', id: number, activeEngagementId?: number | null, createdAt: any } };
 
 export type AdminCreateEngagementMutationVariables = Exact<{
   eventId: Scalars['Int']['input'];
@@ -360,14 +352,6 @@ export type AdminUpdateEventMutationVariables = Exact<{
 
 
 export type AdminUpdateEventMutation = { __typename?: 'Mutation', updateEvent: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, status: EngagementStatus, order: number, createdAt: any, updatedAt: any }> } };
-
-export type AdminUpdateEventActiveEngagementMutationVariables = Exact<{
-  eventId: Scalars['Int']['input'];
-  engagementId?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-
-export type AdminUpdateEventActiveEngagementMutation = { __typename?: 'Mutation', updateEventActiveEngagement: { __typename?: 'Event', id: number, activeEngagementId?: number | null, createdAt: any } };
 
 export type LoginMutationVariables = Exact<{
   emailOrUsername: Scalars['String']['input'];
@@ -415,6 +399,13 @@ export type WhoamiQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type WhoamiQuery = { __typename?: 'Query', whoami?: { __typename?: 'User', id: number, email?: string | null, username?: string | null, name?: string | null, lastLogin?: any | null, role: Role } | null };
 
+export type OnActiveEngagementChangedSubscriptionVariables = Exact<{
+  eventSlug: Scalars['String']['input'];
+}>;
+
+
+export type OnActiveEngagementChangedSubscription = { __typename?: 'Subscription', activeEngagementChanged?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, status: EngagementStatus, order: number } | null };
+
 export const AdminEngagementFragmentDoc = gql`
     fragment AdminEngagement on Engagement {
   id
@@ -460,6 +451,21 @@ export const AdminEventFragmentDoc = gql`
   }
 }
     `;
+export const StageEngagementFragmentDoc = gql`
+    fragment StageEngagement on Engagement {
+  id
+  createdAt
+  updatedAt
+  title
+  description
+  startTime
+  endTime
+  viewConfig
+  viewData
+  status
+  order
+}
+    `;
 export const UserEventFragmentDoc = gql`
     fragment UserEvent on Event {
   id
@@ -470,6 +476,42 @@ export const UserEventFragmentDoc = gql`
   location
 }
     `;
+export const AdminChangeEventActiveEngagementDocument = gql`
+    mutation adminChangeEventActiveEngagement($eventId: Int!, $engagementId: Int) {
+  changeEventActiveEngagement(engagementId: $engagementId, eventId: $eventId) {
+    id
+    activeEngagementId
+    createdAt
+  }
+}
+    `;
+export type AdminChangeEventActiveEngagementMutationFn = Apollo.MutationFunction<AdminChangeEventActiveEngagementMutation, AdminChangeEventActiveEngagementMutationVariables>;
+
+/**
+ * __useAdminChangeEventActiveEngagementMutation__
+ *
+ * To run a mutation, you first call `useAdminChangeEventActiveEngagementMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminChangeEventActiveEngagementMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminChangeEventActiveEngagementMutation, { data, loading, error }] = useAdminChangeEventActiveEngagementMutation({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *      engagementId: // value for 'engagementId'
+ *   },
+ * });
+ */
+export function useAdminChangeEventActiveEngagementMutation(baseOptions?: Apollo.MutationHookOptions<AdminChangeEventActiveEngagementMutation, AdminChangeEventActiveEngagementMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminChangeEventActiveEngagementMutation, AdminChangeEventActiveEngagementMutationVariables>(AdminChangeEventActiveEngagementDocument, options);
+      }
+export type AdminChangeEventActiveEngagementMutationHookResult = ReturnType<typeof useAdminChangeEventActiveEngagementMutation>;
+export type AdminChangeEventActiveEngagementMutationResult = Apollo.MutationResult<AdminChangeEventActiveEngagementMutation>;
+export type AdminChangeEventActiveEngagementMutationOptions = Apollo.BaseMutationOptions<AdminChangeEventActiveEngagementMutation, AdminChangeEventActiveEngagementMutationVariables>;
 export const AdminCreateEngagementDocument = gql`
     mutation adminCreateEngagement($eventId: Int!, $input: CreateEngagementInput!) {
   createEngagement(eventId: $eventId, data: $input) {
@@ -604,42 +646,6 @@ export function useAdminUpdateEventMutation(baseOptions?: Apollo.MutationHookOpt
 export type AdminUpdateEventMutationHookResult = ReturnType<typeof useAdminUpdateEventMutation>;
 export type AdminUpdateEventMutationResult = Apollo.MutationResult<AdminUpdateEventMutation>;
 export type AdminUpdateEventMutationOptions = Apollo.BaseMutationOptions<AdminUpdateEventMutation, AdminUpdateEventMutationVariables>;
-export const AdminUpdateEventActiveEngagementDocument = gql`
-    mutation adminUpdateEventActiveEngagement($eventId: Int!, $engagementId: Int) {
-  updateEventActiveEngagement(engagementId: $engagementId, eventId: $eventId) {
-    id
-    activeEngagementId
-    createdAt
-  }
-}
-    `;
-export type AdminUpdateEventActiveEngagementMutationFn = Apollo.MutationFunction<AdminUpdateEventActiveEngagementMutation, AdminUpdateEventActiveEngagementMutationVariables>;
-
-/**
- * __useAdminUpdateEventActiveEngagementMutation__
- *
- * To run a mutation, you first call `useAdminUpdateEventActiveEngagementMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAdminUpdateEventActiveEngagementMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [adminUpdateEventActiveEngagementMutation, { data, loading, error }] = useAdminUpdateEventActiveEngagementMutation({
- *   variables: {
- *      eventId: // value for 'eventId'
- *      engagementId: // value for 'engagementId'
- *   },
- * });
- */
-export function useAdminUpdateEventActiveEngagementMutation(baseOptions?: Apollo.MutationHookOptions<AdminUpdateEventActiveEngagementMutation, AdminUpdateEventActiveEngagementMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AdminUpdateEventActiveEngagementMutation, AdminUpdateEventActiveEngagementMutationVariables>(AdminUpdateEventActiveEngagementDocument, options);
-      }
-export type AdminUpdateEventActiveEngagementMutationHookResult = ReturnType<typeof useAdminUpdateEventActiveEngagementMutation>;
-export type AdminUpdateEventActiveEngagementMutationResult = Apollo.MutationResult<AdminUpdateEventActiveEngagementMutation>;
-export type AdminUpdateEventActiveEngagementMutationOptions = Apollo.BaseMutationOptions<AdminUpdateEventActiveEngagementMutation, AdminUpdateEventActiveEngagementMutationVariables>;
 export const LoginDocument = gql`
     mutation login($emailOrUsername: String!, $password: String!) {
   login(emailOrUsername: $emailOrUsername, password: $password) {
@@ -921,3 +927,33 @@ export type WhoamiQueryHookResult = ReturnType<typeof useWhoamiQuery>;
 export type WhoamiLazyQueryHookResult = ReturnType<typeof useWhoamiLazyQuery>;
 export type WhoamiSuspenseQueryHookResult = ReturnType<typeof useWhoamiSuspenseQuery>;
 export type WhoamiQueryResult = Apollo.QueryResult<WhoamiQuery, WhoamiQueryVariables>;
+export const OnActiveEngagementChangedDocument = gql`
+    subscription OnActiveEngagementChanged($eventSlug: String!) {
+  activeEngagementChanged(eventSlug: $eventSlug) {
+    ...StageEngagement
+  }
+}
+    ${StageEngagementFragmentDoc}`;
+
+/**
+ * __useOnActiveEngagementChangedSubscription__
+ *
+ * To run a query within a React component, call `useOnActiveEngagementChangedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnActiveEngagementChangedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnActiveEngagementChangedSubscription({
+ *   variables: {
+ *      eventSlug: // value for 'eventSlug'
+ *   },
+ * });
+ */
+export function useOnActiveEngagementChangedSubscription(baseOptions: Apollo.SubscriptionHookOptions<OnActiveEngagementChangedSubscription, OnActiveEngagementChangedSubscriptionVariables> & ({ variables: OnActiveEngagementChangedSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnActiveEngagementChangedSubscription, OnActiveEngagementChangedSubscriptionVariables>(OnActiveEngagementChangedDocument, options);
+      }
+export type OnActiveEngagementChangedSubscriptionHookResult = ReturnType<typeof useOnActiveEngagementChangedSubscription>;
+export type OnActiveEngagementChangedSubscriptionResult = Apollo.SubscriptionResult<OnActiveEngagementChangedSubscription>;

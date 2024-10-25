@@ -2,20 +2,55 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider as SuperApolloProvider,
+  split,
+  HttpLink,
 } from "@apollo/client";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
+import { getMainDefinition } from "@apollo/client/utilities";
 
-let uri: string;
+let httpUri: string;
+let wsUri: string;
 const hostname = window.location.hostname;
+
 if (hostname === "thecasualfunk.com") {
-  uri = "https://api.thecasualfunk.com/graphql";
+  httpUri = "https://api.thecasualfunk.com/graphql";
+  wsUri = "wss://api.thecasualfunk.com/graphql";
 } else {
-  uri = `http://${hostname}:3000/graphql`;
+  httpUri = `http://${hostname}:3000/graphql`;
+  wsUri = `ws://${hostname}:3000/graphql`;
 }
 
-const client = new ApolloClient({
-  uri, // Use the correct API URL for the environment
-  cache: new InMemoryCache(),
+// HTTP Link for queries and mutations
+const httpLink = new HttpLink({
+  uri: httpUri,
   credentials: "include", // Include credentials like cookies (JWT)
+});
+
+// WebSocket Link for subscriptions
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: wsUri,
+  })
+);
+
+// Split the links based on operation type
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink, // Use wsLink for subscriptions
+  httpLink // Use httpLink for queries and mutations
+);
+
+// Create the Apollo Client instance
+const client = new ApolloClient({
+  link: splitLink,
+  cache: new InMemoryCache(),
 });
 
 export function ApolloProvider({ children }: { children: React.ReactNode }) {

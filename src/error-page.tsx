@@ -14,9 +14,13 @@ export default function ErrorPage() {
       >
         <h1 className="mb-8 text-8xl">Oops!</h1>
         <p className="text-4xl">Sorry, an unexpected error has occurred.</p>
-        <p>
-          <i>{error.message}</i>
-        </p>
+        <pre
+          className={`
+            mt-4 rounded-md bg-slate-50 p-3 text-muted text-md font-mono
+          `}
+        >
+          {error.message}
+        </pre>
       </div>
     </>
   );
