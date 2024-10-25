@@ -1,28 +1,49 @@
 import { CodeBlock } from "@/components/CodeBlock";
 import {
-  useGetEventQuery,
+  StageGetEventDocument,
+  StageGetEventQuery,
   useOnActiveEngagementChangedSubscription,
+  useStageGetEventQuery,
 } from "@/gql/graphql";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 
 export function EventStageScreen() {
   const { slug } = useParamsSafe("slug");
-  const { data } = useGetEventQuery({
+  const { data } = useStageGetEventQuery({
     variables: {
       slug,
     },
   });
 
-  const { data: engagementData } = useOnActiveEngagementChangedSubscription({
+  useOnActiveEngagementChangedSubscription({
     variables: { eventSlug: slug },
+    onData: ({ client, data }) => {
+      if (data?.data?.activeEngagementChanged) {
+        // Update the Apollo cache with the new active engagement
+        client.cache.updateQuery<StageGetEventQuery>(
+          {
+            query: StageGetEventDocument,
+            variables: { slug },
+          },
+          (cachedData) => {
+            if (!cachedData?.event) return cachedData;
+
+            return {
+              event: {
+                ...cachedData.event,
+                activeEngagement: data.data?.activeEngagementChanged,
+              },
+            };
+          }
+        );
+      }
+    },
   });
 
   return (
     <div className="flex flex-col gap-4">
       <h2>Event</h2>
       <CodeBlock json={data} />
-      <h2>Engagement</h2>
-      <CodeBlock json={engagementData} />
     </div>
   );
 }
