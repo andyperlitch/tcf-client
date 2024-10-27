@@ -1,52 +1,24 @@
-import { CodeBlock } from "@/components/CodeBlock";
-import {
-  StageGetEventDocument,
-  StageGetEventQuery,
-  useOnActiveEngagementChangedSubscription,
-  useStageGetEventQuery,
-} from "@/gql/graphql";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
+import { FunksGivingStage } from "./FunksGivingStage";
+import { FC } from "react";
+
+const CUSTOM_EVENT_PAGES: Record<string, FC> = {
+  funksgiving: FunksGivingStage,
+};
 
 export function EventStageScreen() {
   const { slug } = useParamsSafe("slug");
-  const { data } = useStageGetEventQuery({
-    variables: {
-      slug,
-    },
-  });
-
-  useOnActiveEngagementChangedSubscription({
-    variables: { eventSlug: slug },
-    onData: ({ client, data }) => {
-      if (data?.data?.activeEngagementChanged !== undefined) {
-        // Update the Apollo cache with the new active engagement
-        client.cache.updateQuery<StageGetEventQuery>(
-          {
-            query: StageGetEventDocument,
-            variables: { slug },
-          },
-          (cachedData) => {
-            if (!cachedData?.event) return cachedData;
-
-            return {
-              event: {
-                ...cachedData.event,
-                activeEngagement: data.data?.activeEngagementChanged || null,
-              },
-            };
-          }
-        );
-      }
-    },
-  });
+  const CustomEventPage = CUSTOM_EVENT_PAGES[slug];
 
   return (
     <div className="flex flex-col gap-4">
-      <h2>Event</h2>
-      <details>
-        <summary>Event</summary>
-        <CodeBlock json={data} />
-      </details>
+      {CustomEventPage ? (
+        <CustomEventPage />
+      ) : (
+        <div>
+          <h2>No Custom Event Page</h2>
+        </div>
+      )}
     </div>
   );
 }
