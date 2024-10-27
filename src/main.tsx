@@ -12,7 +12,7 @@ import Root from "./routes/root";
 import ErrorPage from "./error-page";
 import { SetList } from "./routes/SetList";
 import { SetListSong } from "./routes/SetListSong";
-import { Event } from "./routes/event";
+import { EventMobileScreen } from "./routes/event";
 import { SetListProvider } from "./providers/SetListProvider";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { Sets } from "./routes/Sets";
@@ -26,6 +26,7 @@ import { AdminEngagement } from "./routes/admin/event/engagement";
 import { AdminEvents } from "./routes/admin/events";
 import { EventStageScreen } from "./routes/stage/EventStageScreen";
 import { Toaster } from "./components/ui/toaster";
+import { QuickSignup } from "./routes/QuickSignup";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,16 @@ const router = createBrowserRouter([
   {
     path: "/stage/:slug",
     element: <EventStageScreen />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/e/:slug",
+    element: <EventMobileScreen />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/quick-signup",
+    element: <QuickSignup />,
     errorElement: <ErrorPage />,
   },
   {
@@ -62,10 +73,6 @@ const router = createBrowserRouter([
       {
         path: "/sets",
         element: <Sets />,
-      },
-      {
-        path: "/event/:slug",
-        element: <Event />,
       },
       {
         path: "/setlist",

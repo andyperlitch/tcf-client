@@ -185,6 +185,7 @@ export type Query = {
   engagements: Array<Engagement>;
   event?: Maybe<Event>;
   events: Array<Event>;
+  randomName: Scalars['String']['output'];
   submissions: Array<Submission>;
   whoami?: Maybe<User>;
 };
@@ -295,13 +296,13 @@ export type AdminEngagementFragment = { __typename?: 'Engagement', id: number, c
 
 export type AdminEventFragment = { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, order: number, createdAt: any, updatedAt: any }> };
 
+export type FanEventFragmentFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null };
+
 export type StageEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> };
 
 export type StageEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null };
 
 export type UserEngagementFragmentFragment = { __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType };
-
-export type UserEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null };
 
 export type AdminChangeEventActiveEngagementMutationVariables = Exact<{
   eventId: Scalars['Int']['input'];
@@ -341,6 +342,13 @@ export type AdminUpdateEventMutationVariables = Exact<{
 
 export type AdminUpdateEventMutation = { __typename?: 'Mutation', updateEvent: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, order: number, createdAt: any, updatedAt: any }> } };
 
+export type FanSignupMutationVariables = Exact<{
+  data: SignupInput;
+}>;
+
+
+export type FanSignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'User', id: number, name?: string | null, role: Role } };
+
 export type LoginMutationVariables = Exact<{
   emailOrUsername: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -375,12 +383,17 @@ export type AdminGetEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AdminGetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, order: number, createdAt: any, updatedAt: any }> }> };
 
-export type GetEventQueryVariables = Exact<{
+export type FanGetEventQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null } | null };
+export type FanGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null } | null };
+
+export type RandomNameQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RandomNameQuery = { __typename?: 'Query', randomName: string };
 
 export type StageGetEventQueryVariables = Exact<{
   slug: Scalars['String']['input'];
@@ -474,6 +487,19 @@ export const StageEngagementFragmentDoc = gql`
   }
 }
     `;
+export const FanEventFragmentFragmentDoc = gql`
+    fragment FanEventFragment on Event {
+  id
+  name
+  live
+  description
+  date
+  location
+  activeEngagement {
+    ...StageEngagement
+  }
+}
+    ${StageEngagementFragmentDoc}`;
 export const StageEventFragmentDoc = gql`
     fragment StageEvent on Event {
   id
@@ -497,16 +523,6 @@ export const UserEngagementFragmentFragmentDoc = gql`
   viewConfig
   viewData
   type
-}
-    `;
-export const UserEventFragmentDoc = gql`
-    fragment UserEvent on Event {
-  id
-  name
-  live
-  description
-  date
-  location
 }
     `;
 export const AdminChangeEventActiveEngagementDocument = gql`
@@ -679,6 +695,41 @@ export function useAdminUpdateEventMutation(baseOptions?: Apollo.MutationHookOpt
 export type AdminUpdateEventMutationHookResult = ReturnType<typeof useAdminUpdateEventMutation>;
 export type AdminUpdateEventMutationResult = Apollo.MutationResult<AdminUpdateEventMutation>;
 export type AdminUpdateEventMutationOptions = Apollo.BaseMutationOptions<AdminUpdateEventMutation, AdminUpdateEventMutationVariables>;
+export const FanSignupDocument = gql`
+    mutation fanSignup($data: SignupInput!) {
+  signup(data: $data) {
+    id
+    name
+    role
+  }
+}
+    `;
+export type FanSignupMutationFn = Apollo.MutationFunction<FanSignupMutation, FanSignupMutationVariables>;
+
+/**
+ * __useFanSignupMutation__
+ *
+ * To run a mutation, you first call `useFanSignupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFanSignupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fanSignupMutation, { data, loading, error }] = useFanSignupMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useFanSignupMutation(baseOptions?: Apollo.MutationHookOptions<FanSignupMutation, FanSignupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FanSignupMutation, FanSignupMutationVariables>(FanSignupDocument, options);
+      }
+export type FanSignupMutationHookResult = ReturnType<typeof useFanSignupMutation>;
+export type FanSignupMutationResult = Apollo.MutationResult<FanSignupMutation>;
+export type FanSignupMutationOptions = Apollo.BaseMutationOptions<FanSignupMutation, FanSignupMutationVariables>;
 export const LoginDocument = gql`
     mutation login($emailOrUsername: String!, $password: String!) {
   login(emailOrUsername: $emailOrUsername, password: $password) {
@@ -876,46 +927,83 @@ export type AdminGetEventsQueryHookResult = ReturnType<typeof useAdminGetEventsQ
 export type AdminGetEventsLazyQueryHookResult = ReturnType<typeof useAdminGetEventsLazyQuery>;
 export type AdminGetEventsSuspenseQueryHookResult = ReturnType<typeof useAdminGetEventsSuspenseQuery>;
 export type AdminGetEventsQueryResult = Apollo.QueryResult<AdminGetEventsQuery, AdminGetEventsQueryVariables>;
-export const GetEventDocument = gql`
-    query getEvent($slug: String!) {
+export const FanGetEventDocument = gql`
+    query fanGetEvent($slug: String!) {
   event(slug: $slug) {
-    ...UserEvent
+    ...FanEventFragment
   }
 }
-    ${UserEventFragmentDoc}`;
+    ${FanEventFragmentFragmentDoc}`;
 
 /**
- * __useGetEventQuery__
+ * __useFanGetEventQuery__
  *
- * To run a query within a React component, call `useGetEventQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFanGetEventQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFanGetEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetEventQuery({
+ * const { data, loading, error } = useFanGetEventQuery({
  *   variables: {
  *      slug: // value for 'slug'
  *   },
  * });
  */
-export function useGetEventQuery(baseOptions: Apollo.QueryHookOptions<GetEventQuery, GetEventQueryVariables> & ({ variables: GetEventQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useFanGetEventQuery(baseOptions: Apollo.QueryHookOptions<FanGetEventQuery, FanGetEventQueryVariables> & ({ variables: FanGetEventQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
+        return Apollo.useQuery<FanGetEventQuery, FanGetEventQueryVariables>(FanGetEventDocument, options);
       }
-export function useGetEventLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
+export function useFanGetEventLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FanGetEventQuery, FanGetEventQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
+          return Apollo.useLazyQuery<FanGetEventQuery, FanGetEventQueryVariables>(FanGetEventDocument, options);
         }
-export function useGetEventSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
+export function useFanGetEventSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FanGetEventQuery, FanGetEventQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
+          return Apollo.useSuspenseQuery<FanGetEventQuery, FanGetEventQueryVariables>(FanGetEventDocument, options);
         }
-export type GetEventQueryHookResult = ReturnType<typeof useGetEventQuery>;
-export type GetEventLazyQueryHookResult = ReturnType<typeof useGetEventLazyQuery>;
-export type GetEventSuspenseQueryHookResult = ReturnType<typeof useGetEventSuspenseQuery>;
-export type GetEventQueryResult = Apollo.QueryResult<GetEventQuery, GetEventQueryVariables>;
+export type FanGetEventQueryHookResult = ReturnType<typeof useFanGetEventQuery>;
+export type FanGetEventLazyQueryHookResult = ReturnType<typeof useFanGetEventLazyQuery>;
+export type FanGetEventSuspenseQueryHookResult = ReturnType<typeof useFanGetEventSuspenseQuery>;
+export type FanGetEventQueryResult = Apollo.QueryResult<FanGetEventQuery, FanGetEventQueryVariables>;
+export const RandomNameDocument = gql`
+    query RandomName {
+  randomName
+}
+    `;
+
+/**
+ * __useRandomNameQuery__
+ *
+ * To run a query within a React component, call `useRandomNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRandomNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRandomNameQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRandomNameQuery(baseOptions?: Apollo.QueryHookOptions<RandomNameQuery, RandomNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RandomNameQuery, RandomNameQueryVariables>(RandomNameDocument, options);
+      }
+export function useRandomNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RandomNameQuery, RandomNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RandomNameQuery, RandomNameQueryVariables>(RandomNameDocument, options);
+        }
+export function useRandomNameSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<RandomNameQuery, RandomNameQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RandomNameQuery, RandomNameQueryVariables>(RandomNameDocument, options);
+        }
+export type RandomNameQueryHookResult = ReturnType<typeof useRandomNameQuery>;
+export type RandomNameLazyQueryHookResult = ReturnType<typeof useRandomNameLazyQuery>;
+export type RandomNameSuspenseQueryHookResult = ReturnType<typeof useRandomNameSuspenseQuery>;
+export type RandomNameQueryResult = Apollo.QueryResult<RandomNameQuery, RandomNameQueryVariables>;
 export const StageGetEventDocument = gql`
     query stageGetEvent($slug: String!) {
   event(slug: $slug) {
