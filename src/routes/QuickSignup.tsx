@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useFanSignupMutation, useRandomNameQuery } from "@/gql/graphql";
+import { useFanSignupMutation, useRandomNameLazyQuery } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
 
 export function QuickSignup() {
@@ -13,18 +13,19 @@ export function QuickSignup() {
 
   const [signup, { loading }] = useFanSignupMutation();
 
-  useRandomNameQuery({
-    skip: nickname !== "",
+  const [fetchNewNickname] = useRandomNameLazyQuery({
     onCompleted: (data) => {
-      if (nickname === "") {
-        setNickname(data.randomName);
-        setTimeout(() => {
-          nicknameInputRef.current?.focus();
-          nicknameInputRef.current?.select();
-        });
-      }
+      setNickname(data.randomName);
+      setTimeout(() => {
+        nicknameInputRef.current?.focus();
+        nicknameInputRef.current?.select();
+      });
     },
   });
+
+  useEffect(() => {
+    fetchNewNickname();
+  }, [fetchNewNickname]);
 
   function updateNickname(e: React.ChangeEvent<HTMLInputElement>) {
     setNickname(e.target.value);
@@ -63,13 +64,23 @@ export function QuickSignup() {
         onChange={updateNickname}
         className="pb-8 pt-8 text-center text-xl"
       />
-      <Button
-        size="lg"
-        onClick={doSignup}
-        disabled={nickname === "" || loading}
-      >
-        Proceed
-      </Button>
+      <div className="flex w-full justify-center space-x-4">
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={() => fetchNewNickname({ fetchPolicy: "no-cache" })}
+        >
+          Suggest another
+        </Button>
+        <Button
+          size="lg"
+          variant="constructive"
+          onClick={doSignup}
+          disabled={nickname === "" || loading}
+        >
+          Looks good
+        </Button>
+      </div>
     </div>
   );
 }

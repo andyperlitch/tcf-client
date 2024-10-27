@@ -12,7 +12,7 @@ import Root from "./routes/root";
 import ErrorPage from "./error-page";
 import { SetList } from "./routes/SetList";
 import { SetListSong } from "./routes/SetListSong";
-import { EventMobileScreen } from "./routes/event";
+import { EventFanScreen } from "./routes/fan/EventFanScreen";
 import { SetListProvider } from "./providers/SetListProvider";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { Sets } from "./routes/Sets";
@@ -46,7 +46,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/e/:slug",
-    element: <EventMobileScreen />,
+    element: <EventFanScreen />,
     errorElement: <ErrorPage />,
   },
   {
