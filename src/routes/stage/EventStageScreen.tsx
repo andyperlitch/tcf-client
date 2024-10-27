@@ -11,7 +11,7 @@ export function EventStageScreen() {
   const CustomEventPage = CUSTOM_EVENT_PAGES[slug];
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex h-screen w-screen flex-col gap-4">
       {CustomEventPage ? (
         <CustomEventPage />
       ) : (
