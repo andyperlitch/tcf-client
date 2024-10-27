@@ -43,7 +43,10 @@ export function EventStageScreen() {
   return (
     <div className="flex flex-col gap-4">
       <h2>Event</h2>
-      <CodeBlock json={data} />
+      <details>
+        <summary>Event</summary>
+        <CodeBlock json={data} />
+      </details>
     </div>
   );
 }
