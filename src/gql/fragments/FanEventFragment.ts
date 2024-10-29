@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const FanEventFragment = gql`
-  fragment FanEventFragment on Event {
+gql`
+  fragment FanEvent on Event {
     id
     name
     live
@@ -9,7 +9,7 @@ export const FanEventFragment = gql`
     date
     location
     activeEngagement {
-      ...StageEngagement
+      ...FanEngagement
     }
   }
 `;

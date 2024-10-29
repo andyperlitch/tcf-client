@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const adminGetEvents = gql`
+gql`
   query adminGetEvents {
     events {
       ...AdminEvent

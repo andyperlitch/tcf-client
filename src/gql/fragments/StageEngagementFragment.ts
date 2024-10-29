@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const StageEngagement = gql`
+gql`
   fragment StageEngagement on Engagement {
     id
     createdAt
@@ -14,19 +14,7 @@ export const StageEngagement = gql`
     type
     order
     submissions {
-      id
-      createdAt
-      data
-      reactions {
-        id
-        createdAt
-        type
-        userId
-        user {
-          id
-          name
-        }
-      }
+      ...StageSubmission
     }
   }
 `;

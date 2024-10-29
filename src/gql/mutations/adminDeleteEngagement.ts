@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const adminDeleteEngagement = gql`
+gql`
   mutation adminDeleteEngagement($id: Int!) {
     deleteEngagement(engagementId: $id) {
       ...AdminEngagement

@@ -1,5 +1,5 @@
 import { useParamsSafe } from "@/hooks/useParamsSafe";
-import { FunksGivingStage } from "./FunksGivingStage";
+import { FunksGivingStage } from "./Funksgiving/FunksGivingStage";
 import { FC } from "react";
 
 const CUSTOM_EVENT_PAGES: Record<string, FC> = {

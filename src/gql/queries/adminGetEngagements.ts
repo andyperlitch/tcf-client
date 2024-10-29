@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const adminGetEngagements = gql`
+gql`
   query adminGetEngagements($eventId: Int!) {
     engagements(eventId: $eventId) {
       ...AdminEngagement

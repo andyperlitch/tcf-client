@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const adminGetEvent = gql`
+gql`
   query adminGetEvent($slug: String!) {
     event(slug: $slug) {
       ...AdminEvent

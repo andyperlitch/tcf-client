@@ -1,5 +1,6 @@
 import { AdminContainer } from "@/components/AdminContainer";
 import { CrumbMeta, SimpleCrumbs } from "@/components/SimpleCrumbs";
+import { SubmissionsList } from "@/components/SubmissionsList";
 import {
   useAdminGetEngagementQuery,
   useAdminGetEventQuery,
@@ -53,6 +54,7 @@ export function AdminEngagement() {
         <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
           <span>Submissions</span>{" "}
         </h2>
+        <SubmissionsList engagementId={engagement.id} />
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const AdminEngagement = gql`
+gql`
   fragment AdminEngagement on Engagement {
     id
     createdAt

@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const UserEngagementFragment = gql`
-  fragment UserEngagementFragment on Engagement {
+gql`
+  fragment UserEngagement on Engagement {
     id
     title
     description

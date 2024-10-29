@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const AdminEvent = gql`
+gql`
   fragment AdminEvent on Event {
     id
     name

@@ -66,6 +66,11 @@ export enum EngagementType {
   VoteFor = 'VOTE_FOR'
 }
 
+export type EngagementViewDataChangedPayload = {
+  __typename?: 'EngagementViewDataChangedPayload';
+  viewData?: Maybe<Scalars['Json']['output']>;
+};
+
 export type Event = {
   __typename?: 'Event';
   activeEngagement?: Maybe<Engagement>;
@@ -89,6 +94,7 @@ export type Mutation = {
   createEvent: Event;
   createReaction: Reaction;
   createSubmission: Submission;
+  createSubmissionPresignedUrl: PresignedUrlResponse;
   deleteEngagement: Engagement;
   deleteReaction: Reaction;
   deleteSubmission: Submission;
@@ -127,6 +133,12 @@ export type MutationCreateReactionArgs = {
 export type MutationCreateSubmissionArgs = {
   data: Scalars['Json']['input'];
   engagementId: Scalars['Int']['input'];
+};
+
+
+export type MutationCreateSubmissionPresignedUrlArgs = {
+  engagementId: Scalars['Int']['input'];
+  mimeType: Scalars['String']['input'];
 };
 
 
@@ -179,6 +191,12 @@ export type MutationUpdateSubmissionArgs = {
   submissionId: Scalars['Int']['input'];
 };
 
+export type PresignedUrlResponse = {
+  __typename?: 'PresignedUrlResponse';
+  key: Scalars['String']['output'];
+  url: Scalars['String']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   engagement?: Maybe<Engagement>;
@@ -186,6 +204,7 @@ export type Query = {
   event?: Maybe<Event>;
   events: Array<Event>;
   randomName: Scalars['String']['output'];
+  submission?: Maybe<Submission>;
   submissions: Array<Submission>;
   whoami?: Maybe<User>;
 };
@@ -203,6 +222,11 @@ export type QueryEngagementsArgs = {
 
 export type QueryEventArgs = {
   slug: Scalars['String']['input'];
+};
+
+
+export type QuerySubmissionArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -247,11 +271,17 @@ export type Submission = {
 export type Subscription = {
   __typename?: 'Subscription';
   activeEngagementChanged?: Maybe<Engagement>;
+  engagementViewDataChanged?: Maybe<EngagementViewDataChangedPayload>;
 };
 
 
 export type SubscriptionActiveEngagementChangedArgs = {
   eventSlug: Scalars['String']['input'];
+};
+
+
+export type SubscriptionEngagementViewDataChangedArgs = {
+  engagementId: Scalars['Int']['input'];
 };
 
 export type UpdateEngagementInput = {
@@ -296,13 +326,21 @@ export type AdminEngagementFragment = { __typename?: 'Engagement', id: number, c
 
 export type AdminEventFragment = { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, order: number, createdAt: any, updatedAt: any }> };
 
-export type FanEventFragmentFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null };
+export type AdminSubmissionFragment = { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> };
+
+export type FanEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> };
+
+export type FanEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null };
+
+export type FanSubmissionFragment = { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> };
 
 export type StageEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> };
 
-export type StageEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null };
+export type StageEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, slug: string, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null };
 
-export type UserEngagementFragmentFragment = { __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType };
+export type StageSubmissionFragment = { __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> };
+
+export type UserEngagementFragment = { __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType };
 
 export type AdminChangeEventActiveEngagementMutationVariables = Exact<{
   eventId: Scalars['Int']['input'];
@@ -334,6 +372,13 @@ export type AdminDeleteEngagementMutationVariables = Exact<{
 
 export type AdminDeleteEngagementMutation = { __typename?: 'Mutation', deleteEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, order: number } };
 
+export type AdminDeleteSubmissionMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type AdminDeleteSubmissionMutation = { __typename?: 'Mutation', deleteSubmission: { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> } };
+
 export type AdminUpdateEventMutationVariables = Exact<{
   id: Scalars['Int']['input'];
   data: UpdateEventInput;
@@ -341,6 +386,22 @@ export type AdminUpdateEventMutationVariables = Exact<{
 
 
 export type AdminUpdateEventMutation = { __typename?: 'Mutation', updateEvent: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, order: number, createdAt: any, updatedAt: any }> } };
+
+export type CreateSubmissionPresignedUrlMutationVariables = Exact<{
+  engagementId: Scalars['Int']['input'];
+  mimeType: Scalars['String']['input'];
+}>;
+
+
+export type CreateSubmissionPresignedUrlMutation = { __typename?: 'Mutation', createSubmissionPresignedUrl: { __typename?: 'PresignedUrlResponse', url: string, key: string } };
+
+export type FanCreateSubmissionMutationVariables = Exact<{
+  engagementId: Scalars['Int']['input'];
+  data: Scalars['Json']['input'];
+}>;
+
+
+export type FanCreateSubmissionMutation = { __typename?: 'Mutation', createSubmission: { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> } };
 
 export type FanSignupMutationVariables = Exact<{
   data: SignupInput;
@@ -383,6 +444,13 @@ export type AdminGetEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AdminGetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewData?: any | null, viewConfig?: any | null, order: number, createdAt: any, updatedAt: any }> }> };
 
+export type AdminGetSubmissionsQueryVariables = Exact<{
+  engagementId: Scalars['Int']['input'];
+}>;
+
+
+export type AdminGetSubmissionsQuery = { __typename?: 'Query', submissions: Array<{ __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> }> };
+
 export type FanGetEventQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
@@ -400,7 +468,14 @@ export type StageGetEventQueryVariables = Exact<{
 }>;
 
 
-export type StageGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null } | null };
+export type StageGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, live: boolean, slug: string, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null } | null };
+
+export type StageGetSubmissionQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type StageGetSubmissionQuery = { __typename?: 'Query', submission?: { __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> } | null };
 
 export type WhoamiQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -413,6 +488,13 @@ export type OnActiveEngagementChangedSubscriptionVariables = Exact<{
 
 
 export type OnActiveEngagementChangedSubscription = { __typename?: 'Subscription', activeEngagementChanged?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, viewConfig?: any | null, viewData?: any | null, type: EngagementType, order: number, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null };
+
+export type OnEngagementViewDataChangedSubscriptionVariables = Exact<{
+  engagementId: Scalars['Int']['input'];
+}>;
+
+
+export type OnEngagementViewDataChangedSubscription = { __typename?: 'Subscription', engagementViewDataChanged?: { __typename?: 'EngagementViewDataChangedPayload', viewData?: any | null } | null };
 
 export const AdminEngagementFragmentDoc = gql`
     fragment AdminEngagement on Engagement {
@@ -457,8 +539,19 @@ export const AdminEventFragmentDoc = gql`
   }
 }
     `;
-export const StageEngagementFragmentDoc = gql`
-    fragment StageEngagement on Engagement {
+export const AdminSubmissionFragmentDoc = gql`
+    fragment AdminSubmission on Submission {
+  id
+  data
+  createdAt
+  reactions {
+    id
+    type
+  }
+}
+    `;
+export const FanEngagementFragmentDoc = gql`
+    fragment FanEngagement on Engagement {
   id
   createdAt
   updatedAt
@@ -487,8 +580,8 @@ export const StageEngagementFragmentDoc = gql`
   }
 }
     `;
-export const FanEventFragmentFragmentDoc = gql`
-    fragment FanEventFragment on Event {
+export const FanEventFragmentDoc = gql`
+    fragment FanEvent on Event {
   id
   name
   live
@@ -496,15 +589,62 @@ export const FanEventFragmentFragmentDoc = gql`
   date
   location
   activeEngagement {
-    ...StageEngagement
+    ...FanEngagement
   }
 }
-    ${StageEngagementFragmentDoc}`;
+    ${FanEngagementFragmentDoc}`;
+export const FanSubmissionFragmentDoc = gql`
+    fragment FanSubmission on Submission {
+  id
+  data
+  createdAt
+  reactions {
+    id
+    type
+  }
+}
+    `;
+export const StageSubmissionFragmentDoc = gql`
+    fragment StageSubmission on Submission {
+  id
+  createdAt
+  data
+  reactions {
+    id
+    createdAt
+    type
+    userId
+    user {
+      id
+      name
+    }
+  }
+}
+    `;
+export const StageEngagementFragmentDoc = gql`
+    fragment StageEngagement on Engagement {
+  id
+  createdAt
+  updatedAt
+  title
+  description
+  startTime
+  endTime
+  viewConfig
+  viewData
+  type
+  order
+  submissions {
+    ...StageSubmission
+  }
+}
+    ${StageSubmissionFragmentDoc}`;
 export const StageEventFragmentDoc = gql`
     fragment StageEvent on Event {
   id
   name
   live
+  slug
   description
   date
   location
@@ -513,8 +653,8 @@ export const StageEventFragmentDoc = gql`
   }
 }
     ${StageEngagementFragmentDoc}`;
-export const UserEngagementFragmentFragmentDoc = gql`
-    fragment UserEngagementFragment on Engagement {
+export const UserEngagementFragmentDoc = gql`
+    fragment UserEngagement on Engagement {
   id
   title
   description
@@ -661,6 +801,39 @@ export function useAdminDeleteEngagementMutation(baseOptions?: Apollo.MutationHo
 export type AdminDeleteEngagementMutationHookResult = ReturnType<typeof useAdminDeleteEngagementMutation>;
 export type AdminDeleteEngagementMutationResult = Apollo.MutationResult<AdminDeleteEngagementMutation>;
 export type AdminDeleteEngagementMutationOptions = Apollo.BaseMutationOptions<AdminDeleteEngagementMutation, AdminDeleteEngagementMutationVariables>;
+export const AdminDeleteSubmissionDocument = gql`
+    mutation adminDeleteSubmission($id: Int!) {
+  deleteSubmission(submissionId: $id) {
+    ...AdminSubmission
+  }
+}
+    ${AdminSubmissionFragmentDoc}`;
+export type AdminDeleteSubmissionMutationFn = Apollo.MutationFunction<AdminDeleteSubmissionMutation, AdminDeleteSubmissionMutationVariables>;
+
+/**
+ * __useAdminDeleteSubmissionMutation__
+ *
+ * To run a mutation, you first call `useAdminDeleteSubmissionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminDeleteSubmissionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminDeleteSubmissionMutation, { data, loading, error }] = useAdminDeleteSubmissionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useAdminDeleteSubmissionMutation(baseOptions?: Apollo.MutationHookOptions<AdminDeleteSubmissionMutation, AdminDeleteSubmissionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminDeleteSubmissionMutation, AdminDeleteSubmissionMutationVariables>(AdminDeleteSubmissionDocument, options);
+      }
+export type AdminDeleteSubmissionMutationHookResult = ReturnType<typeof useAdminDeleteSubmissionMutation>;
+export type AdminDeleteSubmissionMutationResult = Apollo.MutationResult<AdminDeleteSubmissionMutation>;
+export type AdminDeleteSubmissionMutationOptions = Apollo.BaseMutationOptions<AdminDeleteSubmissionMutation, AdminDeleteSubmissionMutationVariables>;
 export const AdminUpdateEventDocument = gql`
     mutation adminUpdateEvent($id: Int!, $data: UpdateEventInput!) {
   updateEvent(eventId: $id, data: $data) {
@@ -695,6 +868,75 @@ export function useAdminUpdateEventMutation(baseOptions?: Apollo.MutationHookOpt
 export type AdminUpdateEventMutationHookResult = ReturnType<typeof useAdminUpdateEventMutation>;
 export type AdminUpdateEventMutationResult = Apollo.MutationResult<AdminUpdateEventMutation>;
 export type AdminUpdateEventMutationOptions = Apollo.BaseMutationOptions<AdminUpdateEventMutation, AdminUpdateEventMutationVariables>;
+export const CreateSubmissionPresignedUrlDocument = gql`
+    mutation CreateSubmissionPresignedUrl($engagementId: Int!, $mimeType: String!) {
+  createSubmissionPresignedUrl(engagementId: $engagementId, mimeType: $mimeType) {
+    url
+    key
+  }
+}
+    `;
+export type CreateSubmissionPresignedUrlMutationFn = Apollo.MutationFunction<CreateSubmissionPresignedUrlMutation, CreateSubmissionPresignedUrlMutationVariables>;
+
+/**
+ * __useCreateSubmissionPresignedUrlMutation__
+ *
+ * To run a mutation, you first call `useCreateSubmissionPresignedUrlMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSubmissionPresignedUrlMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSubmissionPresignedUrlMutation, { data, loading, error }] = useCreateSubmissionPresignedUrlMutation({
+ *   variables: {
+ *      engagementId: // value for 'engagementId'
+ *      mimeType: // value for 'mimeType'
+ *   },
+ * });
+ */
+export function useCreateSubmissionPresignedUrlMutation(baseOptions?: Apollo.MutationHookOptions<CreateSubmissionPresignedUrlMutation, CreateSubmissionPresignedUrlMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSubmissionPresignedUrlMutation, CreateSubmissionPresignedUrlMutationVariables>(CreateSubmissionPresignedUrlDocument, options);
+      }
+export type CreateSubmissionPresignedUrlMutationHookResult = ReturnType<typeof useCreateSubmissionPresignedUrlMutation>;
+export type CreateSubmissionPresignedUrlMutationResult = Apollo.MutationResult<CreateSubmissionPresignedUrlMutation>;
+export type CreateSubmissionPresignedUrlMutationOptions = Apollo.BaseMutationOptions<CreateSubmissionPresignedUrlMutation, CreateSubmissionPresignedUrlMutationVariables>;
+export const FanCreateSubmissionDocument = gql`
+    mutation fanCreateSubmission($engagementId: Int!, $data: Json!) {
+  createSubmission(engagementId: $engagementId, data: $data) {
+    ...FanSubmission
+  }
+}
+    ${FanSubmissionFragmentDoc}`;
+export type FanCreateSubmissionMutationFn = Apollo.MutationFunction<FanCreateSubmissionMutation, FanCreateSubmissionMutationVariables>;
+
+/**
+ * __useFanCreateSubmissionMutation__
+ *
+ * To run a mutation, you first call `useFanCreateSubmissionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFanCreateSubmissionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fanCreateSubmissionMutation, { data, loading, error }] = useFanCreateSubmissionMutation({
+ *   variables: {
+ *      engagementId: // value for 'engagementId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useFanCreateSubmissionMutation(baseOptions?: Apollo.MutationHookOptions<FanCreateSubmissionMutation, FanCreateSubmissionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FanCreateSubmissionMutation, FanCreateSubmissionMutationVariables>(FanCreateSubmissionDocument, options);
+      }
+export type FanCreateSubmissionMutationHookResult = ReturnType<typeof useFanCreateSubmissionMutation>;
+export type FanCreateSubmissionMutationResult = Apollo.MutationResult<FanCreateSubmissionMutation>;
+export type FanCreateSubmissionMutationOptions = Apollo.BaseMutationOptions<FanCreateSubmissionMutation, FanCreateSubmissionMutationVariables>;
 export const FanSignupDocument = gql`
     mutation fanSignup($data: SignupInput!) {
   signup(data: $data) {
@@ -927,13 +1169,53 @@ export type AdminGetEventsQueryHookResult = ReturnType<typeof useAdminGetEventsQ
 export type AdminGetEventsLazyQueryHookResult = ReturnType<typeof useAdminGetEventsLazyQuery>;
 export type AdminGetEventsSuspenseQueryHookResult = ReturnType<typeof useAdminGetEventsSuspenseQuery>;
 export type AdminGetEventsQueryResult = Apollo.QueryResult<AdminGetEventsQuery, AdminGetEventsQueryVariables>;
+export const AdminGetSubmissionsDocument = gql`
+    query adminGetSubmissions($engagementId: Int!) {
+  submissions(engagementId: $engagementId) {
+    ...AdminSubmission
+  }
+}
+    ${AdminSubmissionFragmentDoc}`;
+
+/**
+ * __useAdminGetSubmissionsQuery__
+ *
+ * To run a query within a React component, call `useAdminGetSubmissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminGetSubmissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminGetSubmissionsQuery({
+ *   variables: {
+ *      engagementId: // value for 'engagementId'
+ *   },
+ * });
+ */
+export function useAdminGetSubmissionsQuery(baseOptions: Apollo.QueryHookOptions<AdminGetSubmissionsQuery, AdminGetSubmissionsQueryVariables> & ({ variables: AdminGetSubmissionsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminGetSubmissionsQuery, AdminGetSubmissionsQueryVariables>(AdminGetSubmissionsDocument, options);
+      }
+export function useAdminGetSubmissionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminGetSubmissionsQuery, AdminGetSubmissionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminGetSubmissionsQuery, AdminGetSubmissionsQueryVariables>(AdminGetSubmissionsDocument, options);
+        }
+export function useAdminGetSubmissionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdminGetSubmissionsQuery, AdminGetSubmissionsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AdminGetSubmissionsQuery, AdminGetSubmissionsQueryVariables>(AdminGetSubmissionsDocument, options);
+        }
+export type AdminGetSubmissionsQueryHookResult = ReturnType<typeof useAdminGetSubmissionsQuery>;
+export type AdminGetSubmissionsLazyQueryHookResult = ReturnType<typeof useAdminGetSubmissionsLazyQuery>;
+export type AdminGetSubmissionsSuspenseQueryHookResult = ReturnType<typeof useAdminGetSubmissionsSuspenseQuery>;
+export type AdminGetSubmissionsQueryResult = Apollo.QueryResult<AdminGetSubmissionsQuery, AdminGetSubmissionsQueryVariables>;
 export const FanGetEventDocument = gql`
     query fanGetEvent($slug: String!) {
   event(slug: $slug) {
-    ...FanEventFragment
+    ...FanEvent
   }
 }
-    ${FanEventFragmentFragmentDoc}`;
+    ${FanEventFragmentDoc}`;
 
 /**
  * __useFanGetEventQuery__
@@ -1044,6 +1326,46 @@ export type StageGetEventQueryHookResult = ReturnType<typeof useStageGetEventQue
 export type StageGetEventLazyQueryHookResult = ReturnType<typeof useStageGetEventLazyQuery>;
 export type StageGetEventSuspenseQueryHookResult = ReturnType<typeof useStageGetEventSuspenseQuery>;
 export type StageGetEventQueryResult = Apollo.QueryResult<StageGetEventQuery, StageGetEventQueryVariables>;
+export const StageGetSubmissionDocument = gql`
+    query stageGetSubmission($id: Int!) {
+  submission(id: $id) {
+    ...StageSubmission
+  }
+}
+    ${StageSubmissionFragmentDoc}`;
+
+/**
+ * __useStageGetSubmissionQuery__
+ *
+ * To run a query within a React component, call `useStageGetSubmissionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStageGetSubmissionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStageGetSubmissionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useStageGetSubmissionQuery(baseOptions: Apollo.QueryHookOptions<StageGetSubmissionQuery, StageGetSubmissionQueryVariables> & ({ variables: StageGetSubmissionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StageGetSubmissionQuery, StageGetSubmissionQueryVariables>(StageGetSubmissionDocument, options);
+      }
+export function useStageGetSubmissionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StageGetSubmissionQuery, StageGetSubmissionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StageGetSubmissionQuery, StageGetSubmissionQueryVariables>(StageGetSubmissionDocument, options);
+        }
+export function useStageGetSubmissionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<StageGetSubmissionQuery, StageGetSubmissionQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<StageGetSubmissionQuery, StageGetSubmissionQueryVariables>(StageGetSubmissionDocument, options);
+        }
+export type StageGetSubmissionQueryHookResult = ReturnType<typeof useStageGetSubmissionQuery>;
+export type StageGetSubmissionLazyQueryHookResult = ReturnType<typeof useStageGetSubmissionLazyQuery>;
+export type StageGetSubmissionSuspenseQueryHookResult = ReturnType<typeof useStageGetSubmissionSuspenseQuery>;
+export type StageGetSubmissionQueryResult = Apollo.QueryResult<StageGetSubmissionQuery, StageGetSubmissionQueryVariables>;
 export const WhoamiDocument = gql`
     query whoami {
   whoami {
@@ -1118,3 +1440,33 @@ export function useOnActiveEngagementChangedSubscription(baseOptions: Apollo.Sub
       }
 export type OnActiveEngagementChangedSubscriptionHookResult = ReturnType<typeof useOnActiveEngagementChangedSubscription>;
 export type OnActiveEngagementChangedSubscriptionResult = Apollo.SubscriptionResult<OnActiveEngagementChangedSubscription>;
+export const OnEngagementViewDataChangedDocument = gql`
+    subscription OnEngagementViewDataChanged($engagementId: Int!) {
+  engagementViewDataChanged(engagementId: $engagementId) {
+    viewData
+  }
+}
+    `;
+
+/**
+ * __useOnEngagementViewDataChangedSubscription__
+ *
+ * To run a query within a React component, call `useOnEngagementViewDataChangedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnEngagementViewDataChangedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnEngagementViewDataChangedSubscription({
+ *   variables: {
+ *      engagementId: // value for 'engagementId'
+ *   },
+ * });
+ */
+export function useOnEngagementViewDataChangedSubscription(baseOptions: Apollo.SubscriptionHookOptions<OnEngagementViewDataChangedSubscription, OnEngagementViewDataChangedSubscriptionVariables> & ({ variables: OnEngagementViewDataChangedSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnEngagementViewDataChangedSubscription, OnEngagementViewDataChangedSubscriptionVariables>(OnEngagementViewDataChangedDocument, options);
+      }
+export type OnEngagementViewDataChangedSubscriptionHookResult = ReturnType<typeof useOnEngagementViewDataChangedSubscription>;
+export type OnEngagementViewDataChangedSubscriptionResult = Apollo.SubscriptionResult<OnEngagementViewDataChangedSubscription>;
