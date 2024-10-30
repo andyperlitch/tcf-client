@@ -3,10 +3,12 @@ import { useStageEvent } from "@/hooks/useStageEvent";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { StageActiveEngagement } from "../StageActiveEngagement";
 import { useFunksgivingBackground } from "./useFunksgivingBackground";
+import useWindowSize from "@/hooks/useWindowSize";
 
 export function FunksGivingStage() {
   const { slug } = useParamsSafe("slug");
   const { data } = useStageEvent("funksgiving");
+  const { width } = useWindowSize();
 
   useFunksgivingBackground();
 
@@ -18,23 +20,25 @@ export function FunksGivingStage() {
     >
       <div
         className={`
-          absolute right-4 top-4 flex items-center justify-center space-x-4
-          rounded-lg bg-[#fae1aa77] p-4
+          absolute right-4 top-4 flex h-screen flex-col items-center
+          justify-center space-x-4
         `}
       >
-        <p className="w-[130px] text-center font-hand text-4xl text-[#894c37]">
-          Only scan this if you're cool
-          <br />
-          <span className="text-6xl">👉</span>
-        </p>
-        <div className="">
-          <QRCode
-            value={`${window.location.origin}/e/${slug}`}
-            size={130}
-            level="L"
-            fgColor="#894c37"
-            bgColor="#fae1aa77"
-          />
+        <div className="flex flex-col items-center">
+          <p className="text-center font-hand text-6xl text-[#894c37]">
+            Only scan this
+            <br /> if you're cool
+          </p>
+          <div className="mb-4 mt-2 text-6xl">👇</div>
+          <div className="rounded-lg bg-[#fae1aa77] p-4">
+            <QRCode
+              value={`${window.location.origin}/e/${slug}`}
+              size={width * 0.15}
+              level="L"
+              fgColor="#894c37"
+              bgColor="#fae1aa77"
+            />
+          </div>
         </div>
       </div>
       {data?.event?.activeEngagement ? (
