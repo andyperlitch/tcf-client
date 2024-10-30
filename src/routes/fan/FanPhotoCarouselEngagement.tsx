@@ -22,7 +22,6 @@ export function FanPhotoCarouselEngagement({
 
   function choosePhoto() {
     photoInputRef.current?.click();
-    // TODO: handle photo
   }
 
   // listen for photo input change
