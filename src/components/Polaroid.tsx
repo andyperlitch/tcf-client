@@ -38,7 +38,7 @@ export function Polaroid({
     >
       {photoUrl && <img style={{ width }} src={photoUrl} />}
 
-      <div className="p-4 font-hand text-5xl text-black">{caption || " "}</div>
+      <div className="p-4 font-hand text-4xl text-black">{caption || " "}</div>
     </div>
   );
 }
