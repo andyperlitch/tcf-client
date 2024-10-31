@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 export function Polaroid({
   width = 300,
@@ -6,13 +7,24 @@ export function Polaroid({
   caption,
   className,
   style,
+  initialStyle,
 }: {
   photoUrl?: string | null;
   caption?: string;
   width?: number | string;
   className?: string;
   style?: React.CSSProperties;
+  initialStyle?: React.CSSProperties;
 }) {
+  const [currentStyle, setCurrentStyle] = useState(initialStyle || style);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setCurrentStyle(style);
+    }, 100);
+    return () => clearTimeout(timeout);
+  }, [style]);
+
   return (
     <div
       className={cn(
@@ -22,7 +34,7 @@ export function Polaroid({
         `,
         className
       )}
-      style={style}
+      style={currentStyle}
     >
       {photoUrl && <img style={{ width }} src={photoUrl} />}
 
