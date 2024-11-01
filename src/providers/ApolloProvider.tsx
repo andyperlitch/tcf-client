@@ -7,6 +7,7 @@ import {
 } from "@apollo/client";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
+import { RetryLink } from "@apollo/client/link/retry";
 import { getMainDefinition } from "@apollo/client/utilities";
 
 let httpUri: string;
@@ -21,17 +22,33 @@ if (hostname === "thecasualfunk.com") {
   wsUri = `ws://${hostname}:3000/graphql`;
 }
 
+// Configure RetryLink with delay and retry attempt settings
+const retryLink = new RetryLink({
+  delay: {
+    initial: 300,
+    max: 10_000,
+    jitter: true,
+  },
+  attempts: {
+    max: 5,
+    retryIf: (error) => !!error,
+  },
+});
+
 // HTTP Link for queries and mutations
 const httpLink = new HttpLink({
   uri: httpUri,
   credentials: "include", // Include credentials like cookies (JWT)
 });
 
+// Combined retry link with http link
+const combinedHttpLink = retryLink.concat(httpLink);
+
 // WebSocket Link for subscriptions
 const wsLink = new GraphQLWsLink(
   createClient({
     url: wsUri,
-    retryAttempts: 5, // Maximum number of retry attempts
+    retryAttempts: 10, // Maximum number of retry attempts
     shouldRetry: () => true, // Always attempt to retry the connection
   })
 );
@@ -46,7 +63,7 @@ const splitLink = split(
     );
   },
   wsLink, // Use wsLink for subscriptions
-  httpLink // Use httpLink for queries and mutations
+  combinedHttpLink // Use httpLink for queries and mutations
 );
 
 // Create the Apollo Client instance

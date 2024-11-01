@@ -1,0 +1,36 @@
+/* Define the animation for the thumbs-up icon */
+@keyframes thumbsUpAnim {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.3) rotate(-10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Define the animation for the text */
+@keyframes textAnim {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Apply the animation to each element */
+.thumbsUp {
+  display: inline-block;
+  animation: thumbsUpAnim 0.6s ease forwards;
+}
+
+.text {
+  display: inline-block;
+  animation: textAnim 0.6s ease forwards;
+}

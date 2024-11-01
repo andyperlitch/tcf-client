@@ -1,10 +1,13 @@
 import { FanEngagementFragment } from "@/gql/graphql";
 import { NewPhotoForm } from "./NewPhotoForm";
+import { useCallback } from "react";
 
 export function FanPhotoCarouselEngagement({
   engagement,
 }: {
   engagement: FanEngagementFragment;
 }) {
-  return <NewPhotoForm engagement={engagement} />;
+  const handleSuccess = useCallback(() => {}, []);
+
+  return <NewPhotoForm engagement={engagement} onSuccess={handleSuccess} />;
 }

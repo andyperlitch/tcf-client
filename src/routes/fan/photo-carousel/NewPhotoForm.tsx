@@ -10,13 +10,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { CameraIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { getRandomCaption } from "./getRandomCaption";
+import { cn } from "@/lib/utils";
+import { Loader } from "@/components/Loader";
+import styles from "./NewPhotoForm.module.css";
+import { useToast } from "@/hooks/use-toast";
 
 const xToRotation = scaleLinear([-50, 50], [-5, 5]);
 
 export function NewPhotoForm({
   engagement,
+  onSuccess,
 }: {
   engagement: FanEngagementFragment;
+  onSuccess?: () => void;
 }) {
   const { previewSrc, handleFileChange } = useImagePreview();
   const photoInputRef = useRef<HTMLInputElement>(null);
@@ -24,6 +30,9 @@ export function NewPhotoForm({
   const [caption, setCaption] = useState(getRandomCaption());
   const [mimeType, setMimeType] = useState("");
   const [file, setFile] = useState<File>();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const { toast } = useToast();
+
   const polaroidRef = useRef<HTMLDivElement>(null);
 
   function choosePhoto() {
@@ -44,14 +53,46 @@ export function NewPhotoForm({
 
   const velocityRef = useRef(0);
   const deltaYRef = useRef(0);
-  const { submitPhoto, uploadProgress, errors, loading } =
-    useFanPhotoCarouselSubmit({
+  const { submitPhoto, loading, errors, succeeded } = useFanPhotoCarouselSubmit(
+    {
       engagementId: engagement.id,
       mimeType: mimeType,
       file,
       caption,
-    });
+    }
+  );
 
+  // SUCCESS HANDLING
+  useEffect(() => {
+    if (succeeded) {
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        onSuccess?.();
+      }, 1500);
+    }
+  }, [succeeded, onSuccess]);
+
+  // ERROR HANDLING
+  useEffect(() => {
+    if (errors && errors.length > 0 && polaroidRef.current) {
+      polaroidRef.current.classList.add("transition-transform");
+      polaroidRef.current.style.transform = `translateX(0px) translateY(0px)`;
+      toast({
+        title: "🤯 Uh oh, something went wrong...",
+        description: "Try again in a sec",
+        variant: "destructive",
+      });
+      setTimeout(() => {
+        if (polaroidRef.current) {
+          // must be removed for dragging/swiping to work
+          polaroidRef.current.classList.remove("transition-transform");
+        }
+      }, 400);
+    }
+  }, [errors, toast]);
+
+  // SWIPE HANDLING
   const swipeHandlers = useSwipeable({
     preventScrollOnSwipe: true,
     onTouchEndOrOnMouseUp: () => {
@@ -61,7 +102,8 @@ export function NewPhotoForm({
           polaroidRef.current.style.transform = `translateX(0px) translateY(0px)`;
           setTimeout(() => {
             if (polaroidRef.current) {
-              polaroidRef.current?.classList.remove("transition-transform");
+              // must be removed for dragging/swiping to work
+              polaroidRef.current.classList.remove("transition-transform");
             }
           }, 400);
         } else {
@@ -102,7 +144,11 @@ export function NewPhotoForm({
         Funksgiving
       </h1>
       {/* subtitle */}
-      <p className="text-center font-hand text-3xl">
+      <p
+        className={cn("text-center font-hand text-3xl transition-opacity", {
+          "opacity-0": loading || succeeded,
+        })}
+      >
         {previewSrc ? (
           <>
             👆
@@ -115,7 +161,7 @@ export function NewPhotoForm({
       </p>
 
       {/* polaroid */}
-      <div className="" ref={polaroidRef}>
+      <div className="relative z-10" ref={polaroidRef}>
         <div
           className="polaroid relative z-10 bg-white p-4"
           {...(previewSrc ? swipeHandlers : {})}
@@ -158,7 +204,43 @@ export function NewPhotoForm({
         </div>
       </div>
 
-      {errors && <div className="text-red-500">{errors.join(", ")}</div>}
+      {/* loading */}
+      {loading && (
+        <Loader
+          className={`
+            absolute left-1/2 top-1/2 -translate-x-1/2 and -translate-y-1/2
+          `}
+        />
+      )}
+
+      {/* success message */}
+      <div
+        className={`
+          absolute left-1/2 top-1/2 flex -translate-x-1/2 and z-0
+          -translate-y-1/2 flex-col items-center space-y-4 transition-opacity
+
+          ${showSuccessMessage ? "opacity-100" : `opacity-0`}
+        `}
+      >
+        <div
+          className={`
+            text-6xl
+
+            ${styles.thumbsUp}
+          `}
+        >
+          👌
+        </div>
+        <div
+          className={`
+            font-hand text-6xl
+
+            ${styles.text}
+          `}
+        >
+          Nice!
+        </div>
+      </div>
 
       <form className="hidden">
         <input
