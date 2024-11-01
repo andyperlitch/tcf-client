@@ -8,16 +8,6 @@ export function FunksgivingFanScreen() {
 
   return (
     <div>
-      <h1
-        className={`
-          absolute left-0 top-0 mt-4 h-12 w-full
-          bg-[url('/funksgiving-fan-title.png')] bg-contain bg-center
-          bg-no-repeat -indent-[1000px] text-4xl font-bold
-        `}
-      >
-        Funksgiving
-      </h1>
-
       {data?.event?.activeEngagement ? (
         <FanActiveEngagement engagement={data.event.activeEngagement} />
       ) : (

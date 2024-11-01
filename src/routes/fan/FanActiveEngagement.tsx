@@ -1,7 +1,7 @@
 import { EngagementType } from "@/gql/graphql";
 
 import { FanEngagementFragment } from "@/gql/graphql";
-import { FanPhotoCarouselEngagement } from "./FanPhotoCarouselEngagement";
+import { FanPhotoCarouselEngagement } from "./photo-carousel/FanPhotoCarouselEngagement";
 
 export function FanActiveEngagement({
   engagement,

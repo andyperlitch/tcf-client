@@ -20,12 +20,14 @@ export function useFanPhotoCarouselSubmit({
   const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [succeeded, setSucceeded] = useState(false);
   const [createSubmission] = useFanCreateSubmissionMutation();
 
   const submitPhoto = useCallback(async () => {
     setLoading(true);
     setErrors([]);
     setUploadProgress(0);
+    setSucceeded(false);
     try {
       // pre-flight conditions
       if (!file) {
@@ -74,6 +76,7 @@ export function useFanPhotoCarouselSubmit({
       });
       // report success or failure
       console.log(`andy newSubmission`, newSubmission);
+      setSucceeded(true);
     } catch (e) {
       setErrors(["Unexpected error occurred"]);
       console.error(`submitPhoto failed with error:`);
@@ -95,5 +98,6 @@ export function useFanPhotoCarouselSubmit({
     uploadProgress,
     errors,
     loading,
+    succeeded,
   };
 }

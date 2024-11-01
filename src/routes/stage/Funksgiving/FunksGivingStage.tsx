@@ -21,7 +21,7 @@ export function FunksGivingStage() {
       />
       {/* top right logo and text */}
       <div className="absolute right-[3vw] top-[0.5vw]">
-        <p className="relative -left-10 font-hand text-4xl text-[#593312]">
+        <p className="relative left-10 font-hand text-xl text-[#593312]">
           ...an evening with
         </p>
         <img src="/funksgiving-logo.svg" style={{ width: "17vw" }} />
