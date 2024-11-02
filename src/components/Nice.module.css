@@ -1,7 +1,11 @@
 /* Define the animation for the thumbs-up icon */
 @keyframes thumbsUpAnim {
   0% {
+    opacity: 0;
     transform: scale(1) rotate(0deg);
+  }
+  20% {
+    opacity: 1;
   }
   50% {
     transform: scale(1.3) rotate(-10deg);
@@ -15,6 +19,10 @@
 @keyframes textAnim {
   0% {
     transform: scale(1) rotate(0deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
   }
   50% {
     transform: scale(1.2) rotate(10deg);
@@ -24,13 +32,28 @@
   }
 }
 
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 /* Apply the animation to each element */
 .thumbsUp {
   display: inline-block;
-  animation: thumbsUpAnim 0.6s ease forwards;
+  animation: thumbsUpAnim 0.6s ease forwards, fadeOut 0.3s ease forwards;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-delay: 0s, 2s; /* Start reverse after a pause */
 }
 
 .text {
   display: inline-block;
-  animation: textAnim 0.6s ease forwards;
+  animation: textAnim 0.6s ease forwards, fadeOut 0.3s ease forwards;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-delay: 0s, 2s; /* Start reverse after a pause */
 }

@@ -12,9 +12,8 @@ import { Button } from "@/components/ui/button";
 import { getRandomCaption } from "./getRandomCaption";
 import { cn } from "@/lib/utils";
 import { Loader } from "@/components/Loader";
-import styles from "./NewPhotoForm.module.css";
 import { useToast } from "@/hooks/use-toast";
-
+import { Nice } from "@/components/Nice";
 const xToRotation = scaleLinear([-50, 50], [-5, 5]);
 
 export function NewPhotoForm({
@@ -30,7 +29,6 @@ export function NewPhotoForm({
   const [caption, setCaption] = useState(getRandomCaption());
   const [mimeType, setMimeType] = useState("");
   const [file, setFile] = useState<File>();
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const { toast } = useToast();
 
   const polaroidRef = useRef<HTMLDivElement>(null);
@@ -61,17 +59,6 @@ export function NewPhotoForm({
       caption,
     }
   );
-
-  // SUCCESS HANDLING
-  useEffect(() => {
-    if (succeeded) {
-      setShowSuccessMessage(true);
-      setTimeout(() => {
-        setShowSuccessMessage(false);
-        onSuccess?.();
-      }, 1500);
-    }
-  }, [succeeded, onSuccess]);
 
   // ERROR HANDLING
   useEffect(() => {
@@ -214,33 +201,7 @@ export function NewPhotoForm({
       )}
 
       {/* success message */}
-      <div
-        className={`
-          absolute left-1/2 top-1/2 flex -translate-x-1/2 and z-0
-          -translate-y-1/2 flex-col items-center space-y-4 transition-opacity
-
-          ${showSuccessMessage ? "opacity-100" : `opacity-0`}
-        `}
-      >
-        <div
-          className={`
-            text-6xl
-
-            ${styles.thumbsUp}
-          `}
-        >
-          👌
-        </div>
-        <div
-          className={`
-            font-hand text-6xl
-
-            ${styles.text}
-          `}
-        >
-          Nice!
-        </div>
-      </div>
+      {succeeded && <Nice onAnimationEnd={onSuccess} />}
 
       <form className="hidden">
         <input
