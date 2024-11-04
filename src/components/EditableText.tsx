@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ResizableInput } from "./ResizableInput";
-import { Button } from "./ui/button";
-import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
+import { InlineConfirmCancel } from "./InlineConfirmCancel";
 
 // EditableTextProps interface
 interface EditableTextProps<T extends keyof JSX.IntrinsicElements> {
@@ -86,19 +85,7 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
         ref={inputRef}
         data-p1-ignore
       >
-        <div
-          className={`
-            absolute left-0 top-[100%] flex justify-center space-x-2
-            bg-background p-2 align-middle
-          `}
-        >
-          <Button size="sm" variant="constructive" onClick={onConfirm}>
-            <CheckIcon className="h-4 w-4" />
-          </Button>
-          <Button size="sm" variant="destructive" onClick={onCancel}>
-            <Cross2Icon className="h-4 w-4" />
-          </Button>
-        </div>
+        <InlineConfirmCancel confirm={onConfirm} cancel={onCancel} />
       </ResizableInput>
     ) : (
       value

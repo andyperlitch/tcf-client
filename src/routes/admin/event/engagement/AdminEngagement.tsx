@@ -1,20 +1,29 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { AdminContainer } from "@/components/AdminContainer";
+import { EditableText } from "@/components/EditableText";
 import { CrumbMeta, SimpleCrumbs } from "@/components/SimpleCrumbs";
 import { SubmissionsList } from "@/components/SubmissionsList";
 import {
   useAdminGetEngagementQuery,
   useAdminGetEventQuery,
+  useAdminUpdateEngagementMutation,
 } from "@/gql/graphql";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { ReactNode } from "react";
+import { EditableJson } from "@/components/EditableJson";
 
 export function AdminEngagement() {
   const { slug, engagementId } = useParamsSafe("slug", "engagementId");
+
+  // Get the engagement
   const { loading, error, data } = useAdminGetEngagementQuery({
     variables: {
       engagementId: Number(engagementId),
     },
   });
+
+  // Get the event
   const {
     loading: eventLoading,
     error: eventError,
@@ -24,6 +33,47 @@ export function AdminEngagement() {
       slug,
     },
   });
+
+  // Get the engagmenet update function
+  const [updateEngagement] = useAdminUpdateEngagementMutation();
+
+  const updateEngagementTitle = (title: string) => {
+    if (data?.engagement) {
+      return updateEngagement({
+        variables: { id: data.engagement.id, data: { title } },
+      });
+    }
+  };
+
+  const updateEngagementDescription = (description: string) => {
+    if (data?.engagement) {
+      return updateEngagement({
+        variables: { id: data.engagement.id, data: { description } },
+      });
+    }
+  };
+
+  const updateEngagementConfig = (config: any) => {
+    if (data?.engagement) {
+      return updateEngagement({
+        variables: {
+          id: data.engagement.id,
+          data: { config },
+        },
+      });
+    }
+  };
+
+  const updateEngagementData = (dataValue: any) => {
+    if (data?.engagement) {
+      return updateEngagement({
+        variables: {
+          id: data.engagement.id,
+          data: { data: dataValue },
+        },
+      });
+    }
+  };
 
   let content: ReactNode = "";
 
@@ -44,17 +94,49 @@ export function AdminEngagement() {
       <div className="flex flex-col space-y-8">
         <div className="flex flex-col space-y-2">
           <SimpleCrumbs crumbs={crumbs} />
-          <h1 className="flex items-baseline space-x-5 text-3xl">
-            <span>{engagement.title}</span>{" "}
-          </h1>
+          <EditableText
+            value={engagement.title}
+            setValue={updateEngagementTitle}
+            element="h1"
+            elementProps={{
+              className: "flex items-baseline space-x-5 text-3xl",
+            }}
+          />
         </div>
-        <p className="text-foreground">{engagement.description}</p>
-        <div className="flex flex-col space-y-3"></div>
+        <EditableText
+          value={engagement.description || "(no description)"}
+          setValue={updateEngagementDescription}
+          element="p"
+          elementProps={{ className: "text-foreground" }}
+        />
+        <div className="flex flex-col space-y-3">
+          <Tabs defaultValue="config" className="w-full">
+            <TabsList>
+              <TabsTrigger value="config">Config</TabsTrigger>
+              <TabsTrigger value="data">Data</TabsTrigger>
+            </TabsList>
+            <TabsContent value="config">
+              <EditableJson
+                value={engagement.config}
+                setValue={updateEngagementConfig}
+              />
+            </TabsContent>
+            <TabsContent value="data">
+              <EditableJson
+                value={engagement.data}
+                setValue={updateEngagementData}
+              />
+            </TabsContent>
+          </Tabs>
+        </div>
 
         <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
           <span>Submissions</span>{" "}
         </h2>
-        <SubmissionsList engagementId={engagement.id} />
+        <SubmissionsList
+          engagementId={engagement.id}
+          engagementType={engagement.type}
+        />
       </div>
     );
   }

@@ -20,12 +20,12 @@ export type Scalars = {
 };
 
 export type CreateEngagementInput = {
+  config?: InputMaybe<Scalars['Json']['input']>;
+  data?: InputMaybe<Scalars['Json']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   endTime?: InputMaybe<Scalars['DateTime']['input']>;
   startTime?: InputMaybe<Scalars['DateTime']['input']>;
   title: Scalars['String']['input'];
-  viewConfig?: InputMaybe<Scalars['Json']['input']>;
-  viewData?: InputMaybe<Scalars['Json']['input']>;
 };
 
 export type CreateEventInput = {
@@ -47,7 +47,9 @@ export type CreateSubmissionInput = {
 
 export type Engagement = {
   __typename?: 'Engagement';
+  config?: Maybe<Scalars['Json']['output']>;
   createdAt: Scalars['DateTime']['output'];
+  data?: Maybe<Scalars['Json']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   endTime?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['Int']['output'];
@@ -305,13 +307,13 @@ export type SubscriptionEngagementViewDataChangedArgs = {
 };
 
 export type UpdateEngagementInput = {
+  config?: InputMaybe<Scalars['Json']['input']>;
+  data?: InputMaybe<Scalars['Json']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   endTime?: InputMaybe<Scalars['DateTime']['input']>;
   order?: InputMaybe<Scalars['Int']['input']>;
   startTime?: InputMaybe<Scalars['DateTime']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
-  viewConfig?: InputMaybe<Scalars['Json']['input']>;
-  viewData?: InputMaybe<Scalars['Json']['input']>;
   viewType?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -358,7 +360,7 @@ export type VoteForData = {
   voteCounts: Array<VoteCount>;
 };
 
-export type AdminEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null };
+export type AdminEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, config?: any | null, data?: any | null, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null };
 
 export type AdminEventFragment = { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, order: number, createdAt: any, updatedAt: any, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null }> };
 
@@ -400,7 +402,7 @@ export type AdminCreateEngagementMutationVariables = Exact<{
 }>;
 
 
-export type AdminCreateEngagementMutation = { __typename?: 'Mutation', createEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null } };
+export type AdminCreateEngagementMutation = { __typename?: 'Mutation', createEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, config?: any | null, data?: any | null, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null } };
 
 export type AdminCreateEventMutationVariables = Exact<{
   input: CreateEventInput;
@@ -414,7 +416,7 @@ export type AdminDeleteEngagementMutationVariables = Exact<{
 }>;
 
 
-export type AdminDeleteEngagementMutation = { __typename?: 'Mutation', deleteEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null } };
+export type AdminDeleteEngagementMutation = { __typename?: 'Mutation', deleteEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, config?: any | null, data?: any | null, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null } };
 
 export type AdminDeleteSubmissionMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -422,6 +424,14 @@ export type AdminDeleteSubmissionMutationVariables = Exact<{
 
 
 export type AdminDeleteSubmissionMutation = { __typename?: 'Mutation', deleteSubmission: { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> } };
+
+export type AdminUpdateEngagementMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  data: UpdateEngagementInput;
+}>;
+
+
+export type AdminUpdateEngagementMutation = { __typename?: 'Mutation', updateEngagement: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, config?: any | null, data?: any | null, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null } };
 
 export type AdminUpdateEventMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -467,14 +477,14 @@ export type AdminGetEngagementQueryVariables = Exact<{
 }>;
 
 
-export type AdminGetEngagementQuery = { __typename?: 'Query', engagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null } | null };
+export type AdminGetEngagementQuery = { __typename?: 'Query', engagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, config?: any | null, data?: any | null, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null } | null };
 
 export type AdminGetEngagementsQueryVariables = Exact<{
   eventId: Scalars['Int']['input'];
 }>;
 
 
-export type AdminGetEngagementsQuery = { __typename?: 'Query', engagements: Array<{ __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null }> };
+export type AdminGetEngagementsQuery = { __typename?: 'Query', engagements: Array<{ __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, config?: any | null, data?: any | null, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null }> };
 
 export type AdminGetEventQueryVariables = Exact<{
   slug: Scalars['String']['input'];
@@ -579,6 +589,9 @@ export const AdminEngagementFragmentDoc = gql`
   description
   startTime
   endTime
+  type
+  config
+  data
   viewConfig {
     ...PhotoCarouselConfigFields
     ...VoteForConfigFields
@@ -954,6 +967,40 @@ export function useAdminDeleteSubmissionMutation(baseOptions?: Apollo.MutationHo
 export type AdminDeleteSubmissionMutationHookResult = ReturnType<typeof useAdminDeleteSubmissionMutation>;
 export type AdminDeleteSubmissionMutationResult = Apollo.MutationResult<AdminDeleteSubmissionMutation>;
 export type AdminDeleteSubmissionMutationOptions = Apollo.BaseMutationOptions<AdminDeleteSubmissionMutation, AdminDeleteSubmissionMutationVariables>;
+export const AdminUpdateEngagementDocument = gql`
+    mutation adminUpdateEngagement($id: Int!, $data: UpdateEngagementInput!) {
+  updateEngagement(engagementId: $id, data: $data) {
+    ...AdminEngagement
+  }
+}
+    ${AdminEngagementFragmentDoc}`;
+export type AdminUpdateEngagementMutationFn = Apollo.MutationFunction<AdminUpdateEngagementMutation, AdminUpdateEngagementMutationVariables>;
+
+/**
+ * __useAdminUpdateEngagementMutation__
+ *
+ * To run a mutation, you first call `useAdminUpdateEngagementMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminUpdateEngagementMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminUpdateEngagementMutation, { data, loading, error }] = useAdminUpdateEngagementMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAdminUpdateEngagementMutation(baseOptions?: Apollo.MutationHookOptions<AdminUpdateEngagementMutation, AdminUpdateEngagementMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminUpdateEngagementMutation, AdminUpdateEngagementMutationVariables>(AdminUpdateEngagementDocument, options);
+      }
+export type AdminUpdateEngagementMutationHookResult = ReturnType<typeof useAdminUpdateEngagementMutation>;
+export type AdminUpdateEngagementMutationResult = Apollo.MutationResult<AdminUpdateEngagementMutation>;
+export type AdminUpdateEngagementMutationOptions = Apollo.BaseMutationOptions<AdminUpdateEngagementMutation, AdminUpdateEngagementMutationVariables>;
 export const AdminUpdateEventDocument = gql`
     mutation adminUpdateEvent($id: Int!, $data: UpdateEventInput!) {
   updateEvent(eventId: $id, data: $data) {

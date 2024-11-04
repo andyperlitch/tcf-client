@@ -9,6 +9,9 @@ gql`
     description
     startTime
     endTime
+    type
+    config
+    data
     viewConfig {
       ...PhotoCarouselConfigFields
       ...VoteForConfigFields

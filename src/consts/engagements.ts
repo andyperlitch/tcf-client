@@ -1,8 +1,16 @@
-import { EngagementType } from "@/gql/graphql";
+import {
+  EngagementData,
+  EngagementConfig,
+  EngagementType,
+  PhotoCarouselConfig,
+  PhotoCarouselData,
+  VoteForConfig,
+  VoteForData,
+} from "@/gql/graphql";
 
 export interface EngagementViewConfigDefinition<
-  TConfig extends CommonViewConfig,
-  TData extends CommonViewData
+  TConfig extends EngagementConfig,
+  TData extends EngagementData
 > {
   type: EngagementType;
   title: string;
@@ -11,19 +19,8 @@ export interface EngagementViewConfigDefinition<
   initialData: (config: TConfig) => TData;
 }
 
-export interface CommonViewConfig {
-  type: EngagementType;
-}
-
-export interface CommonViewData {}
-
 ///////////
 // CAROUSEL
-export interface PhotoCarouselConfig extends CommonViewConfig {
-  maxPhotos: number;
-  maxPhotosPerUser: number;
-}
-export interface PhotoCarouselData extends CommonViewData {}
 const photoCarouselDef: EngagementViewConfigDefinition<
   PhotoCarouselConfig,
   PhotoCarouselData
@@ -32,30 +29,25 @@ const photoCarouselDef: EngagementViewConfigDefinition<
   title: "Photo Carousel",
   description: "An engagement asking users to upload photos",
   defaultConfig: () => ({
-    type: EngagementType.PhotoCarousel,
-    maxPhotos: 100,
-    maxPhotosPerUser: 1,
+    maxSubmissionsPerUser: 1,
   }),
-  initialData: () => ({}),
+  initialData: () => ({
+    visibleSubmission: null,
+  }),
 };
 
 /////////////////
 // VOTE FOR
-export interface VoteForConfig extends CommonViewConfig {
-  options: string[];
-  maxVotes: number;
-}
-export interface VoteForData extends CommonViewData {}
 const voteForDef: EngagementViewConfigDefinition<VoteForConfig, VoteForData> = {
   type: EngagementType.VoteFor,
   title: "Vote For",
   description: "An engagement asking users to vote for a single option",
   defaultConfig: () => ({
-    type: EngagementType.VoteFor,
-    options: [],
-    maxVotes: 1,
+    votesPerUser: 1,
   }),
-  initialData: () => ({}),
+  initialData: () => ({
+    voteCounts: [],
+  }),
 };
 
 export const EngagementDefinitions = {

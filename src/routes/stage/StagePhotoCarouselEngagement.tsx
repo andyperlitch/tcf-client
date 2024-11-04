@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import useWindowSize from "@/hooks/useWindowSize";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import QRCode from "react-qr-code";
+import { toFullS3Url } from "@/utils/toFullS3Url";
 
 interface Photo {
   photoUrl: string;
@@ -48,7 +49,7 @@ export function StagePhotoCarouselEngagement({
 
   useEffect(() => {
     if (data?.submission?.data?.photoUrl) {
-      const url = `https://thecasualfunk.s3.us-west-1.amazonaws.com/${data?.submission?.data?.photoUrl}`;
+      const url = toFullS3Url(data?.submission?.data?.photoUrl);
       const loader = new Image();
       loader.src = url;
       loader.onload = () => {

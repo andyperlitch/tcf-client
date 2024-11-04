@@ -93,13 +93,14 @@ export function CreateEngagementForm({
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const viewConfig =
-      EngagementDefinitions[selectedType as EngagementType].defaultConfig();
+    const def = EngagementDefinitions[selectedType as EngagementType];
+    const config = def.defaultConfig();
+    const data = def.initialData(config as any);
 
     createEngagement({
       variables: {
         eventId,
-        input: { ...values, viewConfig },
+        input: { ...values, config, data },
       },
     }).then((res) => {
       // go to the engagement page

@@ -16,6 +16,13 @@
 [X] delete engagement
 [X] make engagement inactive
 [X] update event form/mode
+[X] toast messages
+[X] engagement status switcher
+[X] allow admins full read/write on config and data for engagements
+[X] edit engagements in admin ui
+[ ] add pre-defined submissions (options)
+[ ] VoteFor engagement
+[ ] add voteFor config
+[ ] enforce maxPhotos carousel config
 [ ] lock event from being updated while engagement is active
-[ ] toast messages
-[ ] engagement status switcher
+[ ] smaller admin nav on ipad
