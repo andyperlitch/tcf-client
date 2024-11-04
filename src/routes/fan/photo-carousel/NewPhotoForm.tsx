@@ -203,7 +203,11 @@ export function NewPhotoForm({
       {/* success message */}
       {succeeded && <Nice onAnimationEnd={onSuccess} />}
 
-      <form className="hidden">
+      <form
+        className="hidden"
+        onSubmit={(e) => e.preventDefault()}
+        encType="multipart/form-data"
+      >
         <input
           ref={photoInputRef}
           type="file"
