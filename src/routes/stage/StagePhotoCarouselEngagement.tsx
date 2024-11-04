@@ -46,6 +46,7 @@ export function StagePhotoCarouselEngagement({
     variables: { id: visibleSubmissionId! },
   });
   const { width } = useWindowSize();
+  const widthRef = useRef(width);
 
   useEffect(() => {
     if (data?.submission?.data?.photoUrl) {
@@ -62,10 +63,12 @@ export function StagePhotoCarouselEngagement({
               rotation: Math.round(Math.random() * 20 - 10),
               scale: 1,
               translateX: Math.round(
-                Math.random() * width * 0.35 - width * 0.05
+                Math.random() * widthRef.current * 0.35 -
+                  widthRef.current * 0.05
               ),
               translateY: Math.round(
-                Math.random() * width * 0.05 - width * 0.035
+                Math.random() * widthRef.current * 0.05 -
+                  widthRef.current * 0.035
               ),
               id: nextPhotoId.current++,
             },
@@ -77,7 +80,7 @@ export function StagePhotoCarouselEngagement({
         });
       };
     }
-  }, [data, width]);
+  }, [data]);
 
   return (
     <div className="flex h-full w-full items-center">

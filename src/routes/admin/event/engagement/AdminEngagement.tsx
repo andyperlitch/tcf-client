@@ -130,9 +130,6 @@ export function AdminEngagement() {
           </Tabs>
         </div>
 
-        <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
-          <span>Submissions</span>{" "}
-        </h2>
         <SubmissionsList
           engagementId={engagement.id}
           engagementType={engagement.type}

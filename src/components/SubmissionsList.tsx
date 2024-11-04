@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { useMemo } from "react";
 import { toFullS3Url } from "@/utils/toFullS3Url";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 export function SubmissionsList({
   engagementId,
@@ -22,7 +23,7 @@ export function SubmissionsList({
   engagementId: number;
   engagementType: EngagementType;
 }) {
-  const { data, loading, error } = useAdminGetSubmissionsQuery({
+  const { data, loading, error, refetch } = useAdminGetSubmissionsQuery({
     variables: { engagementId },
     skip: !engagementId,
   });
@@ -44,28 +45,41 @@ export function SubmissionsList({
       : DefaultDataCell;
 
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableHeader>Submission ID</TableHeader>
-          <TableHeader>Data</TableHeader>
-          <TableHeader>Date/Time</TableHeader>
-          <TableHeader>Actions</TableHeader>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {sortedSubmissions.map((submission) => (
-          <TableRow key={submission.id}>
-            <TableCell>{submission.id}</TableCell>
-            <DataCell data={submission.data} />
-            <TableCell>{format(submission.createdAt, "Pp")}</TableCell>
-            <TableCell>
-              <DeleteSubmissionButton id={submission.id} />
-            </TableCell>
+    <>
+      <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
+        <span>Submissions</span>{" "}
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => refetch()}
+          disabled={loading}
+        >
+          <ReloadIcon className="h-4 w-4 text-white" />
+        </Button>
+      </h2>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeader>Submission ID</TableHeader>
+            <TableHeader>Data</TableHeader>
+            <TableHeader>Date/Time</TableHeader>
+            <TableHeader>Actions</TableHeader>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHead>
+        <TableBody>
+          {sortedSubmissions.map((submission) => (
+            <TableRow key={submission.id}>
+              <TableCell>{submission.id}</TableCell>
+              <DataCell data={submission.data} />
+              <TableCell>{format(submission.createdAt, "Pp")}</TableCell>
+              <TableCell>
+                <DeleteSubmissionButton id={submission.id} />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
   );
 }
 
