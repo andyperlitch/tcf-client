@@ -22,10 +22,12 @@ gql`
       startTime
       endTime
       viewConfig {
-        ...EngagementViewConfig
+        ...PhotoCarouselConfigFields
+        ...VoteForConfigFields
       }
       viewData {
-        ...EngagementViewData
+        ...PhotoCarouselDataFields
+        ...VoteForDataFields
       }
       order
       createdAt

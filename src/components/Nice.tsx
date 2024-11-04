@@ -12,7 +12,7 @@ export function Nice({
     const timeout = setTimeout(() => {
       onAnimationEnd?.();
       return () => clearTimeout(timeout);
-    }, 3500);
+    }, 3000);
   }, [onAnimationEnd]);
 
   return (

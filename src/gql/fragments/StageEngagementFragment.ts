@@ -10,23 +10,12 @@ gql`
     startTime
     endTime
     viewConfig {
-      ... on PhotoCarouselConfig {
-        maxSubmissionsPerUser
-      }
-      ... on VoteForConfig {
-        votesPerUser
-      }
+      ...PhotoCarouselConfigFields
+      ...VoteForConfigFields
     }
     viewData {
-      ... on PhotoCarouselData {
-        visibleSubmission
-      }
-      ... on VoteForData {
-        voteCounts {
-          submissionId
-          count
-        }
-      }
+      ...PhotoCarouselDataFields
+      ...VoteForDataFields
     }
     type
     order

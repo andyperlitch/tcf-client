@@ -364,23 +364,15 @@ export type AdminEventFragment = { __typename?: 'Event', id: number, name: strin
 
 export type AdminSubmissionFragment = { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> };
 
-type EngagementViewConfig_PhotoCarouselConfig_Fragment = { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number };
-
-type EngagementViewConfig_VoteForConfig_Fragment = { __typename?: 'VoteForConfig', votesPerUser: number };
-
-export type EngagementViewConfigFragment = EngagementViewConfig_PhotoCarouselConfig_Fragment | EngagementViewConfig_VoteForConfig_Fragment;
-
-type EngagementViewData_PhotoCarouselData_Fragment = { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null };
-
-type EngagementViewData_VoteForData_Fragment = { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> };
-
-export type EngagementViewDataFragment = EngagementViewData_PhotoCarouselData_Fragment | EngagementViewData_VoteForData_Fragment;
-
 export type FanEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> };
 
 export type FanEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null };
 
 export type FanSubmissionFragment = { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> };
+
+export type PhotoCarouselConfigFieldsFragment = { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number };
+
+export type PhotoCarouselDataFieldsFragment = { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null };
 
 export type StageEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> };
 
@@ -389,6 +381,10 @@ export type StageEventFragment = { __typename?: 'Event', id: number, name: strin
 export type StageSubmissionFragment = { __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> };
 
 export type UserEngagementFragment = { __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null };
+
+export type VoteForConfigFieldsFragment = { __typename?: 'VoteForConfig', votesPerUser: number };
+
+export type VoteForDataFieldsFragment = { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> };
 
 export type AdminChangeEventActiveEngagementMutationVariables = Exact<{
   eventId: Scalars['Int']['input'];
@@ -499,6 +495,13 @@ export type AdminGetSubmissionsQueryVariables = Exact<{
 
 export type AdminGetSubmissionsQuery = { __typename?: 'Query', submissions: Array<{ __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> }> };
 
+export type CanCreateSubmissionQueryVariables = Exact<{
+  engagementId: Scalars['Int']['input'];
+}>;
+
+
+export type CanCreateSubmissionQuery = { __typename?: 'Query', canCreateSubmission: boolean };
+
 export type FanGetEventQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
@@ -544,26 +547,26 @@ export type OnEngagementViewDataChangedSubscriptionVariables = Exact<{
 
 export type OnEngagementViewDataChangedSubscription = { __typename?: 'Subscription', engagementViewDataChanged?: { __typename?: 'EngagementViewDataChangedPayload', viewData: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null };
 
-export const EngagementViewConfigFragmentDoc = gql`
-    fragment EngagementViewConfig on EngagementConfig {
-  ... on PhotoCarouselConfig {
-    maxSubmissionsPerUser
-  }
-  ... on VoteForConfig {
-    votesPerUser
-  }
+export const PhotoCarouselConfigFieldsFragmentDoc = gql`
+    fragment PhotoCarouselConfigFields on PhotoCarouselConfig {
+  maxSubmissionsPerUser
 }
     `;
-export const EngagementViewDataFragmentDoc = gql`
-    fragment EngagementViewData on EngagementData {
-  ... on PhotoCarouselData {
-    visibleSubmission
-  }
-  ... on VoteForData {
-    voteCounts {
-      submissionId
-      count
-    }
+export const VoteForConfigFieldsFragmentDoc = gql`
+    fragment VoteForConfigFields on VoteForConfig {
+  votesPerUser
+}
+    `;
+export const PhotoCarouselDataFieldsFragmentDoc = gql`
+    fragment PhotoCarouselDataFields on PhotoCarouselData {
+  visibleSubmission
+}
+    `;
+export const VoteForDataFieldsFragmentDoc = gql`
+    fragment VoteForDataFields on VoteForData {
+  voteCounts {
+    submissionId
+    count
   }
 }
     `;
@@ -577,15 +580,19 @@ export const AdminEngagementFragmentDoc = gql`
   startTime
   endTime
   viewConfig {
-    ...EngagementViewConfig
+    ...PhotoCarouselConfigFields
+    ...VoteForConfigFields
   }
   viewData {
-    ...EngagementViewData
+    ...PhotoCarouselDataFields
+    ...VoteForDataFields
   }
   order
 }
-    ${EngagementViewConfigFragmentDoc}
-${EngagementViewDataFragmentDoc}`;
+    ${PhotoCarouselConfigFieldsFragmentDoc}
+${VoteForConfigFieldsFragmentDoc}
+${PhotoCarouselDataFieldsFragmentDoc}
+${VoteForDataFieldsFragmentDoc}`;
 export const AdminEventFragmentDoc = gql`
     fragment AdminEvent on Event {
   id
@@ -608,18 +615,22 @@ export const AdminEventFragmentDoc = gql`
     startTime
     endTime
     viewConfig {
-      ...EngagementViewConfig
+      ...PhotoCarouselConfigFields
+      ...VoteForConfigFields
     }
     viewData {
-      ...EngagementViewData
+      ...PhotoCarouselDataFields
+      ...VoteForDataFields
     }
     order
     createdAt
     updatedAt
   }
 }
-    ${EngagementViewConfigFragmentDoc}
-${EngagementViewDataFragmentDoc}`;
+    ${PhotoCarouselConfigFieldsFragmentDoc}
+${VoteForConfigFieldsFragmentDoc}
+${PhotoCarouselDataFieldsFragmentDoc}
+${VoteForDataFieldsFragmentDoc}`;
 export const AdminSubmissionFragmentDoc = gql`
     fragment AdminSubmission on Submission {
   id
@@ -641,10 +652,12 @@ export const FanEngagementFragmentDoc = gql`
   startTime
   endTime
   viewConfig {
-    ...EngagementViewConfig
+    ...PhotoCarouselConfigFields
+    ...VoteForConfigFields
   }
   viewData {
-    ...EngagementViewData
+    ...PhotoCarouselDataFields
+    ...VoteForDataFields
   }
   type
   order
@@ -664,8 +677,10 @@ export const FanEngagementFragmentDoc = gql`
     }
   }
 }
-    ${EngagementViewConfigFragmentDoc}
-${EngagementViewDataFragmentDoc}`;
+    ${PhotoCarouselConfigFieldsFragmentDoc}
+${VoteForConfigFieldsFragmentDoc}
+${PhotoCarouselDataFieldsFragmentDoc}
+${VoteForDataFieldsFragmentDoc}`;
 export const FanEventFragmentDoc = gql`
     fragment FanEvent on Event {
   id
@@ -717,23 +732,12 @@ export const StageEngagementFragmentDoc = gql`
   startTime
   endTime
   viewConfig {
-    ... on PhotoCarouselConfig {
-      maxSubmissionsPerUser
-    }
-    ... on VoteForConfig {
-      votesPerUser
-    }
+    ...PhotoCarouselConfigFields
+    ...VoteForConfigFields
   }
   viewData {
-    ... on PhotoCarouselData {
-      visibleSubmission
-    }
-    ... on VoteForData {
-      voteCounts {
-        submissionId
-        count
-      }
-    }
+    ...PhotoCarouselDataFields
+    ...VoteForDataFields
   }
   type
   order
@@ -741,7 +745,11 @@ export const StageEngagementFragmentDoc = gql`
     ...StageSubmission
   }
 }
-    ${StageSubmissionFragmentDoc}`;
+    ${PhotoCarouselConfigFieldsFragmentDoc}
+${VoteForConfigFieldsFragmentDoc}
+${PhotoCarouselDataFieldsFragmentDoc}
+${VoteForDataFieldsFragmentDoc}
+${StageSubmissionFragmentDoc}`;
 export const StageEventFragmentDoc = gql`
     fragment StageEvent on Event {
   id
@@ -764,15 +772,19 @@ export const UserEngagementFragmentDoc = gql`
   startTime
   endTime
   viewConfig {
-    ...EngagementViewConfig
+    ...PhotoCarouselConfigFields
+    ...VoteForConfigFields
   }
   viewData {
-    ...EngagementViewData
+    ...PhotoCarouselDataFields
+    ...VoteForDataFields
   }
   type
 }
-    ${EngagementViewConfigFragmentDoc}
-${EngagementViewDataFragmentDoc}`;
+    ${PhotoCarouselConfigFieldsFragmentDoc}
+${VoteForConfigFieldsFragmentDoc}
+${PhotoCarouselDataFieldsFragmentDoc}
+${VoteForDataFieldsFragmentDoc}`;
 export const AdminChangeEventActiveEngagementDocument = gql`
     mutation adminChangeEventActiveEngagement($eventId: Int!, $engagementId: Int) {
   changeEventActiveEngagement(engagementId: $engagementId, eventId: $eventId) {
@@ -1317,6 +1329,44 @@ export type AdminGetSubmissionsQueryHookResult = ReturnType<typeof useAdminGetSu
 export type AdminGetSubmissionsLazyQueryHookResult = ReturnType<typeof useAdminGetSubmissionsLazyQuery>;
 export type AdminGetSubmissionsSuspenseQueryHookResult = ReturnType<typeof useAdminGetSubmissionsSuspenseQuery>;
 export type AdminGetSubmissionsQueryResult = Apollo.QueryResult<AdminGetSubmissionsQuery, AdminGetSubmissionsQueryVariables>;
+export const CanCreateSubmissionDocument = gql`
+    query canCreateSubmission($engagementId: Int!) {
+  canCreateSubmission(engagementId: $engagementId)
+}
+    `;
+
+/**
+ * __useCanCreateSubmissionQuery__
+ *
+ * To run a query within a React component, call `useCanCreateSubmissionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCanCreateSubmissionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCanCreateSubmissionQuery({
+ *   variables: {
+ *      engagementId: // value for 'engagementId'
+ *   },
+ * });
+ */
+export function useCanCreateSubmissionQuery(baseOptions: Apollo.QueryHookOptions<CanCreateSubmissionQuery, CanCreateSubmissionQueryVariables> & ({ variables: CanCreateSubmissionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CanCreateSubmissionQuery, CanCreateSubmissionQueryVariables>(CanCreateSubmissionDocument, options);
+      }
+export function useCanCreateSubmissionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CanCreateSubmissionQuery, CanCreateSubmissionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CanCreateSubmissionQuery, CanCreateSubmissionQueryVariables>(CanCreateSubmissionDocument, options);
+        }
+export function useCanCreateSubmissionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<CanCreateSubmissionQuery, CanCreateSubmissionQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CanCreateSubmissionQuery, CanCreateSubmissionQueryVariables>(CanCreateSubmissionDocument, options);
+        }
+export type CanCreateSubmissionQueryHookResult = ReturnType<typeof useCanCreateSubmissionQuery>;
+export type CanCreateSubmissionLazyQueryHookResult = ReturnType<typeof useCanCreateSubmissionLazyQuery>;
+export type CanCreateSubmissionSuspenseQueryHookResult = ReturnType<typeof useCanCreateSubmissionSuspenseQuery>;
+export type CanCreateSubmissionQueryResult = Apollo.QueryResult<CanCreateSubmissionQuery, CanCreateSubmissionQueryVariables>;
 export const FanGetEventDocument = gql`
     query fanGetEvent($slug: String!) {
   event(slug: $slug) {
@@ -1552,11 +1602,13 @@ export const OnEngagementViewDataChangedDocument = gql`
     subscription OnEngagementViewDataChanged($engagementId: Int!) {
   engagementViewDataChanged(engagementId: $engagementId) {
     viewData {
-      ...EngagementViewData
+      ...PhotoCarouselDataFields
+      ...VoteForDataFields
     }
   }
 }
-    ${EngagementViewDataFragmentDoc}`;
+    ${PhotoCarouselDataFieldsFragmentDoc}
+${VoteForDataFieldsFragmentDoc}`;
 
 /**
  * __useOnEngagementViewDataChangedSubscription__
