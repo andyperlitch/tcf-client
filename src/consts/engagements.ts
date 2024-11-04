@@ -1,13 +1,10 @@
-export enum ViewType {
-  PhotoCarousel = "photoCarousel",
-  VoteFor = "voteFor",
-}
+import { EngagementType } from "@/gql/graphql";
 
 export interface EngagementViewConfigDefinition<
   TConfig extends CommonViewConfig,
   TData extends CommonViewData
 > {
-  type: ViewType;
+  type: EngagementType;
   title: string;
   description: string;
   defaultConfig: () => TConfig;
@@ -15,7 +12,7 @@ export interface EngagementViewConfigDefinition<
 }
 
 export interface CommonViewConfig {
-  type: ViewType;
+  type: EngagementType;
 }
 
 export interface CommonViewData {}
@@ -31,11 +28,11 @@ const photoCarouselDef: EngagementViewConfigDefinition<
   PhotoCarouselConfig,
   PhotoCarouselData
 > = {
-  type: ViewType.PhotoCarousel,
+  type: EngagementType.PhotoCarousel,
   title: "Photo Carousel",
   description: "An engagement asking users to upload photos",
   defaultConfig: () => ({
-    type: ViewType.PhotoCarousel,
+    type: EngagementType.PhotoCarousel,
     maxPhotos: 100,
     maxPhotosPerUser: 1,
   }),
@@ -50,11 +47,11 @@ export interface VoteForConfig extends CommonViewConfig {
 }
 export interface VoteForData extends CommonViewData {}
 const voteForDef: EngagementViewConfigDefinition<VoteForConfig, VoteForData> = {
-  type: ViewType.VoteFor,
+  type: EngagementType.VoteFor,
   title: "Vote For",
   description: "An engagement asking users to vote for a single option",
   defaultConfig: () => ({
-    type: ViewType.VoteFor,
+    type: EngagementType.VoteFor,
     options: [],
     maxVotes: 1,
   }),
@@ -62,6 +59,6 @@ const voteForDef: EngagementViewConfigDefinition<VoteForConfig, VoteForData> = {
 };
 
 export const EngagementDefinitions = {
-  [ViewType.PhotoCarousel]: photoCarouselDef,
-  [ViewType.VoteFor]: voteForDef,
+  [EngagementType.PhotoCarousel]: photoCarouselDef,
+  [EngagementType.VoteFor]: voteForDef,
 };

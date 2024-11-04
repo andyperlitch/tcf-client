@@ -7,8 +7,12 @@ gql`
     description
     startTime
     endTime
-    viewConfig
-    viewData
+    viewConfig {
+      ...EngagementViewConfig
+    }
+    viewData {
+      ...EngagementViewData
+    }
     type
   }
 `;

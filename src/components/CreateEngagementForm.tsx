@@ -24,13 +24,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { EngagementDefinitions, ViewType } from "@/consts/engagements";
+import { EngagementDefinitions } from "@/consts/engagements";
 import { useState } from "react";
 import {
   AdminGetEngagementsDocument,
   AdminGetEngagementsQuery,
   AdminGetEngagementsQueryVariables,
   useAdminCreateEngagementMutation,
+  EngagementType,
 } from "@/gql/graphql";
 
 const formSchema = z.object({
@@ -38,9 +39,10 @@ const formSchema = z.object({
   description: z.string().optional(),
 });
 
-const engagementTypeDefs = [ViewType.VoteFor, ViewType.PhotoCarousel].map(
-  (type) => EngagementDefinitions[type]
-);
+const engagementTypeDefs = [
+  EngagementType.VoteFor,
+  EngagementType.PhotoCarousel,
+].map((type) => EngagementDefinitions[type]);
 
 export function CreateEngagementForm({
   eventId,
@@ -77,7 +79,7 @@ export function CreateEngagementForm({
 
   const navigate = useNavigate();
   const [selectedType, setSelectedType] = useState<string>(
-    ViewType.PhotoCarousel
+    EngagementType.PhotoCarousel
   );
 
   // 1. Define your form.
@@ -92,7 +94,7 @@ export function CreateEngagementForm({
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     const viewConfig =
-      EngagementDefinitions[selectedType as ViewType].defaultConfig();
+      EngagementDefinitions[selectedType as EngagementType].defaultConfig();
 
     createEngagement({
       variables: {

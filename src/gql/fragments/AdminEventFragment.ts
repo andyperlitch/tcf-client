@@ -21,8 +21,12 @@ gql`
       description
       startTime
       endTime
-      viewData
-      viewConfig
+      viewConfig {
+        ...EngagementViewConfig
+      }
+      viewData {
+        ...EngagementViewData
+      }
       order
       createdAt
       updatedAt

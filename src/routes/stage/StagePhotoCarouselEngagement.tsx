@@ -34,11 +34,15 @@ export function StagePhotoCarouselEngagement({
 }) {
   const { slug } = useParamsSafe("slug");
   const nextPhotoId = useRef(0);
-  const visibleSubmissionId = engagement.viewData?.visibleSubmission;
+  const visibleSubmissionId =
+    engagement.viewData?.__typename === "PhotoCarouselData"
+      ? engagement.viewData.visibleSubmission
+      : undefined;
+
   const [photos, setPhotos] = useState<Photo[]>([]);
   const { data /* , loading, error  */ } = useStageGetSubmissionQuery({
     skip: !visibleSubmissionId,
-    variables: { id: visibleSubmissionId },
+    variables: { id: visibleSubmissionId! },
   });
   const { width } = useWindowSize();
 
@@ -76,14 +80,14 @@ export function StagePhotoCarouselEngagement({
 
   return (
     <div className="flex h-full w-full items-center">
-      <div className="h-full w-1/2 pl-[10vw] pt-[25vh]">
+      <div className="h-full w-1/2 pl-[10vw] pt-[20vh]">
         {photos.map((photo) => (
           <Polaroid
             key={photo.id}
             className="absolute polaroid-fade-in"
             photoUrl={photo.photoUrl}
             caption={photo.caption}
-            width="30vw"
+            width="28vw"
             initialStyle={initialStyle}
             style={{
               opacity: 1,

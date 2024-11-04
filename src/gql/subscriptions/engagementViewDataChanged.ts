@@ -1,9 +1,11 @@
 import { gql } from "@apollo/client";
 
-export const engagementViewDataChanged = gql`
+gql`
   subscription OnEngagementViewDataChanged($engagementId: Int!) {
     engagementViewDataChanged(engagementId: $engagementId) {
-      viewData
+      viewData {
+        ...EngagementViewData
+      }
     }
   }
 `;

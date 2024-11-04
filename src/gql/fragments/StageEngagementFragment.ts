@@ -9,8 +9,25 @@ gql`
     description
     startTime
     endTime
-    viewConfig
-    viewData
+    viewConfig {
+      ... on PhotoCarouselConfig {
+        maxSubmissionsPerUser
+      }
+      ... on VoteForConfig {
+        votesPerUser
+      }
+    }
+    viewData {
+      ... on PhotoCarouselData {
+        visibleSubmission
+      }
+      ... on VoteForData {
+        voteCounts {
+          submissionId
+          count
+        }
+      }
+    }
     type
     order
     submissions {
