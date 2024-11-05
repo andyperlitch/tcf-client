@@ -7,11 +7,12 @@ import { SubmissionsList } from "@/components/SubmissionsList";
 import {
   useAdminGetEngagementQuery,
   useAdminGetEventQuery,
-  useAdminUpdateEngagementMutation,
 } from "@/gql/graphql";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { ReactNode } from "react";
 import { EditableJson } from "@/components/EditableJson";
+import { useUpdateFns } from "./useUpdateFns";
+import { Badge } from "@/components/ui/badge";
 
 export function AdminEngagement() {
   const { slug, engagementId } = useParamsSafe("slug", "engagementId");
@@ -34,46 +35,12 @@ export function AdminEngagement() {
     },
   });
 
-  // Get the engagmenet update function
-  const [updateEngagement] = useAdminUpdateEngagementMutation();
-
-  const updateEngagementTitle = (title: string) => {
-    if (data?.engagement) {
-      return updateEngagement({
-        variables: { id: data.engagement.id, data: { title } },
-      });
-    }
-  };
-
-  const updateEngagementDescription = (description: string) => {
-    if (data?.engagement) {
-      return updateEngagement({
-        variables: { id: data.engagement.id, data: { description } },
-      });
-    }
-  };
-
-  const updateEngagementConfig = (config: any) => {
-    if (data?.engagement) {
-      return updateEngagement({
-        variables: {
-          id: data.engagement.id,
-          data: { config },
-        },
-      });
-    }
-  };
-
-  const updateEngagementData = (dataValue: any) => {
-    if (data?.engagement) {
-      return updateEngagement({
-        variables: {
-          id: data.engagement.id,
-          data: { data: dataValue },
-        },
-      });
-    }
-  };
+  const {
+    updateEngagementTitle,
+    updateEngagementDescription,
+    updateEngagementConfig,
+    updateEngagementData,
+  } = useUpdateFns({ data });
 
   let content: ReactNode = "";
 
@@ -94,6 +61,7 @@ export function AdminEngagement() {
       <div className="flex flex-col space-y-8">
         <div className="flex flex-col space-y-2">
           <SimpleCrumbs crumbs={crumbs} />
+          {/* TITLE */}
           <EditableText
             value={engagement.title}
             setValue={updateEngagementTitle}
@@ -102,13 +70,18 @@ export function AdminEngagement() {
               className: "flex items-baseline space-x-5 text-3xl",
             }}
           />
+          <div>
+            <Badge>{engagement.type}</Badge>
+          </div>
         </div>
+        {/* DESCRIPTION */}
         <EditableText
           value={engagement.description || "(no description)"}
           setValue={updateEngagementDescription}
           element="p"
           elementProps={{ className: "text-foreground" }}
         />
+        {/* CONFIG/DATA */}
         <div className="flex flex-col space-y-3">
           <Tabs defaultValue="config" className="w-full">
             <TabsList>
@@ -129,7 +102,7 @@ export function AdminEngagement() {
             </TabsContent>
           </Tabs>
         </div>
-
+        {/* SUBMISSIONS */}
         <SubmissionsList
           engagementId={engagement.id}
           engagementType={engagement.type}

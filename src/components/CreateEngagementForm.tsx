@@ -100,7 +100,12 @@ export function CreateEngagementForm({
     createEngagement({
       variables: {
         eventId,
-        input: { ...values, config, data },
+        input: {
+          ...values,
+          config,
+          data,
+          type: selectedType as EngagementType,
+        },
       },
     }).then((res) => {
       // go to the engagement page

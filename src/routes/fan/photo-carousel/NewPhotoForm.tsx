@@ -3,17 +3,21 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { scaleLinear } from "d3-scale";
 import { FanEngagementFragment } from "@/gql/graphql";
-import { useImagePreview } from "@/hooks/useImagePreview";
+import { useImageInput } from "@/hooks/useImagePreview";
 import { useRef } from "react";
-import { useFanPhotoCarouselSubmit } from "@/hooks/useFanPhotoCarouselSubmit";
 import { Textarea } from "@/components/ui/textarea";
-import { CameraIcon, ReloadIcon } from "@radix-ui/react-icons";
+import {
+  CameraIcon,
+  CircleBackslashIcon,
+  ReloadIcon,
+} from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { getRandomCaption } from "./getRandomCaption";
 import { cn } from "@/lib/utils";
 import { Loader } from "@/components/Loader";
 import { useToast } from "@/hooks/use-toast";
 import { Nice } from "@/components/Nice";
+import { useCreateSubmission } from "@/hooks/useCreateSubmission";
 const xToRotation = scaleLinear([-50, 50], [-5, 5]);
 
 export function NewPhotoForm({
@@ -23,12 +27,14 @@ export function NewPhotoForm({
   engagement: FanEngagementFragment;
   onSuccess?: () => void;
 }) {
-  const { previewSrc, handleFileChange } = useImagePreview();
   const photoInputRef = useRef<HTMLInputElement>(null);
+  const { previewSrc, handleFileChange, file } = useImageInput({
+    onImageChange: () => {
+      captionInputRef.current?.focus();
+    },
+  });
   const captionInputRef = useRef<HTMLTextAreaElement>(null);
   const [caption, setCaption] = useState(getRandomCaption());
-  const [mimeType, setMimeType] = useState("");
-  const [file, setFile] = useState<File>();
   const { toast } = useToast();
 
   const polaroidRef = useRef<HTMLDivElement>(null);
@@ -37,28 +43,16 @@ export function NewPhotoForm({
     photoInputRef.current?.click();
   }
 
-  // listen for photo input change
-  useEffect(() => {
-    photoInputRef.current?.addEventListener("change", handlePhotoChange);
-  }, []);
-
-  function handlePhotoChange(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    setMimeType(file?.type || "");
-    setFile(file);
-    captionInputRef.current?.focus();
-  }
-
   const velocityRef = useRef(0);
   const deltaYRef = useRef(0);
-  const { submitPhoto, loading, errors, succeeded } = useFanPhotoCarouselSubmit(
-    {
-      engagementId: engagement.id,
-      mimeType: mimeType,
-      file,
+  const { createSubmission, loading, errors, succeeded } = useCreateSubmission({
+    engagementId: engagement.id,
+    file,
+    toData: (url?: string) => ({
+      photoUrl: url,
       caption,
-    }
-  );
+    }),
+  });
 
   // ERROR HANDLING
   useEffect(() => {
@@ -95,7 +89,7 @@ export function NewPhotoForm({
           }, 400);
         } else {
           polaroidRef.current.style.transform = `translateY(-200vh)`;
-          submitPhoto();
+          createSubmission();
         }
       }
     },
@@ -181,12 +175,17 @@ export function NewPhotoForm({
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
             />
-            <Button
-              variant="default"
-              onClick={() => setCaption(getRandomCaption())}
-            >
-              <ReloadIcon className="h-4 w-4" />
-            </Button>
+            <div className="flex flex-col gap-2">
+              <Button
+                variant="default"
+                onClick={() => setCaption(getRandomCaption())}
+              >
+                <ReloadIcon className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" onClick={() => setCaption("")}>
+                <CircleBackslashIcon className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>

@@ -26,6 +26,7 @@ export type CreateEngagementInput = {
   endTime?: InputMaybe<Scalars['DateTime']['input']>;
   startTime?: InputMaybe<Scalars['DateTime']['input']>;
   title: Scalars['String']['input'];
+  type: EngagementType;
 };
 
 export type CreateEventInput = {
@@ -314,7 +315,6 @@ export type UpdateEngagementInput = {
   order?: InputMaybe<Scalars['Int']['input']>;
   startTime?: InputMaybe<Scalars['DateTime']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
-  viewType?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateEventInput = {
@@ -441,6 +441,14 @@ export type AdminUpdateEventMutationVariables = Exact<{
 
 export type AdminUpdateEventMutation = { __typename?: 'Mutation', updateEvent: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, order: number, createdAt: any, updatedAt: any, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', voteCounts: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null }> } };
 
+export type CreateSubmissionMutationVariables = Exact<{
+  engagementId: Scalars['Int']['input'];
+  data: Scalars['Json']['input'];
+}>;
+
+
+export type CreateSubmissionMutation = { __typename?: 'Mutation', createSubmission: { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> } };
+
 export type CreateSubmissionPresignedUrlMutationVariables = Exact<{
   engagementId: Scalars['Int']['input'];
   mimeType: Scalars['String']['input'];
@@ -448,14 +456,6 @@ export type CreateSubmissionPresignedUrlMutationVariables = Exact<{
 
 
 export type CreateSubmissionPresignedUrlMutation = { __typename?: 'Mutation', createSubmissionPresignedUrl: { __typename?: 'PresignedUrlResponse', url: string, key: string } };
-
-export type FanCreateSubmissionMutationVariables = Exact<{
-  engagementId: Scalars['Int']['input'];
-  data: Scalars['Json']['input'];
-}>;
-
-
-export type FanCreateSubmissionMutation = { __typename?: 'Mutation', createSubmission: { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> } };
 
 export type FanSignupMutationVariables = Exact<{
   data: SignupInput;
@@ -1035,6 +1035,40 @@ export function useAdminUpdateEventMutation(baseOptions?: Apollo.MutationHookOpt
 export type AdminUpdateEventMutationHookResult = ReturnType<typeof useAdminUpdateEventMutation>;
 export type AdminUpdateEventMutationResult = Apollo.MutationResult<AdminUpdateEventMutation>;
 export type AdminUpdateEventMutationOptions = Apollo.BaseMutationOptions<AdminUpdateEventMutation, AdminUpdateEventMutationVariables>;
+export const CreateSubmissionDocument = gql`
+    mutation createSubmission($engagementId: Int!, $data: Json!) {
+  createSubmission(engagementId: $engagementId, data: $data) {
+    ...FanSubmission
+  }
+}
+    ${FanSubmissionFragmentDoc}`;
+export type CreateSubmissionMutationFn = Apollo.MutationFunction<CreateSubmissionMutation, CreateSubmissionMutationVariables>;
+
+/**
+ * __useCreateSubmissionMutation__
+ *
+ * To run a mutation, you first call `useCreateSubmissionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSubmissionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSubmissionMutation, { data, loading, error }] = useCreateSubmissionMutation({
+ *   variables: {
+ *      engagementId: // value for 'engagementId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateSubmissionMutation(baseOptions?: Apollo.MutationHookOptions<CreateSubmissionMutation, CreateSubmissionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSubmissionMutation, CreateSubmissionMutationVariables>(CreateSubmissionDocument, options);
+      }
+export type CreateSubmissionMutationHookResult = ReturnType<typeof useCreateSubmissionMutation>;
+export type CreateSubmissionMutationResult = Apollo.MutationResult<CreateSubmissionMutation>;
+export type CreateSubmissionMutationOptions = Apollo.BaseMutationOptions<CreateSubmissionMutation, CreateSubmissionMutationVariables>;
 export const CreateSubmissionPresignedUrlDocument = gql`
     mutation CreateSubmissionPresignedUrl($engagementId: Int!, $mimeType: String!) {
   createSubmissionPresignedUrl(engagementId: $engagementId, mimeType: $mimeType) {
@@ -1070,40 +1104,6 @@ export function useCreateSubmissionPresignedUrlMutation(baseOptions?: Apollo.Mut
 export type CreateSubmissionPresignedUrlMutationHookResult = ReturnType<typeof useCreateSubmissionPresignedUrlMutation>;
 export type CreateSubmissionPresignedUrlMutationResult = Apollo.MutationResult<CreateSubmissionPresignedUrlMutation>;
 export type CreateSubmissionPresignedUrlMutationOptions = Apollo.BaseMutationOptions<CreateSubmissionPresignedUrlMutation, CreateSubmissionPresignedUrlMutationVariables>;
-export const FanCreateSubmissionDocument = gql`
-    mutation fanCreateSubmission($engagementId: Int!, $data: Json!) {
-  createSubmission(engagementId: $engagementId, data: $data) {
-    ...FanSubmission
-  }
-}
-    ${FanSubmissionFragmentDoc}`;
-export type FanCreateSubmissionMutationFn = Apollo.MutationFunction<FanCreateSubmissionMutation, FanCreateSubmissionMutationVariables>;
-
-/**
- * __useFanCreateSubmissionMutation__
- *
- * To run a mutation, you first call `useFanCreateSubmissionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useFanCreateSubmissionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [fanCreateSubmissionMutation, { data, loading, error }] = useFanCreateSubmissionMutation({
- *   variables: {
- *      engagementId: // value for 'engagementId'
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useFanCreateSubmissionMutation(baseOptions?: Apollo.MutationHookOptions<FanCreateSubmissionMutation, FanCreateSubmissionMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<FanCreateSubmissionMutation, FanCreateSubmissionMutationVariables>(FanCreateSubmissionDocument, options);
-      }
-export type FanCreateSubmissionMutationHookResult = ReturnType<typeof useFanCreateSubmissionMutation>;
-export type FanCreateSubmissionMutationResult = Apollo.MutationResult<FanCreateSubmissionMutation>;
-export type FanCreateSubmissionMutationOptions = Apollo.BaseMutationOptions<FanCreateSubmissionMutation, FanCreateSubmissionMutationVariables>;
 export const FanSignupDocument = gql`
     mutation fanSignup($data: SignupInput!) {
   signup(data: $data) {
