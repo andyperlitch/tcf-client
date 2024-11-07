@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 export function Polaroid({
-  width = 300,
+  height = "60vh",
   photoUrl,
   caption,
   className,
@@ -11,7 +11,7 @@ export function Polaroid({
 }: {
   photoUrl?: string | null;
   caption?: string;
-  width?: number | string;
+  height?: number | string;
   className?: string;
   style?: React.CSSProperties;
   initialStyle?: React.CSSProperties;
@@ -27,16 +27,10 @@ export function Polaroid({
 
   return (
     <div
-      className={cn(
-        `
-          polaroid rounded-sm bg-white p-4
-          shadow-[inset_0_0_10px_rgba(0,0,0,0.2)] shadow-md
-        `,
-        className
-      )}
+      className={cn(`polaroid rounded-sm bg-white p-4 shadow-md`, className)}
       style={currentStyle}
     >
-      {photoUrl && <img style={{ width }} src={photoUrl} />}
+      {photoUrl && <img style={{ height }} src={photoUrl} />}
 
       <div className="p-4 font-hand text-4xl text-black">{caption || " "}</div>
     </div>

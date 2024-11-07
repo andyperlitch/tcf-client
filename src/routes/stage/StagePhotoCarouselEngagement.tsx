@@ -42,8 +42,9 @@ export function StagePhotoCarouselEngagement({
     skip: !visibleSubmissionId,
     variables: { id: visibleSubmissionId! },
   });
-  const { width } = useWindowSize();
+  const { width, height } = useWindowSize();
   const widthRef = useRef(width);
+  const heightRef = useRef(height);
 
   useEffect(() => {
     if (data?.submission?.data?.photoUrl) {
@@ -59,13 +60,10 @@ export function StagePhotoCarouselEngagement({
               caption: data?.submission?.data?.caption || "",
               rotation: Math.round(Math.random() * 20 - 10),
               scale: 1,
-              translateX: Math.round(
-                Math.random() * widthRef.current * 0.35 -
-                  widthRef.current * 0.05
-              ),
+              translateX: Math.round(Math.random() * widthRef.current * 0.45),
               translateY: Math.round(
-                Math.random() * widthRef.current * 0.05 -
-                  widthRef.current * 0.035
+                Math.random() * heightRef.current * 0.1 -
+                  heightRef.current * 0.02
               ),
               id: nextPhotoId.current++,
             },
@@ -80,23 +78,21 @@ export function StagePhotoCarouselEngagement({
   }, [data]);
 
   return (
-    <div className="flex h-full w-full items-center">
-      <div className="h-full w-1/2 pl-[10vw] pt-[20vh]">
-        {photos.map((photo) => (
-          <Polaroid
-            key={photo.id}
-            className="absolute polaroid-fade-in"
-            photoUrl={photo.photoUrl}
-            caption={photo.caption}
-            width="28vw"
-            initialStyle={initialStyle}
-            style={{
-              opacity: 1,
-              transform: `rotate(${photo.rotation}deg) scale(${photo.scale}) translate(${photo.translateX}px, ${photo.translateY}px)`,
-            }}
-          />
-        ))}
-      </div>
+    <div className="flex h-full w-full flex-stretch items-center">
+      {photos.map((photo) => (
+        <Polaroid
+          key={photo.id}
+          className="absolute polaroid-fade-in"
+          photoUrl={photo.photoUrl}
+          caption={photo.caption}
+          height="60vh"
+          initialStyle={initialStyle}
+          style={{
+            opacity: 1,
+            transform: `rotate(${photo.rotation}deg) scale(${photo.scale}) translate(${photo.translateX}px, ${photo.translateY}px)`,
+          }}
+        />
+      ))}
     </div>
   );
 }

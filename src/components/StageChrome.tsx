@@ -13,7 +13,7 @@ export function StageChrome({ children, name }: StageChromeProps) {
   return (
     <div
       data-name={name}
-      className={`flex h-screen w-screen items-center align-middle`}
+      className={`flex h-screen w-screen items-center items-stretch align-middle`}
     >
       <div data-name={`${name}-content`} className="flex-1">
         {children}
