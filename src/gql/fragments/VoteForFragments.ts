@@ -5,7 +5,7 @@ gql`
     votesPerUser
   }
   fragment VoteForDataFields on VoteForData {
-    voteCounts {
+    votes {
       submissionId
       count
     }

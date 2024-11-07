@@ -46,7 +46,7 @@ const voteForDef: EngagementViewConfigDefinition<VoteForConfig, VoteForData> = {
     votesPerUser: 1,
   }),
   initialData: () => ({
-    voteCounts: [],
+    votes: [],
   }),
 };
 

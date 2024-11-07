@@ -19,8 +19,5 @@ gql`
     }
     type
     order
-    submissions {
-      ...StageSubmission
-    }
   }
 `;
