@@ -1,18 +1,16 @@
 import { useStageEvent } from "@/hooks/useStageEvent";
 import { StageActiveEngagement } from "../StageActiveEngagement";
 import { useFunksgivingBackground } from "./useFunksgivingBackground";
+import { StageChrome } from "@/components/StageChrome";
+import { NoEngagementStage } from "./NoEngagementStage";
 
 export function FunksGivingStage() {
   const { data } = useStageEvent("funksgiving");
 
   useFunksgivingBackground();
 
-  return (
-    <div
-      className={`
-        flex h-screen w-screen flex-col items-center justify-center gap-4
-      `}
-    >
+  return data?.event?.activeEngagement ? (
+    <StageChrome name="funksgiving-screen">
       {/* funksgiving logo */}
       <img
         className="absolute left-1/2 top-[2vw] -translate-x-1/2"
@@ -26,15 +24,9 @@ export function FunksGivingStage() {
         </p>
         <img src="/funksgiving-logo.svg" style={{ width: "17vw" }} />
       </div>
-
-      {/* active engagement */}
-      {data?.event?.activeEngagement ? (
-        <StageActiveEngagement event={data.event} />
-      ) : (
-        <>
-          <h1>Welcome to FunksGiving!</h1>
-        </>
-      )}
-    </div>
+      <StageActiveEngagement event={data.event} />
+    </StageChrome>
+  ) : (
+    <NoEngagementStage />
   );
 }

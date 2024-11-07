@@ -1,6 +1,7 @@
 import { useFanEvent } from "@/hooks/useFanEvent";
 import { FanActiveEngagement } from "../FanActiveEngagement";
 import { useFunksgivingBackground } from "./useFunksgivingBackground";
+import { NoEngagementFan } from "./NoEngagementFan";
 
 export function FunksgivingFanScreen() {
   useFunksgivingBackground();
@@ -11,7 +12,7 @@ export function FunksgivingFanScreen() {
       {data?.event?.activeEngagement ? (
         <FanActiveEngagement engagement={data.event.activeEngagement} />
       ) : (
-        <p>Stay tuned for ways you can engage with the band!</p>
+        <NoEngagementFan />
       )}
     </div>
   );

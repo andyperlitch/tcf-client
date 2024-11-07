@@ -7,8 +7,6 @@ import {
 } from "@/gql/graphql";
 import { useEffect, useRef, useState } from "react";
 import useWindowSize from "@/hooks/useWindowSize";
-import { useParamsSafe } from "@/hooks/useParamsSafe";
-import QRCode from "react-qr-code";
 import { toFullS3Url } from "@/utils/toFullS3Url";
 
 interface Photo {
@@ -33,7 +31,6 @@ export function StagePhotoCarouselEngagement({
 }: {
   engagement: StageEngagementFragment;
 }) {
-  const { slug } = useParamsSafe("slug");
   const nextPhotoId = useRef(0);
   const visibleSubmissionId =
     engagement.viewData?.__typename === "PhotoCarouselData"
@@ -99,28 +96,6 @@ export function StagePhotoCarouselEngagement({
             }}
           />
         ))}
-      </div>
-      <div className="flex h-full w-1/2 flex-col items-end justify-end">
-        <div
-          className={`
-            mb-4 mr-4 flex flex-col items-center rounded-lg bg-[#fae1aa] p-4
-          `}
-        >
-          <p
-            className={`text-center font-hand text-5xl text-[#894c37]`}
-            style={{ width: `${width * 0.15}px` }}
-          >
-            Only scan this if you're cool
-          </p>
-          <QRCode
-            value={`${window.location.origin}/e/${slug}`}
-            size={width * 0.15}
-            level="L"
-            fgColor="#894c37"
-            bgColor="#fae1aa77"
-            className="mt-4"
-          />
-        </div>
       </div>
     </div>
   );
