@@ -27,6 +27,7 @@ import { AdminEvents } from "./routes/admin/events";
 import { EventStageScreen } from "./routes/stage/EventStageScreen";
 import { Toaster } from "./components/ui/toaster";
 import { QuickSignup } from "./routes/QuickSignup";
+import { TooltipProvider } from "./components/ui/tooltip";
 
 const router = createBrowserRouter([
   {
@@ -113,7 +114,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <ApolloProvider>
       <AuthProvider>
         <ThemeProvider defaultTheme="dark" storageKey="tcf-ui-theme">
-          <RouterProvider router={router} />
+          <TooltipProvider>
+            <RouterProvider router={router} />
+          </TooltipProvider>
           <Toaster />
         </ThemeProvider>
       </AuthProvider>

@@ -2,22 +2,21 @@ import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { ModeToggle } from "./ModeToggle";
 import { buttonVariants } from "./ui/button";
+import { CalendarIcon, PersonIcon } from "@radix-ui/react-icons";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const ADMIN_NAV_ITEMS = [
   {
     id: "events",
     title: "Events",
     href: "/admin/events",
+    icon: <CalendarIcon />,
   },
   {
     id: "users",
     title: "Users",
     href: "/admin/users",
-  },
-  {
-    id: "calendar",
-    title: "Calendar",
-    href: "/admin/calendar",
+    icon: <PersonIcon />,
   },
 ] as const;
 
@@ -35,11 +34,11 @@ export function AdminContainer({
         rounded-lg border
       `}
     >
-      <nav className={`flex w-1/4 flex-col border-r`}>
+      <nav className={`flex flex-col border-r`}>
         <AdminSideNav currentSection={section} />
       </nav>
 
-      <main className={`w-3/4`}>
+      <main className={`flex-1`}>
         <div className="rounded-lg p-8 shadow-lg">{children}</div>
         <ModeToggle />
       </main>
@@ -49,15 +48,7 @@ export function AdminContainer({
 
 function AdminSideNav({ currentSection }: { currentSection: string }) {
   return (
-    <nav
-      className={cn(
-        `
-          flex space-y-2 p-6
-
-          md:flex-col md:space-x-0 md:space-y-1
-        `
-      )}
-    >
+    <nav className={cn(`flex flex-col space-x-0 space-y-1 space-y-2 p-6`)}>
       {ADMIN_NAV_ITEMS.map((item) => (
         <Link
           key={item.href}
@@ -78,7 +69,24 @@ function AdminSideNav({ currentSection }: { currentSection: string }) {
             "justify-start"
           )}
         >
-          {item.title}
+          <div className="flex flex-row items-center space-x-2">
+            <Tooltip>
+              <TooltipTrigger asChild>{item.icon}</TooltipTrigger>
+              <TooltipContent>
+                <p>{item.title}</p>
+              </TooltipContent>
+            </Tooltip>
+            {/* only show title on desktop */}
+            <div
+              className={`
+                hidden
+
+                lg:block
+              `}
+            >
+              {item.title}
+            </div>
+          </div>
         </Link>
       ))}
     </nav>
