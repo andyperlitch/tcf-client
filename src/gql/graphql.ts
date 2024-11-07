@@ -443,6 +443,14 @@ export type AdminUpdateEventMutationVariables = Exact<{
 
 export type AdminUpdateEventMutation = { __typename?: 'Mutation', updateEvent: { __typename?: 'Event', id: number, name: string, date?: any | null, location?: string | null, description?: string | null, slug: string, live: boolean, createdAt: any, updatedAt: any, activeEngagementId?: number | null, activeEngagement?: { __typename?: 'Engagement', id: number } | null, engagements: Array<{ __typename?: 'Engagement', id: number, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, order: number, createdAt: any, updatedAt: any, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null }> } };
 
+export type AdminUpdateSubmissionMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  data: Scalars['Json']['input'];
+}>;
+
+
+export type AdminUpdateSubmissionMutation = { __typename?: 'Mutation', updateSubmission: { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> } };
+
 export type CreateReactionMutationVariables = Exact<{
   submissionId: Scalars['Int']['input'];
   type: Scalars['String']['input'];
@@ -1055,6 +1063,40 @@ export function useAdminUpdateEventMutation(baseOptions?: Apollo.MutationHookOpt
 export type AdminUpdateEventMutationHookResult = ReturnType<typeof useAdminUpdateEventMutation>;
 export type AdminUpdateEventMutationResult = Apollo.MutationResult<AdminUpdateEventMutation>;
 export type AdminUpdateEventMutationOptions = Apollo.BaseMutationOptions<AdminUpdateEventMutation, AdminUpdateEventMutationVariables>;
+export const AdminUpdateSubmissionDocument = gql`
+    mutation adminUpdateSubmission($id: Int!, $data: Json!) {
+  updateSubmission(submissionId: $id, data: $data) {
+    ...AdminSubmission
+  }
+}
+    ${AdminSubmissionFragmentDoc}`;
+export type AdminUpdateSubmissionMutationFn = Apollo.MutationFunction<AdminUpdateSubmissionMutation, AdminUpdateSubmissionMutationVariables>;
+
+/**
+ * __useAdminUpdateSubmissionMutation__
+ *
+ * To run a mutation, you first call `useAdminUpdateSubmissionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminUpdateSubmissionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminUpdateSubmissionMutation, { data, loading, error }] = useAdminUpdateSubmissionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAdminUpdateSubmissionMutation(baseOptions?: Apollo.MutationHookOptions<AdminUpdateSubmissionMutation, AdminUpdateSubmissionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminUpdateSubmissionMutation, AdminUpdateSubmissionMutationVariables>(AdminUpdateSubmissionDocument, options);
+      }
+export type AdminUpdateSubmissionMutationHookResult = ReturnType<typeof useAdminUpdateSubmissionMutation>;
+export type AdminUpdateSubmissionMutationResult = Apollo.MutationResult<AdminUpdateSubmissionMutation>;
+export type AdminUpdateSubmissionMutationOptions = Apollo.BaseMutationOptions<AdminUpdateSubmissionMutation, AdminUpdateSubmissionMutationVariables>;
 export const CreateReactionDocument = gql`
     mutation createReaction($submissionId: Int!, $type: String!) {
   createReaction(submissionId: $submissionId, type: $type) {

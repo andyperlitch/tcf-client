@@ -1,4 +1,9 @@
-import { EngagementType, useAdminGetSubmissionsQuery } from "@/gql/graphql";
+import {
+  AdminSubmissionFragment,
+  EngagementType,
+  useAdminGetSubmissionsQuery,
+  useAdminUpdateSubmissionMutation,
+} from "@/gql/graphql";
 import {
   Table,
   TableBody,
@@ -16,6 +21,12 @@ import { useMemo } from "react";
 import { toFullS3Url } from "@/utils/toFullS3Url";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { CreateVoteForChoiceButton } from "./CreateVoteForChoiceButton";
+import { RandomizeChoiceColorsButton } from "./RandomizeChoiceColorsButton";
+import { ColorPicker } from "./ColorPicker";
+
+type DataCellProps = {
+  submission: AdminSubmissionFragment;
+};
 
 export function SubmissionsList({
   engagementId,
@@ -36,16 +47,20 @@ export function SubmissionsList({
     });
   }, [data]);
 
-  let DataCell: React.ComponentType<{ data: any }>;
+  let DataCell: React.ComponentType<DataCellProps>;
+  let DataHeaders: React.ComponentType;
   switch (engagementType) {
     case EngagementType.PhotoCarousel:
       DataCell = PhotoCarouselDataCell;
+      DataHeaders = PhotoCarouselDataHeaders;
       break;
     case EngagementType.VoteFor:
       DataCell = VoteForDataCell;
+      DataHeaders = VoteForDataHeaders;
       break;
     default:
       DataCell = DefaultDataCell;
+      DataHeaders = DefaultDataHeaders;
   }
 
   return (
@@ -61,10 +76,13 @@ export function SubmissionsList({
           <ReloadIcon className="h-4 w-4 text-white" />
         </Button>
         {engagementType === EngagementType.VoteFor && (
-          <CreateVoteForChoiceButton
-            engagementId={engagementId}
-            onCreated={() => refetch()}
-          />
+          <>
+            <CreateVoteForChoiceButton
+              engagementId={engagementId}
+              onCreated={() => refetch()}
+            />
+            <RandomizeChoiceColorsButton submissions={data?.submissions} />
+          </>
         )}
       </h2>
       {loading && <div>Loading...</div>}
@@ -74,8 +92,8 @@ export function SubmissionsList({
         <Table>
           <TableHead>
             <TableRow>
-              <TableHeader>Submission ID</TableHeader>
-              <TableHeader>Data</TableHeader>
+              <TableHeader>ID</TableHeader>
+              <DataHeaders />
               <TableHeader>Date/Time</TableHeader>
               <TableHeader>Actions</TableHeader>
             </TableRow>
@@ -84,7 +102,7 @@ export function SubmissionsList({
             {sortedSubmissions.map((submission) => (
               <TableRow key={submission.id}>
                 <TableCell>{submission.id}</TableCell>
-                <DataCell data={submission.data} />
+                <DataCell submission={submission} />
                 <TableCell>{format(submission.createdAt, "Pp")}</TableCell>
                 <TableCell>
                   <DeleteSubmissionButton id={submission.id} />
@@ -100,7 +118,8 @@ export function SubmissionsList({
   );
 }
 
-function DefaultDataCell({ data }: { data: any }) {
+function DefaultDataCell({ submission }: DataCellProps) {
+  const data = submission?.data || {};
   return (
     <TableCell>
       <Popover>
@@ -115,7 +134,12 @@ function DefaultDataCell({ data }: { data: any }) {
   );
 }
 
-function PhotoCarouselDataCell({ data }: { data: any }) {
+function DefaultDataHeaders() {
+  return <TableHeader>Data</TableHeader>;
+}
+
+function PhotoCarouselDataCell({ submission }: DataCellProps) {
+  const data = submission?.data || {};
   return (
     <TableCell>
       <img src={toFullS3Url(data.photoUrl)} className="h-24" />
@@ -124,19 +148,50 @@ function PhotoCarouselDataCell({ data }: { data: any }) {
   );
 }
 
-function VoteForDataCell({ data }: { data: any }) {
+function PhotoCarouselDataHeaders() {
+  return <TableHeader>Photo/Caption</TableHeader>;
+}
+
+function VoteForDataCell({ submission }: DataCellProps) {
+  const data = submission?.data || {};
+  const [updateSubmission] = useAdminUpdateSubmissionMutation();
   return (
-    <TableCell className="text-center">
-      <div className="font-bold">{data.title || "No title"}</div>
-      {data.description && <div>{data.description}</div>}
-      {data.photoUrl && (
-        <div className="flex justify-center">
-          <img
-            src={toFullS3Url(data.photoUrl)}
-            className={`h-24 rounded-full border-4 border-solid border-white`}
-          />
-        </div>
-      )}
-    </TableCell>
+    <>
+      <TableCell className="text-center">
+        <div className="text-left font-bold">{data.title || "No title"}</div>
+        {data.description && <div>{data.description}</div>}
+        {data.photoUrl && (
+          <div className="flex justify-start">
+            <img
+              src={toFullS3Url(data.photoUrl)}
+              className={`h-24 rounded-full border-4 border-solid border-white`}
+            />
+          </div>
+        )}
+      </TableCell>
+      <TableCell>
+        <ColorPicker
+          value={data.color}
+          name="color"
+          onChange={(c) => {
+            updateSubmission({
+              variables: {
+                id: submission.id,
+                data: { ...data, color: c },
+              },
+            });
+          }}
+        />
+      </TableCell>
+    </>
+  );
+}
+
+function VoteForDataHeaders() {
+  return (
+    <>
+      <TableHeader>Photo/Caption</TableHeader>
+      <TableHeader>Color</TableHeader>
+    </>
   );
 }

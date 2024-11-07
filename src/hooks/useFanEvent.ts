@@ -29,7 +29,9 @@ export function useFanEvent(slug: string) {
             return {
               event: {
                 ...cachedData.event,
-                activeEngagement: data.data?.activeEngagementChanged || null,
+                activeEngagement: data.data?.activeEngagementChanged
+                  ? { submissions: [], ...data.data.activeEngagementChanged }
+                  : null,
               },
             };
           }

@@ -1,0 +1,32 @@
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.27);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+.bounce {
+  animation: bounce 0.6s ease-out forwards;
+}
+
+.selected {
+  border-width: 7px;
+  transform: scale(1.4);
+  box-shadow: 0 2px 7px #00000077;
+  z-index: 9;
+}
+
+.colorCircle {
+  @apply h-9 w-9 rounded-full border-4 border-solid relative border-white;
+}
+
+.colorCircle:hover:not(.selected) {
+  animation: bounce 0.6s ease-out forwards;
+  z-index: 10;
+  box-shadow: 0 2px 7px #00000077;
+}

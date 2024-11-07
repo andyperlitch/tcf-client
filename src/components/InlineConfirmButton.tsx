@@ -26,6 +26,13 @@ export function InlineConfirmButton({
     error?.message
   );
 
+  const handleOpenChange = useCallback((open: boolean) => {
+    setOpen(open);
+    if (!open) {
+      setErrorMessage(undefined);
+    }
+  }, []);
+
   const wrappedOnConfirm = useCallback(async () => {
     try {
       await onConfirm();
@@ -36,7 +43,7 @@ export function InlineConfirmButton({
   }, [onConfirm]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <Button variant="destructive" {...buttonProps}>
           {children}

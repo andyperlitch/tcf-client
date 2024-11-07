@@ -17,12 +17,15 @@ import { useCreateSubmission } from "@/hooks/useCreateSubmission";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "./ui/button";
 import { FormErrors } from "./FormErrors";
+import { ColorPicker } from "./ColorPicker";
 
 const formSchema = z.object({
   // title of the choice
   title: z.string().min(1),
   // description of the choice
   description: z.string().optional(),
+  // color of the choice
+  color: z.string(),
 });
 
 export function CreateVoteForChoiceForm({
@@ -68,19 +71,34 @@ export function CreateVoteForChoiceForm({
         className="space-y-8"
       >
         {errors?.length > 0 && <FormErrors errors={errors} />}
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>Title</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage {...field} />
-            </FormItem>
-          )}
-        />
+        <div className="flex items-center space-x-2">
+          <FormField
+            control={form.control}
+            name="color"
+            render={({ field }) => (
+              <FormItem className="flex-0">
+                <FormLabel htmlFor={field.name}>Color</FormLabel>
+                <FormControl>
+                  <ColorPicker {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel htmlFor={field.name}>Title</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage {...field} />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <FormField
           control={form.control}
           name="description"

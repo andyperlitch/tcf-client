@@ -89,16 +89,20 @@ export function AdminEngagement() {
               <TabsTrigger value="data">Data</TabsTrigger>
             </TabsList>
             <TabsContent value="config">
-              <EditableJson
-                value={engagement.config}
-                setValue={updateEngagementConfig}
-              />
+              <div className="rounded-lg bg-muted p-1">
+                <EditableJson
+                  value={engagement.config}
+                  setValue={updateEngagementConfig}
+                />
+              </div>
             </TabsContent>
             <TabsContent value="data">
-              <EditableJson
-                value={engagement.data}
-                setValue={updateEngagementData}
-              />
+              <div className="rounded-lg bg-muted p-1">
+                <EditableJson
+                  value={engagement.data}
+                  setValue={updateEngagementData}
+                />
+              </div>
             </TabsContent>
           </Tabs>
         </div>

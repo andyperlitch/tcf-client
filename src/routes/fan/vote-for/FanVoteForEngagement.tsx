@@ -5,7 +5,7 @@ import {
 } from "@/gql/graphql";
 import { toFullS3Url } from "@/utils/toFullS3Url";
 import { useState } from "react";
-import styles from "./Choice.module.css";
+import styles from "../../../css/Bounce.module.css";
 
 export function FanVoteForEngagement({
   engagement,
