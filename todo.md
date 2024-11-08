@@ -20,9 +20,16 @@
 [X] engagement status switcher
 [X] allow admins full read/write on config and data for engagements
 [X] edit engagements in admin ui
+[X] add voteFor config
 [ ] add pre-defined submissions (options)
 [ ] VoteFor engagement
-[ ] add voteFor config
-[ ] enforce maxPhotos carousel config
+[ ] declare winner via timer
+[ ] declare winner via admin
+[ ] show winner on engagement stage
+[ ] show winner on engagement fan
+
+[ ] have engagement field for QR CTA text
+[ ] incorporate Engagement Title
+[ ] have approval mechanism for photo carousel
 [ ] lock event from being updated while engagement is active
 [ ] smaller admin nav on ipad
