@@ -1,5 +1,4 @@
 import { scaleLinear, ScaleLinear } from "d3-scale";
-
 import {
   StageEngagementFragment,
   StageSubmissionFragment,
@@ -21,7 +20,7 @@ export function StageVoteForEngagement({
     number,
     number
   > | null>(null);
-  const choiceRangeRef = useRef<HTMLDivElement>(null);
+  const voteContainerRef = useRef<HTMLDivElement>(null);
   const choiceContainerRef = useRef<HTMLDivElement>(null);
   const [choiceWidth, setChoiceWidth] = useState(0);
   const voteCounts = useMemo(
@@ -41,9 +40,9 @@ export function StageVoteForEngagement({
   });
 
   useEffect(() => {
-    if (data?.submissions.length && choiceRangeRef.current) {
+    if (data?.submissions.length && voteContainerRef.current) {
       const newChoiceWidth =
-        (choiceRangeRef.current.clientWidth / data?.submissions.length) * 0.8;
+        (voteContainerRef.current.clientWidth / data?.submissions.length) * 0.8;
       setChoiceWidth(newChoiceWidth);
       const maxVotes = Math.max(
         data.submissions.length,
@@ -53,8 +52,8 @@ export function StageVoteForEngagement({
         [0, maxVotes],
         [
           0,
-          choiceRangeRef.current?.clientHeight
-            ? choiceRangeRef.current?.clientHeight - newChoiceWidth * 1.5
+          voteContainerRef.current?.clientHeight
+            ? voteContainerRef.current?.clientHeight - newChoiceWidth * 1.7
             : 0,
         ]
       );
@@ -64,17 +63,17 @@ export function StageVoteForEngagement({
 
   return (
     <div
-      ref={choiceRangeRef}
-      data-name="vote-for-container"
+      ref={voteContainerRef}
+      data-name="VOTE-FOR-CONTAINER"
       className="flex h-full w-full flex-col items-end justify-around"
     >
       {loading && <Loader />}
       {error && <div>Error: {error.message}</div>}
-      {/* This div is not actually used visually, but meant to create a range for the scale */}
-      <div data-name="choice-range-ref" className="w-full flex-1" />
+      {/* This div creates the space between the choices container and the top of the vote for container */}
+      <div data-name="CHOICE-RANGE-REF" className="w-full flex-1" />
       <div
         ref={choiceContainerRef}
-        data-name="choices"
+        data-name="CHOICE-CONTAINER"
         className={`flex w-full flex-row justify-around`}
       >
         {data?.submissions.map((choice) => (
@@ -116,39 +115,41 @@ const Choice = ({
         : scaleLinear([0, 10], [4, 10]),
     [voteScale]
   );
-  const { voteStyles, votePollStyles } = useMemo(() => {
-    const voteSize = width / 2;
+  const { voteStyles, voteBarStyles, imageStyles, imageWrapperStyles } =
+    useMemo(() => {
+      const voteSize = width / 2;
 
-    const voteHeight = imageLoaded && voteScale ? voteScale?.(votes) : 0;
-    return {
-      voteStyles: {
-        width: voteSize,
-        height: voteSize,
-        boxShadow: `0 0 0 ${widthScale(votes)}px ${choice.data.color}`,
-        top: `-${voteHeight}px`,
-      },
-      votePollStyles: {
-        height: `${voteHeight + voteSize}px`,
-        // top: `calc(${voteSize} - ${voteHeight}px)`,
-        top: `${voteSize / 2 - voteHeight}px`,
-        backgroundColor: choice.data.color,
-        // width: `${widthScale(votes)}px`,
-        width: voteSize,
-      },
-    };
-  }, [width, imageLoaded, voteScale, votes, widthScale, choice.data.color]);
-
-  const imageStyles = useMemo(
-    () => ({
-      border: `4px solid white`,
-      width,
-      height: width,
-    }),
-    [width]
-  );
+      const voteHeight = imageLoaded && voteScale ? voteScale?.(votes) : 0;
+      return {
+        voteStyles: {
+          width: voteSize,
+          height: voteSize,
+          boxShadow: `0 0 0 ${widthScale(votes)}px ${choice.data.color}`,
+        },
+        voteBarStyles: {
+          height: `${voteHeight + voteSize}px`,
+          // top: `calc(${voteSize} - ${voteHeight}px)`,
+          top: `${1.5 * voteSize - voteHeight}px`,
+          backgroundColor: choice.data.color,
+          // width: `${widthScale(votes)}px`,
+          width: voteSize,
+        },
+        imageStyles: {
+          border: `4px solid white`,
+          width,
+          height: width,
+        },
+        imageWrapperStyles: {
+          top: `-${voteHeight}px`,
+          backgroundColor: "black",
+          borderColor: choice.data.color,
+        },
+      };
+    }, [width, imageLoaded, voteScale, votes, widthScale, choice.data.color]);
 
   return (
     <div
+      data-name="CHOICE-CONTAINER"
       key={choice.id}
       className={`
         relative flex flex-col items-center justify-center transition-opacity
@@ -166,34 +167,23 @@ const Choice = ({
       onClick={() => handleClick(choice)}
     >
       <div
+        data-name="VOTE-BAR"
         className={`
           absolute
 
           ${elasticStyles.elastic}
         `}
-        style={votePollStyles}
+        style={voteBarStyles}
       />
+
       <div
-        data-name="votes"
-        style={voteStyles}
+        data-name="CHOICE-IMAGE-WRAPPER"
+        style={imageWrapperStyles}
         className={`
-          relative z-10 flex items-center justify-center rounded-full
+          relative flex items-center justify-center rounded-full border-8
+          border-solid
 
           ${elasticStyles.elastic}
-
-          bg-foreground font-margarine text-center text-3xl text-background
-        `}
-      >
-        {votes}
-      </div>
-      <div
-        style={{
-          backgroundColor: "black",
-          borderColor: choice.data.color,
-        }}
-        className={`
-          relative flex items-center justify-center rounded-full border-4
-          border-solid
         `}
       >
         {!imageLoaded && (
@@ -202,7 +192,7 @@ const Choice = ({
           />
         )}
         <img
-          data-name="image"
+          data-name="CHOICE-IMAGE"
           src={url}
           style={imageStyles}
           className={`
@@ -214,13 +204,27 @@ const Choice = ({
       </div>
 
       <div
-        data-name="title"
+        data-name="CHOICE-VOTE-COUNT"
+        style={voteStyles}
+        className={`
+          relative z-10 flex items-center justify-center rounded-full
+
+          ${elasticStyles.elastic}
+
+          bg-foreground font-margarine text-center text-3xl text-background
+        `}
+      >
+        {votes}
+      </div>
+
+      <div
+        data-name="CHOICE-TITLE"
         style={{
           boxShadow: `3px -3px 0 ${choice.data.color}`,
         }}
         className={`
-          relative z-10 -mt-4 mb-2 max-w-[30vw] rounded-lg bg-foreground pb-0
-          pl-4 pr-4 pt-0 text-center font-hand text-3xl text-background
+          relative z-10 mb-2 max-w-[30vw] rounded-lg bg-foreground pb-0 pl-4
+          pr-4 pt-0 text-center font-hand text-3xl text-background
         `}
       >
         {choice.data.title}

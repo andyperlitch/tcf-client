@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import QRCode from "react-qr-code";
 
 interface StageQRProps {
@@ -20,13 +21,27 @@ export function StageQR({
   bgQRColor = "#FFFFFF",
   className = "",
 }: StageQRProps) {
+  const { stageQrStyles, stageQrTextStyles } = useMemo(
+    () => ({
+      stageQrStyles: {
+        backgroundColor: bgColor,
+      },
+      stageQrTextStyles: {
+        width: `${width}px`,
+        color: fgColor,
+      },
+    }),
+    [bgColor, fgColor, width]
+  );
+
   if (!slug) return null;
+
   return (
     <div
+      style={stageQrStyles}
+      data-name="STAGE-QR"
       className={`
         mb-4 mr-4 flex flex-col items-center rounded-lg
-
-        bg-[${bgColor}]
 
         ${className}
 
@@ -34,16 +49,14 @@ export function StageQR({
       `}
     >
       <p
-        className={`
-          text-center font-hand text-5xl
-
-          text-[${fgColor}]
-        `}
-        style={{ width: `${width}px` }}
+        data-name="STAGE-QR-TEXT"
+        style={stageQrTextStyles}
+        className={`text-center font-hand text-5xl`}
       >
         Only scan this if you're cool
       </p>
       <QRCode
+        data-name="STAGE-QR-CODE"
         value={`${window.location.origin}/e/${slug}`}
         size={width}
         level="L"

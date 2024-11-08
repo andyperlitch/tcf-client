@@ -38,7 +38,7 @@ export function StageChrome({ children, name }: StageChromeProps) {
           width={width * 0.17}
           bgColor="#fae1aa77"
           fgColor="#894c37"
-          bgQRColor="#fae1aa"
+          bgQRColor="#fae1aa77"
         />
       </div>
     </div>

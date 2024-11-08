@@ -54,6 +54,7 @@
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
     "use-local-storage": "^3.0.0",
+    "use-resize-observer": "^9.1.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
