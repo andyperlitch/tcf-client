@@ -4,8 +4,12 @@ import {
   useCreateReactionMutation,
 } from "@/gql/graphql";
 import { toFullS3Url } from "@/utils/toFullS3Url";
-import { useState } from "react";
-import styles from "../../../css/Bounce.module.css";
+import { useMemo, useState } from "react";
+import styles from "@/styles/Bounce.module.css";
+import { useImageLoader } from "@/hooks/useImageLoader";
+import pulseStyles from "@/styles/Pulse.module.css";
+import { Loader } from "@/components/Loader";
+import useWindowSize from "@/hooks/useWindowSize";
 
 export function FanVoteForEngagement({
   engagement,
@@ -14,11 +18,12 @@ export function FanVoteForEngagement({
 }) {
   const choices = engagement.submissions;
   const [chosen, setChosen] = useState<FanSubmissionFragment | null>(null);
+  const { width } = useWindowSize();
+  const choiceWidth = Math.min(width / 3, 100);
 
   const [createReaction] = useCreateReactionMutation();
 
   const handleChoiceClick = (choice: FanSubmissionFragment) => {
-    console.log(choice);
     setChosen(choice);
     createReaction({
       variables: {
@@ -42,6 +47,7 @@ export function FanVoteForEngagement({
             choice={choice}
             handleClick={handleChoiceClick}
             isChosen={chosen?.id === choice.id}
+            width={choiceWidth}
           />
         ))}
       </div>
@@ -53,38 +59,92 @@ const Choice = ({
   choice,
   handleClick,
   isChosen,
+  width,
 }: {
   choice: FanSubmissionFragment;
   handleClick: (choice: FanSubmissionFragment) => void;
   isChosen: boolean;
+  width: number;
 }) => {
+  const { imageLoaded } = useImageLoader({
+    url: choice.data.photoUrl ? toFullS3Url(choice.data.photoUrl) : undefined,
+  });
+  const imgCtnrStyles = useMemo(
+    () => ({
+      backgroundColor: choice.data.color,
+      border: `4px solid white`,
+    }),
+    [choice.data.color]
+  );
+  const imageStyles = useMemo(
+    () => ({
+      border: `${isChosen ? "6px" : "4px"} solid ${choice.data.color}`,
+      width,
+      height: width,
+    }),
+    [choice.data.color, width, isChosen]
+  );
   return (
     <div
       key={choice.id}
-      className={`relative mb-8 ml-[5vw] mr-[5vw] w-[30vw]`}
+      className={`
+        relative mb-8 ml-[5vw] mr-[5vw]
+
+        w-[${width}px]
+
+        transition-opacity
+
+        ${
+          imageLoaded
+            ? `
+              opacity-100
+
+              ${pulseStyles.pulse}
+            `
+            : `opacity-20`
+        }
+      `}
       onClick={() => handleClick(choice)}
     >
       <div
         data-name="title"
+        style={{
+          boxShadow: `${isChosen ? `5px -5px` : `3px -3px`} 0 ${
+            choice.data.color
+          }`,
+        }}
         className={`
-          absolute bottom-1 z-10 max-w-[30vw] rounded-lg bg-foreground pb-0 pl-4
-          pr-4 pt-0 font-hand text-3xl text-background
+          absolute -bottom-4 z-10 max-w-[30vw] rounded-lg bg-foreground pb-0
+          pl-4 pr-4 pt-0 font-hand text-3xl text-background
 
           ${isChosen ? styles.bounce : ""}
         `}
       >
         {choice.data.title}
       </div>
-      <img
-        data-name="image"
-        src={toFullS3Url(choice.data.photoUrl)}
+      <div
+        style={imgCtnrStyles}
         className={`
-          w-[30vw] rounded-full border-solid
-
-          ${isChosen ? `border-8 border-green-400` : `border-4 border-white`}
-          ${isChosen ? styles.bounce : ""}
+          relative flex items-center justify-center rounded-full bg-muted
         `}
-      />
+      >
+        {!imageLoaded && (
+          <Loader
+            className={`absolute flex h-full w-full items-center justify-center`}
+          />
+        )}
+        <img
+          data-name="image"
+          src={toFullS3Url(choice.data.photoUrl)}
+          style={imageStyles}
+          className={`
+            rounded-full transition-opacity
+
+            ${imageLoaded ? "opacity-100" : `opacity-0`}
+            ${isChosen && imageLoaded ? styles.bounce : ""}
+          `}
+        />
+      </div>
     </div>
   );
 };

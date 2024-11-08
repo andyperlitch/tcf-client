@@ -66,6 +66,7 @@ export default {
         ],
         hand: [
           "Just Another Hand",
+          "Margarine",
           "Inter",
           "system-ui",
           "Avenir",
@@ -73,6 +74,7 @@ export default {
           "Arial",
           "sans-serif",
         ],
+        margarine: ["Margarine", "sans-serif"],
       },
     },
   },
