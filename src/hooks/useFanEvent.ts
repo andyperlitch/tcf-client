@@ -17,25 +17,42 @@ export function useFanEvent(slug: string) {
     variables: { eventSlug: slug },
     onData: ({ client, data }) => {
       if (data?.data?.activeEngagementChanged !== undefined) {
-        // Update the Apollo cache with the new active engagement
+        // First, evict the existing activeEngagement from cache
+        client.cache.evict({
+          id: client.cache.identify({ __typename: "Event", slug }),
+          fieldName: "activeEngagement",
+        });
+
+        // Then update the cache with the new data
         client.cache.updateQuery<FanGetEventQuery>(
           {
             query: FanGetEventDocument,
             variables: { slug },
           },
           (cachedData) => {
-            if (!cachedData?.event) return cachedData;
+            if (!cachedData?.event) return null;
+
+            console.log(
+              `andy data.data.activeEngagementChanged`,
+              data?.data?.activeEngagementChanged
+            );
 
             return {
               event: {
                 ...cachedData.event,
                 activeEngagement: data.data?.activeEngagementChanged
-                  ? { submissions: [], ...data.data.activeEngagementChanged }
+                  ? {
+                      ...data.data.activeEngagementChanged,
+                      submissions: [], // Add missing required field
+                    }
                   : null,
               },
             };
           }
         );
+
+        // Garbage collect any remaining deleted references
+        client.cache.gc();
       }
     },
   });

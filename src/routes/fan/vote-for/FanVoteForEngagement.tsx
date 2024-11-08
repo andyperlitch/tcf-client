@@ -2,6 +2,7 @@ import {
   FanEngagementFragment,
   FanSubmissionFragment,
   useCreateReactionMutation,
+  useFanGetSubmissionsQuery,
 } from "@/gql/graphql";
 import { toFullS3Url } from "@/utils/toFullS3Url";
 import { useMemo, useState } from "react";
@@ -16,7 +17,12 @@ export function FanVoteForEngagement({
 }: {
   engagement: FanEngagementFragment;
 }) {
-  const choices = engagement.submissions;
+  const { data } = useFanGetSubmissionsQuery({
+    variables: {
+      engagementId: engagement.id,
+    },
+  });
+  const choices = data?.submissions ?? [];
   const [chosen, setChosen] = useState<FanSubmissionFragment | null>(null);
   const { width } = useWindowSize();
   const choiceWidth = Math.min(width / 3, 100);
@@ -104,7 +110,7 @@ const Choice = ({
             : `opacity-20`
         }
       `}
-      onClick={() => handleClick(choice)}
+      onClick={() => !isChosen && handleClick(choice)}
     >
       <div
         data-name="title"

@@ -372,7 +372,7 @@ export type FanEventFragment = { __typename?: 'Event', id: number, name: string,
 
 export type FanReactionFragment = { __typename?: 'Reaction', id: number, type: string, createdAt: any };
 
-export type FanSubmissionFragment = { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> };
+export type FanSubmissionFragment = { __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> };
 
 export type PhotoCarouselConfigFieldsFragment = { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number };
 
@@ -465,7 +465,7 @@ export type CreateSubmissionMutationVariables = Exact<{
 }>;
 
 
-export type CreateSubmissionMutation = { __typename?: 'Mutation', createSubmission: { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> } };
+export type CreateSubmissionMutation = { __typename?: 'Mutation', createSubmission: { __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> } };
 
 export type CreateSubmissionPresignedUrlMutationVariables = Exact<{
   engagementId: Scalars['Int']['input'];
@@ -536,6 +536,13 @@ export type FanGetEventQueryVariables = Exact<{
 
 
 export type FanGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig?: { __typename?: 'PhotoCarouselConfig', maxSubmissionsPerUser: number } | { __typename?: 'VoteForConfig', votesPerUser: number } | null, viewData?: { __typename?: 'PhotoCarouselData', visibleSubmission?: number | null } | { __typename?: 'VoteForData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> } | null } | null };
+
+export type FanGetSubmissionsQueryVariables = Exact<{
+  engagementId: Scalars['Int']['input'];
+}>;
+
+
+export type FanGetSubmissionsQuery = { __typename?: 'Query', submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: any, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> };
 
 export type RandomNameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -742,11 +749,17 @@ export const FanReactionFragmentDoc = gql`
 export const FanSubmissionFragmentDoc = gql`
     fragment FanSubmission on Submission {
   id
-  data
   createdAt
+  data
   reactions {
     id
+    createdAt
     type
+    userId
+    user {
+      id
+      name
+    }
   }
 }
     `;
@@ -1550,6 +1563,46 @@ export type FanGetEventQueryHookResult = ReturnType<typeof useFanGetEventQuery>;
 export type FanGetEventLazyQueryHookResult = ReturnType<typeof useFanGetEventLazyQuery>;
 export type FanGetEventSuspenseQueryHookResult = ReturnType<typeof useFanGetEventSuspenseQuery>;
 export type FanGetEventQueryResult = Apollo.QueryResult<FanGetEventQuery, FanGetEventQueryVariables>;
+export const FanGetSubmissionsDocument = gql`
+    query fanGetSubmissions($engagementId: Int!) {
+  submissions(engagementId: $engagementId) {
+    ...FanSubmission
+  }
+}
+    ${FanSubmissionFragmentDoc}`;
+
+/**
+ * __useFanGetSubmissionsQuery__
+ *
+ * To run a query within a React component, call `useFanGetSubmissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFanGetSubmissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFanGetSubmissionsQuery({
+ *   variables: {
+ *      engagementId: // value for 'engagementId'
+ *   },
+ * });
+ */
+export function useFanGetSubmissionsQuery(baseOptions: Apollo.QueryHookOptions<FanGetSubmissionsQuery, FanGetSubmissionsQueryVariables> & ({ variables: FanGetSubmissionsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FanGetSubmissionsQuery, FanGetSubmissionsQueryVariables>(FanGetSubmissionsDocument, options);
+      }
+export function useFanGetSubmissionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FanGetSubmissionsQuery, FanGetSubmissionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FanGetSubmissionsQuery, FanGetSubmissionsQueryVariables>(FanGetSubmissionsDocument, options);
+        }
+export function useFanGetSubmissionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FanGetSubmissionsQuery, FanGetSubmissionsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FanGetSubmissionsQuery, FanGetSubmissionsQueryVariables>(FanGetSubmissionsDocument, options);
+        }
+export type FanGetSubmissionsQueryHookResult = ReturnType<typeof useFanGetSubmissionsQuery>;
+export type FanGetSubmissionsLazyQueryHookResult = ReturnType<typeof useFanGetSubmissionsLazyQuery>;
+export type FanGetSubmissionsSuspenseQueryHookResult = ReturnType<typeof useFanGetSubmissionsSuspenseQuery>;
+export type FanGetSubmissionsQueryResult = Apollo.QueryResult<FanGetSubmissionsQuery, FanGetSubmissionsQueryVariables>;
 export const RandomNameDocument = gql`
     query RandomName {
   randomName

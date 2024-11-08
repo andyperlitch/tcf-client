@@ -3,11 +3,17 @@ import { gql } from "@apollo/client";
 gql`
   fragment FanSubmission on Submission {
     id
-    data
     createdAt
+    data
     reactions {
       id
+      createdAt
       type
+      userId
+      user {
+        id
+        name
+      }
     }
   }
 `;

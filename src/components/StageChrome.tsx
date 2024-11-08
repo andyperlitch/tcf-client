@@ -1,6 +1,7 @@
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { StageQR } from "./StageQR";
 import useWindowSize from "@/hooks/useWindowSize";
+import { useMemo } from "react";
 
 interface StageChromeProps {
   children: React.ReactNode;
@@ -9,13 +10,23 @@ interface StageChromeProps {
 
 export function StageChrome({ children, name }: StageChromeProps) {
   const { slug } = useParamsSafe("slug");
-  const { width } = useWindowSize();
+  const { width, height } = useWindowSize();
+  const contentStyles = useMemo(
+    () => ({
+      paddingTop: `${height * 0.2}px`,
+    }),
+    [height]
+  );
   return (
     <div
       data-name={name}
-      className={`flex h-screen w-screen items-center items-stretch align-middle`}
+      className={`flex h-screen w-screen items-stretch align-middle`}
     >
-      <div data-name={`${name}-content`} className="flex-1">
+      <div
+        style={contentStyles}
+        data-name={`${name}-content`}
+        className="flex-1"
+      >
         {children}
       </div>
       <div

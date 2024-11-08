@@ -78,8 +78,9 @@ const Choice = ({
     return {
       width: voteSize,
       height: voteSize,
+      boxShadow: `2px -1px 0 2px ${choice.data.color}`,
     };
-  }, [width]);
+  }, [width, choice.data.color]);
 
   const { width: screenWidth, height: screenHeight } = useWindowSize();
 
