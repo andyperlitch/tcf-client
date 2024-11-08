@@ -40,7 +40,7 @@ export function FanVoteForEngagement({
   };
   return (
     <div
-      data-name="screen-container"
+      data-name="vote-for-container"
       className={`flex h-screen w-screen flex-col items-center space-y-4`}
     >
       <div className="flex h-[30vh] flex-col items-center justify-center">
@@ -77,14 +77,16 @@ const Choice = ({
   });
   const imgCtnrStyles = useMemo(
     () => ({
-      backgroundColor: choice.data.color,
-      border: `4px solid white`,
+      backgroundColor: "black",
+      border: `4px solid ${choice.data.color}`,
     }),
     [choice.data.color]
   );
   const imageStyles = useMemo(
     () => ({
-      border: `${isChosen ? "6px" : "4px"} solid ${choice.data.color}`,
+      border: `${isChosen ? "6px" : "4px"} solid ${
+        isChosen ? choice.data.color : "white"
+      }`,
       width,
       height: width,
     }),

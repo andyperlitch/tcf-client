@@ -48,7 +48,7 @@ export function AdminContainer({
 
 function AdminSideNav({ currentSection }: { currentSection: string }) {
   return (
-    <nav className={cn(`flex flex-col space-x-0 space-y-1 space-y-2 p-6`)}>
+    <nav className={cn(`flex flex-col space-x-0 space-y-2 p-6`)}>
       {ADMIN_NAV_ITEMS.map((item) => (
         <Link
           key={item.href}

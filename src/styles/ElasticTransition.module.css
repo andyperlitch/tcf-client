@@ -1,0 +1,4 @@
+.elastic {
+  transition: top 0.6s cubic-bezier(0.2, 2.5, 0.3, 1),
+    height 0.6s cubic-bezier(0.2, 2.5, 0.3, 1);
+}
