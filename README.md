@@ -9,8 +9,6 @@ Front-end code for thecasualfunk.com.
 ### Prerequisites
 
 - [nvm - node version manager](https://github.com/nvm-sh/nvm)
-- docker (e.g. [Docker Desktop for mac](https://docs.docker.com/desktop/install/mac-install/))
-- docker-compose (should be included with docker desktop)
 
 ### One-time setup
 
@@ -27,6 +25,8 @@ corepack enable
 ```
 
 3. Install dependencies:
+
+This project uses [pnpm](https://pnpm.io/) as the package manager. Server uses yarn.
 
 ```bash
 pnpm install

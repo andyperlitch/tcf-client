@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 
 export function SetListPicker() {
   return (
-    <div className="fixed bottom-2 right-2 z-10">
+    <div data-name="SET-LIST-PICKER" className="fixed bottom-2 right-2 z-10">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon">

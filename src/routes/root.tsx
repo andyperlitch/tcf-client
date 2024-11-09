@@ -1,11 +1,11 @@
 import { ModeToggle } from "@/components/ModeToggle";
-import { SetListPicker } from "@/components/SetListPicker";
+// import { SetListPicker } from "@/components/SetListPicker";
 
 export default function Root() {
   return (
     <>
       <ModeToggle />
-      <SetListPicker />
+      {/* <SetListPicker /> */}
       <div
         className={`
           relative z-[2] flex min-h-screen flex-col items-center justify-center

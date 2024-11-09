@@ -48,7 +48,7 @@ const combinedHttpLink = retryLink.concat(httpLink);
 const wsLink = new GraphQLWsLink(
   createClient({
     url: wsUri,
-    retryAttempts: 10, // Maximum number of retry attempts
+    retryAttempts: 1000, // Maximum number of retry attempts
     shouldRetry: () => true, // Always attempt to retry the connection
   })
 );

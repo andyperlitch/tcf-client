@@ -7,6 +7,7 @@ gql`
     updatedAt
     title
     description
+    qrCodeCta
     startTime
     endTime
     type
