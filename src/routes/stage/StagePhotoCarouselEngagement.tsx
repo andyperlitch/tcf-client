@@ -23,7 +23,7 @@ interface Photo {
 const MAX_PHOTOS = 20;
 const initialStyle = {
   opacity: 0,
-  transform: "scale(3) rotate(0deg) translate(0, 100%)",
+  transform: "scale(3) rotate(0deg) translate(0, 25%)",
 };
 
 export function StagePhotoCarouselEngagement({
@@ -82,6 +82,7 @@ export function StagePhotoCarouselEngagement({
       data-name="PHOTOS-CONTAINER"
       className={`
         flex h-screen w-full flex-stretch relative items-center justify-center
+        overflow-hidden
       `}
     >
       {photos.map((photo) => (

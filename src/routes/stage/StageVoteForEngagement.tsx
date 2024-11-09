@@ -40,8 +40,10 @@ export function StageVoteForEngagement({
 
   useEffect(() => {
     if (data?.submissions.length && voteContainerRef.current) {
-      const newChoiceWidth =
-        (voteContainerRef.current.clientWidth / data?.submissions.length) * 0.8;
+      const newChoiceWidth = Math.min(
+        (voteContainerRef.current.clientWidth / data?.submissions.length) * 0.8,
+        100
+      );
       setChoiceWidth(newChoiceWidth);
       const maxVotes = Math.max(
         data.submissions.length,

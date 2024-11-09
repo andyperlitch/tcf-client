@@ -21,6 +21,14 @@ interface UseImagePreviewReturn {
    * The mime type of the file.
    */
   mimeType: string;
+  /**
+   * Set the preview src.
+   */
+  setPreviewSrc: (src: string | null) => void;
+  /**
+   * Set the file.
+   */
+  setFile: (file: File | undefined) => void;
 }
 
 export function useImageInput({
@@ -48,5 +56,19 @@ export function useImageInput({
     [onImageChange]
   );
 
-  return { previewSrc, handleFileChange, file, mimeType };
+  return {
+    previewSrc,
+    handleFileChange,
+    file,
+    mimeType,
+    setPreviewSrc,
+    setFile: useCallback(
+      (file: File | undefined) => {
+        setFile(file);
+        setMimeType(file?.type || "");
+        onImageChange?.(file || null);
+      },
+      [onImageChange]
+    ),
+  };
 }

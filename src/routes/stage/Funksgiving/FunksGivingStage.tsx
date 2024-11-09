@@ -55,7 +55,7 @@ export function FunksGivingStage() {
           className={`
             transition-all duration-1000
 
-            ${hasActiveEngagement ? "w-[18vw]" : "w-[30vw]"}
+            ${hasActiveEngagement ? "w-[16vw]" : "w-[30vw]"}
           `}
         />
       </div>

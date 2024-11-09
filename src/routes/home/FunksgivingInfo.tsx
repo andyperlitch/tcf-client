@@ -28,7 +28,9 @@ export function FunksgivingInfo() {
         <div data-name="LEFT-TEXT" className="flex-1">
           <h2
             className={`
-              pl-8 pr-8 text-right font-hand text-6xl transition-opacity
+              ${isMobile ? "pl-4 pr-4" : "pl-8 pr-8"}
+
+              whitespace-nowrap text-right font-hand text-6xl transition-opacity
 
               ${isFontLoaded ? "opacity-100" : "opacity-0"}
               ${styles.fanOutHeading}

@@ -20,9 +20,9 @@ import { Button } from "./ui/button";
 import { useMemo } from "react";
 import { toFullS3Url } from "@/utils/toFullS3Url";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { CreateVoteForChoiceButton } from "./CreateVoteForChoiceButton";
 import { RandomizeChoiceColorsButton } from "./RandomizeChoiceColorsButton";
 import { ColorPicker } from "./ColorPicker";
+import { CreateVoteForChoiceForm } from "./CreateVoteForChoiceForm";
 
 type DataCellProps = {
   submission: AdminSubmissionFragment;
@@ -76,44 +76,38 @@ export function SubmissionsList({
           <ReloadIcon className="h-4 w-4 text-white" />
         </Button>
         {engagementType === EngagementType.VoteFor && (
-          <>
-            <CreateVoteForChoiceButton
+          <RandomizeChoiceColorsButton submissions={data?.submissions} />
+        )}
+      </h2>
+
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeader>ID</TableHeader>
+            <DataHeaders />
+            <TableHeader>Date/Time</TableHeader>
+            <TableHeader>Actions</TableHeader>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {engagementType === EngagementType.VoteFor && (
+            <CreateVoteForChoiceForm
               engagementId={engagementId}
               onCreated={() => refetch()}
             />
-            <RandomizeChoiceColorsButton submissions={data?.submissions} />
-          </>
-        )}
-      </h2>
-      {loading && <div>Loading...</div>}
-      {error && <div>Error: {error.message}</div>}
-
-      {data?.submissions.length ? (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeader>ID</TableHeader>
-              <DataHeaders />
-              <TableHeader>Date/Time</TableHeader>
-              <TableHeader>Actions</TableHeader>
+          )}
+          {sortedSubmissions.map((submission) => (
+            <TableRow key={submission.id}>
+              <TableCell>{submission.id}</TableCell>
+              <DataCell submission={submission} />
+              <TableCell>{format(submission.createdAt, "Pp")}</TableCell>
+              <TableCell>
+                <DeleteSubmissionButton id={submission.id} />
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {sortedSubmissions.map((submission) => (
-              <TableRow key={submission.id}>
-                <TableCell>{submission.id}</TableCell>
-                <DataCell submission={submission} />
-                <TableCell>{format(submission.createdAt, "Pp")}</TableCell>
-                <TableCell>
-                  <DeleteSubmissionButton id={submission.id} />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      ) : (
-        <div>No submissions</div>
-      )}
+          ))}
+        </TableBody>
+      </Table>
     </>
   );
 }
@@ -157,9 +151,11 @@ function VoteForDataCell({ submission }: DataCellProps) {
   const [updateSubmission] = useAdminUpdateSubmissionMutation();
   return (
     <>
-      <TableCell className="text-center">
-        <div className="text-left font-bold">{data.title || "No title"}</div>
+      <TableCell>
+        <div className="font-bold">{data.title || "No title"}</div>
         {data.description && <div>{data.description}</div>}
+      </TableCell>
+      <TableCell className="text-center">
         {data.photoUrl && (
           <div className="flex justify-start">
             <img
@@ -190,7 +186,8 @@ function VoteForDataCell({ submission }: DataCellProps) {
 function VoteForDataHeaders() {
   return (
     <>
-      <TableHeader>Photo/Caption</TableHeader>
+      <TableHeader>Label</TableHeader>
+      <TableHeader>Photo</TableHeader>
       <TableHeader>Color</TableHeader>
     </>
   );

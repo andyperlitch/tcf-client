@@ -9,10 +9,12 @@ export function useCreateSubmission({
   engagementId,
   file,
   toData,
+  onSuccess,
 }: {
   engagementId: number;
   file?: File | null;
   toData: (url?: string) => any;
+  onSuccess?: () => void;
 }) {
   const [createPresignedUrl] = useCreateSubmissionPresignedUrlMutation();
   const [errors, setErrors] = useState<string[]>([]);
@@ -69,6 +71,7 @@ export function useCreateSubmission({
       });
       // report success or failure
       setSucceeded(true);
+      onSuccess?.();
     } catch (e) {
       setErrors(["Unexpected error occurred"]);
       console.error(`submitPhoto failed with error:`);
@@ -76,7 +79,14 @@ export function useCreateSubmission({
     } finally {
       setLoading(false);
     }
-  }, [createPresignedUrl, engagementId, file, createSubmission, toData]);
+  }, [
+    file,
+    createSubmission,
+    engagementId,
+    toData,
+    onSuccess,
+    createPresignedUrl,
+  ]);
 
   return {
     createSubmission: sendSubmission,

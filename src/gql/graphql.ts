@@ -96,8 +96,20 @@ export type Event = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type GenerateImageInput = {
+  prompt: Scalars['String']['input'];
+  size: Scalars['String']['input'];
+};
+
+export type GenerateImageResponse = {
+  __typename?: 'GenerateImageResponse';
+  error?: Maybe<Scalars['String']['output']>;
+  uri?: Maybe<Scalars['String']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  adminGenerateImage: GenerateImageResponse;
   changeEventActiveEngagement: Event;
   createEngagement: Engagement;
   createEvent: Event;
@@ -113,6 +125,11 @@ export type Mutation = {
   updateEvent: Event;
   updateReaction: Reaction;
   updateSubmission: Submission;
+};
+
+
+export type MutationAdminGenerateImageArgs = {
+  data: GenerateImageInput;
 };
 
 
@@ -437,6 +454,13 @@ export type AdminDeleteSubmissionMutationVariables = Exact<{
 
 
 export type AdminDeleteSubmissionMutation = { __typename?: 'Mutation', deleteSubmission: { __typename?: 'Submission', id: number, data: any, createdAt: any, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> } };
+
+export type AdminGenerateImageMutationVariables = Exact<{
+  data: GenerateImageInput;
+}>;
+
+
+export type AdminGenerateImageMutation = { __typename?: 'Mutation', adminGenerateImage: { __typename?: 'GenerateImageResponse', uri?: string | null, error?: string | null } };
 
 export type AdminUpdateEngagementMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -1010,6 +1034,40 @@ export function useAdminDeleteSubmissionMutation(baseOptions?: Apollo.MutationHo
 export type AdminDeleteSubmissionMutationHookResult = ReturnType<typeof useAdminDeleteSubmissionMutation>;
 export type AdminDeleteSubmissionMutationResult = Apollo.MutationResult<AdminDeleteSubmissionMutation>;
 export type AdminDeleteSubmissionMutationOptions = Apollo.BaseMutationOptions<AdminDeleteSubmissionMutation, AdminDeleteSubmissionMutationVariables>;
+export const AdminGenerateImageDocument = gql`
+    mutation adminGenerateImage($data: GenerateImageInput!) {
+  adminGenerateImage(data: $data) {
+    uri
+    error
+  }
+}
+    `;
+export type AdminGenerateImageMutationFn = Apollo.MutationFunction<AdminGenerateImageMutation, AdminGenerateImageMutationVariables>;
+
+/**
+ * __useAdminGenerateImageMutation__
+ *
+ * To run a mutation, you first call `useAdminGenerateImageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminGenerateImageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminGenerateImageMutation, { data, loading, error }] = useAdminGenerateImageMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAdminGenerateImageMutation(baseOptions?: Apollo.MutationHookOptions<AdminGenerateImageMutation, AdminGenerateImageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminGenerateImageMutation, AdminGenerateImageMutationVariables>(AdminGenerateImageDocument, options);
+      }
+export type AdminGenerateImageMutationHookResult = ReturnType<typeof useAdminGenerateImageMutation>;
+export type AdminGenerateImageMutationResult = Apollo.MutationResult<AdminGenerateImageMutation>;
+export type AdminGenerateImageMutationOptions = Apollo.BaseMutationOptions<AdminGenerateImageMutation, AdminGenerateImageMutationVariables>;
 export const AdminUpdateEngagementDocument = gql`
     mutation adminUpdateEngagement($id: Int!, $data: UpdateEngagementInput!) {
   updateEngagement(engagementId: $id, data: $data) {
