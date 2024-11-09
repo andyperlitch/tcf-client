@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 import "./index.css";
-import Root from "./routes/home/root";
+import Home from "./routes/home/home";
 import ErrorPage from "./error-page";
 import { SetList } from "./routes/SetList";
 import { SetListSong } from "./routes/SetListSong";
@@ -32,7 +32,7 @@ import { TooltipProvider } from "./components/ui/tooltip";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <Home />,
     errorElement: <ErrorPage />,
   },
   {
