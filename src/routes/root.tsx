@@ -1,11 +1,15 @@
 import { ModeToggle } from "@/components/ModeToggle";
-// import { SetListPicker } from "@/components/SetListPicker";
+import { useAuth } from "@/hooks/useAuth";
+import { SetListPicker } from "@/components/SetListPicker";
+import { hasRole } from "@/utils/hasRole";
+import { Role } from "@/gql/graphql";
 
 export default function Root() {
+  const { user } = useAuth();
   return (
     <>
       <ModeToggle />
-      {/* <SetListPicker /> */}
+      {hasRole(user, [Role.Admin, Role.Bandmate]) && <SetListPicker />}
       <div
         className={`
           relative z-[2] flex min-h-screen flex-col items-center justify-center
