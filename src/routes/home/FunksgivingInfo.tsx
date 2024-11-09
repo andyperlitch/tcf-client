@@ -28,7 +28,7 @@ export function FunksgivingInfo() {
         <div data-name="LEFT-TEXT" className="flex-1">
           <h2
             className={`
-              pl-[5vw] pr-[5vw] text-right font-hand text-6xl transition-opacity
+              pl-8 pr-8 text-right font-hand text-6xl transition-opacity
 
               ${isFontLoaded ? "opacity-100" : "opacity-0"}
               ${styles.fanOutHeading}
@@ -40,7 +40,7 @@ export function FunksgivingInfo() {
           </h2>
         </div>
         <div data-name="RIGHT-IMAGE" className="flex-1">
-          <div className="pl-[3vw] pr-[3vw]">
+          <div className="pl-8 pr-8">
             <img
               className={`
                 ${styles.fanOutImage}
@@ -54,7 +54,7 @@ export function FunksgivingInfo() {
       <div
         data-name="CTA"
         className={`
-          font-hand text-2xl opacity-0
+          font-hand text-3xl opacity-0
 
           ${styles.cta}
         `}
