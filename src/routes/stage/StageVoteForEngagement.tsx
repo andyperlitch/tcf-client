@@ -52,7 +52,7 @@ export function StageVoteForEngagement({
         [
           0,
           voteContainerRef.current?.clientHeight
-            ? voteContainerRef.current?.clientHeight - newChoiceWidth * 1.7
+            ? voteContainerRef.current?.clientHeight * 0.6
             : 0,
         ]
       );

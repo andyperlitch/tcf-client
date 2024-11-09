@@ -1,0 +1,29 @@
+@keyframes annoyedShake {
+  0%,
+  20% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(10deg) scale(1.05);
+  }
+  30% {
+    transform: rotate(-10deg) scale(1.05);
+  }
+  35% {
+    transform: rotate(10deg) scale(1.05);
+  }
+  40% {
+    transform: rotate(0deg) scale(1);
+  }
+  45% {
+    transform: rotate(5deg) scale(1.05);
+  }
+  50%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.annoyedShake {
+  animation: annoyedShake 2.5s ease-in-out infinite;
+}

@@ -12,26 +12,11 @@ gql`
     createdAt
     updatedAt
     activeEngagement {
-      id
+      ...AdminEngagement
     }
     activeEngagementId
     engagements {
-      id
-      title
-      description
-      startTime
-      endTime
-      viewConfig {
-        ...PhotoCarouselConfigFields
-        ...VoteForConfigFields
-      }
-      viewData {
-        ...PhotoCarouselDataFields
-        ...VoteForDataFields
-      }
-      order
-      createdAt
-      updatedAt
+      ...AdminEngagement
     }
   }
 `;

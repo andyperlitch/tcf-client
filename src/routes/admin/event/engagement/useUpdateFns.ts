@@ -43,10 +43,19 @@ export function useUpdateFns({ data }: { data?: AdminGetEngagementQuery }) {
     }
   };
 
+  const updateEngagementQrCodeCta = (qrCodeCta: string) => {
+    if (data?.engagement) {
+      return updateEngagement({
+        variables: { id: data.engagement.id, data: { qrCodeCta } },
+      });
+    }
+  };
+
   return {
     updateEngagementTitle,
     updateEngagementDescription,
     updateEngagementConfig,
     updateEngagementData,
+    updateEngagementQrCodeCta,
   };
 }

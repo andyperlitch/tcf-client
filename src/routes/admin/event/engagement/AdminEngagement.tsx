@@ -13,6 +13,7 @@ import { ReactNode } from "react";
 import { EditableJson } from "@/components/EditableJson";
 import { useUpdateFns } from "./useUpdateFns";
 import { Badge } from "@/components/ui/badge";
+import { EditableTextarea } from "@/components/EditableTextarea";
 
 export function AdminEngagement() {
   const { slug, engagementId } = useParamsSafe("slug", "engagementId");
@@ -40,6 +41,7 @@ export function AdminEngagement() {
     updateEngagementDescription,
     updateEngagementConfig,
     updateEngagementData,
+    updateEngagementQrCodeCta,
   } = useUpdateFns({ data });
 
   let content: ReactNode = "";
@@ -66,20 +68,25 @@ export function AdminEngagement() {
             value={engagement.title}
             setValue={updateEngagementTitle}
             element="h1"
-            elementProps={{
-              className: "flex items-baseline space-x-5 text-3xl",
-            }}
+            className="flex items-baseline space-x-5 text-3xl"
           />
           <div>
             <Badge>{engagement.type}</Badge>
           </div>
         </div>
         {/* DESCRIPTION */}
-        <EditableText
+        <EditableTextarea
           value={engagement.description || "(no description)"}
           setValue={updateEngagementDescription}
           element="p"
-          elementProps={{ className: "text-foreground" }}
+          className="text-foreground"
+        />
+        {/* QR CODE CTA */}
+        <EditableTextarea
+          value={engagement.qrCodeCta || "(no cta)"}
+          setValue={updateEngagementQrCodeCta}
+          element="p"
+          className="text-foreground"
         />
         {/* CONFIG/DATA */}
         <div className="flex flex-col space-y-3">

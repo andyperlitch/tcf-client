@@ -1,0 +1,13 @@
+@keyframes activeEngagementTitle {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.07);
+  }
+}
+
+.activeEngagementTitle {
+  box-shadow: 0 4px 13px 4px rgba(78, 191, 55, 0.5);
+  animation: activeEngagementTitle 2s ease-in-out infinite;
+}

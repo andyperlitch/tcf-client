@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ResizableInput } from "./ResizableInput";
 import { InlineConfirmCancel } from "./InlineConfirmCancel";
+import { Textarea } from "./ui/textarea";
 
 // EditableTextProps interface
-interface EditableTextProps<T extends keyof JSX.IntrinsicElements> {
+interface EditableTextareaProps<T extends keyof JSX.IntrinsicElements> {
   value: string;
   setValue: (value: string) => void | Promise<any>;
   element: T; // The HTML tag (key of JSX Intrinsic Elements)
@@ -12,15 +12,15 @@ interface EditableTextProps<T extends keyof JSX.IntrinsicElements> {
   className?: string;
 }
 
-export function EditableText<T extends keyof JSX.IntrinsicElements>({
+export function EditableTextarea<T extends keyof JSX.IntrinsicElements>({
   value,
   setValue,
   element: Element,
   elementProps = {} as JSX.IntrinsicElements[T],
   locked = false,
   className,
-}: EditableTextProps<T>) {
-  const inputRef = useRef<HTMLInputElement>(null);
+}: EditableTextareaProps<T>) {
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const [editing, setEditing] = useState(false);
   const [localValue, setLocalValue] = useState(value);
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,9 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
     }
   };
 
-  const checkForEnterOrEscape = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const checkForEnterOrEscape = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
     if (e.key === "Enter") {
       onConfirm();
     }
@@ -73,23 +75,24 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
       onClick: () => !editing && !locked && setEditing(true), // Spread elementProps and handle click
     }, // Spread elementProps and handle click
     editing ? (
-      <ResizableInput
+      <div
         className={`
-          inherit relative -left-[6px] -top-[2px] border-2 border-input
-          bg-transparent pb-0 pl-[4px] pr-0 pt-0 text-inherit outline-1
+          inherit relative -left-[6px] -top-[2px] bg-transparent pb-0 pl-[4px]
+          pr-0 pt-0 text-inherit outline-1
 
           text-[length:inherit]
         `}
-        disabled={loading}
-        value={localValue}
-        containerClassName="relative"
-        onChange={(e) => setLocalValue(e.target.value)}
-        onKeyDown={checkForEnterOrEscape}
-        ref={inputRef}
-        data-p1-ignore
       >
+        <Textarea
+          disabled={loading}
+          value={localValue}
+          onChange={(e) => setLocalValue(e.target.value)}
+          onKeyDown={checkForEnterOrEscape}
+          ref={inputRef}
+          data-p1-ignore
+        />
         <InlineConfirmCancel confirm={onConfirm} cancel={onCancel} />
-      </ResizableInput>
+      </div>
     ) : (
       value
     )

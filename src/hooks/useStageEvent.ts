@@ -1,4 +1,6 @@
 import {
+  StageGetActiveEngagementDocument,
+  StageGetActiveEngagementQuery,
   StageGetEventDocument,
   StageGetEventQuery,
   useOnActiveEngagementChangedSubscription,
@@ -32,6 +34,21 @@ export function useStageEvent(slug: string) {
                 ...cachedData.event,
                 activeEngagement: data.data?.activeEngagementChanged || null,
               },
+            };
+          }
+        );
+
+        // Also update the StageGetActiveEngagement query
+        client.cache.updateQuery<StageGetActiveEngagementQuery>(
+          {
+            query: StageGetActiveEngagementDocument,
+            variables: { eventSlug: slug },
+          },
+          (cachedData) => {
+            if (!cachedData?.activeEventEngagement) return cachedData;
+
+            return {
+              activeEventEngagement: data.data?.activeEngagementChanged,
             };
           }
         );
