@@ -211,7 +211,7 @@ const Choice = ({
 
           ${elasticStyles.elastic}
 
-          bg-foreground font-margarine text-center text-3xl text-background
+          bg-foreground text-center font-margarine text-3xl text-background
         `}
       >
         {votes}

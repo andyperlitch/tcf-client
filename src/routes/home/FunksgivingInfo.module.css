@@ -1,0 +1,53 @@
+.container {
+  perspective: 10000px;
+}
+
+@keyframes fanOutHeading {
+  0% {
+    transform: rotate3d(0, 0, 0, -180deg) scale(1);
+  }
+  100% {
+    transform: rotate3d(1, -2, 1, -20deg) scale(1.12);
+  }
+}
+
+/* Animation for the image */
+.fanOutImage {
+  animation-name: fanOutImage;
+  animation-delay: 0.84s;
+  animation-duration: 0.6s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+}
+
+@keyframes fanOutImage {
+  0% {
+    transform: rotate3d(0, 0, 0, 180deg) scale(1);
+  }
+  100% {
+    transform: rotate3d(-1, -2, 1, 20deg) scale(1.12);
+  }
+}
+.fanOutHeading {
+  animation-name: fanOutHeading;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.cta {
+  animation-name: fadeIn;
+  animation-duration: 0.4s;
+  animation-delay: 3s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+}

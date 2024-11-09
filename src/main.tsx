@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 import "./index.css";
-import Root from "./routes/root";
+import Root from "./routes/home/root";
 import ErrorPage from "./error-page";
 import { SetList } from "./routes/SetList";
 import { SetListSong } from "./routes/SetListSong";
