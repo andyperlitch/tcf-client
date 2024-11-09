@@ -6,7 +6,6 @@ import {
 } from "@/gql/graphql";
 import { toFullS3Url } from "@/utils/toFullS3Url";
 import { useEffect, useMemo, useRef, useState } from "react";
-import pulseStyles from "@/styles/Pulse.module.css";
 import elasticStyles from "@/styles/ElasticTransition.module.css";
 import { useImageLoader } from "@/hooks/useImageLoader";
 import { Loader } from "@/components/Loader";
@@ -127,12 +126,11 @@ const Choice = ({
           boxShadow: `0 0 0 ${widthScale(votes)}px ${choice.data.color}`,
         },
         voteBarStyles: {
-          height: `${voteHeight + voteSize}px`,
-          // top: `calc(${voteSize} - ${voteHeight}px)`,
-          top: `${1.5 * voteSize - voteHeight}px`,
+          height: `${voteHeight + voteSize * 2}px`,
+          top: `${voteSize - voteHeight}px`,
           backgroundColor: choice.data.color,
-          // width: `${widthScale(votes)}px`,
           width: voteSize,
+          borderRadius: `${voteSize / 2}px`,
         },
         imageStyles: {
           border: `4px solid white`,
@@ -149,20 +147,13 @@ const Choice = ({
 
   return (
     <div
-      data-name="CHOICE-CONTAINER"
+      data-name="CHOICES-CONTAINER"
       key={choice.id}
       className={`
-        relative flex flex-col items-center justify-center transition-opacity
+        relative flex flex-col items-center justify-center pb-4
+        transition-opacity
 
-        ${
-          imageLoaded
-            ? `
-              opacity-100
-
-              ${pulseStyles.pulse}
-            `
-            : "opacity-20"
-        }
+        ${imageLoaded ? `opacity-100` : "opacity-20"}
       `}
       onClick={() => handleClick(choice)}
     >
