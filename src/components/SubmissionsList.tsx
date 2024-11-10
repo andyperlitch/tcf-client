@@ -35,7 +35,7 @@ export function SubmissionsList({
   engagementId: number;
   engagementType: EngagementType;
 }) {
-  const { data, loading, error, refetch } = useAdminGetSubmissionsQuery({
+  const { data, loading, refetch } = useAdminGetSubmissionsQuery({
     variables: { engagementId },
     skip: !engagementId,
   });

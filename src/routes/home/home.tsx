@@ -5,14 +5,13 @@ import { hasRole } from "@/utils/hasRole";
 import { Role } from "@/gql/graphql";
 import { FunksgivingInfo } from "./FunksgivingInfo";
 import { useFontLoader } from "@/hooks/useFontLoader";
-import { isMobile } from "react-device-detect";
 
 export default function Home() {
   const { user } = useAuth();
   const isFontLoaded = useFontLoader({ fonts: ["Just Another Hand"] });
   return (
     <>
-      {!isMobile && <ModeToggle />}
+      <ModeToggle />
       {hasRole(user, [Role.Admin, Role.Bandmate]) && <SetListPicker />}
       <div
         data-name="MAIN-CONTENT"
