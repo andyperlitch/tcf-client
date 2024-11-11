@@ -13,6 +13,8 @@ import {
 } from "@/gql/graphql";
 import { ToggleActiveEngagementButton } from "./ToggleActiveEngagementButton";
 import { DeleteEngagementButton } from "./DeleteEngagementButton";
+import { useMemo } from "react";
+import { MoveEngagementButton } from "./MoveEngagementButton";
 
 export function EngagementsList({
   eventId,
@@ -36,6 +38,12 @@ export function EngagementsList({
     },
   });
 
+  const sortedEngagements = useMemo(() => {
+    const unsortedEngagements = data?.engagements.slice() || [];
+    unsortedEngagements.sort((a, b) => a.order - b.order);
+    return unsortedEngagements;
+  }, [data?.engagements]);
+
   if (loading || eventLoading) {
     return <p>Loading...</p>;
   }
@@ -52,20 +60,20 @@ export function EngagementsList({
     return <p>No engagements or event data found.</p>;
   }
 
-  console.log(`andy data`, data);
-
   return (
     <Table>
       <TableHead>
         <TableRow>
+          <TableHeader>Order</TableHeader>
           <TableHeader>Active</TableHeader>
           <TableHeader>Title</TableHeader>
           <TableHeader>Actions</TableHeader>
         </TableRow>
       </TableHead>
       <TableBody>
-        {data?.engagements.map((engagement) => (
+        {sortedEngagements.map((engagement, index) => (
           <TableRow key={engagement.id}>
+            <TableCell>{engagement.order}</TableCell>
             <TableCell>
               <ToggleActiveEngagementButton
                 id={engagement.id}
@@ -80,12 +88,26 @@ export function EngagementsList({
                 {engagement.title}
               </Link>
             </TableCell>
-            <TableCell>
+            <TableCell className="flex gap-2">
               <DeleteEngagementButton
                 id={engagement.id}
                 disabled={
                   eventData?.event?.activeEngagementId === engagement.id
                 }
+              />
+              <MoveEngagementButton
+                id={engagement.id}
+                engagements={sortedEngagements}
+                index={index}
+                eventId={eventId}
+                direction="up"
+              />
+              <MoveEngagementButton
+                id={engagement.id}
+                engagements={sortedEngagements}
+                index={index}
+                eventId={eventId}
+                direction="down"
               />
             </TableCell>
           </TableRow>

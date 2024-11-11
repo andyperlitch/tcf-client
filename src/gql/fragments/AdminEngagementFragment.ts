@@ -9,6 +9,7 @@ gql`
     description
     qrCodeCta
     startTime
+    order
     endTime
     type
     config
