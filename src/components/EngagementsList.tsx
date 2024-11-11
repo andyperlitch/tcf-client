@@ -7,34 +7,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
-import {
-  useAdminGetEngagementsQuery,
-  useAdminGetEventQuery,
-} from "@/gql/graphql";
+import { useAdminGetEngagementsQuery } from "@/gql/graphql";
 import { ToggleActiveEngagementButton } from "./ToggleActiveEngagementButton";
 import { DeleteEngagementButton } from "./DeleteEngagementButton";
 import { useMemo } from "react";
 import { MoveEngagementButton } from "./MoveEngagementButton";
+import { AdminEventFragment } from "@/gql/graphql";
 
-export function EngagementsList({
-  eventId,
-  eventSlug,
-}: {
-  eventId: number;
-  eventSlug: string;
-}) {
+export function EngagementsList({ event }: { event: AdminEventFragment }) {
   const { data, loading, error } = useAdminGetEngagementsQuery({
     variables: {
-      eventId,
-    },
-  });
-  const {
-    data: eventData,
-    loading: eventLoading,
-    error: eventError,
-  } = useAdminGetEventQuery({
-    variables: {
-      slug: eventSlug,
+      eventId: event.id,
     },
   });
 
@@ -44,7 +27,7 @@ export function EngagementsList({
     return unsortedEngagements;
   }, [data?.engagements]);
 
-  if (loading || eventLoading) {
+  if (loading) {
     return <p>Loading...</p>;
   }
 
@@ -52,11 +35,7 @@ export function EngagementsList({
     return <p>{error.message}</p>;
   }
 
-  if (eventError) {
-    return <p>{eventError.message}</p>;
-  }
-
-  if (!data?.engagements || !eventData?.event) {
+  if (!data?.engagements) {
     return <p>No engagements or event data found.</p>;
   }
 
@@ -75,43 +54,49 @@ export function EngagementsList({
             <TableCell>
               <ToggleActiveEngagementButton
                 id={engagement.id}
-                activeId={eventData?.event?.activeEngagementId}
-                eventId={eventId}
+                activeId={event.activeEngagementId}
+                eventId={event.id}
               />
             </TableCell>
 
             <TableCell>
               <Link
-                to={`/admin/events/${eventSlug}/engagements/${engagement.id}`}
+                to={`/admin/events/${event.slug}/engagements/${engagement.id}`}
               >
                 {engagement.title}
               </Link>
             </TableCell>
 
             <TableCell className="flex gap-2">
-              <div className="flex items-center gap-2">
-                <DeleteEngagementButton
-                  size="icon"
-                  id={engagement.id}
-                  disabled={
-                    eventData?.event?.activeEngagementId === engagement.id
-                  }
-                />
-                <MoveEngagementButton
-                  id={engagement.id}
-                  engagements={sortedEngagements}
-                  index={index}
-                  eventId={eventId}
-                  direction="up"
-                />
-                <MoveEngagementButton
-                  id={engagement.id}
-                  engagements={sortedEngagements}
-                  index={index}
-                  eventId={eventId}
-                  direction="down"
-                />
-              </div>
+              {event.locked ? (
+                <span className="italic">Event locked</span>
+              ) : (
+                <div className={`flex items-center gap-2`}>
+                  <DeleteEngagementButton
+                    size="icon"
+                    id={engagement.id}
+                    disabled={
+                      event.locked || event.activeEngagementId === engagement.id
+                    }
+                  />
+                  <MoveEngagementButton
+                    disabled={event.locked}
+                    id={engagement.id}
+                    engagements={sortedEngagements}
+                    index={index}
+                    eventId={event.id}
+                    direction="up"
+                  />
+                  <MoveEngagementButton
+                    disabled={event.locked}
+                    id={engagement.id}
+                    engagements={sortedEngagements}
+                    index={index}
+                    eventId={event.id}
+                    direction="down"
+                  />
+                </div>
+              )}
             </TableCell>
           </TableRow>
         ))}

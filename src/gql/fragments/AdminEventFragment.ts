@@ -5,10 +5,11 @@ gql`
     id
     name
     date
+    live
     location
+    locked
     description
     slug
-    live
     createdAt
     updatedAt
     activeEngagement {

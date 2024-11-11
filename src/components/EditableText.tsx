@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ResizableInput } from "./ResizableInput";
 import { InlineConfirmCancel } from "./InlineConfirmCancel";
+import { useToast } from "@/hooks/use-toast";
 
 // EditableTextProps interface
 interface EditableTextProps<T extends keyof JSX.IntrinsicElements> {
@@ -20,6 +21,7 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
   locked = false,
   className,
 }: EditableTextProps<T>) {
+  const { toast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState(false);
   const [localValue, setLocalValue] = useState(value);
@@ -70,6 +72,13 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
     {
       className,
       ...elementProps,
+      onDoubleClick: () =>
+        locked &&
+        toast({
+          variant: "destructive",
+          title: "Event locked",
+          description: "You cannot edit this field",
+        }),
       onClick: () => !editing && !locked && setEditing(true), // Spread elementProps and handle click
     }, // Spread elementProps and handle click
     editing ? (

@@ -13,6 +13,7 @@ type MoveEngagementButtonProps = {
   index: number;
   eventId: number;
   direction: "up" | "down";
+  disabled?: boolean;
 };
 
 export function MoveEngagementButton({
@@ -21,6 +22,7 @@ export function MoveEngagementButton({
   index,
   eventId,
   direction,
+  disabled,
 }: MoveEngagementButtonProps) {
   const [moveEngagement] = useAdminMoveEngagementMutation({
     update: (cache, { data }) => {
@@ -51,7 +53,8 @@ export function MoveEngagementButton({
   );
 
   const isDisabled =
-    direction === "up" ? index === 0 : index === engagements.length - 1;
+    disabled ||
+    (direction === "up" ? index === 0 : index === engagements.length - 1);
 
   return (
     <Button

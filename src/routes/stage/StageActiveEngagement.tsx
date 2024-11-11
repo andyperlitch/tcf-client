@@ -26,9 +26,19 @@ export function StageActiveEngagement({
         {(() => {
           switch (engagement.type) {
             case EngagementType.PhotoCarousel:
-              return <StagePhotoCarouselEngagement engagement={engagement} />;
+              return (
+                <StagePhotoCarouselEngagement
+                  key={engagement.id}
+                  engagement={engagement}
+                />
+              );
             case EngagementType.VoteFor:
-              return <StageVoteForEngagement engagement={engagement} />;
+              return (
+                <StageVoteForEngagement
+                  key={engagement.id}
+                  engagement={engagement}
+                />
+              );
             default:
               return <div>{engagement.title}</div>;
           }

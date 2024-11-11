@@ -1,6 +1,6 @@
 import { AdminContainer } from "@/components/AdminContainer";
 import { format } from "date-fns";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import { LiveSwitch } from "./LiveSwitch";
 import { CreateNewEngagementButton } from "@/components/CreateNewEngagementButton";
 import { EngagementsList } from "@/components/EngagementsList";
@@ -15,7 +15,6 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
 export function AdminEventPage() {
-  const [lockEdits, setLockEdits] = useState(false);
   const { slug } = useParamsSafe("slug");
   const { data, loading, error } = useAdminGetEventQuery({
     fetchPolicy: "network-only",
@@ -68,6 +67,14 @@ export function AdminEventPage() {
     }
   };
 
+  const updateLocked = (locked: boolean) => {
+    if (data?.event) {
+      return updateEvent({
+        variables: { id: data.event.id, data: { locked } },
+      });
+    }
+  };
+
   let content: ReactNode = "";
 
   if (loading) {
@@ -84,7 +91,7 @@ export function AdminEventPage() {
             <div className={`flex items-baseline justify-between space-x-5`}>
               <div className="flex items-baseline space-x-2">
                 <EditableText
-                  locked={lockEdits}
+                  locked={data.event.locked}
                   element="h1"
                   elementProps={{ className: "text-3xl" }}
                   value={data.event.name}
@@ -93,7 +100,7 @@ export function AdminEventPage() {
                 <div className="flex space-x-0">
                   <pre className="text-muted text-md">/event/</pre>
                   <EditableText
-                    locked={lockEdits}
+                    locked={data.event.locked}
                     element="pre"
                     elementProps={{
                       className: "text-md text-muted-foreground",
@@ -112,8 +119,8 @@ export function AdminEventPage() {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="edits-locked"
-                    checked={lockEdits}
-                    onCheckedChange={setLockEdits}
+                    checked={data.event.locked}
+                    onCheckedChange={updateLocked}
                     disabled={loading}
                     className="data-[state=checked]:bg-destructive"
                   />
@@ -124,7 +131,7 @@ export function AdminEventPage() {
           </div>
 
           <EditableText
-            locked={lockEdits}
+            locked={data.event.locked}
             element="div"
             elementProps={{ className: "text-foreground" }}
             value={data.event.description || ""}
@@ -134,7 +141,7 @@ export function AdminEventPage() {
             <div className="flex space-x-1 text-foreground">
               <div>📍</div>
               <EditableText
-                locked={lockEdits}
+                locked={data.event.locked}
                 element="div"
                 elementProps={{ className: "text-foreground" }}
                 value={data.event.location || ""}
@@ -154,10 +161,7 @@ export function AdminEventPage() {
                 eventSlug={data.event.slug}
               />
             </h2>
-            <EngagementsList
-              eventSlug={data.event.slug}
-              eventId={data.event.id}
-            />
+            {data.event && <EngagementsList event={data.event} />}
           </div>
         </div>
       </div>
