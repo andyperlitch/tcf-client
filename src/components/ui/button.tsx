@@ -43,7 +43,7 @@ const buttonVariants = cva(
         `,
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: `
-          text-primary underline-offset-4
+          bg-transparent text-primary underline-offset-4
 
           hover:underline
         `,
@@ -55,6 +55,14 @@ const buttonVariants = cva(
         icon: "h-9 w-9 p-0",
       },
     },
+    compoundVariants: [
+      // Remove padding when variant is 'link', regardless of size
+      {
+        variant: "link",
+        size: ["default", "sm", "lg"],
+        class: "h-auto p-0",
+      },
+    ],
     defaultVariants: {
       variant: "default",
       size: "default",

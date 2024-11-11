@@ -4,7 +4,7 @@ import {
   AdminGetEventDocument,
 } from "@/gql/graphql";
 import { Button } from "./ui/button";
-import { DoubleArrowDownIcon, DoubleArrowUpIcon } from "@radix-ui/react-icons";
+import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { useMemo } from "react";
 
 type MoveEngagementButtonProps = {
@@ -54,8 +54,13 @@ export function MoveEngagementButton({
     direction === "up" ? index === 0 : index === engagements.length - 1;
 
   return (
-    <Button variant="default" onClick={handleClick} disabled={isDisabled}>
-      {direction === "up" ? <DoubleArrowUpIcon /> : <DoubleArrowDownIcon />}
+    <Button
+      size="icon"
+      variant="ghost"
+      onClick={handleClick}
+      disabled={isDisabled}
+    >
+      {direction === "up" ? <ArrowUpIcon /> : <ArrowDownIcon />}
     </Button>
   );
 }

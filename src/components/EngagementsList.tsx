@@ -64,7 +64,6 @@ export function EngagementsList({
     <Table>
       <TableHead>
         <TableRow>
-          <TableHeader>Order</TableHeader>
           <TableHeader>Active</TableHeader>
           <TableHeader>Title</TableHeader>
           <TableHeader>Actions</TableHeader>
@@ -73,7 +72,6 @@ export function EngagementsList({
       <TableBody>
         {sortedEngagements.map((engagement, index) => (
           <TableRow key={engagement.id}>
-            <TableCell>{engagement.order}</TableCell>
             <TableCell>
               <ToggleActiveEngagementButton
                 id={engagement.id}
@@ -81,6 +79,7 @@ export function EngagementsList({
                 eventId={eventId}
               />
             </TableCell>
+
             <TableCell>
               <Link
                 to={`/admin/events/${eventSlug}/engagements/${engagement.id}`}
@@ -88,27 +87,31 @@ export function EngagementsList({
                 {engagement.title}
               </Link>
             </TableCell>
+
             <TableCell className="flex gap-2">
-              <DeleteEngagementButton
-                id={engagement.id}
-                disabled={
-                  eventData?.event?.activeEngagementId === engagement.id
-                }
-              />
-              <MoveEngagementButton
-                id={engagement.id}
-                engagements={sortedEngagements}
-                index={index}
-                eventId={eventId}
-                direction="up"
-              />
-              <MoveEngagementButton
-                id={engagement.id}
-                engagements={sortedEngagements}
-                index={index}
-                eventId={eventId}
-                direction="down"
-              />
+              <div className="flex items-center gap-2">
+                <DeleteEngagementButton
+                  size="icon"
+                  id={engagement.id}
+                  disabled={
+                    eventData?.event?.activeEngagementId === engagement.id
+                  }
+                />
+                <MoveEngagementButton
+                  id={engagement.id}
+                  engagements={sortedEngagements}
+                  index={index}
+                  eventId={eventId}
+                  direction="up"
+                />
+                <MoveEngagementButton
+                  id={engagement.id}
+                  engagements={sortedEngagements}
+                  index={index}
+                  eventId={eventId}
+                  direction="down"
+                />
+              </div>
             </TableCell>
           </TableRow>
         ))}
