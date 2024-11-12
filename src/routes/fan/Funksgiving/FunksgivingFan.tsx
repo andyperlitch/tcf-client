@@ -1,5 +1,5 @@
 import { useFanEvent } from "@/hooks/useFanEvent";
-import { FanActiveEngagement } from "../FanActiveEngagement";
+import { FanActiveEngagement } from "../../../engagements/FanActiveEngagement";
 import { useFunksgivingBackground } from "./useFunksgivingBackground";
 import { NoEngagementFan } from "./NoEngagementFan";
 

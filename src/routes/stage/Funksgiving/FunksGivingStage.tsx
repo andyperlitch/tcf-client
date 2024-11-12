@@ -1,5 +1,5 @@
 import { useStageEvent } from "@/hooks/useStageEvent";
-import { StageActiveEngagement } from "../StageActiveEngagement";
+import { StageActiveEngagement } from "../../../engagements/StageActiveEngagement";
 import { useFunksgivingBackground } from "./useFunksgivingBackground";
 import { StageChrome } from "../StageChrome";
 

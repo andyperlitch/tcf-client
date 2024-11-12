@@ -2,7 +2,7 @@ import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { StageQR } from "./StageQR";
 import useWindowSize from "@/hooks/useWindowSize";
 import { StageEventFragment } from "@/gql/graphql";
-import { StageEngagementTitle } from "./StageEngagementTitle";
+import { StageEngagementTitle } from "../../engagements/StageEngagementTitle";
 
 interface StageChromeProps {
   children: React.ReactNode;

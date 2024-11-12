@@ -1,9 +1,4 @@
-import {
-  AdminSubmissionFragment,
-  EngagementType,
-  useAdminGetSubmissionsQuery,
-  useAdminUpdateSubmissionMutation,
-} from "@/gql/graphql";
+import { EngagementType, useAdminGetSubmissionsQuery } from "@/gql/graphql";
 import {
   Table,
   TableBody,
@@ -18,15 +13,11 @@ import { DeleteSubmissionButton } from "./DeleteSubmissionButton";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { useMemo } from "react";
-import { toFullS3Url } from "@/utils/toFullS3Url";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { RandomizeChoiceColorsButton } from "./RandomizeChoiceColorsButton";
-import { ColorPicker } from "./ColorPicker";
 import { CreateVoteForChoiceForm } from "./CreateVoteForChoiceForm";
-
-type DataCellProps = {
-  submission: AdminSubmissionFragment;
-};
+import { DataCellProps } from "@/engagements/base/EngagementDefinition";
+import { ENGAGEMENT_DEFINITIONS } from "@/engagements";
 
 export function SubmissionsList({
   engagementId,
@@ -47,21 +38,11 @@ export function SubmissionsList({
     });
   }, [data]);
 
-  let DataCell: React.ComponentType<DataCellProps>;
-  let DataHeaders: React.ComponentType;
-  switch (engagementType) {
-    case EngagementType.PhotoCarousel:
-      DataCell = PhotoCarouselDataCell;
-      DataHeaders = PhotoCarouselDataHeaders;
-      break;
-    case EngagementType.VoteFor:
-      DataCell = VoteForDataCell;
-      DataHeaders = VoteForDataHeaders;
-      break;
-    default:
-      DataCell = DefaultDataCell;
-      DataHeaders = DefaultDataHeaders;
-  }
+  const EngagementDefinition = ENGAGEMENT_DEFINITIONS[engagementType];
+  const DataCell =
+    EngagementDefinition.submissionsTableDataCell || DefaultDataCell;
+  const DataHeaders =
+    EngagementDefinition.submissionsTableHeaders || DefaultDataHeaders;
 
   return (
     <>
@@ -130,65 +111,4 @@ function DefaultDataCell({ submission }: DataCellProps) {
 
 function DefaultDataHeaders() {
   return <TableHeader>Data</TableHeader>;
-}
-
-function PhotoCarouselDataCell({ submission }: DataCellProps) {
-  const data = submission?.data || {};
-  return (
-    <TableCell>
-      <img src={toFullS3Url(data.photoUrl)} className="h-24" />
-      <p>{data.caption}</p>
-    </TableCell>
-  );
-}
-
-function PhotoCarouselDataHeaders() {
-  return <TableHeader>Photo/Caption</TableHeader>;
-}
-
-function VoteForDataCell({ submission }: DataCellProps) {
-  const data = submission?.data || {};
-  const [updateSubmission] = useAdminUpdateSubmissionMutation();
-  return (
-    <>
-      <TableCell>
-        <div className="font-bold">{data.title || "No title"}</div>
-        {data.description && <div>{data.description}</div>}
-      </TableCell>
-      <TableCell className="text-center">
-        {data.photoUrl && (
-          <div className="flex justify-start">
-            <img
-              src={toFullS3Url(data.photoUrl)}
-              className={`h-24 rounded-full border-4 border-solid border-white`}
-            />
-          </div>
-        )}
-      </TableCell>
-      <TableCell>
-        <ColorPicker
-          value={data.color}
-          name="color"
-          onChange={(c) => {
-            updateSubmission({
-              variables: {
-                id: submission.id,
-                data: { ...data, color: c },
-              },
-            });
-          }}
-        />
-      </TableCell>
-    </>
-  );
-}
-
-function VoteForDataHeaders() {
-  return (
-    <>
-      <TableHeader>Label</TableHeader>
-      <TableHeader>Photo</TableHeader>
-      <TableHeader>Color</TableHeader>
-    </>
-  );
 }
