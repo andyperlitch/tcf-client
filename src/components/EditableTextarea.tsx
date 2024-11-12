@@ -45,7 +45,7 @@ export function EditableTextarea<T extends keyof JSX.IntrinsicElements>({
   const checkForEnterOrEscape = (
     e: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && e.shiftKey) {
       onConfirm();
     }
     if (e.key === "Escape") {

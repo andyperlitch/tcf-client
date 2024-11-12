@@ -1,18 +1,17 @@
 import { AdminContainer } from "@/components/AdminContainer";
-import { format } from "date-fns";
 import { ReactNode } from "react";
 import { LiveSwitch } from "./LiveSwitch";
 import { CreateNewEngagementButton } from "@/components/CreateNewEngagementButton";
 import { EngagementsList } from "@/components/EngagementsList";
-import {
-  useAdminGetEventQuery,
-  useAdminUpdateEventMutation,
-} from "@/gql/graphql";
+import { useAdminGetEventQuery } from "@/gql/graphql";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { CrumbMeta, SimpleCrumbs } from "@/components/SimpleCrumbs";
 import { EditableText } from "@/components/EditableText";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { useAdminEventHandlers } from "./useAdminEventHandlers";
+import { EditableTextarea } from "@/components/EditableTextarea";
+import { EditableDate } from "@/components/EditableDate";
 
 export function AdminEventPage() {
   const { slug } = useParamsSafe("slug");
@@ -23,57 +22,16 @@ export function AdminEventPage() {
     },
   });
 
-  const [updateEvent, { loading: updateLoading }] =
-    useAdminUpdateEventMutation();
-
-  const setLive = (live: boolean) => {
-    if (data?.event) {
-      updateEvent({
-        variables: {
-          id: data.event.id,
-          data: {
-            live,
-          },
-        },
-      });
-    }
-  };
-
-  const updateEventName = (name: string) => {
-    if (data?.event) {
-      return updateEvent({ variables: { id: data.event.id, data: { name } } });
-    }
-  };
-
-  const updateEventDescription = (description: string) => {
-    if (data?.event) {
-      return updateEvent({
-        variables: { id: data.event.id, data: { description } },
-      });
-    }
-  };
-
-  const updateEventSlug = (slug: string) => {
-    if (data?.event) {
-      return updateEvent({ variables: { id: data.event.id, data: { slug } } });
-    }
-  };
-
-  const updateEventLocation = (location: string) => {
-    if (data?.event) {
-      return updateEvent({
-        variables: { id: data.event.id, data: { location } },
-      });
-    }
-  };
-
-  const updateLocked = (locked: boolean) => {
-    if (data?.event) {
-      return updateEvent({
-        variables: { id: data.event.id, data: { locked } },
-      });
-    }
-  };
+  const {
+    setLive,
+    updateEventName,
+    updateEventDescription,
+    updateEventSlug,
+    updateEventDate,
+    updateEventLocation,
+    updateLocked,
+    updateLoading,
+  } = useAdminEventHandlers({ data });
 
   let content: ReactNode = "";
 
@@ -138,7 +96,7 @@ export function AdminEventPage() {
             </div>
           </div>
 
-          <EditableText
+          <EditableTextarea
             locked={data.event.locked}
             element="div"
             elementProps={{ className: "text-foreground" }}
@@ -159,9 +117,14 @@ export function AdminEventPage() {
                 setValue={updateEventLocation}
               />
             </div>
-            <div className="text-foreground">
+            {/* <div className="text-foreground">
               📆 {format(data.event.date, "PPP")}
-            </div>
+            </div> */}
+            <EditableDate
+              locked={data.event.locked}
+              value={data.event.date}
+              setValue={updateEventDate}
+            />
           </div>
 
           <div data-name="ENGAGEMENTS" className="flex flex-col space-y-2">
