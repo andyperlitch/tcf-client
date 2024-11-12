@@ -77,14 +77,22 @@ export function FunksGivingStage() {
           }
         `}
       >
-        <img
-          src="/insta.png"
-          className="w-[4vw] rounded-xl bg-white p-[0.3vw]"
-        />
-        <span>Follow us</span>
+        <img src="/insta.png" className="w-[4vw] rounded-xl bg-white" />
         <div className="flex items-center justify-center">
-          <span className="pt-4 text-6xl font-bold">@</span>
-          <span>TheCasualFunk</span>
+          <span
+            className={`pt-4 text-6xl font-bold transition-all duration-1000`}
+          >
+            @
+          </span>
+          <span
+            className={`
+              ${hasActiveEngagement ? "text-4xl" : "text-5xl"}
+
+              font-bold transition-all duration-1000
+            `}
+          >
+            thecasualfunk
+          </span>
         </div>
       </div>
 
