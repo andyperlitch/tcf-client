@@ -84,48 +84,56 @@ export function AdminEventPage() {
   } else if (data?.event) {
     const crumbs: CrumbMeta[] = [["/admin/events", "Events"]];
     content = (
-      <div className="flex flex-col space-y-2">
+      <div data-name="ADMIN-EVENT-PAGE" className="flex flex-col space-y-2">
         <SimpleCrumbs crumbs={crumbs} />
-        <div className="flex flex-col space-y-8">
-          <div className="flex flex-col space-y-2">
-            <div className={`flex items-baseline justify-between space-x-5`}>
-              <div className="flex items-baseline space-x-2">
+        <div data-name="CONTROLS" className="flex flex-col space-y-8">
+          <div
+            data-name="NAME-SLUG-SWITCHES"
+            className={`flex flex-col space-y-2`}
+          >
+            <div
+              data-name="NAME-SLUG-SWITCHES-INNER"
+              className={`
+                flex flex-col items-baseline justify-between space-x-5
+
+                md:flex-row
+              `}
+            >
+              <EditableText
+                locked={data.event.locked}
+                element="h1"
+                elementProps={{ className: "text-3xl" }}
+                value={data.event.name}
+                setValue={updateEventName}
+              />
+              <div data-name="SLUG" className="flex space-x-0">
+                <pre className="text-muted text-md">/event/</pre>
                 <EditableText
                   locked={data.event.locked}
-                  element="h1"
-                  elementProps={{ className: "text-3xl" }}
-                  value={data.event.name}
-                  setValue={updateEventName}
+                  element="pre"
+                  elementProps={{
+                    className: "text-md text-muted-foreground",
+                  }}
+                  value={data.event.slug}
+                  setValue={updateEventSlug}
                 />
-                <div className="flex space-x-0">
-                  <pre className="text-muted text-md">/event/</pre>
-                  <EditableText
-                    locked={data.event.locked}
-                    element="pre"
-                    elementProps={{
-                      className: "text-md text-muted-foreground",
-                    }}
-                    value={data.event.slug}
-                    setValue={updateEventSlug}
-                  />
-                </div>
               </div>
+            </div>
+            <div data-name="SWITCHES" className="flex items-center space-x-2">
+              <LiveSwitch
+                live={data.event.live}
+                setLive={setLive}
+                loading={updateLoading}
+              />
               <div className="flex items-center space-x-2">
-                <LiveSwitch
-                  live={data.event.live}
-                  setLive={setLive}
-                  loading={updateLoading}
+                <Switch
+                  id="edits-locked"
+                  checked={data.event.locked}
+                  onCheckedChange={updateLocked}
+                  disabled={loading}
+                  className="data-[state=checked]:bg-destructive"
                 />
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="edits-locked"
-                    checked={data.event.locked}
-                    onCheckedChange={updateLocked}
-                    disabled={loading}
-                    className="data-[state=checked]:bg-destructive"
-                  />
-                  <Label htmlFor="edits-locked">Lock</Label>
-                </div>
+                <Label htmlFor="edits-locked">Lock</Label>
               </div>
             </div>
           </div>
@@ -137,7 +145,10 @@ export function AdminEventPage() {
             value={data.event.description || ""}
             setValue={updateEventDescription}
           />
-          <div className="flex flex-col space-y-3">
+          <div
+            data-name="LOCATION-AND-DATE"
+            className="flex flex-col space-y-3"
+          >
             <div className="flex space-x-1 text-foreground">
               <div>📍</div>
               <EditableText
@@ -153,7 +164,7 @@ export function AdminEventPage() {
             </div>
           </div>
 
-          <div className="flex flex-col space-y-2">
+          <div data-name="ENGAGEMENTS" className="flex flex-col space-y-2">
             <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
               <span>Engagements</span>{" "}
               <CreateNewEngagementButton

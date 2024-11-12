@@ -15,7 +15,7 @@ import { useUpdateFns } from "./useUpdateFns";
 import { Badge } from "@/components/ui/badge";
 import { EditableTextarea } from "@/components/EditableTextarea";
 
-export function AdminEngagement() {
+export function AdminEngagementPage() {
   const { slug, engagementId } = useParamsSafe("slug", "engagementId");
 
   // Get the engagement

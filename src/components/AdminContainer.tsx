@@ -29,9 +29,10 @@ export function AdminContainer({
 }) {
   return (
     <div
+      data-name="ADMIN-CONTAINER"
       className={`
-        relative z-[2] mx-auto mt-4 flex max-w-screen-lg flex-row justify-center
-        rounded-lg border
+        relative z-[2] mx-auto mt-0 flex flex-row justify-center rounded-lg
+        max-w-screen
       `}
     >
       <nav className={`flex flex-col border-r`}>
@@ -48,7 +49,13 @@ export function AdminContainer({
 
 function AdminSideNav({ currentSection }: { currentSection: string }) {
   return (
-    <nav className={cn(`flex flex-col space-x-0 space-y-2 p-6`)}>
+    <nav
+      className={cn(`
+        hidden space-x-0 space-y-2 p-6
+
+        md:visible md:flex md:flex-col
+      `)}
+    >
       {ADMIN_NAV_ITEMS.map((item) => (
         <Link
           key={item.href}

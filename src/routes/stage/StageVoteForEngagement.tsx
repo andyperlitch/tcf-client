@@ -81,7 +81,7 @@ export function StageVoteForEngagement({
           <Choice
             key={choice.id}
             choice={choice}
-            votes={voteCounts[choice.id]}
+            votes={voteCounts[choice.id] || 0}
             handleClick={() => {}}
             // make width based on container width
             width={choiceWidth}
