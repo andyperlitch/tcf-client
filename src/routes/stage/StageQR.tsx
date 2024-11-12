@@ -1,5 +1,5 @@
-import { useStageGetActiveEngagementQuery } from "@/gql/graphql";
-import { memo, useMemo } from "react";
+import { StageEventFragment } from "@/gql/graphql";
+import { memo, useEffect, useMemo, useRef } from "react";
 import QRCode from "react-qr-code";
 
 interface StageQRProps {
@@ -12,6 +12,7 @@ interface StageQRProps {
   fgColor?: string;
   bgQRColor?: string;
   className?: string;
+  event?: StageEventFragment | null;
 }
 
 export const StageQR = memo(
@@ -22,7 +23,16 @@ export const StageQR = memo(
     fgColor = "#000000",
     bgQRColor = "#FFFFFF",
     className = "",
+    event,
   }: StageQRProps) => {
+    const lastCtaText = useRef(event?.activeEngagement?.qrCodeCta);
+
+    useEffect(() => {
+      if (event?.activeEngagement?.qrCodeCta) {
+        lastCtaText.current = event.activeEngagement.qrCodeCta;
+      }
+    }, [event?.activeEngagement?.qrCodeCta]);
+
     const { stageQrStyles, stageQrTextStyles } = useMemo(
       () => ({
         stageQrStyles: {
@@ -35,13 +45,6 @@ export const StageQR = memo(
       }),
       [bgColor, fgColor, width]
     );
-
-    const { data } = useStageGetActiveEngagementQuery({
-      skip: !eventSlug,
-      variables: { eventSlug: eventSlug! },
-    });
-
-    if (!eventSlug) return null;
 
     return (
       <div
@@ -60,7 +63,7 @@ export const StageQR = memo(
           style={stageQrTextStyles}
           className={`whitespace-nowrap text-center font-hand text-4xl`}
         >
-          {data?.activeEventEngagement?.qrCodeCta}
+          {event?.activeEngagement?.qrCodeCta || lastCtaText.current}
         </p>
         <QRCode
           data-name="STAGE-QR-CODE"

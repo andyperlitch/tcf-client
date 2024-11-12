@@ -33,6 +33,7 @@ export function StageChrome({ children, name, event }: StageChromeProps) {
         <StageEngagementTitle event={event} />
         <StageQR
           className="mb-4 mr-4 mt-4"
+          event={event}
           eventSlug={slug}
           width={width * 0.17}
           bgColor="#fae1aa77"

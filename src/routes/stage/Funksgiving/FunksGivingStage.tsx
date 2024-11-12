@@ -71,7 +71,7 @@ export function FunksGivingStage() {
             hasActiveEngagement
               ? `
                 bottom-[100vh] right-full translate-x-full translate-y-[10vh]
-                pl-[3vw] text-black
+                pl-[3vw] text-[#974e33]
               `
               : `bottom-[2vw] right-1/2 translate-x-1/2`
           }
