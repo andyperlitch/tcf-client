@@ -59,6 +59,35 @@ export function FunksGivingStage() {
           `}
         />
       </div>
+
+      {/* INSTAGRAM CTA, bottom right corner of the screen */}
+      <div
+        data-name="INSTAGRAM-CTA"
+        className={`
+          absolute flex items-center justify-center space-x-2 whitespace-nowrap
+          font-hand text-4xl transition-all duration-1000
+
+          ${
+            hasActiveEngagement
+              ? `
+                bottom-[100vh] right-full translate-x-full translate-y-[10vh]
+                pl-[3vw] text-black
+              `
+              : `bottom-[2vw] right-1/2 translate-x-1/2`
+          }
+        `}
+      >
+        <img
+          src="/insta.png"
+          className="w-[4vw] rounded-xl bg-white p-[0.3vw]"
+        />
+        <span>Follow us</span>
+        <div className="flex items-center justify-center">
+          <span className="pt-4 text-6xl font-bold">@</span>
+          <span>TheCasualFunk</span>
+        </div>
+      </div>
+
       {data?.event?.activeEngagement && (
         <StageActiveEngagement event={data.event} />
       )}
