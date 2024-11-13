@@ -51,9 +51,8 @@ export function StagePhotoCarouselEngagement({
 
   useOnSubmissionDeletedSubscription({
     variables: { engagementId: engagement.id },
-    onSubscriptionData: (data) => {
-      const deletedSubmissionId =
-        data?.subscriptionData?.data?.submissionDeleted?.submissionId;
+    onData: ({ data }) => {
+      const deletedSubmissionId = data.data?.submissionDeleted?.submissionId;
       if (deletedSubmissionId) {
         setPhotos((prev) =>
           prev.filter((p) => p.submissionId !== deletedSubmissionId)
