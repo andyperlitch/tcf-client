@@ -377,10 +377,16 @@ export type Submission = {
   userId?: Maybe<Scalars['Int']['output']>;
 };
 
+export type SubmissionDeletedPayload = {
+  __typename?: 'SubmissionDeletedPayload';
+  submissionId: Scalars['Int']['output'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   activeEngagementChanged?: Maybe<Engagement>;
   engagementViewDataChanged?: Maybe<EngagementViewDataChangedPayload>;
+  submissionDeleted?: Maybe<SubmissionDeletedPayload>;
 };
 
 
@@ -390,6 +396,11 @@ export type SubscriptionActiveEngagementChangedArgs = {
 
 
 export type SubscriptionEngagementViewDataChangedArgs = {
+  engagementId: Scalars['Int']['input'];
+};
+
+
+export type SubscriptionSubmissionDeletedArgs = {
   engagementId: Scalars['Int']['input'];
 };
 
@@ -747,6 +758,13 @@ export type OnEngagementViewDataChangedSubscriptionVariables = Exact<{
 
 
 export type OnEngagementViewDataChangedSubscription = { __typename?: 'Subscription', engagementViewDataChanged?: { __typename?: 'EngagementViewDataChangedPayload', viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null };
+
+export type OnSubmissionDeletedSubscriptionVariables = Exact<{
+  engagementId: Scalars['Int']['input'];
+}>;
+
+
+export type OnSubmissionDeletedSubscription = { __typename?: 'Subscription', submissionDeleted?: { __typename?: 'SubmissionDeletedPayload', submissionId: number } | null };
 
 export const PhotoCarouselAdminDataFieldsFragmentDoc = gql`
     fragment PhotoCarouselAdminDataFields on PhotoCarouselAdminData {
@@ -2150,3 +2168,33 @@ export function useOnEngagementViewDataChangedSubscription(baseOptions: Apollo.S
       }
 export type OnEngagementViewDataChangedSubscriptionHookResult = ReturnType<typeof useOnEngagementViewDataChangedSubscription>;
 export type OnEngagementViewDataChangedSubscriptionResult = Apollo.SubscriptionResult<OnEngagementViewDataChangedSubscription>;
+export const OnSubmissionDeletedDocument = gql`
+    subscription OnSubmissionDeleted($engagementId: Int!) {
+  submissionDeleted(engagementId: $engagementId) {
+    submissionId
+  }
+}
+    `;
+
+/**
+ * __useOnSubmissionDeletedSubscription__
+ *
+ * To run a query within a React component, call `useOnSubmissionDeletedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnSubmissionDeletedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnSubmissionDeletedSubscription({
+ *   variables: {
+ *      engagementId: // value for 'engagementId'
+ *   },
+ * });
+ */
+export function useOnSubmissionDeletedSubscription(baseOptions: Apollo.SubscriptionHookOptions<OnSubmissionDeletedSubscription, OnSubmissionDeletedSubscriptionVariables> & ({ variables: OnSubmissionDeletedSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnSubmissionDeletedSubscription, OnSubmissionDeletedSubscriptionVariables>(OnSubmissionDeletedDocument, options);
+      }
+export type OnSubmissionDeletedSubscriptionHookResult = ReturnType<typeof useOnSubmissionDeletedSubscription>;
+export type OnSubmissionDeletedSubscriptionResult = Apollo.SubscriptionResult<OnSubmissionDeletedSubscription>;

@@ -16,6 +16,8 @@ import { Button } from "@/components/ui/button";
 import { MixerVerticalIcon } from "@radix-ui/react-icons";
 import { useNavigate } from "react-router-dom";
 
+const enableControlView = false;
+
 export function AdminEventPage() {
   const { slug } = useParamsSafe("slug");
   const navigate = useNavigate();
@@ -138,15 +140,17 @@ export function AdminEventPage() {
               space-x-2
             `}
           >
-            <Button
-              variant="default"
-              onClick={() =>
-                navigate(`/admin/events/${data.event?.slug}/control`)
-              }
-            >
-              <MixerVerticalIcon className="mr-2 h-4 w-4" />
-              Enter Control View
-            </Button>
+            {enableControlView && (
+              <Button
+                variant="default"
+                onClick={() =>
+                  navigate(`/admin/events/${data.event?.slug}/control`)
+                }
+              >
+                <MixerVerticalIcon className="mr-2 h-4 w-4" />
+                Enter Control View
+              </Button>
+            )}
           </div>
 
           <div

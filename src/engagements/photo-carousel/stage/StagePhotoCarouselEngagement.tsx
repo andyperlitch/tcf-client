@@ -4,6 +4,7 @@ import styles from "./StagePhotoCarouselEngagement.module.css";
 import {
   PhotoCarouselSubmissionData,
   StageEngagementFragment,
+  useOnSubmissionDeletedSubscription,
   useStageGetSubmissionQuery,
 } from "@/gql/graphql";
 import { useEffect, useRef, useState } from "react";
@@ -19,6 +20,7 @@ interface Photo {
   translateY: number;
   // can't use photoUrl because there will be duplicates
   id: number;
+  submissionId: number | undefined;
 }
 
 const MAX_PHOTOS = 20;
@@ -47,8 +49,24 @@ export function StagePhotoCarouselEngagement({
   const widthRef = useRef(width);
   const heightRef = useRef(height);
 
+  useOnSubmissionDeletedSubscription({
+    variables: { engagementId: engagement.id },
+    onSubscriptionData: (data) => {
+      const deletedSubmissionId =
+        data?.subscriptionData?.data?.submissionDeleted?.submissionId;
+      if (deletedSubmissionId) {
+        setPhotos((prev) =>
+          prev.filter((p) => p.submissionId !== deletedSubmissionId)
+        );
+      }
+    },
+  });
+
   useEffect(() => {
-    if (data?.submission?.data?.__typename === "PhotoCarouselSubmissionData") {
+    if (
+      data?.submission?.data?.__typename === "PhotoCarouselSubmissionData" &&
+      data.submission?.id
+    ) {
       const submissionData = data.submission
         .data as PhotoCarouselSubmissionData;
       if (submissionData.photoUrl) {
@@ -73,6 +91,7 @@ export function StagePhotoCarouselEngagement({
                   heightRef.current * 0.02
               ),
               id: nextPhotoId.current++,
+              submissionId: data.submission?.id,
             },
           ];
           if (newPhotos.length > MAX_PHOTOS) {
