@@ -9,7 +9,7 @@ export function PhotoCarouselAdminControlView({
   const data = engagement.data;
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <CodeBlock json={data} />
+      <CodeBlock json={data} maxHeight="40vh" />
     </div>
   );
 }

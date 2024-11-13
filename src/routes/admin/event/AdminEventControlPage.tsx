@@ -67,14 +67,13 @@ export function AdminEventControlPage() {
     );
   }
 
-  if (!event.activeEngagement?.type) {
+  if (event.activeEngagement && !event.activeEngagement?.type) {
     throw new Error("activeEngagement.type is not set");
   }
 
-  const definition = ENGAGEMENT_DEFINITIONS[event.activeEngagement?.type];
-  if (!definition) {
-    throw new Error(`no definition found for ${event.activeEngagement?.type}`);
-  }
+  const definition = event.activeEngagement
+    ? ENGAGEMENT_DEFINITIONS[event.activeEngagement.type]
+    : null;
 
   return (
     <div
@@ -87,9 +86,9 @@ export function AdminEventControlPage() {
         </Link>
       </Button>
       <div className="flex-1">
-        {activeEngagementId ? (
+        {activeEngagementId && event.activeEngagement ? (
           <>
-            {definition.adminControlView ? (
+            {definition?.adminControlView ? (
               <definition.adminControlView
                 key={activeEngagementId}
                 engagement={event.activeEngagement}
