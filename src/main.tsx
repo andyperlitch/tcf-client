@@ -28,6 +28,7 @@ import { EventStageScreen } from "./routes/stage/EventStageScreen";
 import { Toaster } from "./components/ui/toaster";
 import { QuickSignup } from "./routes/QuickSignup";
 import { TooltipProvider } from "./components/ui/tooltip";
+import { AdminEventControlPage } from "./routes/admin/event/AdminEventControlPage";
 
 const router = createBrowserRouter([
   {
@@ -100,6 +101,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/events/:slug",
         element: <AdminEventPage />,
+      },
+      {
+        path: "/admin/events/:slug/control",
+        element: <AdminEventControlPage />,
       },
       {
         path: "/admin/events/:slug/engagements/:engagementId",

@@ -1,4 +1,5 @@
 import {
+  AdminEngagementFragment,
   AdminSubmissionFragment,
   EngagementType,
   FanEngagementFragment,
@@ -11,9 +12,11 @@ export interface DataCellProps {
 }
 
 export interface EngagementDefinition {
+  icon: React.ReactNode;
   type: EngagementType;
   stageComponent: FC<{ engagement: StageEngagementFragment }>;
   fanComponent: FC<{ engagement: FanEngagementFragment }>;
   submissionsTableHeaders?: FC;
   submissionsTableDataCell?: FC<DataCellProps>;
+  adminControlView?: FC<{ engagement: AdminEngagementFragment }>;
 }

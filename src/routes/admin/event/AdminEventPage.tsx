@@ -12,9 +12,14 @@ import { Label } from "@/components/ui/label";
 import { useAdminEventHandlers } from "./useAdminEventHandlers";
 import { EditableTextarea } from "@/components/EditableTextarea";
 import { EditableDate } from "@/components/EditableDate";
+import { Button } from "@/components/ui/button";
+import { MixerVerticalIcon } from "@radix-ui/react-icons";
+import { useNavigate } from "react-router-dom";
 
 export function AdminEventPage() {
   const { slug } = useParamsSafe("slug");
+  const navigate = useNavigate();
+
   const { data, loading, error } = useAdminGetEventQuery({
     fetchPolicy: "network-only",
     variables: {
@@ -127,7 +132,27 @@ export function AdminEventPage() {
             />
           </div>
 
-          <div data-name="ENGAGEMENTS" className="flex flex-col space-y-2">
+          <div
+            className={`
+              fixed bottom-4 left-1/2 flex -translate-x-1/2 justify-center
+              space-x-2
+            `}
+          >
+            <Button
+              variant="default"
+              onClick={() =>
+                navigate(`/admin/events/${data.event?.slug}/control`)
+              }
+            >
+              <MixerVerticalIcon className="mr-2 h-4 w-4" />
+              Enter Control View
+            </Button>
+          </div>
+
+          <div
+            data-name="ENGAGEMENTS"
+            className="flex flex-col space-y-2 pb-36"
+          >
             <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
               <span>Engagements</span>{" "}
               <CreateNewEngagementButton

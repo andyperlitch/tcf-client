@@ -21,8 +21,8 @@ export function CreateNewEngagementButton({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <PlusIcon className="h-4 w-4" /> New Engagement
+        <Button variant="constructive">
+          <PlusIcon className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

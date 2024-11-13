@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { useAdminGetEngagementsQuery } from "@/gql/graphql";
 import { ToggleActiveEngagementButton } from "./ToggleActiveEngagementButton";
 import { DeleteEngagementButton } from "./DeleteEngagementButton";
-import { useMemo } from "react";
+import { useSortedAdminEngagements } from "@/hooks/useSortedEngagements";
 import { MoveEngagementButton } from "./MoveEngagementButton";
 import { AdminEventFragment } from "@/gql/graphql";
 
@@ -21,11 +21,7 @@ export function EngagementsList({ event }: { event: AdminEventFragment }) {
     },
   });
 
-  const sortedEngagements = useMemo(() => {
-    const unsortedEngagements = data?.engagements.slice() || [];
-    unsortedEngagements.sort((a, b) => a.order - b.order);
-    return unsortedEngagements;
-  }, [data?.engagements]);
+  const sortedEngagements = useSortedAdminEngagements(data?.engagements || []);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -33,10 +29,6 @@ export function EngagementsList({ event }: { event: AdminEventFragment }) {
 
   if (error) {
     return <p>{error.message}</p>;
-  }
-
-  if (!data?.engagements) {
-    return <p>No engagements or event data found.</p>;
   }
 
   return (

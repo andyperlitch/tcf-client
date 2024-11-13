@@ -9,9 +9,7 @@ gql`
       engagementId: $engagementId
       eventId: $eventId
     ) {
-      id
-      activeEngagementId
-      createdAt
+      ...AdminEvent
     }
   }
 `;

@@ -1,7 +1,5 @@
-import { useAdminChangeEventActiveEngagementMutation } from "@/gql/graphql";
 import { Switch } from "./ui/switch";
-import { useCallback } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { useSetActiveEngagement } from "@/hooks/useSetActiveEngagement";
 
 export function ToggleActiveEngagementButton({
   id,
@@ -12,32 +10,16 @@ export function ToggleActiveEngagementButton({
   activeId?: number | null;
   eventId: number;
 }) {
-  const { toast } = useToast();
-  const [changeEvent, { loading }] =
-    useAdminChangeEventActiveEngagementMutation({
-      onError(error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
-    });
-
-  const setActive = useCallback(() => {
-    changeEvent({
-      variables: {
-        eventId,
-        engagementId: id === activeId ? null : id,
-      },
-    });
-  }, [activeId, eventId, id, changeEvent]);
+  const { setActive, loading } = useSetActiveEngagement({
+    activeId,
+    eventId,
+  });
 
   return (
     <Switch
       id="engagement-active"
       checked={id === activeId}
-      onCheckedChange={setActive}
+      onCheckedChange={() => setActive(id)}
       disabled={loading}
     />
   );
