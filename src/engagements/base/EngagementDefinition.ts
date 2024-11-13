@@ -1,6 +1,8 @@
 import {
   AdminEngagementFragment,
   AdminSubmissionFragment,
+  EngagementAdminConfig,
+  EngagementAdminData,
   EngagementType,
   FanEngagementFragment,
   StageEngagementFragment,
@@ -11,7 +13,11 @@ export interface DataCellProps {
   submission: AdminSubmissionFragment;
 }
 
-export interface EngagementDefinition {
+export interface EngagementDefinition<
+  TConfig extends EngagementAdminConfig,
+  TData extends EngagementAdminData
+> {
+  title: string;
   icon: React.ReactNode;
   type: EngagementType;
   stageComponent: FC<{ engagement: StageEngagementFragment }>;
@@ -19,4 +25,6 @@ export interface EngagementDefinition {
   submissionsTableHeaders?: FC;
   submissionsTableDataCell?: FC<DataCellProps>;
   adminControlView?: FC<{ engagement: AdminEngagementFragment }>;
+  getInitialData: () => TData;
+  getInitialConfig: () => TConfig;
 }

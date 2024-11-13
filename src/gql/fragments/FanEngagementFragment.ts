@@ -10,29 +10,17 @@ gql`
     startTime
     endTime
     viewConfig {
-      ...PhotoCarouselConfigFields
-      ...VoteForConfigFields
+      ...PhotoCarouselViewConfigFields
+      ...VoteForViewConfigFields
     }
     viewData {
-      ...PhotoCarouselDataFields
-      ...VoteForDataFields
+      ...PhotoCarouselViewDataFields
+      ...VoteForViewDataFields
     }
     type
     order
     submissions {
-      id
-      createdAt
-      data
-      reactions {
-        id
-        createdAt
-        type
-        userId
-        user {
-          id
-          name
-        }
-      }
+      ...FanSubmission
     }
   }
 `;

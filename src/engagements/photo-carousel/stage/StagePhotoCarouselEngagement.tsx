@@ -2,6 +2,7 @@
 import { Polaroid } from "@/components/Polaroid";
 import styles from "./StagePhotoCarouselEngagement.module.css";
 import {
+  PhotoCarouselSubmissionData,
   StageEngagementFragment,
   useStageGetSubmissionQuery,
 } from "@/gql/graphql";
@@ -33,7 +34,7 @@ export function StagePhotoCarouselEngagement({
 }) {
   const nextPhotoId = useRef(0);
   const visibleSubmissionId =
-    engagement.viewData?.__typename === "PhotoCarouselData"
+    engagement.viewData?.__typename === "PhotoCarouselViewData"
       ? engagement.viewData.visibleSubmission
       : undefined;
 
@@ -47,33 +48,39 @@ export function StagePhotoCarouselEngagement({
   const heightRef = useRef(height);
 
   useEffect(() => {
-    if (data?.submission?.data?.photoUrl) {
-      const photoUrl = toFullS3Url(data?.submission?.data?.photoUrl);
-      setPhotos((prev) => {
-        if (prev.length > 0 && prev[prev.length - 1].photoUrl === photoUrl) {
-          return prev;
-        }
-        const newPhotos = [
-          ...prev,
-          {
-            photoUrl,
-            caption: data?.submission?.data?.caption || "",
-            rotation: Math.round(Math.random() * 20 - 10),
-            scale: 1,
-            translateX: Math.round(
-              Math.random() * widthRef.current * 0.45 - widthRef.current * 0.225
-            ),
-            translateY: Math.round(
-              Math.random() * heightRef.current * 0.1 - heightRef.current * 0.02
-            ),
-            id: nextPhotoId.current++,
-          },
-        ];
-        if (newPhotos.length > MAX_PHOTOS) {
-          newPhotos.shift();
-        }
-        return newPhotos;
-      });
+    if (data?.submission?.data?.__typename === "PhotoCarouselSubmissionData") {
+      const submissionData = data.submission
+        .data as PhotoCarouselSubmissionData;
+      if (submissionData.photoUrl) {
+        const photoUrl = toFullS3Url(submissionData.photoUrl);
+        setPhotos((prev) => {
+          if (prev.length > 0 && prev[prev.length - 1].photoUrl === photoUrl) {
+            return prev;
+          }
+          const newPhotos = [
+            ...prev,
+            {
+              photoUrl,
+              caption: submissionData.caption,
+              rotation: Math.round(Math.random() * 20 - 10),
+              scale: 1,
+              translateX: Math.round(
+                Math.random() * widthRef.current * 0.45 -
+                  widthRef.current * 0.225
+              ),
+              translateY: Math.round(
+                Math.random() * heightRef.current * 0.1 -
+                  heightRef.current * 0.02
+              ),
+              id: nextPhotoId.current++,
+            },
+          ];
+          if (newPhotos.length > MAX_PHOTOS) {
+            newPhotos.shift();
+          }
+          return newPhotos;
+        });
+      }
     }
   }, [data]);
 

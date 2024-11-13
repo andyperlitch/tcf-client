@@ -1,11 +1,14 @@
 import { DataCellProps } from "@/engagements/base/EngagementDefinition";
 import { toFullS3Url } from "@/utils/toFullS3Url";
-import { useAdminUpdateSubmissionMutation } from "@/gql/graphql";
+import {
+  useAdminUpdateSubmissionMutation,
+  VoteForSubmissionData,
+} from "@/gql/graphql";
 import { TableCell, TableHeader } from "@/components/ui/table";
 import { ColorPicker } from "@/components/ColorPicker";
 
 export function VoteForDataCell({ submission }: DataCellProps) {
-  const data = submission?.data || {};
+  const data = (submission?.data || {}) as VoteForSubmissionData;
   const [updateSubmission] = useAdminUpdateSubmissionMutation();
   return (
     <>

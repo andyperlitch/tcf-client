@@ -11,12 +11,12 @@ gql`
     startTime
     endTime
     viewConfig {
-      ...PhotoCarouselConfigFields
-      ...VoteForConfigFields
+      ...PhotoCarouselViewConfigFields
+      ...VoteForViewConfigFields
     }
     viewData {
-      ...PhotoCarouselDataFields
-      ...VoteForDataFields
+      ...PhotoCarouselViewDataFields
+      ...VoteForViewDataFields
     }
     type
     order

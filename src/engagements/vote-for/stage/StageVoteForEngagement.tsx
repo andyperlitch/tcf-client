@@ -3,6 +3,7 @@ import {
   StageEngagementFragment,
   StageSubmissionFragment,
   useStageGetSubmissionsQuery,
+  VoteForSubmissionData,
 } from "@/gql/graphql";
 import { toFullS3Url } from "@/utils/toFullS3Url";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -24,7 +25,7 @@ export function StageVoteForEngagement({
   const [choiceWidth, setChoiceWidth] = useState(0);
   const voteCounts = useMemo(
     () =>
-      (engagement.viewData?.__typename === "VoteForData"
+      (engagement.viewData?.__typename === "VoteForViewData"
         ? engagement.viewData.votes
         : []
       ).reduce((acc, vote) => {
@@ -106,8 +107,9 @@ const Choice = ({
   width: number;
   voteScale?: ScaleLinear<number, number> | null;
 }) => {
+  const data = (choice.data || {}) as VoteForSubmissionData;
   const { imageLoaded, url } = useImageLoader({
-    url: choice.data.photoUrl ? toFullS3Url(choice.data.photoUrl) : undefined,
+    url: data.photoUrl ? toFullS3Url(data.photoUrl) : undefined,
   });
   const widthScale = useMemo(
     () =>
@@ -125,12 +127,12 @@ const Choice = ({
         voteStyles: {
           width: voteSize,
           height: voteSize,
-          boxShadow: `0 0 0 ${widthScale(votes)}px ${choice.data.color}`,
+          boxShadow: `0 0 0 ${widthScale(votes)}px ${data.color}`,
         },
         voteBarStyles: {
           height: `${voteHeight + voteSize * 2}px`,
           top: `${voteSize - voteHeight}px`,
-          backgroundColor: choice.data.color,
+          backgroundColor: data.color,
           width: voteSize,
           borderRadius: `${voteSize / 2}px`,
         },
@@ -142,10 +144,10 @@ const Choice = ({
         imageWrapperStyles: {
           top: `-${voteHeight}px`,
           backgroundColor: "black",
-          borderColor: choice.data.color,
+          borderColor: data.color,
         },
       };
-    }, [width, imageLoaded, voteScale, votes, widthScale, choice.data.color]);
+    }, [width, imageLoaded, voteScale, votes, widthScale, data.color]);
 
   return (
     <div
@@ -213,14 +215,14 @@ const Choice = ({
       <div
         data-name="CHOICE-TITLE"
         style={{
-          boxShadow: `3px -3px 0 ${choice.data.color}`,
+          boxShadow: `3px -3px 0 ${data.color}`,
         }}
         className={`
           relative z-10 mb-2 max-w-[30vw] rounded-lg bg-foreground pb-0 pl-4
           pr-4 pt-0 text-center font-hand text-3xl text-background
         `}
       >
-        {choice.data.title}
+        {data.title}
       </div>
     </div>
   );

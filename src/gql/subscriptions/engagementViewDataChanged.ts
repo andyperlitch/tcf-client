@@ -4,8 +4,8 @@ gql`
   subscription OnEngagementViewDataChanged($engagementId: Int!) {
     engagementViewDataChanged(engagementId: $engagementId) {
       viewData {
-        ...PhotoCarouselDataFields
-        ...VoteForDataFields
+        ...PhotoCarouselViewDataFields
+        ...VoteForViewDataFields
       }
     }
   }

@@ -4,7 +4,10 @@ gql`
   fragment StageSubmission on Submission {
     id
     createdAt
-    data
+    data {
+      ...PhotoCarouselSubmissionFields
+      ...VoteForSubmissionFields
+    }
     reactions {
       id
       createdAt

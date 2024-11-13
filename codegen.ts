@@ -4,9 +4,11 @@ const config: CodegenConfig = {
   overwrite: true,
   schema: "http://localhost:3000/graphql",
   documents: [
+    "src/engagements/**/schema.ts",
+    "src/engagements/**/*.schema.ts",
+    "src/gql/fragments/**/*.ts",
     "src/gql/queries/**/*.ts",
     "src/gql/mutations/**/*.ts",
-    "src/gql/fragments/**/*.ts",
     "src/gql/subscriptions/**/*.ts",
   ],
   ignoreNoDocuments: true, // for better experience with the watcher

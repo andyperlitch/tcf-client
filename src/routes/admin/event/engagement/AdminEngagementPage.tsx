@@ -14,6 +14,7 @@ import { EditableJson } from "@/components/EditableJson";
 import { useUpdateFns } from "./useUpdateFns";
 import { Badge } from "@/components/ui/badge";
 import { EditableTextarea } from "@/components/EditableTextarea";
+import { isMobile } from "react-device-detect";
 
 export function AdminEngagementPage() {
   const { slug, engagementId } = useParamsSafe("slug", "engagementId");
@@ -75,44 +76,54 @@ export function AdminEngagementPage() {
           </div>
         </div>
         {/* DESCRIPTION */}
-        <EditableTextarea
-          value={engagement.description || "(no description)"}
-          setValue={updateEngagementDescription}
-          element="p"
-          className="text-foreground"
-        />
-        {/* QR CODE CTA */}
-        <EditableTextarea
-          value={engagement.qrCodeCta || "(no cta)"}
-          setValue={updateEngagementQrCodeCta}
-          element="p"
-          className="text-foreground"
-        />
-        {/* CONFIG/DATA */}
-        <div className="flex flex-col space-y-3">
-          <Tabs defaultValue="config" className="w-full">
-            <TabsList>
-              <TabsTrigger value="config">Config</TabsTrigger>
-              <TabsTrigger value="data">Data</TabsTrigger>
-            </TabsList>
-            <TabsContent value="config">
-              <div className="rounded-lg bg-muted p-1">
-                <EditableJson
-                  value={engagement.config}
-                  setValue={updateEngagementConfig}
-                />
-              </div>
-            </TabsContent>
-            <TabsContent value="data">
-              <div className="rounded-lg bg-muted p-1">
-                <EditableJson
-                  value={engagement.data}
-                  setValue={updateEngagementData}
-                />
-              </div>
-            </TabsContent>
-          </Tabs>
+        <div className="flex flex-col space-y-1">
+          <EditableTextarea
+            value={engagement.description || "(no description)"}
+            setValue={updateEngagementDescription}
+            element="p"
+            className="text-foreground"
+          />
+          <div className="text-xs text-muted">
+            Shown as instructions to fans on mobile.
+          </div>
         </div>
+        {/* QR CODE CTA */}
+        <div className="flex flex-col space-y-1">
+          <EditableTextarea
+            value={engagement.qrCodeCta || "(no cta)"}
+            setValue={updateEngagementQrCodeCta}
+            element="p"
+            className="text-foreground"
+          />
+          <div className="text-xs text-muted">Displayed above QR code.</div>
+        </div>
+        {/* CONFIG/DATA */}
+        {!isMobile && (
+          <div className="flex flex-col space-y-3">
+            <Tabs defaultValue="config" className="w-full">
+              <TabsList>
+                <TabsTrigger value="config">Config</TabsTrigger>
+                <TabsTrigger value="data">Data</TabsTrigger>
+              </TabsList>
+              <TabsContent value="config">
+                <div className="rounded-lg bg-muted p-1">
+                  <EditableJson
+                    value={engagement.config}
+                    setValue={updateEngagementConfig}
+                  />
+                </div>
+              </TabsContent>
+              <TabsContent value="data">
+                <div className="rounded-lg bg-muted p-1">
+                  <EditableJson
+                    value={engagement.data}
+                    setValue={updateEngagementData}
+                  />
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
+        )}
         {/* SUBMISSIONS */}
         <SubmissionsList
           engagementId={engagement.id}

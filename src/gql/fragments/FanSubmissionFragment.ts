@@ -4,16 +4,12 @@ gql`
   fragment FanSubmission on Submission {
     id
     createdAt
-    data
+    data {
+      ...PhotoCarouselSubmissionFields
+      ...VoteForSubmissionFields
+    }
     reactions {
-      id
-      createdAt
-      type
-      userId
-      user {
-        id
-        name
-      }
+      ...FanReaction
     }
   }
 `;

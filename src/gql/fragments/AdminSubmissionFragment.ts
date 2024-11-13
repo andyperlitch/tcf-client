@@ -3,7 +3,10 @@ import { gql } from "@apollo/client";
 gql`
   fragment AdminSubmission on Submission {
     id
-    data
+    data {
+      ...PhotoCarouselSubmissionFields
+      ...VoteForSubmissionFields
+    }
     createdAt
     reactions {
       id

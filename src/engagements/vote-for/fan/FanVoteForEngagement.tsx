@@ -3,6 +3,7 @@ import {
   FanSubmissionFragment,
   useCreateReactionMutation,
   useFanGetSubmissionsQuery,
+  VoteForSubmissionData,
 } from "@/gql/graphql";
 import { toFullS3Url } from "@/utils/toFullS3Url";
 import { useMemo, useState } from "react";
@@ -72,25 +73,26 @@ const Choice = ({
   isChosen: boolean;
   width: number;
 }) => {
+  const data = choice.data as VoteForSubmissionData;
   const { imageLoaded } = useImageLoader({
-    url: choice.data.photoUrl ? toFullS3Url(choice.data.photoUrl) : undefined,
+    url: data.photoUrl ? toFullS3Url(data.photoUrl) : undefined,
   });
   const imgCtnrStyles = useMemo(
     () => ({
       backgroundColor: "black",
-      border: `4px solid ${choice.data.color}`,
+      border: `4px solid ${data.color}`,
     }),
-    [choice.data.color]
+    [data.color]
   );
   const imageStyles = useMemo(
     () => ({
       border: `${isChosen ? "6px" : "4px"} solid ${
-        isChosen ? choice.data.color : "white"
+        isChosen ? data.color : "white"
       }`,
       width,
       height: width,
     }),
-    [choice.data.color, width, isChosen]
+    [data.color, width, isChosen]
   );
   return (
     <div
@@ -117,9 +119,7 @@ const Choice = ({
       <div
         data-name="title"
         style={{
-          boxShadow: `${isChosen ? `5px -5px` : `3px -3px`} 0 ${
-            choice.data.color
-          }`,
+          boxShadow: `${isChosen ? `5px -5px` : `3px -3px`} 0 ${data.color}`,
         }}
         className={`
           absolute -bottom-4 z-10 max-w-[30vw] rounded-lg bg-foreground pb-0
@@ -128,7 +128,7 @@ const Choice = ({
           ${isChosen ? styles.bounce : ""}
         `}
       >
-        {choice.data.title}
+        {data.title}
       </div>
       <div
         style={imgCtnrStyles}
@@ -143,7 +143,7 @@ const Choice = ({
         )}
         <img
           data-name="image"
-          src={toFullS3Url(choice.data.photoUrl)}
+          src={toFullS3Url(data.photoUrl)}
           style={imageStyles}
           className={`
             rounded-full transition-opacity

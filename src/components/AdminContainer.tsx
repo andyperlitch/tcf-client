@@ -35,12 +35,24 @@ export function AdminContainer({
         max-w-screen
       `}
     >
-      <nav className={`flex flex-col border-r`}>
+      <nav
+        data-name="ADMIN-SIDE-NAV-CONTAINER"
+        className={`flex flex-col border-r`}
+      >
         <AdminSideNav currentSection={section} />
       </nav>
 
-      <main className={`flex-1`}>
-        <div className="rounded-lg p-8 shadow-lg">{children}</div>
+      <main data-name="ADMIN-CONTENT-CONTAINER" className={`flex-1`}>
+        <div
+          data-name="ADMIN-CONTENT"
+          className={`
+            rounded-lg p-4 shadow-lg
+
+            md:p-8
+          `}
+        >
+          {children}
+        </div>
         <ModeToggle />
       </main>
     </div>

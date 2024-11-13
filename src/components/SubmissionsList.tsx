@@ -18,13 +18,18 @@ import { RandomizeChoiceColorsButton } from "./RandomizeChoiceColorsButton";
 import { CreateVoteForChoiceForm } from "./CreateVoteForChoiceForm";
 import { DataCellProps } from "@/engagements/base/EngagementDefinition";
 import { ENGAGEMENT_DEFINITIONS } from "@/engagements";
+import { isMobile } from "react-device-detect";
 
 export function SubmissionsList({
   engagementId,
   engagementType,
+  className,
+  tableClassName,
 }: {
   engagementId: number;
   engagementType: EngagementType;
+  className?: string;
+  tableClassName?: string;
 }) {
   const { data, loading, refetch } = useAdminGetSubmissionsQuery({
     variables: { engagementId },
@@ -45,7 +50,7 @@ export function SubmissionsList({
     EngagementDefinition.submissionsTableHeaders || DefaultDataHeaders;
 
   return (
-    <>
+    <div data-name="ADMIN-SUBMISSIONS-LIST" className={className}>
       <h2 className="mt-10 flex items-center space-x-5 text-2xl">
         <span>Submissions</span>{" "}
         <Button
@@ -61,10 +66,10 @@ export function SubmissionsList({
         )}
       </h2>
 
-      <Table>
+      <Table className={tableClassName}>
         <TableHead>
           <TableRow>
-            <TableHeader>ID</TableHeader>
+            {isMobile ? null : <TableHeader>ID</TableHeader>}
             <DataHeaders />
             <TableHeader>Date/Time</TableHeader>
             <TableHeader>Actions</TableHeader>
@@ -79,9 +84,11 @@ export function SubmissionsList({
           )}
           {sortedSubmissions.map((submission) => (
             <TableRow key={submission.id}>
-              <TableCell>{submission.id}</TableCell>
+              {isMobile ? null : <TableCell>{submission.id}</TableCell>}
               <DataCell submission={submission} />
-              <TableCell>{format(submission.createdAt, "Pp")}</TableCell>
+              <TableCell>
+                {format(submission.createdAt, isMobile ? "p" : "Pp")}
+              </TableCell>
               <TableCell>
                 <DeleteSubmissionButton id={submission.id} />
               </TableCell>
@@ -89,7 +96,7 @@ export function SubmissionsList({
           ))}
         </TableBody>
       </Table>
-    </>
+    </div>
   );
 }
 

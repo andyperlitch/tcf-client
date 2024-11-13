@@ -9,4 +9,4 @@ export const ENGAGEMENT_DEFINITIONS = [
 ].reduce((acc, definition) => {
   acc[definition.type] = definition;
   return acc;
-}, {} as Record<EngagementType, EngagementDefinition>);
+}, {} as Record<EngagementType, EngagementDefinition<any, any>>);

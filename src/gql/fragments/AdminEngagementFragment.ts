@@ -12,15 +12,21 @@ gql`
     order
     endTime
     type
-    config
-    data
+    data {
+      ...PhotoCarouselAdminDataFields
+      ...VoteForAdminDataFields
+    }
+    config {
+      ...PhotoCarouselAdminConfigFields
+      ...VoteForAdminConfigFields
+    }
     viewConfig {
-      ...PhotoCarouselConfigFields
-      ...VoteForConfigFields
+      ...PhotoCarouselViewConfigFields
+      ...VoteForViewConfigFields
     }
     viewData {
-      ...PhotoCarouselDataFields
-      ...VoteForDataFields
+      ...PhotoCarouselViewDataFields
+      ...VoteForViewDataFields
     }
     order
   }
