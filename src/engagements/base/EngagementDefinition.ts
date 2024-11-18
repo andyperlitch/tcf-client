@@ -11,6 +11,7 @@ import { FC } from "react";
 
 export interface DataCellProps {
   submission: AdminSubmissionFragment;
+  engagement: AdminEngagementFragment;
 }
 
 export interface EngagementDefinition<

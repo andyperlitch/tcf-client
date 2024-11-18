@@ -21,8 +21,5 @@ gql`
     }
     type
     order
-    submissions {
-      ...FanSubmission
-    }
   }
 `;

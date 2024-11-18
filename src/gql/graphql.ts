@@ -571,9 +571,9 @@ export type AdminEventFragment = { __typename?: 'Event', id: number, name: strin
 
 export type AdminSubmissionFragment = { __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> };
 
-export type FanEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig: { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> }, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> }> };
+export type FanEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig: { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } };
 
-export type FanEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig: { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> }, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> }> } | null };
+export type FanEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig: { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null };
 
 export type FanReactionFragment = { __typename?: 'Reaction', id: number, type: string, createdAt: any };
 
@@ -752,7 +752,7 @@ export type FanGetEventQueryVariables = Exact<{
 }>;
 
 
-export type FanGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig: { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> }, submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> }> } | null } | null };
+export type FanGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig: { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null } | null };
 
 export type FanGetSubmissionsQueryVariables = Exact<{
   engagementId: Scalars['Int']['input'];
@@ -1003,6 +1003,47 @@ export const AdminSubmissionFragmentDoc = gql`
     ${PhotoCarouselSubmissionFieldsFragmentDoc}
 ${VoteForSubmissionFieldsFragmentDoc}
 ${SlidesSubmissionFieldsFragmentDoc}`;
+export const FanEngagementFragmentDoc = gql`
+    fragment FanEngagement on Engagement {
+  id
+  createdAt
+  updatedAt
+  title
+  description
+  startTime
+  endTime
+  viewConfig {
+    ...PhotoCarouselViewConfigFields
+    ...VoteForViewConfigFields
+    ...SlidesViewConfigFields
+  }
+  viewData {
+    ...PhotoCarouselViewDataFields
+    ...VoteForViewDataFields
+    ...SlidesViewDataFields
+  }
+  type
+  order
+}
+    ${PhotoCarouselViewConfigFieldsFragmentDoc}
+${VoteForViewConfigFieldsFragmentDoc}
+${SlidesViewConfigFieldsFragmentDoc}
+${PhotoCarouselViewDataFieldsFragmentDoc}
+${VoteForViewDataFieldsFragmentDoc}
+${SlidesViewDataFieldsFragmentDoc}`;
+export const FanEventFragmentDoc = gql`
+    fragment FanEvent on Event {
+  id
+  name
+  live
+  description
+  date
+  location
+  activeEngagement {
+    ...FanEngagement
+  }
+}
+    ${FanEngagementFragmentDoc}`;
 export const FanReactionFragmentDoc = gql`
     fragment FanReaction on Reaction {
   id
@@ -1027,51 +1068,6 @@ export const FanSubmissionFragmentDoc = gql`
 ${VoteForSubmissionFieldsFragmentDoc}
 ${SlidesSubmissionFieldsFragmentDoc}
 ${FanReactionFragmentDoc}`;
-export const FanEngagementFragmentDoc = gql`
-    fragment FanEngagement on Engagement {
-  id
-  createdAt
-  updatedAt
-  title
-  description
-  startTime
-  endTime
-  viewConfig {
-    ...PhotoCarouselViewConfigFields
-    ...VoteForViewConfigFields
-    ...SlidesViewConfigFields
-  }
-  viewData {
-    ...PhotoCarouselViewDataFields
-    ...VoteForViewDataFields
-    ...SlidesViewDataFields
-  }
-  type
-  order
-  submissions {
-    ...FanSubmission
-  }
-}
-    ${PhotoCarouselViewConfigFieldsFragmentDoc}
-${VoteForViewConfigFieldsFragmentDoc}
-${SlidesViewConfigFieldsFragmentDoc}
-${PhotoCarouselViewDataFieldsFragmentDoc}
-${VoteForViewDataFieldsFragmentDoc}
-${SlidesViewDataFieldsFragmentDoc}
-${FanSubmissionFragmentDoc}`;
-export const FanEventFragmentDoc = gql`
-    fragment FanEvent on Event {
-  id
-  name
-  live
-  description
-  date
-  location
-  activeEngagement {
-    ...FanEngagement
-  }
-}
-    ${FanEngagementFragmentDoc}`;
 export const StageEngagementFragmentDoc = gql`
     fragment StageEngagement on Engagement {
   id

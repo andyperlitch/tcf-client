@@ -101,6 +101,8 @@ button:focus-visible {
     --radius: 0.5rem;
     --constructive: 143 68% 30%;
     --constructive-foreground: 0 0% 9%;
+    --informational: 220 70% 50%;
+    --informational-foreground: 0 0% 98%;
   }
   .dark {
     --background: 19.4 88.6% 2.4%;
@@ -129,6 +131,8 @@ button:focus-visible {
     --chart-5: 340 75% 55%;
     --constructive: 143 68% 30%;
     --constructive-foreground: 0 0% 98%;
+    --informational: 220 70% 50%;
+    --informational-foreground: 0 0% 98%;
   }
 }
 

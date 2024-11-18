@@ -134,10 +134,7 @@ export function AdminEngagementPage() {
         {engagementDef?.submissionsTable ? (
           <engagementDef.submissionsTable engagement={engagement} />
         ) : (
-          <SubmissionsList
-            engagementId={engagement.id}
-            engagementType={engagement.type}
-          />
+          <SubmissionsList engagement={engagement} />
         )}
       </div>
     );

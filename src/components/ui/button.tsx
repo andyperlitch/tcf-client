@@ -31,6 +31,11 @@ const buttonVariants = cva(
 
           hover:bg-constructive/90
         `,
+        informational: `
+          bg-informational text-informational-foreground shadow-sm
+
+          hover:bg-informational/90
+        `,
         outline: `
           border border-input bg-background shadow-sm
 

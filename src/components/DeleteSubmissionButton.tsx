@@ -19,6 +19,7 @@ export function DeleteSubmissionButton({
       onConfirm={() => deleteSubmission({ variables: { id } })}
       loading={loading}
       error={error}
+      size="icon"
       {...buttonProps}
     >
       <TrashIcon />
