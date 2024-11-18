@@ -22,7 +22,8 @@ import { ProtectedArea } from "./components/ProtectedArea";
 import { AdminHome } from "./routes/admin/home";
 import { AuthProvider } from "./providers/AuthProvider";
 import { AdminEventPage } from "./routes/admin/event";
-import { AdminEngagement } from "./routes/admin/event/engagement";
+import { AdminSubmissionPage } from "./routes/admin/event/engagement/submission";
+import { AdminEngagementPage } from "./routes/admin/event/engagement";
 import { AdminEvents } from "./routes/admin/events";
 import { EventStageScreen } from "./routes/stage/EventStageScreen";
 import { Toaster } from "./components/ui/toaster";
@@ -108,7 +109,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/events/:slug/engagements/:engagementId",
-        element: <AdminEngagement />,
+        element: <AdminEngagementPage />,
+      },
+      {
+        path: "/admin/events/:slug/engagements/:engagementId/submissions/:submissionId",
+        element: <AdminSubmissionPage />,
       },
     ],
   },

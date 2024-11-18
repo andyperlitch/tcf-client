@@ -109,7 +109,7 @@ const Choice = ({
 }) => {
   const data = (choice.data || {}) as VoteForSubmissionData;
   const { imageLoaded, url } = useImageLoader({
-    url: data.photoUrl ? toFullS3Url(data.photoUrl) : undefined,
+    url: data.optionalImageUrl ? toFullS3Url(data.optionalImageUrl) : undefined,
   });
   const widthScale = useMemo(
     () =>

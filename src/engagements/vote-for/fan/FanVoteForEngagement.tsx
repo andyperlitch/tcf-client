@@ -75,7 +75,7 @@ const Choice = ({
 }) => {
   const data = choice.data as VoteForSubmissionData;
   const { imageLoaded } = useImageLoader({
-    url: data.photoUrl ? toFullS3Url(data.photoUrl) : undefined,
+    url: data.optionalImageUrl ? toFullS3Url(data.optionalImageUrl) : undefined,
   });
   const imgCtnrStyles = useMemo(
     () => ({
@@ -141,17 +141,19 @@ const Choice = ({
             className={`absolute flex h-full w-full items-center justify-center`}
           />
         )}
-        <img
-          data-name="image"
-          src={toFullS3Url(data.photoUrl)}
-          style={imageStyles}
-          className={`
-            rounded-full transition-opacity
+        {data.optionalImageUrl && (
+          <img
+            data-name="image"
+            src={toFullS3Url(data.optionalImageUrl)}
+            style={imageStyles}
+            className={`
+              rounded-full transition-opacity
 
-            ${imageLoaded ? "opacity-100" : `opacity-0`}
-            ${isChosen && imageLoaded ? styles.bounce : ""}
-          `}
-        />
+              ${imageLoaded ? "opacity-100" : `opacity-0`}
+              ${isChosen && imageLoaded ? styles.bounce : ""}
+            `}
+          />
+        )}
       </div>
     </div>
   );

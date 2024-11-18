@@ -8,15 +8,14 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { ImageSelector } from "./ImageSelector";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ImageSelector } from "@/components/ImageSelector";
 import { useEffect, useState } from "react";
 import { useCreateSubmission } from "@/hooks/useCreateSubmission";
 import { useToast } from "@/hooks/use-toast";
-import { Button } from "./ui/button";
-import { ColorPicker } from "./ColorPicker";
-import { TableCell, TableRow } from "./ui/table";
+import { Button } from "@/components/ui/button";
+import { ColorPicker } from "@/components/ColorPicker";
 
 const formSchema = z.object({
   // title of the choice
@@ -53,7 +52,7 @@ export function CreateVoteForChoiceForm({
     engagementId,
     file,
     toData: (url?: string) => ({
-      photoUrl: url,
+      optionalImageUrl: url,
       ...form.getValues(),
     }),
     onSuccess: () => {
@@ -78,48 +77,8 @@ export function CreateVoteForChoiceForm({
 
   return (
     <Form {...form}>
-      <TableRow>
-        <TableCell>
-          <em className="text-sm text-muted-foreground">new</em>
-        </TableCell>
-        <TableCell>
-          <div className="flex flex-col space-y-1">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormControl>
-                    <Input placeholder="Label" {...field} />
-                  </FormControl>
-                  <FormMessage {...field} />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Textarea placeholder="Description" {...field} />
-                  </FormControl>
-                  <FormMessage {...field} />
-                </FormItem>
-              )}
-            />
-          </div>
-        </TableCell>
-        <TableCell>
-          <ImageSelector
-            key={resetKey}
-            onImageChange={setFile}
-            allowGenerate
-            width={100}
-          />
-        </TableCell>
-
-        <TableCell>
+      <div className="flex flex-col space-y-1">
+        <div className="flex space-x-2">
           <FormField
             control={form.control}
             name="color"
@@ -131,16 +90,46 @@ export function CreateVoteForChoiceForm({
               </FormItem>
             )}
           />
-        </TableCell>
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormControl>
+                  <Input placeholder="Label" {...field} />
+                </FormControl>
+                <FormMessage {...field} />
+              </FormItem>
+            )}
+          />
+        </div>
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Textarea placeholder="Description" {...field} />
+              </FormControl>
+              <FormMessage {...field} />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="flex">
+        <ImageSelector
+          key={resetKey}
+          onImageChange={setFile}
+          allowGenerate
+          width={100}
+        />
+      </div>
 
-        <TableCell />
-
-        <TableCell>
-          <Button type="button" onClick={createSubmission} disabled={loading}>
-            Create
-          </Button>
-        </TableCell>
-      </TableRow>
+      <div>
+        <Button type="button" onClick={createSubmission} disabled={loading}>
+          Create
+        </Button>
+      </div>
     </Form>
   );
 }

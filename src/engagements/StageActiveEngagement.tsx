@@ -1,5 +1,5 @@
 import { StageEventFragment } from "@/gql/graphql";
-import { ENGAGEMENT_DEFINITIONS } from "./index";
+import { engagementDefinitions } from "./index";
 import { AnimatePresence, motion } from "framer-motion";
 
 export function StageActiveEngagement({
@@ -11,7 +11,7 @@ export function StageActiveEngagement({
 
   if (!engagement) return null;
 
-  const EngagementDefinition = ENGAGEMENT_DEFINITIONS[engagement.type];
+  const EngagementDefinition = engagementDefinitions[engagement.type];
   const Component = EngagementDefinition?.stageComponent;
 
   if (!Component) throw new Error(`No stage component for ${engagement.type}`);

@@ -9,6 +9,7 @@ import {
 import { VoteForDataHeaders } from "./admin/submissions-table";
 import { VoteForDataCell } from "./admin/submissions-table";
 import { BarChartIcon } from "@radix-ui/react-icons";
+import { CreateVoteForChoiceForm } from "./admin/CreateVoteForChoiceForm";
 
 export const voteForEngagementDefinition: EngagementDefinition<
   VoteForAdminConfig,
@@ -21,6 +22,8 @@ export const voteForEngagementDefinition: EngagementDefinition<
   fanComponent: FanVoteForEngagement,
   submissionsTableHeaders: VoteForDataHeaders,
   submissionsTableDataCell: VoteForDataCell,
+  adminSubmissionForm: CreateVoteForChoiceForm,
+  submissionsName: "Choices",
   getInitialData: () => ({
     votes: [],
   }),

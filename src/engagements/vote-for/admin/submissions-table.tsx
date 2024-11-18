@@ -17,10 +17,10 @@ export function VoteForDataCell({ submission }: DataCellProps) {
         {data.description && <div>{data.description}</div>}
       </TableCell>
       <TableCell className="text-center">
-        {data.photoUrl && (
+        {data.optionalImageUrl && (
           <div className="flex justify-start">
             <img
-              src={toFullS3Url(data.photoUrl)}
+              src={toFullS3Url(data.optionalImageUrl)}
               className={`h-24 rounded-full border-4 border-solid border-white`}
             />
           </div>

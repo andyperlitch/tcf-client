@@ -1,12 +1,19 @@
 import { EngagementType } from "@/gql/graphql";
 import { photoCarouselEngagementDefinition } from "./photo-carousel/definition";
 import { voteForEngagementDefinition } from "./vote-for/definition";
+import { slidesEngagementDefinition } from "./slides/definition";
 import { EngagementDefinition } from "./base/EngagementDefinition";
 
-export const ENGAGEMENT_DEFINITIONS = [
+export const engagementDefinitionsArray = [
   photoCarouselEngagementDefinition,
   voteForEngagementDefinition,
-].reduce((acc, definition) => {
-  acc[definition.type] = definition;
-  return acc;
-}, {} as Record<EngagementType, EngagementDefinition<any, any>>);
+  slidesEngagementDefinition,
+];
+
+export const engagementDefinitions = engagementDefinitionsArray.reduce(
+  (acc, definition) => {
+    acc[definition.type] = definition;
+    return acc;
+  },
+  {} as Record<EngagementType, EngagementDefinition<any, any>>
+);

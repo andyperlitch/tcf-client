@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ENGAGEMENT_DEFINITIONS } from "@/engagements";
+import { engagementDefinitions } from "@/engagements";
 import { AdminEngagementFragment, useAdminGetEventQuery } from "@/gql/graphql";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { useSetActiveEngagement } from "@/hooks/useSetActiveEngagement";
@@ -72,7 +72,7 @@ export function AdminEventControlPage() {
   }
 
   const definition = event.activeEngagement
-    ? ENGAGEMENT_DEFINITIONS[event.activeEngagement.type]
+    ? engagementDefinitions[event.activeEngagement.type]
     : null;
 
   return (
@@ -252,7 +252,7 @@ function ActiveEngagementPicker({
       <PopoverContent>
         <div className={`flex flex-col items-stretch`}>
           {sortedEngagements.map((e) => {
-            const { icon } = ENGAGEMENT_DEFINITIONS[e.type];
+            const { icon } = engagementDefinitions[e.type];
 
             return (
               <div

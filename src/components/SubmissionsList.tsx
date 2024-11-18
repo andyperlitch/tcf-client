@@ -1,4 +1,4 @@
-import { EngagementType, useAdminGetSubmissionsQuery } from "@/gql/graphql";
+import { EngagementType } from "@/gql/graphql";
 import {
   Table,
   TableBody,
@@ -12,13 +12,12 @@ import { format } from "date-fns";
 import { DeleteSubmissionButton } from "./DeleteSubmissionButton";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
-import { useMemo } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { RandomizeChoiceColorsButton } from "./RandomizeChoiceColorsButton";
-import { CreateVoteForChoiceForm } from "./CreateVoteForChoiceForm";
 import { DataCellProps } from "@/engagements/base/EngagementDefinition";
-import { ENGAGEMENT_DEFINITIONS } from "@/engagements";
+import { engagementDefinitions } from "@/engagements";
 import { isMobile } from "react-device-detect";
+import { useAdminOrderedSubmissions } from "@/hooks/useAdminOrderedSubmissions";
 
 export function SubmissionsList({
   engagementId,
@@ -31,28 +30,21 @@ export function SubmissionsList({
   className?: string;
   tableClassName?: string;
 }) {
-  const { data, loading, refetch } = useAdminGetSubmissionsQuery({
-    variables: { engagementId },
-    skip: !engagementId,
+  const { sortedSubmissions, loading, refetch } = useAdminOrderedSubmissions({
+    engagementId,
   });
 
-  const sortedSubmissions = useMemo(() => {
-    if (!data) return [];
-    return data.submissions.slice().sort((a, b) => {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    });
-  }, [data]);
-
-  const EngagementDefinition = ENGAGEMENT_DEFINITIONS[engagementType];
+  const EngagementDefinition = engagementDefinitions[engagementType];
   const DataCell =
     EngagementDefinition.submissionsTableDataCell || DefaultDataCell;
   const DataHeaders =
     EngagementDefinition.submissionsTableHeaders || DefaultDataHeaders;
+  const CreateSubmissionForm = EngagementDefinition.adminSubmissionForm || null;
 
   return (
     <div data-name="ADMIN-SUBMISSIONS-LIST" className={className}>
       <h2 className="mt-10 flex items-center space-x-5 text-2xl">
-        <span>Submissions</span>{" "}
+        <span>{EngagementDefinition.submissionsName || "Submissions"}</span>{" "}
         <Button
           variant="outline"
           size="icon"
@@ -62,12 +54,23 @@ export function SubmissionsList({
           <ReloadIcon className="h-4 w-4 text-white" />
         </Button>
         {engagementType === EngagementType.VoteFor && (
-          <RandomizeChoiceColorsButton submissions={data?.submissions} />
+          <RandomizeChoiceColorsButton submissions={sortedSubmissions} />
         )}
       </h2>
 
       <Table className={tableClassName}>
         <TableHead>
+          {CreateSubmissionForm && (
+            <TableRow>
+              <TableCell colSpan={10}>
+                <CreateSubmissionForm
+                  engagementId={engagementId}
+                  existingSubmissions={sortedSubmissions}
+                  onCreated={refetch}
+                />
+              </TableCell>
+            </TableRow>
+          )}
           <TableRow>
             {isMobile ? null : <TableHeader>ID</TableHeader>}
             <DataHeaders />
@@ -76,12 +79,6 @@ export function SubmissionsList({
           </TableRow>
         </TableHead>
         <TableBody>
-          {engagementType === EngagementType.VoteFor && (
-            <CreateVoteForChoiceForm
-              engagementId={engagementId}
-              onCreated={() => refetch()}
-            />
-          )}
           {sortedSubmissions.map((submission) => (
             <TableRow key={submission.id}>
               {isMobile ? null : <TableCell>{submission.id}</TableCell>}

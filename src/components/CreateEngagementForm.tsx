@@ -32,17 +32,15 @@ import {
   useAdminCreateEngagementMutation,
   EngagementType,
 } from "@/gql/graphql";
-import { ENGAGEMENT_DEFINITIONS } from "@/engagements";
+import {
+  engagementDefinitionsArray,
+  engagementDefinitions,
+} from "@/engagements";
 
 const formSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
 });
-
-const engagementTypeDefs = [
-  EngagementType.VoteFor,
-  EngagementType.PhotoCarousel,
-].map((type) => ENGAGEMENT_DEFINITIONS[type]);
 
 export function CreateEngagementForm({
   eventId,
@@ -93,7 +91,7 @@ export function CreateEngagementForm({
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const def = ENGAGEMENT_DEFINITIONS[selectedType as EngagementType];
+    const def = engagementDefinitions[selectedType as EngagementType];
     const config = def.getInitialConfig();
     const data = def.getInitialData();
 
@@ -157,7 +155,7 @@ export function CreateEngagementForm({
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Engagement Types</SelectLabel>
-                {engagementTypeDefs.map((typeDef) => (
+                {engagementDefinitionsArray.map((typeDef) => (
                   <SelectItem key={typeDef.type} value={typeDef.type}>
                     {typeDef.title}
                   </SelectItem>

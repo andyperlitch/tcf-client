@@ -11,10 +11,10 @@ gql`
     }
   }
   fragment VoteForSubmissionFields on VoteForSubmissionData {
-    photoUrl
     title
     color
     description
+    optionalImageUrl
   }
   fragment VoteForAdminConfigFields on VoteForAdminConfig {
     votesPerUser

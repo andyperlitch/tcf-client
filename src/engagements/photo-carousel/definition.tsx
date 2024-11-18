@@ -23,6 +23,7 @@ export const photoCarouselEngagementDefinition: EngagementDefinition<
   submissionsTableHeaders: PhotoCarouselDataHeaders,
   submissionsTableDataCell: PhotoCarouselDataCell,
   adminControlView: PhotoCarouselAdminControlView,
+  submissionsName: "Photos",
   getInitialData: () => ({
     rejectedQueue: [],
     seenQueue: [],

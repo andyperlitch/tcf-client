@@ -13,10 +13,12 @@ gql`
     viewConfig {
       ...PhotoCarouselViewConfigFields
       ...VoteForViewConfigFields
+      ...SlidesViewConfigFields
     }
     viewData {
       ...PhotoCarouselViewDataFields
       ...VoteForViewDataFields
+      ...SlidesViewDataFields
     }
     type
     order

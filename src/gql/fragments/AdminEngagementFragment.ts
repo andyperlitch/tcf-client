@@ -15,18 +15,22 @@ gql`
     data {
       ...PhotoCarouselAdminDataFields
       ...VoteForAdminDataFields
+      ...SlidesAdminDataFields
     }
     config {
       ...PhotoCarouselAdminConfigFields
       ...VoteForAdminConfigFields
+      ...SlidesAdminConfigFields
     }
     viewConfig {
       ...PhotoCarouselViewConfigFields
       ...VoteForViewConfigFields
+      ...SlidesViewConfigFields
     }
     viewData {
       ...PhotoCarouselViewDataFields
       ...VoteForViewDataFields
+      ...SlidesViewDataFields
     }
     order
   }

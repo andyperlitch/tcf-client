@@ -15,6 +15,7 @@ import { useUpdateFns } from "./useUpdateFns";
 import { Badge } from "@/components/ui/badge";
 import { EditableTextarea } from "@/components/EditableTextarea";
 import { isMobile } from "react-device-detect";
+import { engagementDefinitions } from "@/engagements";
 
 export function AdminEngagementPage() {
   const { slug, engagementId } = useParamsSafe("slug", "engagementId");
@@ -25,6 +26,11 @@ export function AdminEngagementPage() {
       engagementId: Number(engagementId),
     },
   });
+
+  // Get the engagement definition
+  const engagementDef = data?.engagement?.type
+    ? engagementDefinitions[data?.engagement?.type]
+    : null;
 
   // Get the event
   const {
@@ -125,10 +131,14 @@ export function AdminEngagementPage() {
           </div>
         )}
         {/* SUBMISSIONS */}
-        <SubmissionsList
-          engagementId={engagement.id}
-          engagementType={engagement.type}
-        />
+        {engagementDef?.submissionsTable ? (
+          <engagementDef.submissionsTable engagement={engagement} />
+        ) : (
+          <SubmissionsList
+            engagementId={engagement.id}
+            engagementType={engagement.type}
+          />
+        )}
       </div>
     );
   }

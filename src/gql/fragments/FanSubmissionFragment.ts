@@ -7,6 +7,7 @@ gql`
     data {
       ...PhotoCarouselSubmissionFields
       ...VoteForSubmissionFields
+      ...SlidesSubmissionFields
     }
     reactions {
       ...FanReaction
