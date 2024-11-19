@@ -354,6 +354,11 @@ export type Reaction = {
   userId?: Maybe<Scalars['Int']['output']>;
 };
 
+export type ReactionsCreatedPayload = {
+  __typename?: 'ReactionsCreatedPayload';
+  reactions: Array<Reaction>;
+};
+
 export enum Role {
   Admin = 'ADMIN',
   Anon = 'ANON',
@@ -427,6 +432,7 @@ export type Subscription = {
   __typename?: 'Subscription';
   activeEngagementChanged?: Maybe<Engagement>;
   engagementViewDataChanged?: Maybe<EngagementViewDataChangedPayload>;
+  reactionsCreated?: Maybe<ReactionsCreatedPayload>;
   submissionDeleted?: Maybe<SubmissionDeletedPayload>;
 };
 
@@ -438,6 +444,11 @@ export type SubscriptionActiveEngagementChangedArgs = {
 
 export type SubscriptionEngagementViewDataChangedArgs = {
   engagementId: Scalars['Int']['input'];
+};
+
+
+export type SubscriptionReactionsCreatedArgs = {
+  submissionId: Scalars['Int']['input'];
 };
 
 
@@ -582,6 +593,8 @@ export type FanSubmissionFragment = { __typename?: 'Submission', id: number, cre
 export type StageEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, qrCodeCta?: string | null, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig: { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } };
 
 export type StageEventFragment = { __typename?: 'Event', id: number, name: string, live: boolean, slug: string, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, qrCodeCta?: string | null, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig: { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null };
+
+export type StageReactionFragment = { __typename?: 'Reaction', id: number, type: string, createdAt: any };
 
 export type StageSubmissionFragment = { __typename?: 'Submission', id: number, createdAt: any, data: { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> };
 
@@ -754,6 +767,13 @@ export type FanGetEventQueryVariables = Exact<{
 
 export type FanGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, live: boolean, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig: { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null } | null };
 
+export type FanGetSubmissionQueryVariables = Exact<{
+  submissionId: Scalars['Int']['input'];
+}>;
+
+
+export type FanGetSubmissionQuery = { __typename?: 'Query', submission?: { __typename?: 'Submission', id: number, createdAt: any, data: { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> } | null };
+
 export type FanGetSubmissionsQueryVariables = Exact<{
   engagementId: Scalars['Int']['input'];
 }>;
@@ -812,6 +832,13 @@ export type OnEngagementViewDataChangedSubscriptionVariables = Exact<{
 
 
 export type OnEngagementViewDataChangedSubscription = { __typename?: 'Subscription', engagementViewDataChanged?: { __typename?: 'EngagementViewDataChangedPayload', viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData' } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null };
+
+export type OnReactionsCreatedSubscriptionVariables = Exact<{
+  submissionId: Scalars['Int']['input'];
+}>;
+
+
+export type OnReactionsCreatedSubscription = { __typename?: 'Subscription', reactionsCreated?: { __typename?: 'ReactionsCreatedPayload', reactions: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> } | null };
 
 export type OnSubmissionDeletedSubscriptionVariables = Exact<{
   engagementId: Scalars['Int']['input'];
@@ -1111,6 +1138,13 @@ export const StageEventFragmentDoc = gql`
   }
 }
     ${StageEngagementFragmentDoc}`;
+export const StageReactionFragmentDoc = gql`
+    fragment StageReaction on Reaction {
+  id
+  type
+  createdAt
+}
+    `;
 export const StageSubmissionFragmentDoc = gql`
     fragment StageSubmission on Submission {
   id
@@ -1964,6 +1998,46 @@ export type FanGetEventQueryHookResult = ReturnType<typeof useFanGetEventQuery>;
 export type FanGetEventLazyQueryHookResult = ReturnType<typeof useFanGetEventLazyQuery>;
 export type FanGetEventSuspenseQueryHookResult = ReturnType<typeof useFanGetEventSuspenseQuery>;
 export type FanGetEventQueryResult = Apollo.QueryResult<FanGetEventQuery, FanGetEventQueryVariables>;
+export const FanGetSubmissionDocument = gql`
+    query fanGetSubmission($submissionId: Int!) {
+  submission(id: $submissionId) {
+    ...FanSubmission
+  }
+}
+    ${FanSubmissionFragmentDoc}`;
+
+/**
+ * __useFanGetSubmissionQuery__
+ *
+ * To run a query within a React component, call `useFanGetSubmissionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFanGetSubmissionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFanGetSubmissionQuery({
+ *   variables: {
+ *      submissionId: // value for 'submissionId'
+ *   },
+ * });
+ */
+export function useFanGetSubmissionQuery(baseOptions: Apollo.QueryHookOptions<FanGetSubmissionQuery, FanGetSubmissionQueryVariables> & ({ variables: FanGetSubmissionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FanGetSubmissionQuery, FanGetSubmissionQueryVariables>(FanGetSubmissionDocument, options);
+      }
+export function useFanGetSubmissionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FanGetSubmissionQuery, FanGetSubmissionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FanGetSubmissionQuery, FanGetSubmissionQueryVariables>(FanGetSubmissionDocument, options);
+        }
+export function useFanGetSubmissionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FanGetSubmissionQuery, FanGetSubmissionQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FanGetSubmissionQuery, FanGetSubmissionQueryVariables>(FanGetSubmissionDocument, options);
+        }
+export type FanGetSubmissionQueryHookResult = ReturnType<typeof useFanGetSubmissionQuery>;
+export type FanGetSubmissionLazyQueryHookResult = ReturnType<typeof useFanGetSubmissionLazyQuery>;
+export type FanGetSubmissionSuspenseQueryHookResult = ReturnType<typeof useFanGetSubmissionSuspenseQuery>;
+export type FanGetSubmissionQueryResult = Apollo.QueryResult<FanGetSubmissionQuery, FanGetSubmissionQueryVariables>;
 export const FanGetSubmissionsDocument = gql`
     query fanGetSubmissions($engagementId: Int!) {
   submissions(engagementId: $engagementId) {
@@ -2309,6 +2383,38 @@ export function useOnEngagementViewDataChangedSubscription(baseOptions: Apollo.S
       }
 export type OnEngagementViewDataChangedSubscriptionHookResult = ReturnType<typeof useOnEngagementViewDataChangedSubscription>;
 export type OnEngagementViewDataChangedSubscriptionResult = Apollo.SubscriptionResult<OnEngagementViewDataChangedSubscription>;
+export const OnReactionsCreatedDocument = gql`
+    subscription OnReactionsCreated($submissionId: Int!) {
+  reactionsCreated(submissionId: $submissionId) {
+    reactions {
+      ...StageReaction
+    }
+  }
+}
+    ${StageReactionFragmentDoc}`;
+
+/**
+ * __useOnReactionsCreatedSubscription__
+ *
+ * To run a query within a React component, call `useOnReactionsCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnReactionsCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnReactionsCreatedSubscription({
+ *   variables: {
+ *      submissionId: // value for 'submissionId'
+ *   },
+ * });
+ */
+export function useOnReactionsCreatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<OnReactionsCreatedSubscription, OnReactionsCreatedSubscriptionVariables> & ({ variables: OnReactionsCreatedSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnReactionsCreatedSubscription, OnReactionsCreatedSubscriptionVariables>(OnReactionsCreatedDocument, options);
+      }
+export type OnReactionsCreatedSubscriptionHookResult = ReturnType<typeof useOnReactionsCreatedSubscription>;
+export type OnReactionsCreatedSubscriptionResult = Apollo.SubscriptionResult<OnReactionsCreatedSubscription>;
 export const OnSubmissionDeletedDocument = gql`
     subscription OnSubmissionDeleted($engagementId: Int!) {
   submissionDeleted(engagementId: $engagementId) {

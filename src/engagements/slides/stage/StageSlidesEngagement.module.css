@@ -1,0 +1,41 @@
+.contentCard {
+  @apply rounded bg-white pl-12 pr-12 pt-8 pb-8 text-black w-1/2;
+}
+
+.contentCard h1 {
+  @apply text-6xl font-bold mb-4 font-hand;
+}
+
+.contentCard p {
+  @apply text-2xl;
+}
+
+.contentCard blockquote {
+  @apply border-l-4 border-gray-300 pl-4 mt-4;
+}
+
+@keyframes tiltImage {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(8deg);
+  }
+}
+
+.tiltImage {
+  animation: tiltImage 1s ease-out forwards alternate;
+}
+
+@keyframes tiltContent {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-4deg);
+  }
+}
+
+.tiltContent {
+  animation: tiltContent 1s ease-out forwards alternate;
+}

@@ -1,0 +1,15 @@
+.contentCard {
+  @apply rounded bg-white pl-12 pr-12 pt-36  pb-8 text-black m-4;
+}
+
+.contentCard h1 {
+  @apply text-5xl font-bold mb-4 font-hand;
+}
+
+.contentCard p {
+  @apply text-xl;
+}
+
+.contentCard blockquote {
+  @apply border-l-4 border-gray-300 pl-4 mt-4;
+}

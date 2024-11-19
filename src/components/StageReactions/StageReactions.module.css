@@ -1,0 +1,33 @@
+/* Goes from translateY(0) to translateY(-100vh), linear easing, 3s duration */
+@keyframes floatUp {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-120vh);
+  }
+}
+
+.floatUp {
+  animation: floatUp 4s linear forwards;
+}
+
+/* Rotates and grows, like a "jiggle" */
+@keyframes jiggle {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(10deg) scale(1.2);
+  }
+  50% {
+    transform: rotate(-10deg) scale(1.4);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.jiggle {
+  animation: jiggle 1s infinite;
+}

@@ -4,7 +4,7 @@ export function useImageLoader({
   url,
   onLoad,
 }: {
-  url?: string;
+  url: string | undefined | null;
   onLoad?: () => void;
 }) {
   const [imageLoaded, setImageLoaded] = useState(false);
