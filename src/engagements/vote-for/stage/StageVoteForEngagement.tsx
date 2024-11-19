@@ -186,16 +186,18 @@ const Choice = ({
             className={`absolute flex h-full w-full items-center justify-center`}
           />
         )}
-        <img
-          data-name="CHOICE-IMAGE"
-          src={url}
-          style={imageStyles}
-          className={`
-            rounded-full transition-opacity
+        {url && (
+          <img
+            data-name="CHOICE-IMAGE"
+            src={url}
+            style={imageStyles}
+            className={`
+              rounded-full transition-opacity
 
-            ${imageLoaded ? "opacity-100" : `opacity-0`}
-          `}
-        />
+              ${imageLoaded ? "opacity-100" : `opacity-0`}
+            `}
+          />
+        )}
       </div>
 
       <div

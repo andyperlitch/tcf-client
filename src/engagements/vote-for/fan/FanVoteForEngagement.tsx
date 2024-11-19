@@ -122,8 +122,8 @@ const Choice = ({
           boxShadow: `${isChosen ? `5px -5px` : `3px -3px`} 0 ${data.color}`,
         }}
         className={`
-          absolute -bottom-4 z-10 max-w-[30vw] rounded-lg bg-foreground pb-0
-          pl-4 pr-4 pt-0 font-hand text-3xl text-background
+          absolute -bottom-4 z-10 whitespace-nowrap rounded-lg bg-foreground
+          px-2 pb-0 pt-0 text-center font-hand text-3xl text-background
 
           ${isChosen ? styles.bounce : ""}
         `}
