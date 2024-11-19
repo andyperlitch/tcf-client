@@ -5,7 +5,7 @@ import {
   useStageGetSubmissionQuery,
 } from "@/gql/graphql";
 import { useMemo } from "react";
-import Markdown from "react-markdown";
+import { Markdown } from "@/components/Markdown";
 import styles from "./FanSlidesEngagement.module.css";
 import { useImageLoader } from "@/hooks/useImageLoader";
 import { toFullS3Url } from "@/utils/toFullS3Url";

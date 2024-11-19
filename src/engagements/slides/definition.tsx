@@ -9,7 +9,7 @@ import { FanSlidesEngagement } from "./fan/FanSlidesEngagement";
 import { CardStackIcon } from "@radix-ui/react-icons";
 import { SlidesDataHeaders, SlidesDataCells } from "./admin/submissions-table";
 import { CreateSlideForm } from "./admin/CreateSlideForm";
-import { SlidePage } from "./admin/SlidePage";
+import { AdminSlidePage } from "./admin/AdminSlidePage";
 
 export const slidesEngagementDefinition: EngagementDefinition<
   SlidesAdminConfig,
@@ -24,7 +24,7 @@ export const slidesEngagementDefinition: EngagementDefinition<
   submissionsTableDataCell: SlidesDataCells,
   adminSubmissionForm: CreateSlideForm,
   submissionsName: "Slides",
-  adminSubmissionPage: SlidePage,
+  adminSubmissionPage: AdminSlidePage,
   getInitialData: () => ({
     currentSlide: 0,
   }),

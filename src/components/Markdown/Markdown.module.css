@@ -1,0 +1,11 @@
+.markdown h1 {
+  @apply text-5xl font-bold mb-4 font-hand;
+}
+
+.markdown p {
+  @apply text-xl;
+}
+
+.markdown blockquote {
+  @apply border-l-4 border-gray-300 pl-4 mt-4;
+}

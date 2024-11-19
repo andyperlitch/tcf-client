@@ -4,9 +4,11 @@ import { Button } from "./ui/button";
 export function InlineConfirmCancel({
   confirm,
   cancel,
+  loading = false,
 }: {
   confirm: () => void;
   cancel: () => void;
+  loading?: boolean;
 }) {
   return (
     <div
@@ -15,7 +17,12 @@ export function InlineConfirmCancel({
         p-2 align-middle
       `}
     >
-      <Button size="sm" variant="constructive" onClick={confirm}>
+      <Button
+        size="sm"
+        variant="constructive"
+        onClick={confirm}
+        disabled={loading}
+      >
         <CheckIcon className="h-4 w-4" />
       </Button>
       <Button size="sm" variant="destructive" onClick={cancel}>

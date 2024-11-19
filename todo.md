@@ -22,13 +22,16 @@
 - [x] edit engagements in admin ui
 - [x] add voteFor config
 - [x] add pre-defined submissions (options)
-- [x] VoteFor engagement
+- [ ] edit slide
+- [-] VoteFor engagement
   - [ ] declare winner via timer
   - [ ] declare winner via admin
   - [ ] show winner on engagement stage
   - [ ] show winner on engagement fan
-- [ ] have engagement field for QR CTA text
-- [ ] incorporate Engagement Title
-- [ ] have approval mechanism for photo carousel
-- [ ] lock event from being updated while engagement is active
+- [x] have engagement field for QR CTA text
+- [x] incorporate Engagement Title
+- [-] have approval mechanism for photo carousel
+- [x] lock event from being updated while engagement is active
 - [ ] smaller admin nav on ipad
+- [ ] make reactions configurable for slides
+- [ ] NowPlaying engagement type
