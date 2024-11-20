@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
 import { useAdminGetEventsQuery } from "@/gql/graphql";
+import { DeleteEventButton } from "./DeleteEventButton";
 
 export function EventsList() {
   const { /* loading, error,  */ data } = useAdminGetEventsQuery();
@@ -20,6 +21,7 @@ export function EventsList() {
           <TableHeader>Name</TableHeader>
           <TableHeader>Description</TableHeader>
           <TableHeader>Date</TableHeader>
+          <TableHeader>Actions</TableHeader>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -30,6 +32,9 @@ export function EventsList() {
             </TableCell>
             <TableCell>{event.description}</TableCell>
             <TableCell>{format(event.date, "PPP")}</TableCell>
+            <TableCell>
+              <DeleteEventButton id={event.id} />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
