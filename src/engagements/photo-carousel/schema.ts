@@ -22,5 +22,6 @@ gql`
     unapprovedQueue
     unseenQueue
     seenQueuePointer
+    seenQueue
   }
 `;
