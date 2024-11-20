@@ -6,11 +6,7 @@ import { FanEngagementFragment } from "@/gql/graphql";
 import { useImageInput } from "@/hooks/useImagePreview";
 import { useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  CameraIcon,
-  CircleBackslashIcon,
-  ReloadIcon,
-} from "@radix-ui/react-icons";
+import { CameraIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { getRandomCaption } from "./getRandomCaption";
 import { cn } from "@/lib/utils";
@@ -18,6 +14,9 @@ import { Loader } from "@/components/Loader";
 import { useToast } from "@/hooks/use-toast";
 import { Nice } from "@/components/Nice";
 import { useCreateSubmission } from "@/hooks/useCreateSubmission";
+
+import styles from "@/styles/SwipeUp.module.css";
+
 const xToRotation = scaleLinear([-50, 50], [-5, 5]);
 
 export function NewPhotoForm({
@@ -108,9 +107,8 @@ export function NewPhotoForm({
 
   return (
     <div
-      className={`
-        flex h-screen w-screen flex-col items-center justify-center space-y-4
-      `}
+      data-name="NEW_PHOTO_FORM"
+      className={`flex h-screen w-screen flex-col items-center justify-center`}
     >
       {/* title */}
       <h1
@@ -125,51 +123,96 @@ export function NewPhotoForm({
         Funksgiving
       </h1>
       {/* subtitle */}
-      <p
-        className={cn("text-center font-hand text-3xl transition-opacity", {
-          "opacity-0": loading || succeeded,
-        })}
-      >
-        {previewSrc ? (
-          <>
-            👆
-            <br />
-            Swipe up to send ittt
-          </>
-        ) : (
-          engagement.description || "Caption contest!"
-        )}
-      </p>
+      {!previewSrc && (
+        <p
+          className={cn("text-center font-hand text-3xl transition-opacity", {
+            "opacity-0": loading || succeeded,
+          })}
+        >
+          {engagement.description || "Caption contest!"}
+        </p>
+      )}
 
       {/* polaroid */}
-      <div className="relative z-10" ref={polaroidRef}>
+      <div data-name="POLAROID" className="relative z-10" ref={polaroidRef}>
         <div
-          className="polaroid relative z-10 bg-white p-4"
+          data-name="POLAROID_SWIPER"
+          className="relative z-10 bg-slate-50 p-4"
           {...(previewSrc ? swipeHandlers : {})}
         >
-          {previewSrc ? (
-            <img className="w-[70vw]" src={previewSrc} alt="preview" />
-          ) : (
-            <div
-              data-name="photo-input-click-area"
-              onClick={choosePhoto}
-              className={`
-                flex h-[90vw] w-[70vw] flex-col items-center justify-center
-                border-8 border-dashed border-[#FFFFFF33] bg-slate-600
-                text-center text-2xl font-bold text-[#FFFFFF33]
-              `}
-            >
-              <CameraIcon className="h-16 w-16" />
-              <div>Share a photo</div>
-            </div>
-          )}
+          <div data-name="PHOTO_FRAME" className="relative">
+            {previewSrc ? (
+              <>
+                <img className="w-[70vw]" src={previewSrc} alt="preview" />
+                {/* swipe-to-send instructions */}
+                {previewSrc && (
+                  <div
+                    data-name="SWIPE_UP_TO_SEND"
+                    // className={`
+                    //   absolute left-1/2 top-1/2 flex -translate-x-1/2
+                    //   -translate-y-1/2 flex-col items-center justify-center
+                    //   text-center
+
+                    //   ${styles.matchOpacityToSwipeUp}
+                    // `}
+                    className={`
+                      absolute bottom-0 left-0 right-0 top-0 flex flex-col
+                      items-center justify-center bg-[#FFFFFF99] text-center
+
+                      ${styles.matchOpacityToSwipeUp}
+                    `}
+                  >
+                    <div
+                      className={`
+                        text-5xl
+
+                        ${styles.swipeUp}
+                      `}
+                    >
+                      👆
+                    </div>
+                    <div
+                      // className={`
+                      //   whitespace-nowrap rounded-lg bg-white px-2 py-1
+                      //   font-hand text-3xl font-bold text-background
+                      // `}
+                      className={`
+                        mt-4 whitespace-nowrap font-hand text-4xl font-bold
+                        text-background
+                      `}
+                    >
+                      SWIPE UP TO SEND
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div
+                data-name="photo-input-click-area"
+                onClick={choosePhoto}
+                className={`
+                  flex h-[90vw] w-[70vw] flex-col items-center justify-center
+                  border-8 border-dashed border-[#FFFFFF33] bg-slate-600
+                  text-center text-2xl font-bold text-[#FFFFFF33]
+                `}
+              >
+                <CameraIcon className="h-16 w-16" />
+                <div>1. Take a photo</div>
+                <div>2. Caption it</div>
+                <div>3. Swipe it 👆</div>
+              </div>
+            )}
+          </div>
+
           {/* caption input */}
-          <div className="mt-2 flex items-center gap-2">
+          <div className="mt-2 text-center text-sm text-muted-foreground">
+            caption
+          </div>
+          <div className="flex items-center gap-2">
             <Textarea
               ref={captionInputRef}
               className={`
-                grow border border-gray-50 font-hand text-2xl text-black
-                shadow-none
+                grow border-slate-200 font-hand text-2xl text-black shadow-inner
               `}
               placeholder="Add a caption..."
               value={caption}
@@ -177,13 +220,20 @@ export function NewPhotoForm({
             />
             <div className="flex flex-col gap-2">
               <Button
-                variant="default"
+                size="sm"
+                variant="informational"
                 onClick={() => setCaption(getRandomCaption())}
               >
-                <ReloadIcon className="h-4 w-4" />
+                {/* <ReloadIcon className="h-4 w-4" /> */}
+                Random
               </Button>
-              <Button variant="outline" onClick={() => setCaption("")}>
-                <CircleBackslashIcon className="h-4 w-4" />
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => setCaption("")}
+              >
+                {/* <CircleBackslashIcon className="h-4 w-4" /> */}
+                Clear
               </Button>
             </div>
           </div>
@@ -211,6 +261,7 @@ export function NewPhotoForm({
           ref={photoInputRef}
           type="file"
           name="photo"
+          accept="image/*"
           onChange={handleFileChange}
         />
       </form>
