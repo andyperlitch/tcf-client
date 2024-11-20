@@ -15,7 +15,12 @@ import { z } from "zod";
 import { Textarea } from "./ui/textarea";
 import { DatePicker } from "./ui/datepicker";
 import { useNavigate } from "react-router-dom";
-import { CreateEventInput, useAdminCreateEventMutation } from "@/gql/graphql";
+import {
+  CreateEventInput,
+  useAdminCreateEventMutation,
+  AdminGetEventsDocument,
+  AdminEventFragment,
+} from "@/gql/graphql";
 import { WithoutNull } from "@/types/common";
 
 const formSchema = z.object({
@@ -29,7 +34,21 @@ const formSchema = z.object({
 type CreateEventFormInput = WithoutNull<CreateEventInput>;
 
 export function CreateEventForm() {
-  const [createEvent, { loading, error }] = useAdminCreateEventMutation();
+  const [createEvent, { loading, error }] = useAdminCreateEventMutation({
+    update: (cache, { data: mutationData }) => {
+      const newEvent = mutationData?.createEvent;
+      if (!newEvent) return;
+
+      cache.updateQuery(
+        { query: AdminGetEventsDocument },
+        (existingData: { events: AdminEventFragment[] } | null) => {
+          return {
+            events: [...(existingData?.events || []), newEvent],
+          };
+        }
+      );
+    },
+  });
   const navigate = useNavigate();
 
   // 1. Define your form.
