@@ -6,7 +6,7 @@ import { FanEngagementFragment } from "@/gql/graphql";
 import { useImageInput } from "@/hooks/useImagePreview";
 import { useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { CameraIcon } from "@radix-ui/react-icons";
+import { ArrowUpIcon, CameraIcon, InputIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { getRandomCaption } from "./getRandomCaption";
 import { cn } from "@/lib/utils";
@@ -148,13 +148,6 @@ export function NewPhotoForm({
                 {previewSrc && (
                   <div
                     data-name="SWIPE_UP_TO_SEND"
-                    // className={`
-                    //   absolute left-1/2 top-1/2 flex -translate-x-1/2
-                    //   -translate-y-1/2 flex-col items-center justify-center
-                    //   text-center
-
-                    //   ${styles.matchOpacityToSwipeUp}
-                    // `}
                     className={`
                       absolute bottom-0 left-0 right-0 top-0 flex flex-col
                       items-center justify-center bg-[#FFFFFF99] text-center
@@ -172,10 +165,6 @@ export function NewPhotoForm({
                       👆
                     </div>
                     <div
-                      // className={`
-                      //   whitespace-nowrap rounded-lg bg-white px-2 py-1
-                      //   font-hand text-3xl font-bold text-background
-                      // `}
                       className={`
                         mt-4 whitespace-nowrap font-hand text-4xl font-bold
                         text-background
@@ -192,14 +181,21 @@ export function NewPhotoForm({
                 onClick={choosePhoto}
                 className={`
                   flex h-[90vw] w-[70vw] flex-col items-center justify-center
-                  border-8 border-dashed border-[#FFFFFF33] bg-slate-600
+                  gap-4 border-8 border-dashed border-[#FFFFFF33] bg-slate-600
                   text-center text-2xl font-bold text-[#FFFFFF33]
                 `}
               >
-                <CameraIcon className="h-16 w-16" />
-                <div>1. Take a photo</div>
-                <div>2. Caption it</div>
-                <div>3. Swipe it 👆</div>
+                <div className="flex gap-2">
+                  <CameraIcon className="h-8 w-8" /> Take a photo
+                </div>
+
+                <div className="flex gap-2">
+                  <InputIcon className="h-8 w-8" /> Caption it
+                </div>
+
+                <div className="flex gap-2">
+                  <ArrowUpIcon className="h-8 w-8" /> Swipe it 👆
+                </div>
               </div>
             )}
           </div>
