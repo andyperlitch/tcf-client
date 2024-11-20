@@ -30,6 +30,7 @@ import { Toaster } from "./components/ui/toaster";
 import { QuickSignup } from "./routes/QuickSignup";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { AdminEventControlPage } from "./routes/admin/event/AdminEventControlPage";
+import { EventStagesPage } from "./routes/stage/EventStagesPage";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,11 @@ const router = createBrowserRouter([
   {
     path: "/stage/:slug",
     element: <EventStageScreen />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/stage",
+    element: <EventStagesPage />,
     errorElement: <ErrorPage />,
   },
   {

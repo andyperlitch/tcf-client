@@ -48,6 +48,10 @@ export default {
           DEFAULT: "hsl(var(--informational))",
           foreground: "hsl(var(--informational-foreground))",
         },
+        advisory: {
+          DEFAULT: "hsl(var(--advisory))",
+          foreground: "hsl(var(--advisory-foreground))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

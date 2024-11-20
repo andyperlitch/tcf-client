@@ -1,8 +1,10 @@
 import styles from "@/styles/Radiate.module.css";
 
 export function Beacon({
+  className,
   state,
 }: {
+  className?: string;
   state: "active" | "inactive" | "pending" | "error";
 }) {
   return (
@@ -10,6 +12,7 @@ export function Beacon({
       className={`
         h-3 w-3 rounded-full
 
+        ${className}
         ${STATE_CLASSES[state]}
       `}
     />

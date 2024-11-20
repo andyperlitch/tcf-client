@@ -1,5 +1,6 @@
 import { CenteredMessage } from "../../CenteredMessage";
 import { useLeadSheetHtml } from "../../hooks/useLeadSheetHtml";
+import "./LeadSheet.css";
 
 export function LeadSheet({
   leadsheetUrl,

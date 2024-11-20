@@ -9,7 +9,7 @@ export function HomeButton() {
       <Button variant="outline" size="icon">
         <Link to="/">
           <HomeIcon className="h-[1.2rem] w-[1.2rem]" />
-          <span className="sr-only">Select setlist</span>
+          <span className="sr-only">Home</span>
         </Link>
       </Button>
     </div>

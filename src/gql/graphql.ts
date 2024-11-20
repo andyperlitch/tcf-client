@@ -800,6 +800,11 @@ export type StageGetEventQueryVariables = Exact<{
 
 export type StageGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, live: boolean, slug: string, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, qrCodeCta?: string | null, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig: { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null } | null };
 
+export type StageGetEventsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StageGetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: number, name: string, live: boolean, slug: string, description?: string | null, date?: any | null, location?: string | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, qrCodeCta?: string | null, description?: string | null, startTime?: any | null, endTime?: any | null, type: EngagementType, order: number, viewConfig: { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null }> };
+
 export type StageGetSubmissionQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
@@ -2195,6 +2200,45 @@ export type StageGetEventQueryHookResult = ReturnType<typeof useStageGetEventQue
 export type StageGetEventLazyQueryHookResult = ReturnType<typeof useStageGetEventLazyQuery>;
 export type StageGetEventSuspenseQueryHookResult = ReturnType<typeof useStageGetEventSuspenseQuery>;
 export type StageGetEventQueryResult = Apollo.QueryResult<StageGetEventQuery, StageGetEventQueryVariables>;
+export const StageGetEventsDocument = gql`
+    query stageGetEvents {
+  events {
+    ...StageEvent
+  }
+}
+    ${StageEventFragmentDoc}`;
+
+/**
+ * __useStageGetEventsQuery__
+ *
+ * To run a query within a React component, call `useStageGetEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStageGetEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStageGetEventsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStageGetEventsQuery(baseOptions?: Apollo.QueryHookOptions<StageGetEventsQuery, StageGetEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StageGetEventsQuery, StageGetEventsQueryVariables>(StageGetEventsDocument, options);
+      }
+export function useStageGetEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StageGetEventsQuery, StageGetEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StageGetEventsQuery, StageGetEventsQueryVariables>(StageGetEventsDocument, options);
+        }
+export function useStageGetEventsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<StageGetEventsQuery, StageGetEventsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<StageGetEventsQuery, StageGetEventsQueryVariables>(StageGetEventsDocument, options);
+        }
+export type StageGetEventsQueryHookResult = ReturnType<typeof useStageGetEventsQuery>;
+export type StageGetEventsLazyQueryHookResult = ReturnType<typeof useStageGetEventsLazyQuery>;
+export type StageGetEventsSuspenseQueryHookResult = ReturnType<typeof useStageGetEventsSuspenseQuery>;
+export type StageGetEventsQueryResult = Apollo.QueryResult<StageGetEventsQuery, StageGetEventsQueryVariables>;
 export const StageGetSubmissionDocument = gql`
     query stageGetSubmission($id: Int!) {
   submission(id: $id) {

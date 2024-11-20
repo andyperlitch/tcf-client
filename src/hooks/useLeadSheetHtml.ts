@@ -54,18 +54,18 @@ export function useLeadSheetHtml({ url }: { url: string | undefined }) {
           }
         });
 
-        // add "sectionTitle" class to every h3 inside of the first column
+        // add "leadSheetSectionTitle" class to every h3 inside of the first column
         const h3s = doc.querySelectorAll("table tr td:first-child h3");
         h3s.forEach((h3) => {
-          h3.classList.add("sectionTitle");
+          h3.classList.add("leadSheetSectionTitle");
         });
 
-        // add "recordingTimestamp" class to every 2nd span inside of an h3 in the first column
+        // add "leadSheetRecordingTimestamp" class to every 2nd span inside of an h3 in the first column
         const h3Spans = doc.querySelectorAll(
           "table tr td:first-child h3 span:nth-child(2)"
         );
         h3Spans.forEach((span) => {
-          span.classList.add("recordingTimestamp");
+          span.classList.add("leadSheetRecordingTimestamp");
         });
 
         // "unwrap" all img tags from their parent span tags
@@ -81,7 +81,7 @@ export function useLeadSheetHtml({ url }: { url: string | undefined }) {
           const parent = img.parentElement;
           const textContent = (parent?.textContent || "").trim();
           if (textContent) {
-            img.classList.add("inlineImage");
+            img.classList.add("leadSheetInlineImage");
           }
         });
 
@@ -93,11 +93,11 @@ export function useLeadSheetHtml({ url }: { url: string | undefined }) {
           img.removeAttribute("style");
         });
 
-        // add the "chords" class too all p tags in the 3rd column which begin with the character "|"
+        // add the "leadSheetChords" class too all p tags in the 3rd column which begin with the character "|"
         const chords = doc.querySelectorAll("table tr td:nth-child(3) p");
         chords.forEach((chord) => {
           if (chord.textContent?.trim().startsWith("|")) {
-            chord.classList.add("chords");
+            chord.classList.add("leadSheetChords");
           }
         });
 

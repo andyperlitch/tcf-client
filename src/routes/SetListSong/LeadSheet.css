@@ -1,8 +1,49 @@
-.leadSheetEditLink {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  z-index: 2;
+.leadSheetTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.leadSheetTable th,
+.leadSheetTable td {
+  border: 1px solid #ffffff11;
+  padding: 1rem 0.5rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.leadSheetTable tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.leadSheetTable td:nth-child(2) {
+  white-space: nowrap;
+}
+
+.leadSheetChords {
+  font-weight: bold;
+}
+
+.leadSheetTable td .lyric {
+  font-style: italic;
+}
+
+.leadSheetTable img {
+  max-width: 200px;
+}
+
+.leadSheetSectionTitle {
+  padding: 0;
+  @apply text-2xl font-bold;
+}
+
+.leadSheetRecordingTimestamp {
+  font-weight: lighter;
+  font-size: 70%;
+  color: #aaa;
+}
+
+.leadSheetInlineImage {
+  height: 4rem;
+  vertical-align: middle;
 }

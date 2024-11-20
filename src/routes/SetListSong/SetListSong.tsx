@@ -1,8 +1,7 @@
 import { isMobile } from "react-device-detect";
 import { useNavigate, useParams } from "react-router-dom";
-import "./SetListSong.css";
 import { useSetList } from "../../hooks/useSetList";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useGigSet } from "../../hooks/useGigSet";
 import { LeadSheet } from "./LeadSheet";
 import { ControlBar } from "./ControlBar";
@@ -14,11 +13,15 @@ import { SET_BREAK_TITLE } from "../../consts/songs";
 import { CenteredMessage } from "../../CenteredMessage";
 import { getPatOnTheBack } from "../../utils/getPatOnTheBack";
 import { HomeButton } from "@/components/HomeButton";
+import useLocalStorage from "use-local-storage";
 
 export function SetListSong() {
   const params = useParams();
   const navigate = useNavigate();
-  const [songView, setSongView] = useState<SongViewType>("leadsheet");
+  const [songView, setSongView] = useLocalStorage<SongViewType>(
+    "songView",
+    "leadsheet"
+  );
   const currentIndex = parseInt(params.songIndex || "0", 10);
   const { loading } = useSetList();
   const songs = useGigSet(params.setSlug!);
@@ -56,11 +59,13 @@ export function SetListSong() {
 
   return (
     <div
-      className="setlistRoot font-inter"
+      data-name="SETLIST_SONG"
+      className="relative flex h-full min-h-screen w-full flex-col"
       {...(isMobile ? {} : swipeHandlers)}
     >
       <HomeButton />
       <ControlBar
+        songs={songs}
         previousIndex={previousIndex}
         setSlug={params.setSlug!}
         nextIndex={nextIndex}

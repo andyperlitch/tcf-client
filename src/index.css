@@ -103,9 +103,12 @@ button:focus-visible {
     --constructive-foreground: 0 0% 9%;
     --informational: 220 70% 50%;
     --informational-foreground: 0 0% 98%;
+    /* advisory is more of a yellow warning color */
+    --advisory: 35 100% 50%;
+    --advisory-foreground: 0 0% 98%;
   }
   .dark {
-    --background: 19.4 88.6% 2.4%;
+    --background: 19.4 88.6% 2.4%; /* #0b0400 */
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -133,6 +136,8 @@ button:focus-visible {
     --constructive-foreground: 0 0% 98%;
     --informational: 220 70% 50%;
     --informational-foreground: 0 0% 98%;
+    --advisory: 35 100% 50%;
+    --advisory-foreground: 0 0% 98%;
   }
 }
 
