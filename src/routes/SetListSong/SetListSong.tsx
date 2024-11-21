@@ -60,11 +60,20 @@ export function SetListSong() {
   return (
     <div
       data-name="SETLIST_SONG"
-      className="relative flex h-full min-h-screen w-full flex-col"
+      className={`relative flex h-full min-h-screen w-full flex-col`}
       {...(isMobile ? {} : swipeHandlers)}
     >
       <HomeButton />
       <ControlBar
+        className={`
+          z-20
+
+          ${
+            isMobile
+              ? "fixed top-[100vh] -translate-y-full"
+              : `sticky top-0 border border-b`
+          }
+        `}
         songs={songs}
         previousIndex={previousIndex}
         setSlug={params.setSlug!}
