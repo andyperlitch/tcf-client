@@ -111,7 +111,7 @@ export function ControlBar({
             <Badge data-name="SONG_KEY" size="sm">
               {currentSong.Key}
             </Badge>
-            <span data-name="SONG_TEMPO" className="italic">
+            <span data-name="SONG_TEMPO" className="whitespace-nowrap italic">
               {currentSong.Tempo} bpm
             </span>
             <div
