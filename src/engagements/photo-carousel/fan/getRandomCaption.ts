@@ -1,22 +1,15 @@
 const captions = [
   "when you know the bartender",
-  "when you know the bartender",
-  "when you don't know the bartender",
   "when you don't know the bartender",
   "when you're not sure if you know the bartender",
   "when you're not sure if you don't know the bartender",
   "when the music is hittin",
-  "when the music is hittin",
-  "when the music is hittin",
   "me n the boys",
-  "hello there",
   "hello there",
   "This is the way.",
   "It is known.",
   "me n the boys",
-  "me n the fellas",
   "me n the gang",
-  "just rolled up",
   "just rolled up",
   "me n the girls",
   "me n the bitches",
@@ -52,6 +45,7 @@ const captions = [
   "This song's about us",
   "well well well...",
   "kisscam",
+  "i used to be cool",
 ];
 
 export function getRandomCaption() {
