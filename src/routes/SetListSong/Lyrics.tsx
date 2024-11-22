@@ -29,7 +29,7 @@ export function Lyrics({ lyricsUrl }: LyricsProps) {
   }
 
   return (
-    <div data-name="LYRICS" className="flex flex-col items-center">
+    <div data-name="LYRICS" className="flex flex-col items-center pb-64">
       <div
         data-name="FONT_SIZE_SELECTOR"
         className={`my-2 flex items-center gap-2`}
