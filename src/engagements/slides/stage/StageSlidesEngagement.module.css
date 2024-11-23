@@ -7,7 +7,11 @@
 }
 
 .contentCard p {
-  @apply text-2xl;
+  @apply text-2xl mb-2 mt-2;
+}
+
+.contentCard ul {
+  @apply list-disc pl-4 mb-4;
 }
 
 .contentCard blockquote {

@@ -9,3 +9,7 @@
 .markdown blockquote {
   @apply border-l-4 border-gray-300 pl-4 mt-4;
 }
+
+.markdown ul {
+  list-style: disc;
+}
