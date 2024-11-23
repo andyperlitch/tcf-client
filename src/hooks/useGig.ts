@@ -35,7 +35,6 @@ export function useGig(gigSlug: string | undefined) {
       }
     }
     setSets(sets);
-    console.log(`WHYYYYYYYYY`, sets);
     setLoading(false);
   }, [songs, gigMeta, songsLoading]);
 
