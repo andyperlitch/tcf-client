@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMasterSongList } from "./useMasterSongList";
 import { GIGS_BY_SLUG } from "@/consts/gigs";
 import { SetListSong } from "@/types/songlist";
@@ -7,15 +7,16 @@ import { SetListSong } from "@/types/songlist";
 const SET_BREAK_TITLE = "SET_BREAK";
 
 export function useGig(gigSlug: string | undefined) {
-  const { songs, loading } = useMasterSongList();
-  console.log(`andy songs`, songs);
+  const { songs, loading: songsLoading } = useMasterSongList();
+  const [loading, setLoading] = useState(songsLoading);
+  const [sets, setSets] = useState<SetListSong[][]>([]);
   const gigMeta = useMemo(
     () => (gigSlug ? GIGS_BY_SLUG[gigSlug] : undefined),
     [gigSlug]
   );
-  return useMemo(() => {
-    if (!gigMeta) {
-      return { sets: [], gigMeta: undefined };
+  useEffect(() => {
+    if (!gigMeta || songsLoading || songs.length === 0) {
+      return;
     }
     const allGigSongs = songs
       .filter((song) => Boolean(song[gigMeta.fieldName]))
@@ -33,7 +34,10 @@ export function useGig(gigSlug: string | undefined) {
         currentSet.push(song);
       }
     }
+    setSets(sets);
+    console.log(`WHYYYYYYYYY`, sets);
+    setLoading(false);
+  }, [songs, gigMeta, songsLoading]);
 
-    return { sets, gigMeta, loading };
-  }, [songs, gigMeta, loading]);
+  return { sets, loading, gigMeta };
 }

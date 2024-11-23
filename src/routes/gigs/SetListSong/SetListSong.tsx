@@ -136,7 +136,7 @@ export function SetListSong() {
       ) : (
         <>
           {songView === "leadsheet" && (
-            <LeadSheet leadsheetUrl={currentSong!.LeadSheet} />
+            <LeadSheet leadsheetUrl={currentSong?.LeadSheet} />
           )}
           {songView === "lyrics" && <Lyrics lyricsUrl={currentSong!.Lyrics} />}
           {songView === "info" && <SongInfo song={currentSong!} />}

@@ -21,7 +21,7 @@ export function LeadSheet({
 
   return (
     <div
-      className="leadSheet"
+      className="leadSheet pb-32"
       dangerouslySetInnerHTML={{ __html: html || "" }}
     />
   );
