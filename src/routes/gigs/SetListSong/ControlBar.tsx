@@ -49,6 +49,7 @@ export function ControlBar({
   currentSong,
   setSongView,
 }: ControlBarProps) {
+  const viewPortWidth = window.innerWidth;
   return (
     <div
       data-name="SETLIST_CONTROL_BAR"
@@ -129,7 +130,7 @@ export function ControlBar({
             flex items-center justify-between
 
             ${
-              isMobile
+              viewPortWidth < 768
                 ? `
                   absolute bottom-full left-1/2 w-[80vw] max-w-[300px]
                   -translate-x-1/2 -translate-y-2 rounded border bg-background

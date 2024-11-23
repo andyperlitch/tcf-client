@@ -30,6 +30,8 @@ export function SetListSong() {
     "leadsheet"
   );
   const { sets, loading } = useGig(gigSlug!);
+  const viewPortWidth = window.innerWidth;
+  const isCellPhone = viewPortWidth < 768;
 
   const { currentSong, previousLink, nextLink } = useMemo(() => {
     let currentSong: SetListSongType | undefined;
@@ -117,7 +119,7 @@ export function SetListSong() {
           z-20
 
           ${
-            isMobile
+            isCellPhone
               ? "fixed top-[100vh] -translate-y-full"
               : `sticky top-0 border border-b`
           }
