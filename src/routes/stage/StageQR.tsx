@@ -61,7 +61,7 @@ export const StageQR = memo(
         <p
           data-name="STAGE-QR-TEXT"
           style={stageQrTextStyles}
-          className={`whitespace-nowrap text-center font-hand text-4xl`}
+          className={`whitespace-nowrap text-center font-hand text-5xl`}
         >
           {event?.activeEngagement?.qrCodeCta || lastCtaText.current}
         </p>
