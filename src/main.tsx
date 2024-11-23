@@ -10,12 +10,12 @@ import {
 import "./index.css";
 import Home from "./routes/home/home";
 import ErrorPage from "./error-page";
-import { SetList } from "./routes/SetList";
-import { SetListSong } from "./routes/SetListSong";
+import { Gig } from "./routes/gigs/Gig";
+import { SetListSong } from "./routes/gigs/SetListSong";
 import { EventFanScreen } from "./routes/fan/EventFanScreen";
-import { SetListProvider } from "./providers/SetListProvider";
+import { MasterSongListProvider } from "./providers/MasterSongListProvider";
 import { ThemeProvider } from "./providers/ThemeProvider";
-import { Sets } from "./routes/Sets";
+import { Gigs } from "./routes/gigs/Gigs";
 import { ApolloProvider } from "./providers/ApolloProvider";
 import { Login } from "./routes/Login";
 import { ProtectedArea } from "./components/ProtectedArea";
@@ -66,26 +66,31 @@ const router = createBrowserRouter([
   {
     // Set List pages
     element: (
-      <SetListProvider>
+      <MasterSongListProvider>
         <Outlet />
-      </SetListProvider>
+      </MasterSongListProvider>
     ),
     children: [
       {
-        path: "/sets/:setSlug",
-        element: <SetList />,
-      },
-      {
-        path: "/sets/:setSlug/:songIndex",
-        element: <SetListSong />,
-      },
-      {
-        path: "/sets",
-        element: <Sets />,
+        path: "/sets/*",
+        element: <Navigate to="/gigs" />,
       },
       {
         path: "/setlist",
-        element: <Navigate to="/sets/funks-giving" />,
+        element: <Navigate to="/gigs" />,
+      },
+
+      {
+        path: "/gigs/:gigSlug/sets/:setIndex/:songIndex",
+        element: <SetListSong />,
+      },
+      {
+        path: "/gigs/:gigSlug",
+        element: <Gig />,
+      },
+      {
+        path: "/gigs",
+        element: <Gigs />,
       },
     ],
   },

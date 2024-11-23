@@ -1,6 +1,6 @@
 import { ModeToggle } from "@/components/ModeToggle";
 import { useAuth } from "@/hooks/useAuth";
-import { SetListPicker } from "@/components/SetListPicker";
+import { GigPicker } from "@/components/GigPicker";
 import { hasRole } from "@/utils/hasRole";
 import { Role } from "@/gql/graphql";
 import { FunksgivingInfo } from "./FunksgivingInfo";
@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <ModeToggle />
-      {hasRole(user, [Role.Admin, Role.Bandmate]) && <SetListPicker />}
+      {hasRole(user, [Role.Admin, Role.Bandmate]) && <GigPicker />}
       <div
         data-name="MAIN-CONTENT"
         className={`

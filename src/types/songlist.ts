@@ -1,4 +1,4 @@
-import type { SetField } from "@/consts/sets";
+import type { GigField } from "@/consts/gigs";
 import { NumericKeys } from "./common";
 
 export interface SetListSongStatic {
@@ -24,11 +24,11 @@ export interface SetListSongStatic {
 
 type SetListSongStaticNumericField = NumericKeys<SetListSongStatic>;
 
-export type SetListSong = SetListSongStatic & Record<SetField, string>;
-export type SetListSongField = keyof SetListSong | SetField;
-export type SetListSongNumericField = SetListSongStaticNumericField | SetField;
+export type SetListSong = SetListSongStatic & Record<GigField, string>;
+export type SetListSongField = keyof SetListSong | GigField;
+export type SetListSongNumericField = SetListSongStaticNumericField | GigField;
 
-export interface SetListContextType {
+export interface MasterSongListContextType {
   songs: SetListSong[];
   loading: boolean;
 }

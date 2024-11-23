@@ -1,19 +1,19 @@
 import { HomeButton } from "@/components/HomeButton";
 import { ModeToggle } from "@/components/ModeToggle";
-import { SETS } from "@/consts/sets";
+import { GIGS } from "@/consts/gigs";
 import { Link } from "react-router-dom";
 
-export function Sets() {
+export function Gigs() {
   return (
     <>
       <HomeButton />
-      <div className="max-w-5xl mx-auto justify-center relative z-[2] p-4">
-        <h2 className="text-6xl text-center pt-8 mb-8 font-hand">Set Lists</h2>
+      <div className="relative z-[2] mx-auto max-w-5xl justify-center p-4">
+        <h2 className="mb-8 pt-8 text-center font-hand text-6xl">Gigs</h2>
         <ol className="setlist">
-          {SETS.map((setList, i) => (
+          {GIGS.map((gig, i) => (
             <li key={i} className="text-3xl">
-              <Link to={`/sets/${setList.slug}`} className="pl-8 p-2 block">
-                {setList.label}
+              <Link to={`/gigs/${gig.slug}`} className="block p-2 pl-8">
+                {gig.label}
               </Link>
             </li>
           ))}

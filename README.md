@@ -49,9 +49,9 @@ The `--host` flag is optional, but recommended if you want to access the app fro
 This app has a few basic pages:
 
 - **Home**: landing page for thecasualfunk.com. Component located at `src/routes/root.tsx`.
-- **Setlists**: for use by the band during practice and live shows.
+- **Gigs**: for use by the band during practice and live shows.
   - component: `src/routes/SetList.tsx`
-  - route: `/sets/:setSlug`
+  - route: `/gigs/:gigSlug`
 - **Admin**: for managing the site, but right now mostly around managing events and their engagements.
   - primary component: `src/routes/admin/events.tsx`
   - route: `/admin/events`

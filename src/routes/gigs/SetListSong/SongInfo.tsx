@@ -1,4 +1,4 @@
-import { SetListSong } from "../../types/setlist";
+import { SetListSong } from "@/types/songlist";
 import "./SongInfo.css";
 
 export function SongInfo({ song }: { song: SetListSong }) {

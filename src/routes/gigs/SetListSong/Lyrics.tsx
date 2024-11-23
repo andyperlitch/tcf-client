@@ -1,5 +1,5 @@
-import { CenteredMessage } from "../../CenteredMessage";
-import { useLyricsHtml } from "../../hooks/useLyricsHtml";
+import { CenteredMessage } from "@/components/CenteredMessage";
+import { useLyricsHtml } from "@/hooks/useLyricsHtml";
 import styles from "./Lyrics.module.css";
 import { Button } from "@/components/ui/button";
 import useLocalStorage from "use-local-storage";

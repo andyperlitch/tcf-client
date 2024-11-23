@@ -7,21 +7,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SETS } from "@/consts/sets";
+import { GIGS } from "@/consts/gigs";
 import { Link } from "react-router-dom";
 
-export function SetListPicker() {
+export function GigPicker() {
   return (
-    <div data-name="SET-LIST-PICKER" className="fixed bottom-2 right-2 z-10">
+    <div data-name="GIG-PICKER" className="fixed bottom-2 right-2 z-10">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon">
             <ArchiveIcon className="absolute h-[1.2rem] w-[1.2rem]" />
-            <span className="sr-only">Select setlist</span>
+            <span className="sr-only">Select gig</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          {SETS.map((set) => (
+          {GIGS.map((set) => (
             <Link key={set.slug} to={`/sets/${set.slug}`}>
               <DropdownMenuItem>{set.label}</DropdownMenuItem>
             </Link>
