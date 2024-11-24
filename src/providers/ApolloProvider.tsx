@@ -50,6 +50,10 @@ const wsLink = new GraphQLWsLink(
     url: wsUri,
     retryAttempts: 1000, // Maximum number of retry attempts
     shouldRetry: () => true, // Always attempt to retry the connection
+    connectionParams: {
+      // Add this to pass cookies/auth headers through WebSocket connection
+      credentials: "include",
+    },
   })
 );
 

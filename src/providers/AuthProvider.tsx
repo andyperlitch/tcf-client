@@ -18,6 +18,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     onError: () => {
       setUser(null);
     },
+    fetchPolicy: "network-only",
+    errorPolicy: "all",
   });
 
   return (
