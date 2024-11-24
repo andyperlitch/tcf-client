@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { GigPicker } from "@/components/GigPicker";
 import { hasRole } from "@/utils/hasRole";
 import { Role } from "@/gql/graphql";
-import { FunksgivingInfo } from "./FunksgivingInfo";
+// import { FunksgivingInfo } from "./FunksgivingInfo";
 import { useFontLoader } from "@/hooks/useFontLoader";
 
 export default function Home() {
@@ -44,7 +44,7 @@ export default function Home() {
           📍 Santa Cruz, CA
         </h2>
 
-        {<FunksgivingInfo />}
+        {/* {<FunksgivingInfo />} */}
 
         <div
           data-name="BOTTOM-INFO"
