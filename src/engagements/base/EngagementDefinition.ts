@@ -9,6 +9,10 @@ import {
 } from "@/gql/graphql";
 import { FC } from "react";
 
+export interface TableHeaderProps {
+  engagement: AdminEngagementFragment;
+}
+
 export interface DataCellProps {
   submission: AdminSubmissionFragment;
   engagement: AdminEngagementFragment;
@@ -31,7 +35,7 @@ export interface EngagementDefinition<
    * The name of the submission type (plural), used in the SubmissionsList table
    */
   submissionsName?: string;
-  submissionsTableHeaders?: FC;
+  submissionsTableHeaders?: FC<TableHeaderProps>;
   submissionsTableDataCell?: FC<DataCellProps>;
   adminControlView?: FC<{ engagement: AdminEngagementFragment }>;
   adminSubmissionForm?: FC<{
