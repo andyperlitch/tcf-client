@@ -73,7 +73,7 @@ export function SubmissionsList({
           )}
           <TableRow>
             {isMobile ? null : <TableHeader>ID</TableHeader>}
-            <DataHeaders />
+            <DataHeaders engagement={engagement} />
             <TableHeader>Actions</TableHeader>
           </TableRow>
         </TableHead>
