@@ -10,15 +10,16 @@ import {
 import "./index.css";
 import Home from "./routes/home/home";
 import ErrorPage from "./error-page";
-import { Gig } from "./routes/gigs/Gig";
-import { SetListSong } from "./routes/gigs/SetListSong";
-import { EventFanScreen } from "./routes/fan/EventFanScreen";
+import { ProtectedArea } from "./components/ProtectedArea";
 import { MasterSongListProvider } from "./providers/MasterSongListProvider";
 import { ThemeProvider } from "./providers/ThemeProvider";
+import { AnalyticsProvider } from "./providers/AnalyticsProvider";
 import { Gigs } from "./routes/gigs/Gigs";
 import { ApolloProvider } from "./providers/ApolloProvider";
 import { Login } from "./routes/Login";
-import { ProtectedArea } from "./components/ProtectedArea";
+import { Gig } from "./routes/gigs/Gig";
+import { SetListSong } from "./routes/gigs/SetListSong";
+import { EventFanScreen } from "./routes/fan/EventFanScreen";
 import { AdminHome } from "./routes/admin/home";
 import { AuthProvider } from "./providers/AuthProvider";
 import { AdminEventPage } from "./routes/admin/event";
@@ -132,15 +133,17 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ApolloProvider>
-      <AuthProvider>
-        <ThemeProvider defaultTheme="dark" storageKey="tcf-ui-theme">
-          <TooltipProvider>
-            <RouterProvider router={router} />
-          </TooltipProvider>
-          <Toaster />
-        </ThemeProvider>
-      </AuthProvider>
-    </ApolloProvider>
+    <AnalyticsProvider>
+      <ApolloProvider>
+        <AuthProvider>
+          <ThemeProvider defaultTheme="dark" storageKey="tcf-ui-theme">
+            <TooltipProvider>
+              <RouterProvider router={router} />
+            </TooltipProvider>
+            <Toaster />
+          </ThemeProvider>
+        </AuthProvider>
+      </ApolloProvider>
+    </AnalyticsProvider>
   </React.StrictMode>
 );
