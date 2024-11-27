@@ -2,12 +2,13 @@ import { useSwipeable } from "react-swipeable";
 import { useEffect } from "react";
 import { useState } from "react";
 import { scaleLinear } from "d3-scale";
-import { FanEngagementFragment } from "@/gql/graphql";
+import { FanEngagementFragment, PhotoCarouselViewConfig } from "@/gql/graphql";
 import { useImageInput } from "@/hooks/useImagePreview";
 import { useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowUpIcon, CameraIcon, InputIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { getRandomCaption } from "./getRandomCaption";
 import { cn } from "@/lib/utils";
 import { Loader } from "@/components/Loader";
@@ -33,7 +34,11 @@ export function NewPhotoForm({
     },
   });
   const captionInputRef = useRef<HTMLTextAreaElement>(null);
+  const viewConfig = engagement.viewConfig as PhotoCarouselViewConfig;
   const [caption, setCaption] = useState(getRandomCaption());
+  const [sharingPermissionGranted, setSharingPermissionGranted] = useState<
+    boolean | "indeterminate"
+  >(viewConfig.askSharePermission ? true : false); // if asking permission, default to true
   const { toast } = useToast();
 
   const polaroidRef = useRef<HTMLDivElement>(null);
@@ -50,6 +55,7 @@ export function NewPhotoForm({
     toData: (url?: string) => ({
       photoUrl: url,
       caption,
+      sharingPermissionGranted,
     }),
   });
 
@@ -108,26 +114,20 @@ export function NewPhotoForm({
   return (
     <div
       data-name="NEW_PHOTO_FORM"
-      className={`flex h-screen w-screen flex-col items-center justify-center`}
+      // height set to 85vh to account for the navigation bar in mobile browsers
+      className={`
+        flex h-[85vh] w-screen flex-col items-center justify-center space-y-4
+      `}
     >
-      {/* title */}
-      <h1
-        className={`
-          ${previewSrc ? "opacity-0" : "opacity-100"}
-
-          absolute left-0 top-0 mt-4 h-10 w-full
-          bg-[url('/funksgiving-fan-title.png')] bg-contain bg-center
-          bg-no-repeat -indent-[1000px] text-4xl font-bold
-        `}
-      >
-        Funksgiving
-      </h1>
-      {/* subtitle */}
+      {/* description */}
       {!previewSrc && (
         <p
-          className={cn("text-center font-hand text-3xl transition-opacity", {
-            "opacity-0": loading || succeeded,
-          })}
+          className={cn(
+            "pt-4 text-center font-hand text-3xl transition-opacity",
+            {
+              "opacity-0": loading || succeeded,
+            }
+          )}
         >
           {engagement.description || "Caption contest!"}
         </p>
@@ -233,6 +233,38 @@ export function NewPhotoForm({
               </Button>
             </div>
           </div>
+          {(viewConfig.askSharePermission || viewConfig.sharePrompt) && (
+            <div
+              data-name="SHARE_PROMPT"
+              className={`mt-2 flex w-[70vw] justify-between p-2`}
+            >
+              <div
+                className={`
+                  ${viewConfig.askSharePermission ? "w-2/3" : "w-full"}
+
+                  flex-grow-0 text-sm text-muted-foreground
+                `}
+              >
+                {viewConfig.sharePrompt}
+              </div>
+              {viewConfig.askSharePermission && (
+                <div className="flex flex-grow-0 items-center gap-2">
+                  <label
+                    className={`
+                      flex items-center gap-2 font-bold text-background
+                    `}
+                  >
+                    Yes{" "}
+                    <Checkbox
+                      className="flex-0"
+                      checked={sharingPermissionGranted}
+                      onCheckedChange={setSharingPermissionGranted}
+                    />
+                  </label>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
