@@ -35,97 +35,106 @@ import { EventStagesPage } from "./routes/stage/EventStagesPage";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Home />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/stage/:slug",
-    element: <EventStageScreen />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/stage",
-    element: <EventStagesPage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/e/:slug",
-    element: <EventFanScreen />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/quick-signup",
-    element: <QuickSignup />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    // Set List pages
     element: (
-      <MasterSongListProvider>
+      <AnalyticsProvider>
         <Outlet />
-      </MasterSongListProvider>
+      </AnalyticsProvider>
     ),
     children: [
       {
-        path: "/sets/*",
-        element: <Navigate to="/gigs" />,
+        path: "/",
+        element: <Home />,
+        errorElement: <ErrorPage />,
       },
       {
-        path: "/setlist",
-        element: <Navigate to="/gigs" />,
+        path: "/login",
+        element: <Login />,
+        errorElement: <ErrorPage />,
       },
+      {
+        path: "/stage/:slug",
+        element: <EventStageScreen />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/stage",
+        element: <EventStagesPage />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/e/:slug",
+        element: <EventFanScreen />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/quick-signup",
+        element: <QuickSignup />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        // Set List pages
+        element: (
+          <MasterSongListProvider>
+            <Outlet />
+          </MasterSongListProvider>
+        ),
+        children: [
+          {
+            path: "/sets/*",
+            element: <Navigate to="/gigs" />,
+          },
+          {
+            path: "/setlist",
+            element: <Navigate to="/gigs" />,
+          },
 
-      {
-        path: "/gigs/:gigSlug/sets/:setIndex/:songIndex",
-        element: <SetListSong />,
+          {
+            path: "/gigs/:gigSlug/sets/:setIndex/:songIndex",
+            element: <SetListSong />,
+          },
+          {
+            path: "/gigs/:gigSlug",
+            element: <Gig />,
+          },
+          {
+            path: "/gigs",
+            element: <Gigs />,
+          },
+        ],
       },
       {
-        path: "/gigs/:gigSlug",
-        element: <Gig />,
-      },
-      {
-        path: "/gigs",
-        element: <Gigs />,
-      },
-    ],
-  },
-  {
-    // Admin pages
-    element: (
-      <ProtectedArea roles={["ADMIN"]} redirectTo="/login?redirect=$path">
-        <Outlet />
-      </ProtectedArea>
-    ),
-    children: [
-      {
-        path: "/admin",
-        element: <AdminHome />,
-      },
-      {
-        path: "/admin/events",
-        element: <AdminEvents />,
-      },
-      {
-        path: "/admin/events/:slug",
-        element: <AdminEventPage />,
-      },
-      {
-        path: "/admin/events/:slug/control",
-        element: <AdminEventControlPage />,
-      },
-      {
-        path: "/admin/events/:slug/engagements/:engagementId",
-        element: <AdminEngagementPage />,
-      },
-      {
-        path: "/admin/events/:slug/engagements/:engagementId/submissions/:submissionId",
-        element: <AdminSubmissionPage />,
+        // Admin pages
+        element: (
+          <ProtectedArea roles={["ADMIN"]} redirectTo="/login?redirect=$path">
+            <Outlet />
+          </ProtectedArea>
+        ),
+        children: [
+          {
+            path: "/admin",
+            element: <AdminHome />,
+          },
+          {
+            path: "/admin/events",
+            element: <AdminEvents />,
+          },
+          {
+            path: "/admin/events/:slug",
+            element: <AdminEventPage />,
+          },
+          {
+            path: "/admin/events/:slug/control",
+            element: <AdminEventControlPage />,
+          },
+          {
+            path: "/admin/events/:slug/engagements/:engagementId",
+            element: <AdminEngagementPage />,
+          },
+          {
+            path: "/admin/events/:slug/engagements/:engagementId/submissions/:submissionId",
+            element: <AdminSubmissionPage />,
+          },
+        ],
       },
     ],
   },
@@ -133,17 +142,15 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AnalyticsProvider>
-      <ApolloProvider>
-        <AuthProvider>
-          <ThemeProvider defaultTheme="dark" storageKey="tcf-ui-theme">
-            <TooltipProvider>
-              <RouterProvider router={router} />
-            </TooltipProvider>
-            <Toaster />
-          </ThemeProvider>
-        </AuthProvider>
-      </ApolloProvider>
-    </AnalyticsProvider>
+    <ApolloProvider>
+      <AuthProvider>
+        <ThemeProvider defaultTheme="dark" storageKey="tcf-ui-theme">
+          <TooltipProvider>
+            <RouterProvider router={router} />
+          </TooltipProvider>
+          <Toaster />
+        </ThemeProvider>
+      </AuthProvider>
+    </ApolloProvider>
   </React.StrictMode>
 );
