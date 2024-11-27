@@ -1,12 +1,44 @@
 import * as amplitude from "@amplitude/analytics-browser";
+import { createContext, useEffect, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 
 const AMPLITUDE_API_KEY = "2032f99eade4ad6d54c694c81ff25c9b";
 
-amplitude.init(AMPLITUDE_API_KEY);
+amplitude.init(AMPLITUDE_API_KEY, {
+  autocapture: true,
+});
+
+export const AnalyticsContext = createContext<{
+  trackEvent: (eventName: string, eventData?: Record<string, any>) => void;
+}>({
+  trackEvent: () => {
+    console.warn("AnalyticsContext not provided!");
+  },
+});
 
 /**
  * In the future, we can provide wrappers for sending analytics events
  */
 export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
-  return children;
+  const location = useLocation();
+
+  useEffect(() => {
+    const path = location.pathname + location.search;
+    amplitude.track("Page Viewed", { path });
+  }, [location]);
+
+  const value = useMemo(
+    () => ({
+      trackEvent: (eventName: string, eventData?: Record<string, any>) => {
+        amplitude.track(eventName, eventData);
+      },
+    }),
+    []
+  );
+
+  return (
+    <AnalyticsContext.Provider value={value}>
+      {children}
+    </AnalyticsContext.Provider>
+  );
 }
