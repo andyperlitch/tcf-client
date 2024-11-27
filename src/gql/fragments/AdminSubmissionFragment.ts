@@ -8,6 +8,7 @@ gql`
       ...PhotoCarouselSubmissionFields
       ...VoteForSubmissionFields
       ...SlidesSubmissionFields
+      ...NowPlayingSubmissionFields
     }
     createdAt
     reactions {

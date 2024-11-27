@@ -89,4 +89,97 @@ Reactions are similar to submissions, but they are a simpler model. They are use
 
 ## Creating a new engagement type
 
-_todo_
+0. Follow the instructions in the server's readme to add your new engagement type.
+
+1. Create a new folder under `src/engagements/`, e.g. `src/engagements/raffle`.
+
+2. Inside this folder, create a file called `schema.ts`. This is where you will define the 5 GraphQL fragments for this engagement type's config, data, submission, and admin config data field types:
+
+```ts
+import { gql } from "@apollo/client";
+
+gql`
+  fragment RaffleAdminConfigFields on RaffleAdminConfig {
+    # ...
+  }
+  fragment RaffleViewConfigFields on RaffleViewConfig {
+    # ...
+  }
+  fragment RaffleAdminDataFields on RaffleAdminData {
+    # ...
+  }
+  fragment RaffleViewDataFields on RaffleViewData {
+    # ...
+  }
+  fragment RaffleSubmissionFields on RaffleSubmissionData {
+    # ...
+  }
+`;
+```
+
+3. Spread the fragments into the following files accordingly:
+
+- `AdminEngagementFragment` type in `src/gql/fragments/AdminEngagementFragment.ts`
+- `FanEngagementFragment` type in `src/gql/fragments/FanEngagementFragment.ts`
+- `StageEngagementFragment` type in `src/gql/fragments/StageEngagementFragment.ts`
+- `AdminSubmissionFragment` type in `src/gql/fragments/AdminSubmissionFragment.ts`
+- `FanSubmissionFragment` type in `src/gql/fragments/FanSubmissionFragment.ts`
+- `StageSubmissionFragment` type in `src/gql/fragments/StageSubmissionFragment.ts`
+
+4. Create a folder called `fan` inside your new engagement folder, and create a view file that will be used to render the fan-facing part of the engagement. It should accept a prop of `engagement` which will be the fan-facing data for the engagement. For example, assuming the name of your engagement is `RAFFLE`, it might be `FanRaffleEngagement.tsx`:
+
+```tsx
+export function FanRaffleEngagement({
+  engagement,
+}: {
+  engagement: FanEngagementFragment;
+}) {
+  return <div>Raffle screen!</div>;
+}
+```
+
+5. Create a folder called `stage` inside your new engagement folder, and create a view file that will be used to render the stage-facing part of the engagement. It should accept a prop of `engagement` which will be the stage-facing data for the engagement. For example, assuming the name of your engagement is `RAFFLE`, it might be `StageRaffleEngagement.tsx`:
+
+```tsx
+export function StageRaffleEngagement({
+  engagement,
+}: {
+  engagement: StageEngagementFragment;
+}) {
+  return <div>Raffle stage screen!</div>;
+}
+```
+
+6. Create a file called `definition.tsx` inside your new engagement folder. This is where you will define the engagement's definition:
+
+```ts
+import {
+  EngagementType,
+  RaffleAdminConfig,
+  RaffleAdminData,
+} from "@/gql/graphql";
+import { StageRaffleEngagement } from "./stage/StageRaffleEngagement";
+import { FanRaffleEngagement } from "./fan/FanRaffleEngagement";
+import { EngagementDefinition } from "../base/EngagementDefinition";
+import { CameraIcon } from "@radix-ui/react-icons";
+
+export const raffleEngagementDefinition: EngagementDefinition<
+  RaffleAdminConfig,
+  RaffleAdminData
+> = {
+  title: "Raffle",
+  icon: <CameraIcon />,
+  type: EngagementType.Raffle,
+  stageComponent: StageRaffleEngagement,
+  fanComponent: FanRaffleEngagement,
+  submissionsName: "Photos",
+  getInitialData: () => ({
+    // initial default data
+  }),
+  getInitialConfig: () => ({
+    // initial default config
+  }),
+};
+```
+
+7. Add your new engagement definition to the `engagementDefinitionsArray` array in `src/engagements/index.ts`.
