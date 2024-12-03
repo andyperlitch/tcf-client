@@ -18,6 +18,12 @@ export interface DataCellProps {
   engagement: AdminEngagementFragment;
 }
 
+export interface AdminSubmissionFormProps {
+  engagementId: number;
+  existingSubmissions?: AdminSubmissionFragment[];
+  onCreated: () => void;
+}
+
 export interface EngagementDefinition<
   TConfig extends EngagementAdminConfig,
   TData extends EngagementAdminData
@@ -38,11 +44,7 @@ export interface EngagementDefinition<
   submissionsTableHeaders?: FC<TableHeaderProps>;
   submissionsTableDataCell?: FC<DataCellProps>;
   adminControlView?: FC<{ engagement: AdminEngagementFragment }>;
-  adminSubmissionForm?: FC<{
-    engagementId: number;
-    existingSubmissions?: AdminSubmissionFragment[];
-    onCreated: () => void;
-  }>;
+  adminSubmissionForm?: FC<AdminSubmissionFormProps>;
   /**
    * If provided, replaces the AdminSubmissionPage with a custom component
    */

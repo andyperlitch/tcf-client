@@ -23,5 +23,7 @@ gql`
     songTitle
     songArtist
     songNotes
+    songLyrics
+    visualizationType
   }
 `;

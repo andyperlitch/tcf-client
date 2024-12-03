@@ -7,6 +7,9 @@ import { StageNowPlayingEngagement } from "./stage/StageNowPlayingEngagement";
 import { FanNowPlayingEngagement } from "./fan/FanNowPlayingEngagement";
 import { EngagementDefinition } from "../base/EngagementDefinition";
 import { PlayIcon } from "@radix-ui/react-icons";
+import { NowPlayingDataHeaders } from "./admin/submissions-table";
+import { NowPlayingDataCells } from "./admin/submissions-table";
+import { NowPlayingSongForm } from "./admin/NowPlayingSongForm";
 
 export const nowPlayingEngagementDefinition: EngagementDefinition<
   NowPlayingAdminConfig,
@@ -18,6 +21,9 @@ export const nowPlayingEngagementDefinition: EngagementDefinition<
   stageComponent: StageNowPlayingEngagement,
   fanComponent: FanNowPlayingEngagement,
   submissionsName: "Songs",
+  submissionsTableHeaders: NowPlayingDataHeaders,
+  submissionsTableDataCell: NowPlayingDataCells,
+  adminSubmissionForm: NowPlayingSongForm,
   getInitialData: () => ({
     currentSong: null,
   }),

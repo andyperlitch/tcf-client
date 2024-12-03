@@ -1,7 +1,7 @@
 import { useSwipeable } from "react-swipeable";
 import { useEffect } from "react";
 import { useState } from "react";
-import { scaleLinear } from "d3-scale";
+import { scaleLinear } from "d3";
 import { FanEngagementFragment, PhotoCarouselViewConfig } from "@/gql/graphql";
 import { useImageInput } from "@/hooks/useImagePreview";
 import { useRef } from "react";
