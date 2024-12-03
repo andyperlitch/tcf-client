@@ -58,6 +58,9 @@ export function Gig() {
                             >
                               {song.Title}
                             </Link>
+                            <div className="text-sm text-gray-500">
+                              {song.Writer}
+                            </div>
                           </li>
                         ))}
                       </ol>
