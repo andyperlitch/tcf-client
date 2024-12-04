@@ -15,7 +15,6 @@ import { Pencil1Icon, ReloadIcon } from "@radix-ui/react-icons";
 import { RandomizeChoiceColorsButton } from "./RandomizeChoiceColorsButton";
 import { DataCellProps } from "@/engagements/base/EngagementDefinition";
 import { engagementDefinitions } from "@/engagements";
-import { isMobile } from "react-device-detect";
 import { useAdminOrderedSubmissions } from "@/hooks/useAdminOrderedSubmissions";
 import { Link } from "react-router-dom";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
@@ -72,7 +71,6 @@ export function SubmissionsList({
             </TableRow>
           )}
           <TableRow>
-            {isMobile ? null : <TableHeader>ID</TableHeader>}
             <DataHeaders engagement={engagement} />
             <TableHeader>Actions</TableHeader>
           </TableRow>
@@ -80,7 +78,6 @@ export function SubmissionsList({
         <TableBody>
           {sortedSubmissions.map((submission) => (
             <TableRow key={submission.id}>
-              {isMobile ? null : <TableCell>{submission.id}</TableCell>}
               <DataCell submission={submission} engagement={engagement} />
               <TableCell>
                 <DeleteSubmissionButton id={submission.id} />

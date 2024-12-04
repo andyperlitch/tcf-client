@@ -1,33 +1,56 @@
+import { Switch } from "@/components/ui/switch";
 import { TableCell, TableHeader } from "@/components/ui/table";
 import { DataCellProps } from "@/engagements/base/EngagementDefinition";
-import { NowPlayingSubmissionData } from "@/gql/graphql";
+import {
+  NowPlayingAdminData,
+  NowPlayingSubmissionData,
+  useAdminUpdateEngagementMutation,
+} from "@/gql/graphql";
 import { toFullS3Url } from "@/utils/toFullS3Url";
+import { PlayIcon } from "@radix-ui/react-icons";
 
 export function NowPlayingDataHeaders() {
   return (
     <>
-      <TableHeader>Album Art</TableHeader>
-      <TableHeader>Song</TableHeader>
-      <TableHeader>Artist</TableHeader>
-      <TableHeader>Lyrics</TableHeader>
-      <TableHeader>Visualization</TableHeader>
+      <TableHeader>
+        <PlayIcon />
+      </TableHeader>
+      <TableHeader>Details</TableHeader>
     </>
   );
 }
 
-export function NowPlayingDataCells({ submission }: DataCellProps) {
+export function NowPlayingDataCells({ submission, engagement }: DataCellProps) {
+  const engagementData = engagement.data as NowPlayingAdminData;
   const data = submission.data as NowPlayingSubmissionData;
+  const [updateEngagement] = useAdminUpdateEngagementMutation();
   return (
     <>
+      <TableCell>
+        <Switch
+          checked={submission.id === engagementData.currentSong}
+          onCheckedChange={async (checked) => {
+            const updateData = {
+              data: { currentSong: checked ? submission.id : 0 },
+            };
+            await updateEngagement({
+              variables: { id: engagement.id, data: updateData },
+            });
+          }}
+        />
+      </TableCell>
       <TableCell>
         {data.songAlbumArt ? (
           <img src={toFullS3Url(data.songAlbumArt)} className={`h-24`} />
         ) : null}
+        {data.songTitle}
+        <br />
+        {data.songArtist}
+        <br />
+        {data.songLyrics}
+        <br />
+        {data.visualizationType}
       </TableCell>
-      <TableCell>{data.songTitle}</TableCell>
-      <TableCell>{data.songArtist}</TableCell>
-      <TableCell>{data.songLyrics}</TableCell>
-      <TableCell>{data.visualizationType}</TableCell>
     </>
   );
 }
