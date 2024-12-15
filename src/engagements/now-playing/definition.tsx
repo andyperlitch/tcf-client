@@ -9,7 +9,7 @@ import { EngagementDefinition } from "../base/EngagementDefinition";
 import { PlayIcon } from "@radix-ui/react-icons";
 import { NowPlayingDataHeaders } from "./admin/submissions-table";
 import { NowPlayingDataCells } from "./admin/submissions-table";
-import { NowPlayingSongForm } from "./admin/NowPlayingSongForm";
+import { NewSongForm } from "./admin/NewSongForm";
 
 export const nowPlayingEngagementDefinition: EngagementDefinition<
   NowPlayingAdminConfig,
@@ -23,7 +23,7 @@ export const nowPlayingEngagementDefinition: EngagementDefinition<
   submissionsName: "Songs",
   submissionsTableHeaders: NowPlayingDataHeaders,
   submissionsTableDataCell: NowPlayingDataCells,
-  adminSubmissionForm: NowPlayingSongForm,
+  adminSubmissionForm: NewSongForm,
   getInitialData: () => ({
     currentSong: null,
   }),

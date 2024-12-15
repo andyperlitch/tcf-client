@@ -23,6 +23,7 @@ export function DefaultSongViz({
         frequencyData={frequencyData}
         placement="top"
         mirrored={true}
+        flipped={true}
         fillColor="#FFFFFF22"
       />
       <AudioVizBars
@@ -32,7 +33,7 @@ export function DefaultSongViz({
         frequencyData={frequencyData}
         placement="bottom"
         mirrored={true}
-        flipped={true}
+        flipped
         fillColor="#FFFFFF22"
       />
       <div className="relative" data-name="SONG_INFO">

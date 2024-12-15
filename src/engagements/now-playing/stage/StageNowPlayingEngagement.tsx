@@ -20,6 +20,7 @@ export function StageNowPlayingEngagement({
 }: {
   engagement: StageEngagementFragment;
 }) {
+  console.log(`andy engagement`, engagement);
   const { frequencyData } = useAudioInput({ fftSize: 128 });
 
   const rootRef = useRef<HTMLDivElement>(null);

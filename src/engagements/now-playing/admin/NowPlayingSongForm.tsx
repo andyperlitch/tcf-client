@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { ImageInput } from "@/components/ui/image-input";
+import { Upload } from "@/hooks/useCreateSubmission";
 
 const formSchema = z.object({
   songTitle: z.string().min(1),
@@ -44,23 +45,19 @@ const formSchema = z.object({
  */
 export function NowPlayingSongForm({
   onSubmit,
-  song,
+  submission: song,
 }: {
   /**
    * Callback for when the form is submitted.
    */
   onSubmit: (data: {
     data: Omit<z.infer<typeof formSchema>, "songAlbumArtFile">;
-    uploads: {
-      field: string;
-      file: File | null | undefined;
-      type: "image";
-    }[];
+    uploads: Upload<NowPlayingSubmissionData>[];
   }) => void;
   /**
    * If this is passed, the form will be in "update" mode.
    */
-  song?: Omit<AdminSubmissionFragment, "data"> & {
+  submission?: Omit<AdminSubmissionFragment, "data"> & {
     data: NowPlayingSubmissionData;
   };
 }) {
@@ -85,13 +82,15 @@ export function NowPlayingSongForm({
       const { songAlbumArtFile, ...rest } = data;
       onSubmit({
         data: rest,
-        uploads: [
-          {
-            field: "songAlbumArt",
-            file: songAlbumArtFile,
-            type: "image",
-          },
-        ],
+        uploads: songAlbumArtFile
+          ? [
+              {
+                field: "songAlbumArt",
+                file: songAlbumArtFile,
+                type: "image",
+              },
+            ]
+          : [],
       });
     },
     [onSubmit]

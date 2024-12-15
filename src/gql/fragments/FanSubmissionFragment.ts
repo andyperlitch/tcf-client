@@ -4,6 +4,7 @@ gql`
   fragment FanSubmission on Submission {
     id
     createdAt
+    engagementId
     data {
       ...PhotoCarouselSubmissionFields
       ...VoteForSubmissionFields

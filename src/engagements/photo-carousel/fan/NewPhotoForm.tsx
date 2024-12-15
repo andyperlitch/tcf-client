@@ -2,7 +2,11 @@ import { useSwipeable } from "react-swipeable";
 import { useEffect } from "react";
 import { useState } from "react";
 import { scaleLinear } from "d3";
-import { FanEngagementFragment, PhotoCarouselViewConfig } from "@/gql/graphql";
+import {
+  FanEngagementFragment,
+  PhotoCarouselSubmissionData,
+  PhotoCarouselViewConfig,
+} from "@/gql/graphql";
 import { useImageInput } from "@/hooks/useImagePreview";
 import { useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
@@ -49,15 +53,8 @@ export function NewPhotoForm({
 
   const velocityRef = useRef(0);
   const deltaYRef = useRef(0);
-  const { createSubmission, loading, errors, succeeded } = useCreateSubmission({
-    engagementId: engagement.id,
-    file,
-    toData: (url?: string) => ({
-      photoUrl: url,
-      caption,
-      sharingPermissionGranted,
-    }),
-  });
+  const { createSubmission, loading, errors, succeeded } =
+    useCreateSubmission<PhotoCarouselSubmissionData>();
 
   // ERROR HANDLING
   useEffect(() => {
@@ -94,7 +91,19 @@ export function NewPhotoForm({
           }, 400);
         } else {
           polaroidRef.current.style.transform = `translateY(-200vh)`;
-          createSubmission();
+          createSubmission({
+            engagementId: engagement.id,
+            data: {
+              caption,
+            },
+            uploads: [
+              {
+                file,
+                field: "photoUrl",
+                type: "image",
+              },
+            ],
+          });
         }
       }
     },

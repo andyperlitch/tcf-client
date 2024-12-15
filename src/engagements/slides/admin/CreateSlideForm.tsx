@@ -1,89 +1,41 @@
-import { ImageSelector } from "@/components/ImageSelector";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { AdminSubmissionFragment } from "@/gql/graphql";
+import { AdminSubmissionFormProps } from "@/engagements/base/EngagementDefinition";
+import { SlideForm, SlideFormProps } from "./SlideForm";
 import { useCreateSubmission } from "@/hooks/useCreateSubmission";
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { SlidesSubmissionData } from "@/gql/graphql";
 
 export function CreateSlideForm({
   engagementId,
-  onCreated,
-  existingSubmissions = [],
-}: {
-  engagementId: number;
-  existingSubmissions?: AdminSubmissionFragment[];
-  onCreated: () => void;
-}) {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  existingSubmissions,
+}: AdminSubmissionFormProps) {
+  const { createSubmission } = useCreateSubmission<SlidesSubmissionData>();
+  const { toast } = useToast();
+  const [newKey, setNewKey] = useState(0);
 
-  const {
-    createSubmission: createSlide,
-    loading,
-    errors,
-  } = useCreateSubmission({
-    engagementId,
-    file,
-    toData: (url) => {
-      const otherOrders = existingSubmissions.map((s) =>
-        s.data.__typename === "SlidesSubmissionData" ? s.data.order : 0
-      );
-      const order = Math.max(...otherOrders, 0) + 1;
-      return {
-        title,
-        content,
-        optionalImageUrl: url,
-        order,
-      };
+  const handleSubmit = useCallback<SlideFormProps["onSubmit"]>(
+    ({ data, uploads }) => {
+      createSubmission({
+        engagementId,
+        data: {
+          ...data,
+          order: existingSubmissions?.length || 0,
+        },
+        uploads,
+      }).then((result) => {
+        if (result && "data" in result && !result.errors?.length) {
+          setNewKey((prevKey) => prevKey + 1);
+        } else {
+          toast({
+            title: "Error",
+            description:
+              "Failed to create slide: " + result?.errors?.join(", "),
+            variant: "destructive",
+          });
+        }
+      });
     },
-    onSuccess: () => {
-      setTitle("");
-      setContent("");
-      setFile(null);
-      onCreated();
-    },
-  });
-
-  async function handleSubmit() {
-    await createSlide();
-  }
-
-  return (
-    <div data-name="CREATE-SLIDE-FORM" className="flex flex-col space-y-2">
-      {errors.map((e) => (
-        <div key={e} className="text-red-500">
-          {e}
-        </div>
-      ))}
-      <div data-name="CREATE-SLIDE-FORM-LEFT" className="flex space-x-2">
-        <div className="flex flex-col space-y-2">
-          <Input
-            name="title"
-            placeholder="Title"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Textarea
-            name="content"
-            placeholder="Content (markdown supported)"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-        </div>
-        <div>
-          <ImageSelector onImageChange={setFile} />
-        </div>
-      </div>
-      <Button
-        type="button"
-        onClick={handleSubmit}
-        disabled={!title || !content || loading}
-      >
-        {loading ? "Creating..." : "Create"}
-      </Button>
-    </div>
+    [createSubmission, engagementId, existingSubmissions, toast]
   );
+  return <SlideForm key={newKey} onSubmit={handleSubmit} />;
 }

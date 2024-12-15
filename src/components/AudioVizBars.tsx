@@ -61,10 +61,17 @@ export function AudioVizBars({
       let dataToVisualize: Uint8Array;
 
       if (mirrored) {
-        dataToVisualize = new Uint8Array([
-          ...Array.from(frequencyData).slice(1).reverse(),
-          ...Array.from(frequencyData),
-        ]);
+        if (flipped) {
+          dataToVisualize = new Uint8Array([
+            ...Array.from(frequencyData).slice(1),
+            ...Array.from(frequencyData).slice(1).reverse(),
+          ]);
+        } else {
+          dataToVisualize = new Uint8Array([
+            ...Array.from(frequencyData).slice(1).reverse(),
+            ...Array.from(frequencyData).slice(1),
+          ]);
+        }
       } else if (flipped) {
         dataToVisualize = frequencyData.reverse();
       } else {

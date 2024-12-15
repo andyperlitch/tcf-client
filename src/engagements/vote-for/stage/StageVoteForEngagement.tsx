@@ -1,4 +1,4 @@
-import { scaleLinear, ScaleLinear } from "d3-scale";
+import { scaleLinear, ScaleLinear } from "d3";
 import {
   StageEngagementFragment,
   StageSubmissionFragment,
