@@ -8,6 +8,9 @@ gql`
     description
     date
     location
+    fanConfig {
+      ...EventFanConfig
+    }
     activeEngagement {
       ...FanEngagement
     }

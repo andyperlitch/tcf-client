@@ -1,7 +1,15 @@
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { FunksGivingStage } from "./Funksgiving/FunksGivingStage";
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import { useStageScreenViewport } from "./useStageScreenViewport";
+import { useStageStyles } from "./useStageStyles";
+import { StageActiveEngagement } from "@/engagements/StageActiveEngagement";
+import { StageElement } from "./StageElement";
+import { StageChrome } from "./StageChrome";
+import { useStageEvent } from "@/hooks/useStageEvent";
+import { useStageState } from "./useStageState";
+import { StageElementFragment, StageEventFragment } from "@/gql/graphql";
+import { useSearchParams } from "react-router-dom";
 
 const CUSTOM_EVENT_PAGES: Record<string, FC> = {
   funksgiving: FunksGivingStage,
@@ -9,21 +17,83 @@ const CUSTOM_EVENT_PAGES: Record<string, FC> = {
 
 export function EventStageScreen() {
   const { slug } = useParamsSafe("slug");
-  const CustomEventPage = CUSTOM_EVENT_PAGES[slug];
+
   useStageScreenViewport();
+
+  const { data } = useStageEvent(slug);
+
+  if (!data?.event) {
+    return <div>Loading...</div>;
+  }
+
+  return <Screen event={data.event} />;
+}
+
+function Screen({ event }: { event: StageEventFragment }) {
+  const CustomEventPage = CUSTOM_EVENT_PAGES[event.slug];
+  const [searchParams] = useSearchParams();
+  const editor = searchParams.get("editor") === "true";
+  const {
+    stageConfig,
+    draftConfig,
+    setSavedConfig,
+    setSelectedElementId,
+    selectedElementId,
+  } = useStageState({
+    initialConfig: event.stageConfig || { elements: [] },
+  });
+  const { rootStyles } = useStageStyles({ stageConfig, draftConfig });
+  const handleUpdateElement = useCallback(
+    (element: StageElementFragment) => {
+      console.log("[handleUpdateElement] Updating element:", element);
+      setSavedConfig((prev) => {
+        console.log("[handleUpdateElement] Previous config:", prev);
+        const updatedElements =
+          prev.elements?.map((e) => {
+            const isMatch = e.id === element.id;
+            console.log(
+              "[handleUpdateElement] Checking element:",
+              e.id,
+              "matches:",
+              isMatch
+            );
+            return isMatch ? element : e;
+          }) || [];
+        console.log("[handleUpdateElement] Updated elements:", updatedElements);
+        return {
+          ...prev,
+          elements: updatedElements,
+        };
+      });
+    },
+    [setSavedConfig]
+  );
 
   return (
     <div
+      data-name="STAGE_ROOT"
       className={`
       relative flex h-screen w-screen flex-col gap-4 overflow-hidden
     `}
+      style={rootStyles}
     >
       {CustomEventPage ? (
         <CustomEventPage />
       ) : (
-        <div>
-          <h2>No Custom Event Page</h2>
-        </div>
+        <StageChrome name="STAGE_CHROME" event={event}>
+          {stageConfig?.elements?.map((element) => (
+            <StageElement
+              onSelect={setSelectedElementId}
+              selected={selectedElementId === element.id}
+              element={element}
+              key={element.id}
+              editor={editor}
+              activeEngagement={event.activeEngagement}
+              onUpdate={handleUpdateElement}
+            />
+          ))}
+          {event.activeEngagement && <StageActiveEngagement event={event} />}
+        </StageChrome>
       )}
     </div>
   );

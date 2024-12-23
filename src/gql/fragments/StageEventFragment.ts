@@ -9,6 +9,9 @@ gql`
     description
     date
     location
+    stageConfig {
+      ...EventStageConfig
+    }
     activeEngagement {
       ...StageEngagement
     }

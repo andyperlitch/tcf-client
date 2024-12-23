@@ -1,87 +1,39 @@
-import { useAdminUpdateEventMutation } from "@/gql/graphql";
-
+import { AdminEventFragment, useAdminUpdateEventMutation } from "@/gql/graphql";
 import { useMemo } from "react";
-import { AdminGetEventQuery } from "@/gql/graphql";
 
 export function useAdminEventHandlers({
-  data,
+  event,
 }: {
-  data: AdminGetEventQuery | null | undefined;
+  event: AdminEventFragment | null | undefined;
 }) {
   const [updateEvent, { loading: updateLoading }] =
     useAdminUpdateEventMutation();
 
   return useMemo(() => {
-    const setLive = (live: boolean) => {
-      if (data?.event) {
-        updateEvent({
-          variables: {
-            id: data.event.id,
-            data: {
-              live,
+    const createUpdateHandler =
+      <T extends string | boolean>(field: string) =>
+      (value: T) => {
+        if (event) {
+          return updateEvent({
+            variables: {
+              id: event.id,
+              data: {
+                [field]: value,
+              },
             },
-          },
-        });
-      }
-    };
-
-    const updateEventName = (name: string) => {
-      if (data?.event) {
-        return updateEvent({
-          variables: { id: data.event.id, data: { name } },
-        });
-      }
-    };
-
-    const updateEventDescription = (description: string) => {
-      if (data?.event) {
-        return updateEvent({
-          variables: { id: data.event.id, data: { description } },
-        });
-      }
-    };
-
-    const updateEventSlug = (slug: string) => {
-      if (data?.event) {
-        return updateEvent({
-          variables: { id: data.event.id, data: { slug } },
-        });
-      }
-    };
-
-    const updateEventLocation = (location: string) => {
-      if (data?.event) {
-        return updateEvent({
-          variables: { id: data.event.id, data: { location } },
-        });
-      }
-    };
-
-    const updateLocked = (locked: boolean) => {
-      if (data?.event) {
-        return updateEvent({
-          variables: { id: data.event.id, data: { locked } },
-        });
-      }
-    };
-
-    const updateEventDate = (date: string) => {
-      if (data?.event) {
-        return updateEvent({
-          variables: { id: data.event.id, data: { date } },
-        });
-      }
-    };
+          });
+        }
+      };
 
     return {
-      setLive,
-      updateEventName,
-      updateEventDescription,
-      updateEventSlug,
-      updateEventLocation,
-      updateLocked,
-      updateEventDate,
+      setLive: createUpdateHandler<boolean>("live"),
+      updateEventName: createUpdateHandler<string>("name"),
+      updateEventDescription: createUpdateHandler<string>("description"),
+      updateEventSlug: createUpdateHandler<string>("slug"),
+      updateEventLocation: createUpdateHandler<string>("location"),
+      updateLocked: createUpdateHandler<boolean>("locked"),
+      updateEventDate: createUpdateHandler<string>("date"),
       updateLoading,
     };
-  }, [updateEvent, data, updateLoading]);
+  }, [updateEvent, event, updateLoading]);
 }

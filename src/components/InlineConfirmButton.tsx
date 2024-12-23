@@ -14,8 +14,8 @@ export function InlineConfirmButton({
   ...buttonProps
 }: {
   onConfirm: () => Promise<any>;
-  loading: boolean;
-  error: ApolloError | undefined;
+  loading?: boolean;
+  error?: ApolloError;
   children: React.ReactNode;
   affirmText?: string;
   cancelText?: string;

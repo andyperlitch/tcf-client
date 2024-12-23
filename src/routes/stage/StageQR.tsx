@@ -49,7 +49,7 @@ export const StageQR = memo(
     return (
       <div
         style={stageQrStyles}
-        data-name="STAGE-QR"
+        data-name="STAGE_QR"
         className={`
           flex flex-col items-center rounded-lg
 
@@ -59,14 +59,14 @@ export const StageQR = memo(
         `}
       >
         <p
-          data-name="STAGE-QR-TEXT"
+          data-name="STAGE_QR_TEXT"
           style={stageQrTextStyles}
           className={`whitespace-nowrap text-center font-hand text-5xl`}
         >
           {event?.activeEngagement?.qrCodeCta || lastCtaText.current}
         </p>
         <QRCode
-          data-name="STAGE-QR-CODE"
+          data-name="STAGE_QR_CODE"
           value={`${window.location.origin}/e/${eventSlug}`}
           size={width}
           level="L"

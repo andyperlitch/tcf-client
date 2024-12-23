@@ -11,6 +11,19 @@ import {
 import { Button } from "./button";
 import { TrashIcon } from "@radix-ui/react-icons";
 
+function makeDisplayUrl(url: string | null | undefined) {
+  if (!url) {
+    return "(no image)";
+  }
+  const fileName = url.split("/").pop() || "";
+
+  // only take the last 20 characters at most
+  const truncatedFileName =
+    fileName.length > 20 ? "..." + fileName.slice(-20) : fileName;
+
+  return truncatedFileName;
+}
+
 export const ImageInput = forwardRef<
   { click: () => void },
   {
@@ -29,6 +42,7 @@ export const ImageInput = forwardRef<
      */
     onCurrentImageClear?: () => void;
     name: string;
+    noPreview?: boolean;
   }
 >(
   (
@@ -40,6 +54,7 @@ export const ImageInput = forwardRef<
       currentImageUrl,
       onCurrentImageClear,
       name,
+      noPreview,
     },
     ref
   ) => {
@@ -58,13 +73,15 @@ export const ImageInput = forwardRef<
     );
 
     // Dimensional styles
-    const style = useMemo(
-      () => ({
+    const style = useMemo(() => {
+      if (noPreview) {
+        return undefined;
+      }
+      return {
         width: width ? `${width}px` : undefined,
         height: height ? `${height}px` : undefined,
-      }),
-      [width, height]
-    );
+      };
+    }, [width, height, noPreview]);
 
     /**
      * Updates the preview image source based on the current value
@@ -88,10 +105,20 @@ export const ImageInput = forwardRef<
       }
     }, [currentImageUrl, value]);
 
+    useEffect(() => {
+      if (value === null && inputRef.current) {
+        inputRef.current.value = "";
+      }
+    }, [value]);
+
     return (
-      <div data-name="IMAGE-SELECTOR" style={style} className="relative">
+      <div
+        data-name="IMAGE-SELECTOR"
+        style={style}
+        className={`relative cursor-pointer`}
+      >
         {/* The preview image */}
-        {previewSrc ? (
+        {!noPreview && previewSrc && (
           <>
             <img
               src={previewSrc}
@@ -120,15 +147,38 @@ export const ImageInput = forwardRef<
               <TrashIcon className="h-4 w-4" />
             </Button>
           </>
-        ) : (
+        )}
+        {noPreview && (value || currentImageUrl) && (
+          <div
+            className="rounded-sm border border-input p-2"
+            onClick={() => inputRef.current?.click()}
+          >
+            {value instanceof File
+              ? value.name
+              : makeDisplayUrl(currentImageUrl)}
+          </div>
+        )}
+        {!previewSrc && (
           <div
             style={style}
             className={`
-              flex items-center justify-center rounded-md border-4 border-dashed
+              flex items-center
+
+              ${
+                noPreview
+                  ? `inline-block rounded-sm border border-input p-2`
+                  : `justify-center rounded-md border-4 border-dashed`
+              }
             `}
             onClick={() => inputRef.current?.click()}
           >
-            <p className="text-center text-sm text-muted-foreground">
+            <p
+              className={`
+                ${noPreview ? "" : "text-center"}
+
+                text-sm text-muted-foreground
+              `}
+            >
               No image selected
             </p>
           </div>

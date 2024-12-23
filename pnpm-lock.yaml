@@ -80,6 +80,9 @@ importers:
       graphql-ws:
         specifier: ^5.16.0
         version: 5.16.0(graphql@16.9.0)
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       papaparse:
         specifier: ^5.4.1
         version: 5.4.1

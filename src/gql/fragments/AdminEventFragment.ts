@@ -12,6 +12,12 @@ gql`
     slug
     createdAt
     updatedAt
+    stageConfig {
+      ...EventStageConfig
+    }
+    fanConfig {
+      ...EventFanConfig
+    }
     activeEngagement {
       ...AdminEngagement
     }

@@ -19,6 +19,7 @@ import {
   SectionIcon,
 } from "@radix-ui/react-icons";
 import { Link, useNavigate } from "react-router-dom";
+import { StageEditor } from "./StageEditor/StageEditor";
 
 const enableControlView = false;
 
@@ -42,7 +43,7 @@ export function AdminEventPage() {
     updateEventLocation,
     updateLocked,
     updateLoading,
-  } = useAdminEventHandlers({ data });
+  } = useAdminEventHandlers({ event: data?.event });
 
   let content: ReactNode = "";
 
@@ -178,6 +179,10 @@ export function AdminEventPage() {
               </Button>
             )}
           </div>
+          <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
+            Stage Editor
+          </h2>
+          <StageEditor event={data.event} />
 
           <div
             data-name="ENGAGEMENTS"

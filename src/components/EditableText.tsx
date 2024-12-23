@@ -7,10 +7,28 @@ import { useToast } from "@/hooks/use-toast";
 interface EditableTextProps<T extends keyof JSX.IntrinsicElements> {
   value: string;
   setValue: (value: string) => void | Promise<any>;
-  element: T; // The HTML tag (key of JSX Intrinsic Elements)
-  elementProps?: Omit<JSX.IntrinsicElements[T], "onClick">; // Props for the element, except onClick
+  /**
+   * The HTML tag to render when NOT an input (key of JSX Intrinsic Elements)
+   */
+  element: T;
+  /**
+   * Props for the element, except onClick
+   */
+  elementProps?: Omit<JSX.IntrinsicElements[T], "onClick">;
   locked?: boolean;
   className?: string;
+  /**
+   * Placeholder text to display when the value is empty
+   */
+  placeholder?: string;
+  /**
+   * Whether to show the confirm/cancel buttons
+   */
+  showConfirmCancel?: boolean;
+  /**
+   * Whether to cancel on blur
+   */
+  cancelOnBlur?: boolean;
 }
 
 export function EditableText<T extends keyof JSX.IntrinsicElements>({
@@ -18,8 +36,11 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
   setValue,
   element: Element,
   elementProps = {} as JSX.IntrinsicElements[T],
+  placeholder,
+  showConfirmCancel = true,
   locked = false,
   className,
+  cancelOnBlur = false,
 }: EditableTextProps<T>) {
   const { toast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -61,7 +82,6 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
 
   // Select all text in the input when entering edit mode
   useEffect(() => {
-    console.log(`andy inputRef.current`, inputRef.current);
     if (editing && inputRef.current) {
       inputRef.current.select();
     }
@@ -94,11 +114,16 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
         containerClassName="relative"
         onChange={(e) => setLocalValue(e.target.value)}
         onKeyDown={checkForEnterOrEscape}
+        onBlur={cancelOnBlur ? onCancel : undefined}
         ref={inputRef}
         data-p1-ignore
       >
-        <InlineConfirmCancel confirm={onConfirm} cancel={onCancel} />
+        {showConfirmCancel && (
+          <InlineConfirmCancel confirm={onConfirm} cancel={onCancel} />
+        )}
       </ResizableInput>
+    ) : value.trim() === "" && placeholder ? (
+      <span className="italic text-muted-foreground">{placeholder}</span>
     ) : (
       value
     )
