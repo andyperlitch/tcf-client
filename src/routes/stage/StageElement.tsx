@@ -1,7 +1,8 @@
 import { StageElementFragment, StageEngagementFragment } from "@/gql/graphql";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { StageElementBoundingBox } from "./StageElementBoundingBox";
 import { StageState } from "./useStageState";
+import { EditableTextarea } from "@/components/EditableTextarea";
 
 export function StageElement({
   element,
@@ -86,6 +87,35 @@ function TextStageElement({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
+  let children: React.ReactNode = text;
+
+  const [editing, setEditing] = useState(false);
+
+  if (editor) {
+    children = (
+      <>
+        <EditableTextarea
+          value={text || ""}
+          setValue={(value) => onUpdate({ ...element, text: value })}
+          element="div"
+          editing={editing}
+          setEditing={setEditing}
+          showConfirmCancel={false}
+          textareaClassName="border-none outline-none"
+        />
+        <StageElementBoundingBox
+          selected={selected}
+          onSelect={onSelect}
+          element={element}
+          activeEngagement={activeEngagement}
+          elementRef={ref}
+          onUpdate={onUpdate}
+          onDoubleClick={() => setEditing(true)}
+        />
+      </>
+    );
+  }
+
   return (
     <div
       ref={ref}
@@ -95,17 +125,7 @@ function TextStageElement({
       style={styles}
       onClick={editor ? () => onSelect(id) : undefined}
     >
-      {text}
-      {editor && (
-        <StageElementBoundingBox
-          selected={selected}
-          onSelect={onSelect}
-          element={element}
-          activeEngagement={activeEngagement}
-          elementRef={ref}
-          onUpdate={onUpdate}
-        />
-      )}
+      {children}
     </div>
   );
 }

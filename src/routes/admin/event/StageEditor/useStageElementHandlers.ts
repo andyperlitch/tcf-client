@@ -16,62 +16,68 @@ export function useStageElementHandlers({
 }) {
   const handleNewTextElement = useCallback(() => {
     setSavedConfig((prev) => {
+      const newElementId = Math.random().toString();
       const newSavedConfig = {
         ...prev,
         elements: [
           ...(prev.elements || []),
           {
-            id: Math.random().toString(),
+            id: newElementId,
             name: "Text element",
             type: "text",
             text: "New element",
             fontFamily: "Arial",
+            defaultClassNames: "text-center",
             defaultStyles: {
               fontSize: "1.5vw",
-              textAlign: "center",
             },
             engagementStyles: {
               fontSize: "1.5vw",
-              textAlign: "center",
             },
           },
         ],
       };
-
+      setSelectedElementId(newElementId);
       logger.info("handleNewTextElement", { newSavedConfig });
       return newSavedConfig;
     });
-  }, [setSavedConfig]);
+  }, [setSavedConfig, setSelectedElementId]);
 
   const handleNewImageElement = useCallback(() => {
     logger.info("handleNewImageElement");
-    setSavedConfig((prev) => ({
-      ...prev,
-      elements: [
-        ...(prev.elements || []),
-        {
-          id: Math.random().toString(),
-          type: "image",
-          name: "Image element",
-          imageUrl: "https://via.placeholder.com/150",
-          defaultStyles: {
-            width: "30vw",
-            height: "30vw",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
+    setSavedConfig((prev) => {
+      const newElementId = Math.random().toString();
+      const newSavedConfig = {
+        ...prev,
+        elements: [
+          ...(prev.elements || []),
+          {
+            id: newElementId,
+            type: "image",
+            name: "Image element",
+            imageUrl: "https://via.placeholder.com/150",
+            defaultStyles: {
+              width: "30vw",
+              height: "30vw",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            },
+            engagementStyles: {
+              width: "30vw",
+              height: "30vw",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            },
           },
-          engagementStyles: {
-            width: "30vw",
-            height: "30vw",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          },
-        },
-      ],
-    }));
-  }, [setSavedConfig]);
+        ],
+      };
+      setSelectedElementId(newElementId);
+      logger.info("handleNewImageElement", { newSavedConfig });
+      return newSavedConfig;
+    });
+  }, [setSavedConfig, setSelectedElementId]);
 
   const handleUpdateElement = useCallback(
     (element: StageElementFragment) => {

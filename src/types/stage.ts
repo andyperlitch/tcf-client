@@ -5,3 +5,5 @@ export interface SharedStageState {
   draftConfig: Partial<EventStageConfig>;
   selectedElementId?: string;
 }
+
+export type TextAlign = "left" | "center" | "right";

@@ -91,6 +91,7 @@ export function StageEditor({ event }: { event: AdminEventFragment }) {
                 onDelete={handleDeleteElement}
                 selected={selectedElementId === element.id}
                 onSelect={setSelectedElementId}
+                activeEngagement={event.activeEngagement}
               />
             ))}
           </div>

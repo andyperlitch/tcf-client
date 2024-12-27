@@ -12,6 +12,7 @@ export function StageElementBoundingBox({
   element,
   activeEngagement,
   onUpdate,
+  onDoubleClick,
 }: {
   selected: boolean;
   onSelect: StageState["setSelectedElementId"];
@@ -19,6 +20,7 @@ export function StageElementBoundingBox({
   element: StageElementFragment;
   activeEngagement: StageEngagementFragment | null | undefined;
   onUpdate: (element: StageElementFragment) => void;
+  onDoubleClick?: () => void;
 }) {
   const { pxToVw, pxToVh } = usePixelToViewport();
 
@@ -133,17 +135,26 @@ export function StageElementBoundingBox({
     onUpdateSize,
   });
 
-  const selectedClass = selected
+  const selectedHandleClass = selected
     ? "bg-blue-600 w-2 h-2"
-    : "bg-gray-200 w-1 h-1";
+    : "opacity-0 hover:opacity-50";
+
+  const selectedBoundingBoxClass = selected
+    ? "opacity-100"
+    : "opacity-0 hover:opacity-50";
 
   return (
-    <div className="absolute left-0 top-0 h-full w-full">
+    <div className={`absolute left-0 top-0 h-full w-full`}>
       {/* bounding box */}
       <div
         {...moveElementHandlers}
         data-name="BOUNDING-BOX"
-        className={`absolute h-full w-full cursor-move border border-white`}
+        onDoubleClick={onDoubleClick}
+        className={`
+          absolute h-full w-full cursor-move border border-white
+
+          ${selectedBoundingBoxClass}
+        `}
       ></div>
       {/* corner handles */}
       <div
@@ -152,7 +163,7 @@ export function StageElementBoundingBox({
           absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2
           cursor-nw-resize rounded-full border border-white
 
-          ${selectedClass}
+          ${selectedHandleClass}
         `}
         {...scaleNWHandlers}
       ></div>
@@ -162,7 +173,7 @@ export function StageElementBoundingBox({
           absolute right-0 top-0 -translate-y-1/2 translate-x-1/2
           cursor-ne-resize rounded-full border border-white
 
-          ${selectedClass}
+          ${selectedHandleClass}
         `}
         {...scaleNEHandlers}
       ></div>
@@ -172,7 +183,7 @@ export function StageElementBoundingBox({
           absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2
           cursor-sw-resize rounded-full border border-white
 
-          ${selectedClass}
+          ${selectedHandleClass}
         `}
         {...scaleSWHandlers}
       ></div>
@@ -182,7 +193,7 @@ export function StageElementBoundingBox({
           absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2
           cursor-se-resize rounded-full border border-white
 
-          ${selectedClass}
+          ${selectedHandleClass}
         `}
         {...scaleSEHandlers}
       ></div>

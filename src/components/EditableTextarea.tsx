@@ -7,21 +7,31 @@ interface EditableTextareaProps<T extends keyof JSX.IntrinsicElements> {
   value: string;
   setValue: (value: string) => void | Promise<any>;
   element: T; // The HTML tag (key of JSX Intrinsic Elements)
+  showConfirmCancel?: boolean;
   elementProps?: Omit<JSX.IntrinsicElements[T], "onClick">; // Props for the element, except onClick
   locked?: boolean;
   className?: string;
+  textareaClassName?: string;
+  editing?: boolean;
+  setEditing?: (editing: boolean) => void;
 }
 
 export function EditableTextarea<T extends keyof JSX.IntrinsicElements>({
   value,
   setValue,
+  editing: editingProp,
+  showConfirmCancel = true,
+  setEditing: setEditingProp,
   element: Element,
   elementProps = {} as JSX.IntrinsicElements[T],
   locked = false,
   className,
+  textareaClassName,
 }: EditableTextareaProps<T>) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [editing, setEditing] = useState(false);
+  const [internalEditing, setInternalEditing] = useState(false);
+  const editing = editingProp ?? internalEditing;
+  const setEditing = setEditingProp ?? setInternalEditing;
   const [localValue, setLocalValue] = useState(value);
   const [loading, setLoading] = useState(false);
 
@@ -86,12 +96,19 @@ export function EditableTextarea<T extends keyof JSX.IntrinsicElements>({
         <Textarea
           disabled={loading}
           value={localValue}
+          className={`
+            ${textareaClassName}
+
+            text-inherit
+          `}
           onChange={(e) => setLocalValue(e.target.value)}
           onKeyDown={checkForEnterOrEscape}
           ref={inputRef}
           data-p1-ignore
         />
-        <InlineConfirmCancel confirm={onConfirm} cancel={onCancel} />
+        {showConfirmCancel && (
+          <InlineConfirmCancel confirm={onConfirm} cancel={onCancel} />
+        )}
       </div>
     ) : (
       value
