@@ -18,6 +18,13 @@ export const GIGS = [
     spotifyPlaylistLink:
       "https://open.spotify.com/playlist/7alEBU9nFYBIq1BMjI54Ij?si=f8f12a7e30ff4a99",
   },
+  // myfunkyvalentine
+  {
+    slug: "my-funky-valentine",
+    date: "2025-02-14",
+    label: "My Funky Valentine",
+    fieldName: "MyFunkyValentine",
+  },
 ] as const;
 
 export type GigSlug = (typeof GIGS)[number]["slug"];
