@@ -278,3 +278,5 @@ function ActiveEngagementPicker({
     </Popover>
   );
 }
+
+export default AdminEventControlPage;

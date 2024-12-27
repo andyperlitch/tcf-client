@@ -142,3 +142,5 @@ export function AdminEngagementPage() {
 
   return <AdminContainer section="events">{content}</AdminContainer>;
 }
+
+export default AdminEngagementPage;

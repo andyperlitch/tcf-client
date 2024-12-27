@@ -65,3 +65,5 @@ export function AdminSubmissionPage() {
     </AdminContainer>
   );
 }
+
+export default AdminSubmissionPage;

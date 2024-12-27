@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
@@ -10,7 +10,6 @@ import {
 import "./index.css";
 import Home from "./routes/home/home";
 import ErrorPage from "./error-page";
-import { ProtectedArea } from "./components/ProtectedArea";
 import { MasterSongListProvider } from "./providers/MasterSongListProvider";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { AnalyticsProvider } from "./providers/AnalyticsProvider";
@@ -20,18 +19,14 @@ import { Login } from "./routes/Login";
 import { Gig } from "./routes/gigs/Gig";
 import { SetListSong } from "./routes/gigs/SetListSong";
 import { EventFanScreen } from "./routes/fan/EventFanScreen";
-import { AdminHome } from "./routes/admin/home";
 import { AuthProvider } from "./providers/AuthProvider";
-import { AdminEventPage } from "./routes/admin/event";
-import { AdminSubmissionPage } from "./routes/admin/event/engagement/submission";
-import { AdminEngagementPage } from "./routes/admin/event/engagement";
-import { AdminEvents } from "./routes/admin/events";
 import { EventStageScreen } from "./routes/stage/EventStageScreen";
 import { Toaster } from "./components/ui/toaster";
 import { QuickSignup } from "./routes/QuickSignup";
 import { TooltipProvider } from "./components/ui/tooltip";
-import { AdminEventControlPage } from "./routes/admin/event/AdminEventControlPage";
 import { EventStagesPage } from "./routes/stage/EventStagesPage";
+import { Loader } from "./components/Loader";
+import { adminRoutes } from "./routes/admin";
 
 const router = createBrowserRouter([
   {
@@ -104,37 +99,10 @@ const router = createBrowserRouter([
       },
       {
         // Admin pages
+        ...adminRoutes,
         element: (
-          <ProtectedArea roles={["ADMIN"]} redirectTo="/login?redirect=$path">
-            <Outlet />
-          </ProtectedArea>
+          <Suspense fallback={<Loader />}>{adminRoutes.element}</Suspense>
         ),
-        children: [
-          {
-            path: "/admin",
-            element: <AdminHome />,
-          },
-          {
-            path: "/admin/events",
-            element: <AdminEvents />,
-          },
-          {
-            path: "/admin/events/:slug",
-            element: <AdminEventPage />,
-          },
-          {
-            path: "/admin/events/:slug/control",
-            element: <AdminEventControlPage />,
-          },
-          {
-            path: "/admin/events/:slug/engagements/:engagementId",
-            element: <AdminEngagementPage />,
-          },
-          {
-            path: "/admin/events/:slug/engagements/:engagementId/submissions/:submissionId",
-            element: <AdminSubmissionPage />,
-          },
-        ],
       },
     ],
   },

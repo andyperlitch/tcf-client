@@ -15,3 +15,5 @@ export function AdminEvents() {
     </AdminContainer>
   );
 }
+
+export default AdminEvents;

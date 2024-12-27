@@ -204,3 +204,5 @@ export function AdminEventPage() {
 
   return <AdminContainer section="events">{content}</AdminContainer>;
 }
+
+export default AdminEventPage;
