@@ -21,9 +21,9 @@ export function GigPicker() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          {GIGS.map((set) => (
-            <Link key={set.slug} to={`/sets/${set.slug}`}>
-              <DropdownMenuItem>{set.label}</DropdownMenuItem>
+          {GIGS.map((gig) => (
+            <Link key={gig.slug} to={`/gigs/${gig.slug}`}>
+              <DropdownMenuItem>{gig.label}</DropdownMenuItem>
             </Link>
           ))}
         </DropdownMenuContent>
