@@ -8,6 +8,7 @@ import { useOnSave } from "./useOnSave";
 import { BackgroundImageInput } from "./BackgroundImageInput";
 import StageElementEditor from "./StageElementEditor";
 import { useStageElementHandlers } from "./useStageElementHandlers";
+import { FontPicker } from "@/components/FontPicker";
 
 const defaultConfig: EventStageConfig = {
   elements: [],
@@ -58,6 +59,26 @@ export function StageEditor({ event }: { event: AdminEventFragment }) {
     [setSavedConfig]
   );
 
+  const handleHeadingFontChange = useCallback(
+    (fontFamily: string[] | null | undefined) => {
+      setSavedConfig((prev) => ({
+        ...prev,
+        headingFontFamily: fontFamily,
+      }));
+    },
+    [setSavedConfig]
+  );
+
+  const handleBodyFontChange = useCallback(
+    (fontFamily: string[] | null | undefined) => {
+      setSavedConfig((prev) => ({
+        ...prev,
+        bodyFontFamily: fontFamily,
+      }));
+    },
+    [setSavedConfig]
+  );
+
   console.log(`andy stageConfig.elements`, stageConfig.elements);
 
   return (
@@ -74,6 +95,21 @@ export function StageEditor({ event }: { event: AdminEventFragment }) {
         data-name="STAGE_EDITOR_TOOLBAR"
         className="flex w-1/3 flex-col gap-4"
       >
+        {/* font picker */}
+        <FontPicker
+          title="Heading font"
+          description="Select the fonts you want to use for headings. You can browse Google Fonts or add your own custom fonts."
+          value={event.stageConfig?.headingFontFamily}
+          onChange={handleHeadingFontChange}
+        />
+
+        <FontPicker
+          title="Body font"
+          description="Select the font you want to use for body text. You can browse Google Fonts or add your own custom fonts."
+          value={event.stageConfig?.bodyFontFamily}
+          onChange={handleBodyFontChange}
+        />
+
         <BackgroundImageInput
           imageUrl={event.stageConfig?.backgroundImage}
           onPreview={handleBackgroundPreview}
