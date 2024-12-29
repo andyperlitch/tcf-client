@@ -92,6 +92,7 @@ function TextStageElement({
   const [editing, setEditing] = useState(false);
 
   if (editor) {
+    // const
     children = (
       <>
         <EditableTextarea
@@ -101,7 +102,12 @@ function TextStageElement({
           editing={editing}
           setEditing={setEditing}
           showConfirmCancel={false}
-          textareaClassName="border-none outline-none"
+          className={`
+            h-full w-full
+
+            ${editing ? "relative z-10" : ""}
+          `}
+          textareaClassName="w-full h-full block border-none"
         />
         <StageElementBoundingBox
           selected={selected}

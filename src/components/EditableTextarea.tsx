@@ -12,6 +12,7 @@ interface EditableTextareaProps<T extends keyof JSX.IntrinsicElements> {
   locked?: boolean;
   className?: string;
   textareaClassName?: string;
+  placeholder?: string;
   editing?: boolean;
   setEditing?: (editing: boolean) => void;
 }
@@ -27,6 +28,7 @@ export function EditableTextarea<T extends keyof JSX.IntrinsicElements>({
   locked = false,
   className,
   textareaClassName,
+  placeholder,
 }: EditableTextareaProps<T>) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [internalEditing, setInternalEditing] = useState(false);
@@ -85,21 +87,14 @@ export function EditableTextarea<T extends keyof JSX.IntrinsicElements>({
       onClick: () => !editing && !locked && setEditing(true), // Spread elementProps and handle click
     }, // Spread elementProps and handle click
     editing ? (
-      <div
-        className={`
-          inherit relative -left-[6px] -top-[2px] bg-transparent pb-0 pl-[4px]
-          pr-0 pt-0 text-inherit outline-1
-
-          text-[length:inherit]
-        `}
-      >
+      <div className={`relative inherit bg-transparent`}>
         <Textarea
           disabled={loading}
           value={localValue}
           className={`
             ${textareaClassName}
 
-            text-inherit
+            text-inherit text-align-inherit font-size-inherit
           `}
           onChange={(e) => setLocalValue(e.target.value)}
           onKeyDown={checkForEnterOrEscape}
@@ -111,7 +106,9 @@ export function EditableTextarea<T extends keyof JSX.IntrinsicElements>({
         )}
       </div>
     ) : (
-      value
+      value || (
+        <span className="italic text-muted-foreground">{placeholder}</span>
+      )
     )
   );
 }

@@ -136,6 +136,7 @@ export function AdminEventPage() {
             elementProps={{ className: "text-foreground" }}
             value={data.event.description || ""}
             setValue={updateEventDescription}
+            placeholder="Description"
           />
           <div
             data-name="LOCATION-AND-DATE"
