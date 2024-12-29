@@ -59,21 +59,11 @@ export function StageEditor({ event }: { event: AdminEventFragment }) {
     [setSavedConfig]
   );
 
-  const handleHeadingFontChange = useCallback(
+  const handleFontChange = useCallback(
     (fontFamily: string[] | null | undefined) => {
       setSavedConfig((prev) => ({
         ...prev,
-        headingFontFamily: fontFamily,
-      }));
-    },
-    [setSavedConfig]
-  );
-
-  const handleBodyFontChange = useCallback(
-    (fontFamily: string[] | null | undefined) => {
-      setSavedConfig((prev) => ({
-        ...prev,
-        bodyFontFamily: fontFamily,
+        fontFamily,
       }));
     },
     [setSavedConfig]
@@ -97,17 +87,15 @@ export function StageEditor({ event }: { event: AdminEventFragment }) {
       >
         {/* font picker */}
         <FontPicker
-          title="Heading font"
-          description="Select the fonts you want to use for headings. You can browse Google Fonts or add your own custom fonts."
-          value={event.stageConfig?.headingFontFamily}
-          onChange={handleHeadingFontChange}
-        />
-
-        <FontPicker
-          title="Body font"
-          description="Select the font you want to use for body text. You can browse Google Fonts or add your own custom fonts."
-          value={event.stageConfig?.bodyFontFamily}
-          onChange={handleBodyFontChange}
+          label="Default Font"
+          title="Default Font"
+          description={[
+            `Select the fonts you want to use by default.`,
+            `You can browse Google Fonts or add your own custom fonts.`,
+            `You may override this on a per-element basis.`,
+          ].join(" ")}
+          value={stageConfig?.fontFamily}
+          onChange={handleFontChange}
         />
 
         <BackgroundImageInput

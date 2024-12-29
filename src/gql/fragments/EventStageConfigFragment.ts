@@ -7,8 +7,7 @@ gql`
     qrTextColor
     qrWrapperBackgroundColor
     backgroundImage
-    headingFontFamily
-    bodyFontFamily
+    fontFamily
     elements {
       ...StageElement
     }

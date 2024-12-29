@@ -43,6 +43,7 @@ export const ImageInput = forwardRef<
     onCurrentImageClear?: () => void;
     name: string;
     noPreview?: boolean;
+    className?: string;
   }
 >(
   (
@@ -55,6 +56,7 @@ export const ImageInput = forwardRef<
       onCurrentImageClear,
       name,
       noPreview,
+      className,
     },
     ref
   ) => {
@@ -115,7 +117,11 @@ export const ImageInput = forwardRef<
       <div
         data-name="IMAGE-SELECTOR"
         style={style}
-        className={`relative cursor-pointer`}
+        className={`
+          relative cursor-pointer
+
+          ${className}
+        `}
       >
         {/* The preview image */}
         {!noPreview && previewSrc && (

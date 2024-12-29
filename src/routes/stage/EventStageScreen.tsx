@@ -45,26 +45,11 @@ function Screen({ event }: { event: StageEventFragment }) {
   const { rootStyles } = useStageStyles({ stageConfig, draftConfig });
   const handleUpdateElement = useCallback(
     (element: StageElementFragment) => {
-      console.log("[handleUpdateElement] Updating element:", element);
-      setSavedConfig((prev) => {
-        console.log("[handleUpdateElement] Previous config:", prev);
-        const updatedElements =
-          prev.elements?.map((e) => {
-            const isMatch = e.id === element.id;
-            console.log(
-              "[handleUpdateElement] Checking element:",
-              e.id,
-              "matches:",
-              isMatch
-            );
-            return isMatch ? element : e;
-          }) || [];
-        console.log("[handleUpdateElement] Updated elements:", updatedElements);
-        return {
-          ...prev,
-          elements: updatedElements,
-        };
-      });
+      setSavedConfig((prev) => ({
+        ...prev,
+        elements:
+          prev.elements?.map((e) => (e.id === element.id ? element : e)) || [],
+      }));
     },
     [setSavedConfig]
   );

@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { EventStageConfig } from "@/gql/graphql";
 
+const DEFAULT_FONT_FAMILY = ["sans-serif"];
+
 export function useStageStyles({
   stageConfig,
   draftConfig,
@@ -8,6 +10,10 @@ export function useStageStyles({
   stageConfig: EventStageConfig | null | undefined;
   draftConfig: Partial<EventStageConfig> | null | undefined;
 }) {
+  // font families
+  const fontFamily = stageConfig?.fontFamily || DEFAULT_FONT_FAMILY;
+
+  // Styles to apply to the root element
   const rootStyles = useMemo(() => {
     const backgroundImageUrl =
       draftConfig?.backgroundImage || stageConfig?.backgroundImage || null;

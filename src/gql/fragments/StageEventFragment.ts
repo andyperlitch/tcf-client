@@ -12,6 +12,9 @@ gql`
     stageConfig {
       ...EventStageConfig
     }
+    fanConfig {
+      ...EventFanConfig
+    }
     activeEngagement {
       ...StageEngagement
     }

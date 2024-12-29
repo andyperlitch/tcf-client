@@ -11,5 +11,6 @@ gql`
     defaultClassNames
     engagementClassNames
     text
+    fontFamily
   }
 `;

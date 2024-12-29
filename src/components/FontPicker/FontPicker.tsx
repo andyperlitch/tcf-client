@@ -21,7 +21,11 @@ import {
 } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Card } from "../ui/card";
-import { Cross2Icon, InfoCircledIcon } from "@radix-ui/react-icons";
+import {
+  Cross2Icon,
+  FontFamilyIcon,
+  InfoCircledIcon,
+} from "@radix-ui/react-icons";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useCallback, useState } from "react";
 import { NamedFontInput } from "./NamedFontInput";
@@ -41,7 +45,6 @@ export function FontPicker({
   value,
   onChange,
 }: Props) {
-  console.log(`andy value`, value);
   const [internalValue, setInternalValue] = useState<string[]>(value || []);
   const [open, setOpen] = useState(false);
 
@@ -65,6 +68,9 @@ export function FontPicker({
             className="flex items-center gap-2"
             onClick={() => setOpen(true)}
           >
+            <div title={title}>
+              <FontFamilyIcon className="size-6" />
+            </div>
             <Input type="text" value={(value || []).join(",")} readOnly />
             <Button size="sm" type="button">
               Select...
@@ -85,8 +91,7 @@ export function FontPicker({
             <TabsContent value="browse">
               <Card>
                 <CardHeader>
-                  <CardTitle>Browse</CardTitle>
-                  <CardDescription>{description}</CardDescription>
+                  <CardTitle>Category</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <FontBrowser onSubmit={handleAddFont} />
