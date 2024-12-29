@@ -10,6 +10,7 @@ import { useStageEvent } from "@/hooks/useStageEvent";
 import { useStageState } from "./useStageState";
 import { StageElementFragment, StageEventFragment } from "@/gql/graphql";
 import { useSearchParams } from "react-router-dom";
+import { useGoogleFonts } from "@/hooks/useGoogleFonts";
 
 const CUSTOM_EVENT_PAGES: Record<string, FC> = {
   funksgiving: FunksGivingStage,
@@ -53,6 +54,10 @@ function Screen({ event }: { event: StageEventFragment }) {
     },
     [setSavedConfig]
   );
+
+  useGoogleFonts({
+    fontFamily: draftConfig?.fontFamily || stageConfig?.fontFamily || [],
+  });
 
   return (
     <div

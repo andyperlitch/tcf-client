@@ -121,7 +121,11 @@ function TextStageElement({
       ref={ref}
       data-name="TEXT_STAGE_ELEMENT"
       data-id={id}
-      className={className}
+      className={`
+        ${className}
+
+        font-stage
+      `}
       style={styles}
       onClick={editor ? () => onSelect(id) : undefined}
     >

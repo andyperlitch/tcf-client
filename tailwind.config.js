@@ -82,6 +82,7 @@ export default {
           "Arial",
           "sans-serif",
         ],
+        stage: ["var(--stage-font-family)"],
         margarine: ["Margarine", "sans-serif"],
       },
     },
