@@ -25,7 +25,6 @@ export function useStageElementHandlers({
             id: newElementId,
             name: "Text element",
             type: "text",
-            textType: "heading",
             text: "New element",
             fontFamily: ["Arial", "sans-serif"],
             defaultClassNames: "text-center",

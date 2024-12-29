@@ -1,6 +1,6 @@
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { FunksGivingStage } from "./Funksgiving/FunksGivingStage";
-import { FC, useCallback } from "react";
+import { FC, useEffect } from "react";
 import { useStageScreenViewport } from "./useStageScreenViewport";
 import { useStageStyles } from "./useStageStyles";
 import { StageActiveEngagement } from "@/engagements/StageActiveEngagement";
@@ -8,9 +8,10 @@ import { StageElement } from "./StageElement";
 import { StageChrome } from "./StageChrome";
 import { useStageEvent } from "@/hooks/useStageEvent";
 import { useStageState } from "./useStageState";
-import { StageElementFragment, StageEventFragment } from "@/gql/graphql";
+import { StageEventFragment } from "@/gql/graphql";
 import { useSearchParams } from "react-router-dom";
 import { useGoogleFonts } from "@/hooks/useGoogleFonts";
+import { useStageElementHandlers } from "../admin/event/StageEditor/useStageElementHandlers";
 
 const CUSTOM_EVENT_PAGES: Record<string, FC> = {
   funksgiving: FunksGivingStage,
@@ -40,24 +41,39 @@ function Screen({ event }: { event: StageEventFragment }) {
     setSavedConfig,
     setSelectedElementId,
     selectedElementId,
+    selectedElement,
   } = useStageState({
     initialConfig: event.stageConfig || { elements: [] },
   });
   const { rootStyles } = useStageStyles({ stageConfig, draftConfig });
-  const handleUpdateElement = useCallback(
-    (element: StageElementFragment) => {
-      setSavedConfig((prev) => ({
-        ...prev,
-        elements:
-          prev.elements?.map((e) => (e.id === element.id ? element : e)) || [],
-      }));
-    },
-    [setSavedConfig]
-  );
+
+  const { handleUpdateElement, handleDeleteElement } = useStageElementHandlers({
+    setSavedConfig,
+    setSelectedElementId,
+    selectedElementId,
+  });
 
   useGoogleFonts({
     fontFamily: draftConfig?.fontFamily || stageConfig?.fontFamily || [],
   });
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    // only set the window listener if the user is in editor mode
+    if (editor) {
+      const onKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "Backspace") {
+          const isEditing =
+            (event.target as HTMLElement).contentEditable === "true";
+          if (!isEditing && selectedElement) {
+            handleDeleteElement(selectedElement);
+          }
+        }
+      };
+      window.addEventListener("keydown", onKeyDown);
+      return () => window.removeEventListener("keydown", onKeyDown);
+    }
+  }, [editor, selectedElement, handleDeleteElement]);
 
   return (
     <div

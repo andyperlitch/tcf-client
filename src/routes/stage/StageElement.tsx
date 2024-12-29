@@ -1,8 +1,9 @@
 import { StageElementFragment, StageEngagementFragment } from "@/gql/graphql";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { StageElementBoundingBox } from "./StageElementBoundingBox";
 import { StageState } from "./useStageState";
-import { EditableTextarea } from "@/components/EditableTextarea";
+import { ContentEditableDiv } from "@/components/ContentEditableDiv";
+import { pick } from "lodash";
 
 export function StageElement({
   element,
@@ -86,57 +87,74 @@ function TextStageElement({
   styles: React.CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-
-  let children: React.ReactNode = text;
-
+  const box = pick(styles, ["width", "height", "top", "left"]);
   const [editing, setEditing] = useState(false);
+  const [internalText, setInternalText] = useState(text || "");
 
-  if (editor) {
-    // const
-    children = (
-      <>
-        <EditableTextarea
-          value={text || ""}
-          setValue={(value) => onUpdate({ ...element, text: value })}
-          element="div"
-          editing={editing}
-          setEditing={setEditing}
-          showConfirmCancel={false}
-          className={`
-            h-full w-full
+  useEffect(() => {
+    if (!editing && internalText !== text) {
+      onUpdate({ ...element, text: internalText });
+    }
+  }, [editing, internalText, text, onUpdate, element]);
 
-            ${editing ? "relative z-10" : ""}
-          `}
-          textareaClassName="w-full h-full block border-none"
-        />
+  const handleSelect = useCallback(() => {
+    if (editor && !selected) {
+      onSelect(id);
+    }
+  }, [editor, selected, id, onSelect]);
+
+  const handleKeyUp = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === "Enter" && event.shiftKey) {
+        event.preventDefault();
+        setEditing(false);
+      } else if (event.key === "Escape") {
+        setEditing(false);
+      }
+    },
+    [setEditing]
+  );
+
+  const handleChange = useCallback(
+    (event: React.FormEvent<HTMLDivElement>) =>
+      setInternalText((event.target as HTMLDivElement).innerText),
+    [setInternalText]
+  );
+
+  return (
+    <>
+      <ContentEditableDiv
+        editable={editing}
+        ref={ref}
+        data-name="TEXT_STAGE_ELEMENT"
+        data-id={id}
+        className={`
+          ${className}
+          ${editing ? "z-20" : ""}
+          ${editor ? "" : "transition-all duration-1000"}
+
+          font-stage
+        `}
+        style={styles}
+        onClick={handleSelect}
+        text={editing ? internalText : text}
+        onChange={handleChange}
+        onKeyUp={handleKeyUp}
+        onBlur={() => setEditing(false)}
+      />
+      {editor && (
         <StageElementBoundingBox
+          box={box}
           selected={selected}
           onSelect={onSelect}
+          ref={ref}
           element={element}
           activeEngagement={activeEngagement}
-          elementRef={ref}
           onUpdate={onUpdate}
           onDoubleClick={() => setEditing(true)}
         />
-      </>
-    );
-  }
-
-  return (
-    <div
-      ref={ref}
-      data-name="TEXT_STAGE_ELEMENT"
-      data-id={id}
-      className={`
-        ${className}
-
-        font-stage
-      `}
-      style={styles}
-      onClick={editor ? () => onSelect(id) : undefined}
-    >
-      {children}
-    </div>
+      )}
+    </>
   );
 }
 
@@ -161,29 +179,35 @@ function ImageStageElement({
   styles: React.CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const box = pick(styles, ["width", "height", "top", "left"]);
 
   return (
-    <div
-      ref={ref}
-      data-name="IMAGE_STAGE_ELEMENT"
-      data-id={id}
-      className={className}
-      style={{
-        ...styles,
-        backgroundImage: `url(${imageUrl || ""})`,
-      }}
-      onClick={editor ? () => onSelect(id) : undefined}
-    >
+    <>
+      <div
+        ref={ref}
+        data-name="IMAGE_STAGE_ELEMENT"
+        data-id={id}
+        className={`
+          ${className}
+          ${editor ? "" : "transition-all duration-1000"}
+        `}
+        style={{
+          ...styles,
+          backgroundImage: `url(${imageUrl || ""})`,
+        }}
+        onClick={editor ? () => onSelect(id) : undefined}
+      />
       {editor && (
         <StageElementBoundingBox
+          box={box}
           selected={selected}
           onSelect={onSelect}
-          elementRef={ref}
+          ref={ref}
           element={element}
           activeEngagement={activeEngagement}
           onUpdate={onUpdate}
         />
       )}
-    </div>
+    </>
   );
 }

@@ -1,36 +1,53 @@
 import { StageEngagementFragment } from "@/gql/graphql";
-import { useCallback, useMemo, useState } from "react";
+import {
+  CSSProperties,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  forwardRef,
+} from "react";
 
 import { StageElementFragment } from "@/gql/graphql";
 import { useEffect } from "react";
 import { StageState } from "./useStageState";
 
-export function StageElementBoundingBox({
-  selected,
-  onSelect,
-  elementRef,
-  element,
-  activeEngagement,
-  onUpdate,
-  onDoubleClick,
-}: {
-  selected: boolean;
-  onSelect: StageState["setSelectedElementId"];
-  elementRef: React.RefObject<HTMLDivElement>;
-  element: StageElementFragment;
-  activeEngagement: StageEngagementFragment | null | undefined;
-  onUpdate: (element: StageElementFragment) => void;
-  onDoubleClick?: () => void;
-}) {
+export const StageElementBoundingBox = forwardRef<
+  HTMLDivElement,
+  {
+    selected: boolean;
+    onSelect: StageState["setSelectedElementId"];
+    element: StageElementFragment;
+    activeEngagement: StageEngagementFragment | null | undefined;
+    onUpdate: (element: StageElementFragment) => void;
+    onDoubleClick?: () => void;
+    box: Pick<CSSProperties, "width" | "height" | "top" | "left">;
+  }
+>(function StageElementBoundingBox(
+  {
+    selected,
+    onSelect,
+    element,
+    activeEngagement,
+    onUpdate,
+    onDoubleClick,
+    box,
+  },
+  elementRef
+) {
+  console.log(`BOUNDING BOX elementRef`, elementRef);
   const { pxToVw, pxToVh } = usePixelToViewport();
-
+  const bboxRef = useRef<HTMLDivElement>(null);
+  const handleClick = useCallback(() => {
+    if (!selected) {
+      onSelect(element.id);
+    }
+  }, [selected, onSelect, element.id]);
   const moveElementHandlers = useMoveElementHandlers({
-    elementRef,
+    elementRef: elementRef as React.RefObject<HTMLDivElement>,
+    bboxRef,
     onUpdatePosition: useCallback(
       ({ x, y }) => {
-        if (!selected) {
-          onSelect(element.id);
-        }
         const translatedXandY = {
           left: `${pxToVw(x)}vw`,
           top: `${pxToVh(y)}vh`,
@@ -72,7 +89,7 @@ export function StageElementBoundingBox({
           ...updates,
         });
       },
-      [selected, pxToVw, pxToVh, activeEngagement, onUpdate, element, onSelect]
+      [pxToVw, pxToVh, activeEngagement, onUpdate, element]
     ),
   });
 
@@ -115,22 +132,26 @@ export function StageElementBoundingBox({
   );
 
   const scaleSEHandlers = useResizeElementHandlers({
-    elementRef,
+    elementRef: elementRef as React.RefObject<HTMLDivElement>,
+    bboxRef,
     anchorLocation: "se",
     onUpdateSize,
   });
   const scaleSWHandlers = useResizeElementHandlers({
-    elementRef,
+    elementRef: elementRef as React.RefObject<HTMLDivElement>,
+    bboxRef,
     anchorLocation: "sw",
     onUpdateSize,
   });
   const scaleNEHandlers = useResizeElementHandlers({
-    elementRef,
+    elementRef: elementRef as React.RefObject<HTMLDivElement>,
+    bboxRef,
     anchorLocation: "ne",
     onUpdateSize,
   });
   const scaleNWHandlers = useResizeElementHandlers({
-    elementRef,
+    elementRef: elementRef as React.RefObject<HTMLDivElement>,
+    bboxRef,
     anchorLocation: "nw",
     onUpdateSize,
   });
@@ -143,13 +164,28 @@ export function StageElementBoundingBox({
     ? "opacity-100"
     : "opacity-0 hover:opacity-50";
 
+  const [style, setStyle] = useState<CSSProperties>({});
+
+  useEffect(() => {
+    const el = (elementRef as React.RefObject<HTMLDivElement>)?.current;
+    if (!el) return;
+    const detectedRect = el.getBoundingClientRect();
+    setStyle({
+      width: box.width || `${detectedRect.width}px`,
+      height: box.height || `${detectedRect.height}px`,
+      top: box.top || detectedRect.top,
+      left: box.left || detectedRect.left,
+    });
+  }, [box.height, box.left, box.top, box.width, elementRef]);
+
   return (
-    <div className={`absolute left-0 top-0 h-full w-full`}>
+    <div className={`absolute`} style={style} ref={bboxRef}>
       {/* bounding box */}
       <div
         {...moveElementHandlers}
         data-name="BOUNDING-BOX"
         onDoubleClick={onDoubleClick}
+        onClick={handleClick}
         className={`
           absolute h-full w-full cursor-move border border-white
 
@@ -199,7 +235,7 @@ export function StageElementBoundingBox({
       ></div>
     </div>
   );
-}
+});
 
 /**
  * Returns a set of functions to convert between pixels and viewport units.
@@ -236,14 +272,17 @@ function usePixelToViewport() {
  *
  * @param onUpdatePosition - A function to update the element's position.
  * @param elementRef - A ref to the element to move.
+ * @param bboxRef - A ref to the editing bounding box of the element.
  * @returns An object containing functions to handle moving an element.
  */
 function useMoveElementHandlers({
   onUpdatePosition,
   elementRef,
+  bboxRef,
 }: {
   onUpdatePosition: (position: { x: number; y: number }) => void;
   elementRef: React.RefObject<HTMLDivElement>;
+  bboxRef: React.RefObject<HTMLDivElement>;
 }) {
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -277,19 +316,31 @@ function useMoveElementHandlers({
       if (elementRef.current && "style" in elementRef.current) {
         elementRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
       }
+
+      // update the bounding box's position
+      if (bboxRef.current && "style" in bboxRef.current) {
+        bboxRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      }
     };
     window.addEventListener("mousemove", onMouseMove);
 
     // create a listener on window for mouse up
     const onMouseUp = (e: MouseEvent) => {
+      // get final delta
       const deltaX = e.clientX - startX;
       const deltaY = e.clientY - startY;
-      // get final delta, call onUpdatePosition with new x and y
+
+      // call onUpdatePosition with new x and y
       onUpdatePosition({ x: left + deltaX, y: top + deltaY });
 
       // reset the element's transform position
       if (elementRef.current && "style" in elementRef.current) {
         elementRef.current.style.transform = "translate(0px, 0px)";
+      }
+
+      // reset the bounding box's transform position
+      if (bboxRef.current && "style" in bboxRef.current) {
+        bboxRef.current.style.transform = "translate(0px, 0px)";
       }
 
       // add the `transition-all` class back to the element
@@ -311,10 +362,12 @@ function useMoveElementHandlers({
 
 function useResizeElementHandlers({
   elementRef,
+  bboxRef,
   onUpdateSize,
   anchorLocation,
 }: {
   elementRef: React.RefObject<HTMLDivElement>;
+  bboxRef: React.RefObject<HTMLDivElement>;
   onUpdateSize: (
     boundingBox: Pick<DOMRect, "width" | "height" | "top" | "left">
   ) => void;
@@ -382,6 +435,13 @@ function useResizeElementHandlers({
         elementRef.current.style.height = `${newHeight}px`;
         elementRef.current.style.top = `${newTop}px`;
         elementRef.current.style.left = `${newLeft}px`;
+      }
+
+      if (bboxRef.current && "style" in bboxRef.current) {
+        bboxRef.current.style.width = `${newWidth}px`;
+        bboxRef.current.style.height = `${newHeight}px`;
+        bboxRef.current.style.top = `${newTop}px`;
+        bboxRef.current.style.left = `${newLeft}px`;
       }
     };
 
