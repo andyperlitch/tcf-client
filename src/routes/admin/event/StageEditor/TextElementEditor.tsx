@@ -32,9 +32,12 @@ export function TextElementEditor({
     }
 
     let textAlign: string;
-    if (element.defaultClassNames?.includes("text-center")) {
+    const classNames = activeEngagement
+      ? element.engagementClassNames
+      : element.defaultClassNames;
+    if (classNames?.includes("text-center")) {
       textAlign = "center";
-    } else if (element.defaultClassNames?.includes("text-right")) {
+    } else if (classNames?.includes("text-right")) {
       textAlign = "right";
     } else {
       textAlign = "left";
@@ -45,16 +48,27 @@ export function TextElementEditor({
     activeEngagement,
     element.defaultClassNames,
     element.defaultStyles?.fontSize,
+    element.engagementClassNames,
     element.engagementStyles?.fontSize,
   ]);
   const setTextAlign = (value: TextAlign) => {
-    onUpdate({
-      ...element,
-      defaultClassNames: updateTextAlignClass(
-        element.defaultClassNames || "",
-        value
-      ),
-    });
+    if (!activeEngagement) {
+      onUpdate({
+        ...element,
+        defaultClassNames: updateTextAlignClass(
+          element.defaultClassNames || "",
+          value
+        ),
+      });
+    } else {
+      onUpdate({
+        ...element,
+        engagementClassNames: updateTextAlignClass(
+          element.engagementClassNames || "",
+          value
+        ),
+      });
+    }
   };
 
   return (

@@ -15,6 +15,7 @@ export function useStageElementHandlers({
   selectedElementId: AdminStageConfig["selectedElementId"];
 }) {
   const handleNewTextElement = useCallback(() => {
+    console.log("handleNewTextElement");
     setSavedConfig((prev) => {
       const newElementId = Math.random().toString();
       const newSavedConfig = {
@@ -28,11 +29,16 @@ export function useStageElementHandlers({
             text: "New element",
             fontFamily: ["Arial", "sans-serif"],
             defaultClassNames: "text-center",
+            engagementClassNames: "text-center",
             defaultStyles: {
               fontSize: "1.5vw",
+              width: "30vw",
+              height: "10vh",
             },
             engagementStyles: {
               fontSize: "1.5vw",
+              width: "30vw",
+              height: "10vh",
             },
           },
         ],

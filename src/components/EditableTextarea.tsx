@@ -73,7 +73,6 @@ export function EditableTextarea<T extends keyof JSX.IntrinsicElements>({
 
   // Select all text in the input when entering edit mode
   useEffect(() => {
-    console.log(`andy inputRef.current`, inputRef.current);
     if (editing && inputRef.current) {
       inputRef.current.select();
     }

@@ -35,7 +35,6 @@ export const StageElementBoundingBox = forwardRef<
   },
   elementRef
 ) {
-  console.log(`BOUNDING BOX elementRef`, elementRef);
   const { pxToVw, pxToVh } = usePixelToViewport();
   const bboxRef = useRef<HTMLDivElement>(null);
   const handleClick = useCallback(() => {

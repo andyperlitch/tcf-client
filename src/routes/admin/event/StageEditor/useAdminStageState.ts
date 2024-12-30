@@ -21,6 +21,9 @@ export function useAdminStageState({
   const debouncedOnSave = useMemo(
     () =>
       debounce((config: EventStageConfig) => {
+        logger.log("debouncedOnSave: ", {
+          config,
+        });
         onSave({
           ...stripTypename(config),
           elements: config.elements?.map((element) => stripTypename(element)),
@@ -29,34 +32,35 @@ export function useAdminStageState({
     [onSave]
   );
 
-  const [stageState, setStageState] = useIframeSharedState<SharedStageState>(
-    {
-      savedConfig: initialConfig,
-      draftConfig: {},
-      selectedElementId: undefined,
-    },
-    { ref: iframeRef }
-  );
+  const [stageConfigs, setStageConfigs] =
+    useIframeSharedState<SharedStageState>(
+      {
+        savedConfig: initialConfig,
+        draftConfig: {},
+        selectedElementId: undefined,
+      },
+      { ref: iframeRef, id: "ADMIN" }
+    );
 
   const setSelectedElementId = useCallback(
     (id: string | undefined) => {
-      if (id === stageState.selectedElementId) {
+      if (id === stageConfigs.selectedElementId) {
         return;
       }
-      setStageState((prev) =>
+      setStageConfigs((prev) =>
         prev.selectedElementId !== id
           ? { ...prev, selectedElementId: id }
           : prev
       );
     },
-    [setStageState, stageState.selectedElementId]
+    [setStageConfigs, stageConfigs.selectedElementId]
   );
 
   const setSavedConfig = useCallback(
     (
       config: EventStageConfig | ((prev: EventStageConfig) => EventStageConfig)
     ) => {
-      setStageState((prev) => {
+      setStageConfigs((prev) => {
         const savedConfig =
           typeof config === "function" ? config(prev.savedConfig) : config;
         const newStageState = {
@@ -66,11 +70,11 @@ export function useAdminStageState({
             ...savedConfig,
           },
         };
-        logger.log("setStageState: ", { newStageState });
+        logger.log("setSavedConfig: ", { newStageState });
         return newStageState;
       });
     },
-    [setStageState]
+    [setStageConfigs]
   );
 
   const setDraftConfig = useCallback(
@@ -79,12 +83,14 @@ export function useAdminStageState({
         | Partial<EventStageConfig>
         | ((prev: Partial<EventStageConfig>) => Partial<EventStageConfig>)
     ) => {
-      setStageState((prev) => {
+      setStageConfigs((prev) => {
         const newDraftConfig =
           typeof config === "function" ? config(prev.draftConfig) : config;
 
-        console.log("Previous draft config:", prev.draftConfig);
-        console.log("New draft config:", newDraftConfig);
+        logger.log("setDraftConfig: ", {
+          prevDraftConfig: prev.draftConfig,
+          newDraftConfig,
+        });
 
         return {
           ...prev,
@@ -92,22 +98,25 @@ export function useAdminStageState({
         };
       });
     },
-    [setStageState]
+    [setStageConfigs]
   );
 
   const lastSavedConfig = useRef(initialConfig);
 
   useEffect(() => {
-    if (!isEqual(lastSavedConfig.current, stageState.savedConfig)) {
-      debouncedOnSave(stageState.savedConfig);
-      lastSavedConfig.current = stageState.savedConfig;
+    if (!isEqual(lastSavedConfig.current, stageConfigs.savedConfig)) {
+      logger.log("Saving config", stageConfigs.savedConfig);
+      debouncedOnSave(stageConfigs.savedConfig);
+      lastSavedConfig.current = stageConfigs.savedConfig;
+    } else {
+      logger.log("No config change, not saving", stageConfigs.savedConfig);
     }
-  }, [debouncedOnSave, stageState.savedConfig, initialConfig]);
+  }, [debouncedOnSave, stageConfigs.savedConfig, initialConfig]);
 
   return {
-    stageConfig: stageState.savedConfig,
-    draftConfig: stageState.draftConfig,
-    selectedElementId: stageState.selectedElementId,
+    stageConfig: stageConfigs.savedConfig,
+    draftConfig: stageConfigs.draftConfig,
+    selectedElementId: stageConfigs.selectedElementId,
     setSavedConfig,
     setDraftConfig,
     setSelectedElementId,

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { EventStageConfig } from "@/gql/graphql";
 import { useIframeSharedState } from "@/hooks/use-iframe";
 import { SharedStageState } from "@/types/stage";
@@ -12,15 +12,16 @@ export function useStageState({
   initialConfig: EventStageConfig;
 }) {
   const [stageConfigs, setStageConfigs] =
-    useIframeSharedState<SharedStageState>({
-      savedConfig: initialConfig,
-      draftConfig: {},
-      selectedElementId: undefined,
-    });
-
-  useEffect(() => {
-    console.log("👨‍🎤 STAGE SAVED CONFIG", stageConfigs.savedConfig);
-  }, [stageConfigs.savedConfig]);
+    useIframeSharedState<SharedStageState>(
+      {
+        savedConfig: initialConfig,
+        draftConfig: {},
+        selectedElementId: undefined,
+      },
+      {
+        id: "STAGE",
+      }
+    );
 
   const setSavedConfig = useCallback(
     (

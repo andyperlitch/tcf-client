@@ -69,8 +69,6 @@ export function StageEditor({ event }: { event: AdminEventFragment }) {
     [setSavedConfig]
   );
 
-  console.log(`andy stageConfig.elements`, stageConfig.elements);
-
   return (
     <div className="flex gap-2" data-name="STAGE_EDITOR">
       <iframe

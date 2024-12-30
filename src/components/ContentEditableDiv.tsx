@@ -34,7 +34,6 @@ export const ContentEditableDiv = forwardRef<
   const prevEditableRef = useRef<boolean>(editable);
 
   // Use forwarded ref if provided, otherwise fall back to inner ref
-  console.log(`andy forwardedRef`, forwardedRef);
   const contentRef = (forwardedRef ||
     innerRef) as React.RefObject<HTMLDivElement>;
 
