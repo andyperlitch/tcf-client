@@ -30,3 +30,7 @@
   z-index: 10;
   box-shadow: 0 2px 7px #00000077;
 }
+
+.colorSquare {
+  @apply h-6 w-6 rounded-md border-2 border-solid relative border-white;
+}

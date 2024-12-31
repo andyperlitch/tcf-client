@@ -31,11 +31,13 @@ export function useStageElementHandlers({
             defaultClassNames: "text-center",
             engagementClassNames: "text-center",
             defaultStyles: {
+              color: "#FFFFFFFF",
               fontSize: "1.5vw",
               width: "30vw",
               height: "10vh",
             },
             engagementStyles: {
+              color: "#FFFFFFFF",
               fontSize: "1.5vw",
               width: "30vw",
               height: "10vh",
