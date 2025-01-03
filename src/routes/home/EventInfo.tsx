@@ -2,30 +2,37 @@ import { useFontLoader } from "@/hooks/useFontLoader";
 import styles from "./EventInfo.module.css";
 import { isMobile } from "react-device-detect";
 
-export function FunksgivingInfo() {
+export function EventInfo({
+  fbLink,
+  imageSrc,
+  date,
+  heading,
+}: {
+  fbLink: string;
+  imageSrc: string;
+  date: string;
+  heading: string;
+}) {
   const isFontLoaded = useFontLoader({ fonts: ["Just Another Hand"] });
   return (
     <div
       onClick={() => {
-        window.open(
-          "https://www.facebook.com/events/428755903589853/",
-          "_blank"
-        );
+        window.open(fbLink, "_blank");
       }}
-      data-name="EVENT-INFO"
+      data-name="EVENT_INFO"
       className={`
         flex cursor-pointer flex-col items-center justify-center space-y-4
       `}
     >
       <div
-        data-name="LEFT-RIGHT-CONTENT"
+        data-name="LEFT_RIGHT_CONTENT"
         className={`
           flex items-center justify-center
 
           ${styles.container}
         `}
       >
-        <div data-name="LEFT-TEXT" className="flex-1">
+        <div data-name="LEFT_TEXT" className="flex-1">
           <h2
             className={`
               ${isMobile ? "pl-4 pr-4" : "pl-8 pr-8"}
@@ -36,18 +43,18 @@ export function FunksgivingInfo() {
               ${styles.fanOutHeading}
             `}
           >
-            <span className="text-3xl">Come check us out on</span>
+            <span className="text-3xl">{heading}</span>
             <br />
-            Nov. 23rd
+            {date}
           </h2>
         </div>
-        <div data-name="RIGHT-IMAGE" className="flex-1">
+        <div data-name="RIGHT_IMAGE" className="flex-1">
           <div className="pl-8 pr-8">
             <img
               className={`
                 ${styles.fanOutImage}
               `}
-              src="/funksgiving-flyer.jpg"
+              src={imageSrc}
               style={{ maxHeight: "25vh", maxWidth: "100%" }}
             />
           </div>

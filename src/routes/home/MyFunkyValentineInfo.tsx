@@ -2,7 +2,7 @@ import { useFontLoader } from "@/hooks/useFontLoader";
 import styles from "./EventInfo.module.css";
 import { isMobile } from "react-device-detect";
 
-export function FunksgivingInfo() {
+export function MyFunkyValentineInfo() {
   const isFontLoaded = useFontLoader({ fonts: ["Just Another Hand"] });
   return (
     <div
@@ -12,7 +12,7 @@ export function FunksgivingInfo() {
           "_blank"
         );
       }}
-      data-name="EVENT-INFO"
+      data-name="MY-FUNKY-VALENTINE-INFO"
       className={`
         flex cursor-pointer flex-col items-center justify-center space-y-4
       `}
@@ -38,7 +38,7 @@ export function FunksgivingInfo() {
           >
             <span className="text-3xl">Come check us out on</span>
             <br />
-            Nov. 23rd
+            Feb. 14th
           </h2>
         </div>
         <div data-name="RIGHT-IMAGE" className="flex-1">
@@ -47,7 +47,7 @@ export function FunksgivingInfo() {
               className={`
                 ${styles.fanOutImage}
               `}
-              src="/funksgiving-flyer.jpg"
+              src="/myfunkyvalentine-flyer.jpg"
               style={{ maxHeight: "25vh", maxWidth: "100%" }}
             />
           </div>

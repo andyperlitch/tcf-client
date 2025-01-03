@@ -3,8 +3,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { GigPicker } from "@/components/GigPicker";
 import { hasRole } from "@/utils/hasRole";
 import { Role } from "@/gql/graphql";
-// import { FunksgivingInfo } from "./FunksgivingInfo";
 import { useFontLoader } from "@/hooks/useFontLoader";
+import { EventInfo } from "./EventInfo";
 
 export default function Home() {
   const { user } = useAuth();
@@ -44,7 +44,12 @@ export default function Home() {
           📍 Santa Cruz, CA
         </h2>
 
-        {/* {<FunksgivingInfo />} */}
+        <EventInfo
+          fbLink="https://www.facebook.com/events/428755903589853/"
+          imageSrc="/myfunkyvalentine-flyer.png"
+          date="Feb. 14th"
+          heading="Come check us out on"
+        />
 
         <div
           data-name="BOTTOM-INFO"
