@@ -30,6 +30,13 @@ function savedConfigReducer(
       };
       return newSavedConfig;
     }
+    case IMAGE_ELEMENT_ADDED: {
+      const newSavedConfig = {
+        ...state,
+        elements: [...(state.elements || []), action.payload.element],
+      };
+      return newSavedConfig;
+    }
     case STAGE_ELEMENT_DELETED: {
       const newSavedConfig = {
         ...state,
