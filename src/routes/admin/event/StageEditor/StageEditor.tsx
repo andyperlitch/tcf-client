@@ -1,13 +1,14 @@
 import { AdminEventFragment, EventStageConfig } from "@/gql/graphql";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { ImageIcon, TextIcon } from "@radix-ui/react-icons";
 import { useAdminStageState } from "./useAdminStageState";
 import { BackgroundImageInput } from "./BackgroundImageInput";
 import StageElementEditor from "./StageElementEditor";
 import { useStageElementHandlers } from "./useStageElementHandlers";
 import { FontPicker } from "@/components/FontPicker";
+import { useHotkeys } from "@shelf/hotkeys";
 
 const defaultConfig: EventStageConfig = {
   elements: [],
@@ -22,6 +23,14 @@ export function StageEditor({ event }: { event: AdminEventFragment }) {
   });
 
   const handlers = useStageElementHandlers({ dispatch });
+
+  useHotkeys({
+    Backspace: useCallback(() => {
+      if (state.selectedElementId) {
+        handlers.handleDeleteElement(state.selectedElementId);
+      }
+    }, [state.selectedElementId, handlers]),
+  });
 
   return (
     <div className="flex gap-2" data-name="STAGE_EDITOR">

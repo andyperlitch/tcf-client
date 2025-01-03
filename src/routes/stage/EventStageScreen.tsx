@@ -1,6 +1,7 @@
+import { useHotkeys } from "@shelf/hotkeys";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { FunksGivingStage } from "./Funksgiving/FunksGivingStage";
-import { FC, useEffect } from "react";
+import { FC, useCallback } from "react";
 import { useStageScreenViewport } from "./useStageScreenViewport";
 import { useStageStyles } from "./useStageStyles";
 import { StageActiveEngagement } from "@/engagements/StageActiveEngagement";
@@ -59,23 +60,13 @@ function Screen({ event }: { event: StageEventFragment }) {
     fontFamily: draftConfig?.fontFamily || savedConfig?.fontFamily || [],
   });
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    // only set the window listener if the user is in editor mode
-    if (editor) {
-      const onKeyDown = (event: KeyboardEvent) => {
-        if (event.key === "Backspace") {
-          const isEditing =
-            (event.target as HTMLElement).contentEditable === "true";
-          if (!isEditing && selectedElementId) {
-            handleDeleteElement(selectedElementId);
-          }
-        }
-      };
-      window.addEventListener("keydown", onKeyDown);
-      return () => window.removeEventListener("keydown", onKeyDown);
-    }
-  }, [editor, selectedElementId, handleDeleteElement]);
+  useHotkeys({
+    Backspace: useCallback(() => {
+      if (editor && selectedElementId) {
+        handleDeleteElement(selectedElementId);
+      }
+    }, [editor, selectedElementId, handleDeleteElement]),
+  });
 
   return (
     <div

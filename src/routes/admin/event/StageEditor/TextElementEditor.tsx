@@ -6,6 +6,44 @@ import { StageElementFragment, StageEngagementFragment } from "@/gql/graphql";
 import { FontSizeIcon } from "@radix-ui/react-icons";
 import { useMemo, useCallback } from "react";
 
+/**
+ * In many cases, if a style is set to the same value on an engagement as default,
+ * then updating the default style should also update the engagement style.
+ */
+function createStyleUpdate(
+  styleField: string,
+  updatedValue: string,
+  element: StageElementFragment,
+  engagement: boolean
+) {
+  if (engagement) {
+    return {
+      ...element,
+      engagementStyles: {
+        ...element.engagementStyles,
+        [styleField]: updatedValue,
+      },
+    };
+  }
+
+  const updates = {
+    ...element,
+    defaultStyles: {
+      ...element.defaultStyles,
+      [styleField]: updatedValue,
+    },
+  };
+
+  if (
+    element.engagementStyles?.[styleField] ===
+    element.defaultStyles?.[styleField]
+  ) {
+    updates.engagementStyles[styleField] = updatedValue;
+  }
+
+  return updates;
+}
+
 export function TextElementEditor({
   element,
   onUpdate,
@@ -64,25 +102,26 @@ export function TextElementEditor({
 
   const setColor = useCallback(
     (value: string) => {
-      const stylesKey = activeEngagement ? "engagementStyles" : "defaultStyles";
-      onUpdate({
-        ...element,
-        [stylesKey]: {
-          ...element[stylesKey],
-          color: value,
-        },
-      });
+      const updates = createStyleUpdate(
+        "color",
+        value,
+        element,
+        !!activeEngagement
+      );
+      onUpdate(updates);
     },
     [element, activeEngagement, onUpdate]
   );
 
   const setFontSize = useCallback(
     (newValue: string) => {
-      const stylesKey = activeEngagement ? "engagementStyles" : "defaultStyles";
-      onUpdate({
-        ...element,
-        [stylesKey]: { ...element[stylesKey], fontSize: newValue },
-      });
+      const updates = createStyleUpdate(
+        "fontSize",
+        newValue,
+        element,
+        !!activeEngagement
+      );
+      onUpdate(updates);
     },
     [element, activeEngagement, onUpdate]
   );
