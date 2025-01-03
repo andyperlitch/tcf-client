@@ -77,8 +77,8 @@ function Screen({ event }: { event: StageEventFragment }) {
       style={rootStyles}
       onClick={(e: React.MouseEvent<HTMLDivElement>) => {
         const dataName = (e.target as HTMLElement).getAttribute("data-name");
-        console.log(`andy dataName`, dataName);
-        if (editor && dataName !== "BOUNDING_BOX") {
+        if (editor && !dataName?.startsWith("BOUNDING_BOX")) {
+          console.log(`andy dataName`, dataName);
           handleSelectElement(undefined);
         }
       }}
