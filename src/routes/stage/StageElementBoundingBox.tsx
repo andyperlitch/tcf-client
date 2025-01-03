@@ -10,13 +10,12 @@ import {
 
 import { StageElementFragment } from "@/gql/graphql";
 import { useEffect } from "react";
-import { StageState } from "./useEventStageState";
 
 export const StageElementBoundingBox = forwardRef<
   HTMLDivElement,
   {
     selected: boolean;
-    onSelect: StageState["setSelectedElementId"];
+    onSelect: (elementId: string) => void;
     element: StageElementFragment;
     activeEngagement: StageEngagementFragment | null | undefined;
     onUpdate: (element: StageElementFragment) => void;
@@ -182,7 +181,7 @@ export const StageElementBoundingBox = forwardRef<
       {/* bounding box */}
       <div
         {...moveElementHandlers}
-        data-name="BOUNDING-BOX"
+        data-name="BOUNDING_BOX"
         onDoubleClick={onDoubleClick}
         onClick={handleClick}
         className={`

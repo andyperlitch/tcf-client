@@ -75,6 +75,13 @@ function Screen({ event }: { event: StageEventFragment }) {
       relative flex h-screen w-screen flex-col gap-4 overflow-hidden
     `}
       style={rootStyles}
+      onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+        const dataName = (e.target as HTMLElement).getAttribute("data-name");
+        console.log(`andy dataName`, dataName);
+        if (editor && dataName !== "BOUNDING_BOX") {
+          handleSelectElement(undefined);
+        }
+      }}
     >
       {CustomEventPage ? (
         <CustomEventPage />
