@@ -7,11 +7,12 @@ import { StageActiveEngagement } from "@/engagements/StageActiveEngagement";
 import { StageElement } from "./StageElement";
 import { StageChrome } from "./StageChrome";
 import { useStageEvent } from "@/hooks/useStageEvent";
-import { useStageState } from "./useStageState";
+import { useEventStageState } from "./useEventStageState";
 import { StageEventFragment } from "@/gql/graphql";
 import { useSearchParams } from "react-router-dom";
 import { useGoogleFonts } from "@/hooks/useGoogleFonts";
 import { useStageElementHandlers } from "../admin/event/StageEditor/useStageElementHandlers";
+import { StageStateProvider } from "@/providers/StageStateProvider";
 
 const CUSTOM_EVENT_PAGES: Record<string, FC> = {
   funksgiving: FunksGivingStage,
@@ -28,7 +29,11 @@ export function EventStageScreen() {
     return <div>Loading...</div>;
   }
 
-  return <Screen event={data.event} />;
+  return (
+    <StageStateProvider initialSavedConfig={data.event.stageConfig}>
+      <Screen event={data.event} />
+    </StageStateProvider>
+  );
 }
 
 function Screen({ event }: { event: StageEventFragment }) {
@@ -36,25 +41,22 @@ function Screen({ event }: { event: StageEventFragment }) {
   const [searchParams] = useSearchParams();
   const editor = searchParams.get("editor") === "true";
   const {
-    stageConfig,
-    draftConfig,
-    setSavedConfig,
-    setSelectedElementId,
-    selectedElementId,
-    selectedElement,
-  } = useStageState({
-    initialConfig: event.stageConfig || { elements: [] },
-  });
-  const { rootStyles } = useStageStyles({ stageConfig, draftConfig });
+    dispatch,
+    state: { savedConfig, draftConfig, selectedElementId },
+  } = useEventStageState();
 
-  const { handleUpdateElement, handleDeleteElement } = useStageElementHandlers({
-    setSavedConfig,
-    setSelectedElementId,
-    selectedElementId,
+  const { handleUpdateElement, handleDeleteElement, handleSelectElement } =
+    useStageElementHandlers({
+      dispatch,
+    });
+
+  const { rootStyles } = useStageStyles({
+    stageConfig: savedConfig,
+    draftConfig,
   });
 
   useGoogleFonts({
-    fontFamily: draftConfig?.fontFamily || stageConfig?.fontFamily || [],
+    fontFamily: draftConfig?.fontFamily || savedConfig?.fontFamily || [],
   });
 
   // Keyboard shortcuts
@@ -65,15 +67,15 @@ function Screen({ event }: { event: StageEventFragment }) {
         if (event.key === "Backspace") {
           const isEditing =
             (event.target as HTMLElement).contentEditable === "true";
-          if (!isEditing && selectedElement) {
-            handleDeleteElement(selectedElement);
+          if (!isEditing && selectedElementId) {
+            handleDeleteElement(selectedElementId);
           }
         }
       };
       window.addEventListener("keydown", onKeyDown);
       return () => window.removeEventListener("keydown", onKeyDown);
     }
-  }, [editor, selectedElement, handleDeleteElement]);
+  }, [editor, selectedElementId, handleDeleteElement]);
 
   return (
     <div
@@ -87,9 +89,9 @@ function Screen({ event }: { event: StageEventFragment }) {
         <CustomEventPage />
       ) : (
         <StageChrome name="STAGE_CHROME" event={event}>
-          {stageConfig?.elements?.map((element) => (
+          {savedConfig?.elements?.map((element) => (
             <StageElement
-              onSelect={setSelectedElementId}
+              onSelect={handleSelectElement}
               selected={selectedElementId === element.id}
               element={element}
               key={element.id}

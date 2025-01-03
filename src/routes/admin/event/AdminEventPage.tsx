@@ -20,6 +20,7 @@ import {
 } from "@radix-ui/react-icons";
 import { Link, useNavigate } from "react-router-dom";
 import { StageEditor } from "./StageEditor/StageEditor";
+import { StageStateProvider } from "@/providers/StageStateProvider";
 
 const enableControlView = false;
 
@@ -183,7 +184,9 @@ export function AdminEventPage() {
           <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
             Stage Editor
           </h2>
-          <StageEditor event={data.event} />
+          <StageStateProvider initialSavedConfig={data.event.stageConfig}>
+            <StageEditor event={data.event} />
+          </StageStateProvider>
 
           <div
             data-name="ENGAGEMENTS"

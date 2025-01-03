@@ -1,7 +1,6 @@
 import { StageElementFragment, StageEngagementFragment } from "@/gql/graphql";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { StageElementBoundingBox } from "./StageElementBoundingBox";
-import { StageState } from "./useStageState";
 import { ContentEditableDiv } from "@/components/ContentEditableDiv";
 import { pick } from "lodash";
 
@@ -23,7 +22,7 @@ export function StageElement({
   activeEngagement: StageEngagementFragment | null | undefined;
   editor: boolean;
   onUpdate: (element: StageElementFragment) => void;
-  onSelect: StageState["setSelectedElementId"];
+  onSelect: (id: string) => void;
   selected: boolean;
 }) {
   const className = `
@@ -81,7 +80,7 @@ function TextStageElement({
   activeEngagement: StageEngagementFragment | null | undefined;
   editor: boolean;
   onUpdate: (element: StageElementFragment) => void;
-  onSelect: StageState["setSelectedElementId"];
+  onSelect: (id: string) => void;
   selected: boolean;
   className: string;
   styles: React.CSSProperties;
@@ -173,7 +172,7 @@ function ImageStageElement({
   activeEngagement: StageEngagementFragment | null | undefined;
   editor: boolean;
   onUpdate: (element: StageElementFragment) => void;
-  onSelect: StageState["setSelectedElementId"];
+  onSelect: (id: string) => void;
   selected: boolean;
   className: string;
   styles: React.CSSProperties;

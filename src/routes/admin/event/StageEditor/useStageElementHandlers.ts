@@ -1,29 +1,32 @@
-import { useCallback } from "react";
+import { useMemo } from "react";
 import { createLogger } from "@/utils/createLogger";
-import { AdminStageConfig } from "./useAdminStageState";
+import { nanoid } from "nanoid";
 import { StageElementFragment } from "@/gql/graphql";
+import {
+  ActionType,
+  addImageElement,
+  addTextElement,
+  changeDefaultFont,
+  deleteStageElement,
+  selectStageElement,
+  setBackgroundPreview,
+  updateStageElement,
+} from "@/providers/StageStateProvider/actions";
 
 const logger = createLogger("useStageElementHandlers");
 
 export function useStageElementHandlers({
-  setSavedConfig,
-  setSelectedElementId,
-  selectedElementId,
+  dispatch,
 }: {
-  setSavedConfig: AdminStageConfig["setSavedConfig"];
-  setSelectedElementId: AdminStageConfig["setSelectedElementId"];
-  selectedElementId: AdminStageConfig["selectedElementId"];
+  dispatch: (message: ActionType) => void;
 }) {
-  const handleNewTextElement = useCallback(() => {
-    console.log("handleNewTextElement");
-    setSavedConfig((prev) => {
-      const newElementId = Math.random().toString();
-      const newSavedConfig = {
-        ...prev,
-        elements: [
-          ...(prev.elements || []),
-          {
-            id: newElementId,
+  return useMemo(() => {
+    const handleNewTextElement = () => {
+      logger.info("handleNewTextElement");
+      dispatch(
+        addTextElement({
+          element: {
+            id: nanoid(),
             name: "Text element",
             type: "text",
             text: "New element",
@@ -43,24 +46,16 @@ export function useStageElementHandlers({
               height: "10vh",
             },
           },
-        ],
-      };
-      setSelectedElementId(newElementId);
-      logger.info("handleNewTextElement", { newSavedConfig });
-      return newSavedConfig;
-    });
-  }, [setSavedConfig, setSelectedElementId]);
+        })
+      );
+    };
 
-  const handleNewImageElement = useCallback(() => {
-    logger.info("handleNewImageElement");
-    setSavedConfig((prev) => {
-      const newElementId = Math.random().toString();
-      const newSavedConfig = {
-        ...prev,
-        elements: [
-          ...(prev.elements || []),
-          {
-            id: newElementId,
+    const handleNewImageElement = () => {
+      logger.info("handleNewImageElement");
+      dispatch(
+        addImageElement({
+          element: {
+            id: nanoid(),
             type: "image",
             name: "Image element",
             imageUrl: "https://via.placeholder.com/150",
@@ -79,48 +74,47 @@ export function useStageElementHandlers({
               backgroundRepeat: "no-repeat",
             },
           },
-        ],
-      };
-      setSelectedElementId(newElementId);
-      logger.info("handleNewImageElement", { newSavedConfig });
-      return newSavedConfig;
-    });
-  }, [setSavedConfig, setSelectedElementId]);
+        })
+      );
+    };
 
-  const handleUpdateElement = useCallback(
-    (element: StageElementFragment) => {
+    const handleUpdateElement = (element: StageElementFragment) => {
       logger.info("handleUpdateElement", element);
-      setSavedConfig((prev) => ({
-        ...prev,
-        elements:
-          prev.elements?.map((e) => (e.id === element.id ? element : e)) || [],
-      }));
-    },
-    [setSavedConfig]
-  );
+      dispatch(updateStageElement({ element }));
+    };
 
-  const handleDeleteElement = useCallback(
-    (element: StageElementFragment) => {
-      setSavedConfig((prev) => {
-        const newElements =
-          prev.elements?.filter((e) => e.id !== element.id) || [];
-        logger.info("handleDeleteElement", element, newElements);
-        if (selectedElementId === element.id) {
-          setSelectedElementId(undefined);
-        }
-        return {
-          ...prev,
-          elements: newElements,
-        };
-      });
-    },
-    [selectedElementId, setSavedConfig, setSelectedElementId]
-  );
+    const handleDeleteElement = (id: string) => {
+      logger.info("handleDeleteElement", id);
+      dispatch(deleteStageElement({ id }));
+    };
 
-  return {
-    handleNewTextElement,
-    handleNewImageElement,
-    handleUpdateElement,
-    handleDeleteElement,
-  };
+    const handleBackgroundPreview = (uri: string | null) => {
+      dispatch(setBackgroundPreview({ backgroundImage: uri }));
+    };
+
+    const handleBackgroundSave = (url: string) => {
+      dispatch(setBackgroundPreview({ backgroundImage: url }));
+    };
+
+    const handleFontChange = (fontFamily: string[] | null | undefined) => {
+      dispatch(changeDefaultFont({ fontFamily: fontFamily ?? [] }));
+    };
+
+    const handleSelectElement = (id: string | undefined | null) => {
+      dispatch(selectStageElement({ id }));
+    };
+
+    return {
+      handleNewTextElement,
+      handleNewImageElement,
+      handleUpdateElement,
+      handleDeleteElement,
+      handleBackgroundPreview,
+      handleBackgroundSave,
+      handleFontChange,
+      handleSelectElement,
+    };
+  }, [dispatch]);
 }
+
+export type StageElementHandlers = ReturnType<typeof useStageElementHandlers>;

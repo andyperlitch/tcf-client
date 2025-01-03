@@ -1,10 +1,9 @@
 import { AdminEventFragment, EventStageConfig } from "@/gql/graphql";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 import { ImageIcon, TextIcon } from "@radix-ui/react-icons";
 import { useAdminStageState } from "./useAdminStageState";
-import { useOnSave } from "./useOnSave";
 import { BackgroundImageInput } from "./BackgroundImageInput";
 import StageElementEditor from "./StageElementEditor";
 import { useStageElementHandlers } from "./useStageElementHandlers";
@@ -16,58 +15,13 @@ const defaultConfig: EventStageConfig = {
 
 export function StageEditor({ event }: { event: AdminEventFragment }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const {
-    stageConfig,
-    setSavedConfig,
-    setDraftConfig,
-    setSelectedElementId,
-    selectedElementId,
-  } = useAdminStageState({
+  const { state, dispatch } = useAdminStageState({
     initialConfig: event.stageConfig || defaultConfig,
-    onSave: useOnSave(event.id),
+    eventId: event.id,
     iframeRef,
   });
 
-  const {
-    handleNewTextElement,
-    handleNewImageElement,
-    handleUpdateElement,
-    handleDeleteElement,
-  } = useStageElementHandlers({
-    setSavedConfig,
-    setSelectedElementId,
-    selectedElementId,
-  });
-
-  const handleBackgroundPreview = useCallback(
-    (uri: string | null) => {
-      setDraftConfig((prev) => ({
-        ...prev,
-        backgroundImage: uri,
-      }));
-    },
-    [setDraftConfig]
-  );
-
-  const handleBackgroundSave = useCallback(
-    (url: string) => {
-      setSavedConfig((prev) => ({
-        ...prev,
-        backgroundImage: url,
-      }));
-    },
-    [setSavedConfig]
-  );
-
-  const handleFontChange = useCallback(
-    (fontFamily: string[] | null | undefined) => {
-      setSavedConfig((prev) => ({
-        ...prev,
-        fontFamily,
-      }));
-    },
-    [setSavedConfig]
-  );
+  const handlers = useStageElementHandlers({ dispatch });
 
   return (
     <div className="flex gap-2" data-name="STAGE_EDITOR">
@@ -92,38 +46,42 @@ export function StageEditor({ event }: { event: AdminEventFragment }) {
             `You can browse Google Fonts or add your own custom fonts.`,
             `You may override this on a per-element basis.`,
           ].join(" ")}
-          value={stageConfig?.fontFamily}
-          onChange={handleFontChange}
+          value={state.savedConfig?.fontFamily}
+          onChange={handlers.handleFontChange}
         />
 
         <BackgroundImageInput
           imageUrl={event.stageConfig?.backgroundImage}
-          onPreview={handleBackgroundPreview}
-          onSave={handleBackgroundSave}
+          onPreview={handlers.handleBackgroundPreview}
+          onSave={handlers.handleBackgroundSave}
         />
 
         <div data-name="STAGE_ELEMENTS_LIST">
           <Label>Stage elements</Label>
           <div className="mb-2 flex flex-col gap-2">
-            {stageConfig.elements?.map((element) => (
+            {state.savedConfig?.elements?.map((element) => (
               <StageElementEditor
                 key={element.id}
                 element={element}
-                onUpdate={handleUpdateElement}
-                onDelete={handleDeleteElement}
-                selected={selectedElementId === element.id}
-                onSelect={setSelectedElementId}
+                onUpdate={handlers.handleUpdateElement}
+                onDelete={handlers.handleDeleteElement}
+                selected={state.selectedElementId === element.id}
+                onSelect={handlers.handleSelectElement}
                 activeEngagement={event.activeEngagement}
               />
             ))}
           </div>
           <div className="flex gap-2">
-            <Button size="sm" onClick={handleNewTextElement} variant="advisory">
+            <Button
+              size="sm"
+              onClick={handlers.handleNewTextElement}
+              variant="advisory"
+            >
               <TextIcon className="mr-2" /> Add text element
             </Button>
             <Button
               size="sm"
-              onClick={handleNewImageElement}
+              onClick={handlers.handleNewImageElement}
               variant="constructive"
             >
               <ImageIcon className="mr-2" /> Add image element

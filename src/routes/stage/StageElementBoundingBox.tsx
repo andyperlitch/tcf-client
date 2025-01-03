@@ -10,7 +10,7 @@ import {
 
 import { StageElementFragment } from "@/gql/graphql";
 import { useEffect } from "react";
-import { StageState } from "./useStageState";
+import { StageState } from "./useEventStageState";
 
 export const StageElementBoundingBox = forwardRef<
   HTMLDivElement,

@@ -36,7 +36,7 @@ export default function StageElementEditor({
 }: {
   element: StageElementFragment;
   onUpdate: (element: StageElementFragment) => void;
-  onDelete: (element: StageElementFragment) => void;
+  onDelete: (id: string) => void;
   selected: boolean;
   onSelect: (id: string | undefined) => void;
   activeEngagement: StageEngagementFragment | null | undefined;
@@ -85,7 +85,7 @@ export default function StageElementEditor({
           size="sm"
           type="button"
           variant="destructive"
-          onClick={() => onDelete(element)}
+          onClick={() => onDelete(element.id)}
         >
           <TrashIcon />
         </Button>
