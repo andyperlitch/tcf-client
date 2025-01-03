@@ -1,6 +1,6 @@
 import { StageEventFragment } from "@/gql/graphql";
 import styles from "./StageEngagementTitle.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export function StageEngagementTitle({
   event,
@@ -15,19 +15,25 @@ export function StageEngagementTitle({
     }
   }, [event?.activeEngagement?.title]);
 
+  const inlineStyles = useMemo(
+    () => ({
+      fontSize: `${
+        event?.activeEngagement?.title?.length || 0 > 18 ? "1.7vw" : "2.2vw"
+      }`,
+    }),
+    [event?.activeEngagement?.title?.length]
+  );
+
+  console.log("inlineStyles", inlineStyles);
+
   return (
     <h1
-      data-name="ACTIVE-ENGAGEMENT-TITLE"
+      style={inlineStyles}
+      data-name="ACTIVE_ENGAGEMENT_TITLE"
       className={`
-        mr-4 whitespace-nowrap rounded-full bg-foreground p-4 pt-6 text-center
-        font-hand
+        whitespace-nowrap rounded-full bg-foreground text-center font-stage
 
         ${styles.activeEngagementTitle}
-        ${
-          (event?.activeEngagement?.title?.length || 0) > 18
-            ? `text-4xl`
-            : `text-5xl`
-        }
 
         text-[#593312] transition-opacity duration-1000
 

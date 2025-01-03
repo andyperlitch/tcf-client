@@ -33,46 +33,50 @@ export const StageQR = memo(
       }
     }, [event?.activeEngagement?.qrCodeCta]);
 
-    const { stageQrStyles, stageQrTextStyles } = useMemo(
-      () => ({
-        stageQrStyles: {
-          backgroundColor: bgColor,
-        },
-        stageQrTextStyles: {
-          width: `${width}px`,
-          color: fgColor,
-        },
-      }),
-      [bgColor, fgColor, width]
-    );
+    const { stageQrContainerStyles, stageQrTextStyles, stageQrStyles } =
+      useMemo(
+        () => ({
+          stageQrContainerStyles: {
+            backgroundColor: bgColor,
+            padding: "2vh 1.5vw",
+          },
+          stageQrTextStyles: {
+            width: `${width}px`,
+            color: fgColor,
+            fontSize: "2.3vw",
+          },
+          stageQrStyles: {
+            marginTop: "1vh",
+          },
+        }),
+        [bgColor, fgColor, width]
+      );
 
     return (
       <div
-        style={stageQrStyles}
+        style={stageQrContainerStyles}
         data-name="STAGE_QR"
         className={`
           flex flex-col items-center rounded-lg
 
           ${className}
-
-          p-4
         `}
       >
         <p
           data-name="STAGE_QR_TEXT"
           style={stageQrTextStyles}
-          className={`whitespace-nowrap text-center font-hand text-5xl`}
+          className={`whitespace-nowrap text-center font-stage`}
         >
           {event?.activeEngagement?.qrCodeCta || lastCtaText.current}
         </p>
         <QRCode
+          style={stageQrStyles}
           data-name="STAGE_QR_CODE"
           value={`${window.location.origin}/e/${eventSlug}`}
           size={width}
           level="L"
           fgColor={fgColor}
           bgColor={bgQRColor}
-          className="mt-4"
         />
       </div>
     );

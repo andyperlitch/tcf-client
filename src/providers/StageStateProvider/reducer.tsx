@@ -9,6 +9,7 @@ import {
   STAGE_ELEMENT_UPDATED,
   IMAGE_ELEMENT_ADDED,
   STAGE_ELEMENT_SELECTED,
+  BACKGROUND_IMAGE_SAVED,
 } from "./actions";
 
 export const stageStateReducer = combineReducers<SharedStageState, ActionType>({
@@ -51,6 +52,12 @@ function savedConfigReducer(
         fontFamily: action.payload.fontFamily,
       };
     }
+    case BACKGROUND_IMAGE_SAVED: {
+      return {
+        ...state,
+        backgroundImage: action.payload.backgroundImage,
+      };
+    }
 
     default:
       return state;
@@ -66,6 +73,12 @@ function draftConfigReducer(
       return {
         ...state,
         backgroundImage: action.payload.backgroundImage,
+      };
+    }
+    case BACKGROUND_IMAGE_SAVED: {
+      return {
+        ...state,
+        backgroundImage: undefined,
       };
     }
     default:

@@ -8,6 +8,7 @@ import {
   addTextElement,
   changeDefaultFont,
   deleteStageElement,
+  saveBackgroundImage,
   selectStageElement,
   setBackgroundPreview,
   updateStageElement,
@@ -93,7 +94,7 @@ export function useStageElementHandlers({
     };
 
     const handleBackgroundSave = (url: string) => {
-      dispatch(setBackgroundPreview({ backgroundImage: url }));
+      dispatch(saveBackgroundImage({ backgroundImage: url }));
     };
 
     const handleFontChange = (fontFamily: string[] | null | undefined) => {

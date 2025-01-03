@@ -22,7 +22,7 @@ export function StageChrome({ children, name, event }: StageChromeProps) {
         {children}
       </div>
       <div
-        data-name={`${name}-SIDEBAR`}
+        data-name={`${name}_SIDEBAR`}
         className={`
           flex-0 flex h-full w-[21vw] flex-col justify-end transition-opacity
           duration-1000
