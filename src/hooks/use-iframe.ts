@@ -11,7 +11,6 @@ import {
 
 interface Options {
   ref?: RefObject<HTMLIFrameElement>;
-  id?: string;
 }
 
 type MessageDispatcher<Message> = (message: Message) => void;
@@ -130,13 +129,23 @@ export function useIframe<Message = any>(
     const message = queue[0];
     if (isParent) {
       if (message && isChildMounted) {
-        setQueue((q) => q.slice(1));
-        postMessage(message);
+        setQueue((q) => {
+          const popped = q.shift();
+          if (popped) {
+            postMessage(popped);
+          }
+          return q.slice();
+        });
       }
     } else {
       if (message) {
-        setQueue((q) => q.slice(1));
-        postMessage(message);
+        setQueue((q) => {
+          const popped = q.shift();
+          if (popped) {
+            postMessage(popped);
+          }
+          return q.slice();
+        });
       }
     }
   }, [isParent, isChildMounted, postMessage, queue]);
@@ -217,7 +226,6 @@ export function useIframeSharedState<S>(
   initialState: S | (() => S),
   options?: Options
 ): [S, Dispatch<SetStateAction<S>>] {
-  const id = options?.id ?? "Unnamed";
   const stateAge = useRef({
     local: new Date().getTime(),
     remote: 0,
@@ -239,32 +247,23 @@ export function useIframeSharedState<S>(
     () => bothStates,
     [bothStates]
   );
-  const setInternalState = useCallback(
-    (state: S | ((prev: S) => S)) => {
-      setBothStates((prev) => ({
-        ...prev,
-        local: (function () {
-          console.log(
-            stateAge.current.local > stateAge.current.remote
-              ? `[${id}] previous is local`
-              : `[${id}] previous is remote`
-          );
-          const newState =
-            typeof state === "function"
-              ? (state as any)(
-                  stateAge.current.local > stateAge.current.remote
-                    ? prev.local
-                    : prev.remote
-                )
-              : state;
-          console.log(`[${id}] newState`, newState);
-          stateAge.current.local = new Date().getTime();
-          return newState;
-        })(),
-      }));
-    },
-    [id]
-  );
+  const setInternalState = useCallback((state: S | ((prev: S) => S)) => {
+    setBothStates((prev) => ({
+      ...prev,
+      local: (function () {
+        const newState =
+          typeof state === "function"
+            ? (state as any)(
+                stateAge.current.local > stateAge.current.remote
+                  ? prev.local
+                  : prev.remote
+              )
+            : state;
+        stateAge.current.local = new Date().getTime();
+        return newState;
+      })(),
+    }));
+  }, []);
 
   const setRemoteState = useCallback((state: S | ((prev: S) => S)) => {
     setBothStates((prev) => ({

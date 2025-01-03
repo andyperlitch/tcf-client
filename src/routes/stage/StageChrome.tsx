@@ -18,7 +18,7 @@ export function StageChrome({ children, name, event }: StageChromeProps) {
       data-name={name}
       className={`flex h-screen w-screen items-stretch align-middle`}
     >
-      <div data-name={`${name}-content`} className="flex-1">
+      <div data-name={`${name}-content`} className="relative z-10 flex-1">
         {children}
       </div>
       <div

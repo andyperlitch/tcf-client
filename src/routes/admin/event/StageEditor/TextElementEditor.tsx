@@ -1,10 +1,13 @@
 import { ColorPicker } from "@/components/ColorPicker";
+import { FontPicker } from "@/components/FontPicker";
 import { TextAlignPicker } from "@/components/TextAlignPicker";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { NumberInput } from "@/components/ui/number-input";
 import { StageElementFragment, StageEngagementFragment } from "@/gql/graphql";
+import { useStageState } from "@/providers/StageStateProvider/useStageState";
 import { FontSizeIcon } from "@radix-ui/react-icons";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 
 /**
  * In many cases, if a style is set to the same value on an engagement as default,
@@ -53,6 +56,8 @@ export function TextElementEditor({
   onUpdate: (element: StageElementFragment) => void;
   activeEngagement: StageEngagementFragment | null | undefined;
 }) {
+  const { state } = useStageState();
+
   const { fontSize, classNames, color } = useMemo(() => {
     let fontSize: string;
     if (activeEngagement) {
@@ -126,9 +131,20 @@ export function TextElementEditor({
     [element, activeEngagement, onUpdate]
   );
 
+  const [overrideFontFamily, setOverrideFontFamily] = useState(
+    Boolean(element.fontFamily && element.fontFamily.length > 0)
+  );
+
+  const setFontFamily = useCallback(
+    (value: string[] | null | undefined) => {
+      onUpdate({ ...element, fontFamily: value });
+    },
+    [element, onUpdate]
+  );
+
   return (
-    <div data-name="TEXT_ELEMENT_EDITOR">
-      {/* Font */}
+    <div data-name="TEXT_ELEMENT_EDITOR" className="flex flex-col gap-2">
+      {/* Basics: size, color, alignment */}
       <div className="flex items-center gap-2 pt-2">
         <div data-name="FONT_SIZE_EDITOR" className="flex items-center gap-2">
           <Label className="" title="Font size, 1 = 0.1vw">
@@ -153,6 +169,21 @@ export function TextElementEditor({
             onChange={setColor}
           />
         </div>
+      </div>
+
+      {/* Font */}
+      <div data-name="FONT_FAMILY">
+        {overrideFontFamily && (
+          <FontPicker
+            value={element.fontFamily || state.savedConfig.fontFamily || []}
+            onChange={setFontFamily}
+          />
+        )}
+        {!overrideFontFamily && (
+          <Button variant="link" onClick={() => setOverrideFontFamily(true)}>
+            Override Font Family
+          </Button>
+        )}
       </div>
     </div>
   );

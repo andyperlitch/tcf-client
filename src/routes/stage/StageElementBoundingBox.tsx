@@ -40,6 +40,7 @@ export const StageElementBoundingBox = forwardRef<
     if (!selected) {
       onSelect(element.id);
     }
+    return true;
   }, [selected, onSelect, element.id]);
   const moveElementHandlers = useMoveElementHandlers({
     elementRef: elementRef as React.RefObject<HTMLDivElement>,
@@ -192,7 +193,7 @@ export const StageElementBoundingBox = forwardRef<
       ></div>
       {/* corner handles */}
       <div
-        data-name="BOUNDING-BOX-NW-HANDLE"
+        data-name="BOUNDING_BOX-NW-HANDLE"
         className={`
           absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2
           cursor-nw-resize rounded-full border border-white
@@ -202,7 +203,7 @@ export const StageElementBoundingBox = forwardRef<
         {...scaleNWHandlers}
       ></div>
       <div
-        data-name="BOUNDING-BOX-NE-HANDLE"
+        data-name="BOUNDING_BOX-NE-HANDLE"
         className={`
           absolute right-0 top-0 -translate-y-1/2 translate-x-1/2
           cursor-ne-resize rounded-full border border-white
@@ -212,7 +213,7 @@ export const StageElementBoundingBox = forwardRef<
         {...scaleNEHandlers}
       ></div>
       <div
-        data-name="BOUNDING-BOX-SW-HANDLE"
+        data-name="BOUNDING_BOX-SW-HANDLE"
         className={`
           absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2
           cursor-sw-resize rounded-full border border-white
@@ -222,7 +223,7 @@ export const StageElementBoundingBox = forwardRef<
         {...scaleSWHandlers}
       ></div>
       <div
-        data-name="BOUNDING-BOX-SE-HANDLE"
+        data-name="BOUNDING_BOX-SE-HANDLE"
         className={`
           absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2
           cursor-se-resize rounded-full border border-white

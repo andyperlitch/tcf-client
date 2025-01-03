@@ -31,7 +31,6 @@ export function useStageElementHandlers({
             name: "Text element",
             type: "text",
             text: "New element",
-            fontFamily: ["Arial", "sans-serif"],
             defaultClassNames: "text-center",
             engagementClassNames: "text-center",
             defaultStyles: {
@@ -90,18 +89,22 @@ export function useStageElementHandlers({
     };
 
     const handleBackgroundPreview = (uri: string | null) => {
+      logger.info("handleBackgroundPreview", uri);
       dispatch(setBackgroundPreview({ backgroundImage: uri }));
     };
 
     const handleBackgroundSave = (url: string) => {
+      logger.info("handleBackgroundSave", url);
       dispatch(saveBackgroundImage({ backgroundImage: url }));
     };
 
     const handleFontChange = (fontFamily: string[] | null | undefined) => {
+      logger.info("handleFontChange", fontFamily);
       dispatch(changeDefaultFont({ fontFamily: fontFamily ?? [] }));
     };
 
     const handleSelectElement = (id: string | undefined | null) => {
+      logger.info("handleSelectElement", id);
       dispatch(selectStageElement({ id }));
     };
 

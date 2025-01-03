@@ -24,8 +24,6 @@ export function StageEngagementTitle({
     [event?.activeEngagement?.title?.length]
   );
 
-  console.log("inlineStyles", inlineStyles);
-
   return (
     <h1
       style={inlineStyles}

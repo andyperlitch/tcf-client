@@ -10,7 +10,7 @@ interface AddTextElementAction {
       name: string;
       type: "text";
       text: string;
-      fontFamily: string[];
+      fontFamily?: string[];
       defaultClassNames: string;
       engagementClassNames: string;
       defaultStyles: {

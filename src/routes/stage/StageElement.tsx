@@ -1,5 +1,5 @@
 import { StageElementFragment, StageEngagementFragment } from "@/gql/graphql";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { StageElementBoundingBox } from "./StageElementBoundingBox";
 import { ContentEditableDiv } from "@/components/ContentEditableDiv";
 import { pick } from "lodash";
@@ -67,7 +67,7 @@ export function StageElement({
 
 function TextStageElement({
   element: { id, text },
-  styles,
+  styles: activeStyles,
   className,
   element,
   activeEngagement,
@@ -86,7 +86,7 @@ function TextStageElement({
   styles: React.CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const box = pick(styles, ["width", "height", "top", "left"]);
+  const box = pick(activeStyles, ["width", "height", "top", "left"]);
   const [editing, setEditing] = useState(false);
   const [internalText, setInternalText] = useState(text || "");
 
@@ -119,6 +119,18 @@ function TextStageElement({
       setInternalText((event.target as HTMLDivElement).innerText),
     [setInternalText]
   );
+
+  const styles = useMemo(() => {
+    if (element.fontFamily) {
+      return {
+        ...activeStyles,
+        fontFamily: element.fontFamily.join(","),
+      };
+    }
+    return {
+      ...activeStyles,
+    };
+  }, [activeStyles, element.fontFamily]);
 
   return (
     <>

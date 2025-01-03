@@ -35,3 +35,9 @@
 - [ ] smaller admin nav on ipad
 - [ ] make reactions configurable for slides
 - [ ] NowPlaying engagement type
+
+- [ ] override font for text element
+- [ ] add image to image element
+- [ ] opacity on both element types
+- [ ] specify colors for the QR code component
+- [ ] fix engagements to use font-stage

@@ -19,8 +19,6 @@ export function FontBrowser({
   const [selectedCategory, setSelectedCategory] = useState<string[]>(["all"]);
   const [selectedFont, setSelectedFont] = useState<string>();
 
-  console.log(`andy selectedCategory`, selectedCategory);
-
   return (
     <div className="flex flex-col gap-2">
       <div data-name="FONT_CATEGORIES" className="flex flex-wrap">
