@@ -16,6 +16,7 @@ export const ColorPicker = React.forwardRef<
     className?: string;
     picker?: "simple" | "chrome" | "sketch";
     trigger?: "circle" | "square";
+    showAlpha?: boolean;
   }
 >(
   (
@@ -28,6 +29,7 @@ export const ColorPicker = React.forwardRef<
       className,
       picker = "simple",
       trigger = "circle",
+      showAlpha = false,
     },
     ref
   ) => {
@@ -56,7 +58,7 @@ export const ColorPicker = React.forwardRef<
                 <ChromePicker
                   color={value}
                   onChangeComplete={(color) => onChange(color.hex)}
-                  disableAlpha={true}
+                  disableAlpha={!showAlpha}
                 />
               </ThemeOverride>
             )}

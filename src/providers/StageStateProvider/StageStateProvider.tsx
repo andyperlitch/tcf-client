@@ -13,10 +13,12 @@ export function StageStateProvider({
   children: React.ReactNode;
   event: StageEventFragment;
 }) {
-  const [state, dispatch] = useReducer(stageStateReducer, {
+  const initialState = {
     ...defaultInitialState,
     savedConfig: getInitialSavedConfig(event),
-  });
+  };
+  console.log(`andy initialState`, initialState);
+  const [state, dispatch] = useReducer(stageStateReducer, initialState);
 
   useEffect(() => {
     dispatch(setActiveEngagement({ engagement: event.activeEngagement }));
@@ -30,6 +32,7 @@ export function StageStateProvider({
 }
 
 function getInitialSavedConfig(event: StageEventFragment) {
+  console.log(`andy event.stageConfig`, event.stageConfig);
   return {
     ...event.stageConfig,
     elements: keyBy(event.stageConfig?.elements || [], "id"),

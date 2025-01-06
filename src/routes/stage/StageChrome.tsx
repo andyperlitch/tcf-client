@@ -3,6 +3,7 @@ import { StageQR } from "./StageQR";
 import useWindowSize from "@/hooks/useWindowSize";
 import { StageEventFragment } from "@/gql/graphql";
 import { StageEngagementTitle } from "../../engagements/StageEngagementTitle";
+import { useEventStageState } from "@/providers/StageStateProvider/EventStageStateContext";
 
 interface StageChromeProps {
   children: React.ReactNode;
@@ -13,6 +14,8 @@ interface StageChromeProps {
 export function StageChrome({ children, name, event }: StageChromeProps) {
   const { slug } = useParamsSafe("slug");
   const { width } = useWindowSize();
+  const { state } = useEventStageState();
+
   return (
     <div
       data-name={name}
@@ -36,9 +39,13 @@ export function StageChrome({ children, name, event }: StageChromeProps) {
           event={event}
           eventSlug={slug}
           width={width * 0.17}
-          bgColor="#fae1aa77"
-          fgColor="#894c37"
-          bgQRColor="#fae1aa77"
+          bgColor={
+            state.savedConfig?.qrWrapperBackgroundColor || "rgba(255,255,255,1)"
+          }
+          fgColor={state.savedConfig?.qrForegroundColor || "rgba(0,0,0,1)"}
+          bgQRColor={
+            state.savedConfig?.qrBackgroundColor || "rgba(255,255,255,1)"
+          }
         />
       </div>
     </div>

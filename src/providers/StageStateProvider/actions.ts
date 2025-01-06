@@ -114,6 +114,21 @@ export const deleteStageElement = (
   payload,
 });
 
+// Stage Element Select Actions
+export const STAGE_ELEMENT_SELECTED = "STAGE_ELEMENT_SELECTED";
+interface SelectStageElementAction {
+  type: typeof STAGE_ELEMENT_SELECTED;
+  payload: {
+    id: string | undefined | null;
+  };
+}
+export const selectStageElement = (
+  payload: SelectStageElementAction["payload"]
+): SelectStageElementAction => ({
+  type: STAGE_ELEMENT_SELECTED,
+  payload,
+});
+
 // Background Preview Actions
 export const BACKGROUND_PREVIEW_SET = "BACKGROUND_PREVIEW_SET";
 interface SetBackgroundPreviewAction {
@@ -159,18 +174,51 @@ export const changeDefaultFont = (
   payload,
 });
 
-// Stage Element Select Actions
-export const STAGE_ELEMENT_SELECTED = "STAGE_ELEMENT_SELECTED";
-interface SelectStageElementAction {
-  type: typeof STAGE_ELEMENT_SELECTED;
+// QR Code Actions
+export const QR_CODE_FOREGROUND_COLOR_CHANGED =
+  "QR_CODE_FOREGROUND_COLOR_CHANGED";
+interface ChangeQRCodeForegroundColorAction {
+  type: typeof QR_CODE_FOREGROUND_COLOR_CHANGED;
   payload: {
-    id: string | undefined | null;
+    qrForegroundColor: string;
   };
 }
-export const selectStageElement = (
-  payload: SelectStageElementAction["payload"]
-): SelectStageElementAction => ({
-  type: STAGE_ELEMENT_SELECTED,
+export const changeQRCodeForegroundColor = (
+  payload: ChangeQRCodeForegroundColorAction["payload"]
+): ChangeQRCodeForegroundColorAction => ({
+  type: QR_CODE_FOREGROUND_COLOR_CHANGED,
+  payload,
+});
+
+// QR Code Background Color Actions
+export const QR_CODE_BACKGROUND_COLOR_CHANGED =
+  "QR_CODE_BACKGROUND_COLOR_CHANGED";
+interface ChangeQRCodeBackgroundColorAction {
+  type: typeof QR_CODE_BACKGROUND_COLOR_CHANGED;
+  payload: {
+    qrBackgroundColor: string;
+  };
+}
+export const changeQRCodeBackgroundColor = (
+  payload: ChangeQRCodeBackgroundColorAction["payload"]
+): ChangeQRCodeBackgroundColorAction => ({
+  type: QR_CODE_BACKGROUND_COLOR_CHANGED,
+  payload,
+});
+
+// QR Code Wrapper Background Color Actions
+export const QR_CODE_WRAPPER_BACKGROUND_COLOR_CHANGED =
+  "QR_CODE_WRAPPER_BACKGROUND_COLOR_CHANGED";
+interface ChangeQRCodeWrapperBackgroundColorAction {
+  type: typeof QR_CODE_WRAPPER_BACKGROUND_COLOR_CHANGED;
+  payload: {
+    qrWrapperBackgroundColor: string;
+  };
+}
+export const changeQRCodeWrapperBackgroundColor = (
+  payload: ChangeQRCodeWrapperBackgroundColorAction["payload"]
+): ChangeQRCodeWrapperBackgroundColorAction => ({
+  type: QR_CODE_WRAPPER_BACKGROUND_COLOR_CHANGED,
   payload,
 });
 
@@ -200,4 +248,7 @@ export type ActionType =
   | ChangeDefaultFontAction
   | SelectStageElementAction
   | SetActiveEngagementAction
-  | UpdateStageElementDraftAction;
+  | UpdateStageElementDraftAction
+  | ChangeQRCodeForegroundColorAction
+  | ChangeQRCodeBackgroundColorAction
+  | ChangeQRCodeWrapperBackgroundColorAction;

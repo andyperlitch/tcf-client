@@ -9,6 +9,7 @@ import { useStageElementHandlers } from "./useStageElementHandlers";
 import { FontPicker } from "@/components/FontPicker";
 import { useHotkeys } from "@shelf/hotkeys";
 import { useAdminStageState } from "@/providers/StageStateProvider/AdminStageStateContext";
+import { QRCodeEditor } from "./QRCodeEditor";
 
 export const StageEditor = forwardRef<
   HTMLIFrameElement,
@@ -58,6 +59,8 @@ export const StageEditor = forwardRef<
           onPreview={handlers.handleBackgroundPreview}
           onSave={handlers.handleBackgroundSave}
         />
+
+        <QRCodeEditor />
 
         <div data-name="STAGE_ELEMENTS_LIST">
           <Label>Stage elements</Label>

@@ -12,6 +12,9 @@ import {
   BACKGROUND_IMAGE_SAVED,
   SET_ACTIVE_ENGAGEMENT,
   STAGE_ELEMENT_DRAFT_UPDATED,
+  QR_CODE_FOREGROUND_COLOR_CHANGED,
+  QR_CODE_BACKGROUND_COLOR_CHANGED,
+  QR_CODE_WRAPPER_BACKGROUND_COLOR_CHANGED,
 } from "./actions";
 import { omit } from "lodash";
 
@@ -84,7 +87,24 @@ function savedConfigReducer(
         backgroundImage: action.payload.backgroundImage,
       };
     }
-
+    case QR_CODE_FOREGROUND_COLOR_CHANGED: {
+      return {
+        ...state,
+        qrForegroundColor: action.payload.qrForegroundColor,
+      };
+    }
+    case QR_CODE_BACKGROUND_COLOR_CHANGED: {
+      return {
+        ...state,
+        qrBackgroundColor: action.payload.qrBackgroundColor,
+      };
+    }
+    case QR_CODE_WRAPPER_BACKGROUND_COLOR_CHANGED: {
+      return {
+        ...state,
+        qrWrapperBackgroundColor: action.payload.qrWrapperBackgroundColor,
+      };
+    }
     default:
       return state;
   }

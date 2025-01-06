@@ -23,7 +23,6 @@ export function EventStageStateProvider({
 
   const wrappedDispatch = useCallback(
     (message: ActionType) => {
-      console.log("[SCREEN] dispatching message", message);
       dispatch(message);
       dispatchIframe(message);
     },
