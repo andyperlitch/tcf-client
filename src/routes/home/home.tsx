@@ -45,7 +45,7 @@ export default function Home() {
         </h2>
 
         <EventInfo
-          fbLink="https://www.facebook.com/events/428755903589853/"
+          fbLink="https://www.facebook.com/events/8630281077080340/"
           imageSrc="/myfunkyvalentine-flyer.png"
           date="Feb. 14th"
           heading="Come check us out on"
