@@ -62,14 +62,14 @@ export function useStageElementHandlers({
             defaultStyles: {
               width: "30vw",
               height: "30vw",
-              backgroundSize: "cover",
+              backgroundSize: "contain",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
             },
             engagementStyles: {
               width: "30vw",
               height: "30vw",
-              backgroundSize: "cover",
+              backgroundSize: "contain",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
             },

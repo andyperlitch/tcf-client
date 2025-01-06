@@ -4,49 +4,11 @@ import { TextAlignPicker } from "@/components/TextAlignPicker";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { NumberInput } from "@/components/ui/number-input";
-import { StageElementFragment } from "@/gql/graphql";
 import { updateStageElement } from "@/providers/StageStateProvider/actions";
 import { useAdminStageState } from "@/providers/StageStateProvider/AdminStageStateContext";
 import { FontSizeIcon } from "@radix-ui/react-icons";
 import { useMemo, useCallback, useState } from "react";
-
-/**
- * In many cases, if a style is set to the same value on an engagement as default,
- * then updating the default style should also update the engagement style.
- */
-function createStyleUpdate(
-  styleField: string,
-  updatedValue: string,
-  element: StageElementFragment,
-  engagement: boolean
-) {
-  if (engagement) {
-    return {
-      ...element,
-      engagementStyles: {
-        ...element.engagementStyles,
-        [styleField]: updatedValue,
-      },
-    };
-  }
-
-  const updates = {
-    ...element,
-    defaultStyles: {
-      ...element.defaultStyles,
-      [styleField]: updatedValue,
-    },
-  };
-
-  if (
-    element.engagementStyles?.[styleField] ===
-    element.defaultStyles?.[styleField]
-  ) {
-    updates.engagementStyles[styleField] = updatedValue;
-  }
-
-  return updates;
-}
+import { createStyleUpdate } from "@/utils/createStyleUpdate";
 
 export function TextElementEditor({ elementId }: { elementId: string }) {
   const { state, dispatch } = useAdminStageState();

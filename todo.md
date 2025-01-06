@@ -37,7 +37,8 @@
 - [ ] NowPlaying engagement type
 
 - [x] override font for text element
-- [ ] add image to image element
+- [x] add image to image element
+- [x] change background-size for image element
 - [ ] opacity on both element types
 - [ ] specify colors for the QR code component
 - [ ] fix engagements to use font-stage
