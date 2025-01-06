@@ -1,4 +1,5 @@
 import { StageElementFragment, StageEngagementFragment } from "@/gql/graphql";
+import { StageDraftElement } from "@/types/stage";
 
 // Text Element Actions
 export const TEXT_ELEMENT_ADDED = "TEXT_ELEMENT_ADDED";
@@ -69,22 +70,6 @@ export const addImageElement = (
   payload,
 });
 
-export const IMAGE_ELEMENT_IMAGE_PREVIEW_SET =
-  "IMAGE_ELEMENT_IMAGE_PREVIEW_SET";
-interface SetImageElementImagePreviewAction {
-  type: typeof IMAGE_ELEMENT_IMAGE_PREVIEW_SET;
-  payload: {
-    imageUrl: string;
-    elementId: string;
-  };
-}
-export const setImageElementImagePreview = (
-  payload: SetImageElementImagePreviewAction["payload"]
-): SetImageElementImagePreviewAction => ({
-  type: IMAGE_ELEMENT_IMAGE_PREVIEW_SET,
-  payload,
-});
-
 // Stage Element Update Actions
 export const STAGE_ELEMENT_UPDATED = "STAGE_ELEMENT_UPDATED";
 interface UpdateStageElementAction {
@@ -97,6 +82,20 @@ export const updateStageElement = (
   payload: UpdateStageElementAction["payload"]
 ): UpdateStageElementAction => ({
   type: STAGE_ELEMENT_UPDATED,
+  payload,
+});
+
+export const STAGE_ELEMENT_DRAFT_UPDATED = "STAGE_ELEMENT_DRAFT_UPDATED";
+interface UpdateStageElementDraftAction {
+  type: typeof STAGE_ELEMENT_DRAFT_UPDATED;
+  payload: {
+    element: StageDraftElement;
+  };
+}
+export const updateStageElementDraft = (
+  payload: UpdateStageElementDraftAction["payload"]
+): UpdateStageElementDraftAction => ({
+  type: STAGE_ELEMENT_DRAFT_UPDATED,
   payload,
 });
 
@@ -200,5 +199,5 @@ export type ActionType =
   | SaveBackgroundImageAction
   | ChangeDefaultFontAction
   | SelectStageElementAction
-  | SetImageElementImagePreviewAction
-  | SetActiveEngagementAction;
+  | SetActiveEngagementAction
+  | UpdateStageElementDraftAction;

@@ -10,8 +10,8 @@ import {
   IMAGE_ELEMENT_ADDED,
   STAGE_ELEMENT_SELECTED,
   BACKGROUND_IMAGE_SAVED,
-  IMAGE_ELEMENT_IMAGE_PREVIEW_SET,
   SET_ACTIVE_ENGAGEMENT,
+  STAGE_ELEMENT_DRAFT_UPDATED,
 } from "./actions";
 import { omit } from "lodash";
 
@@ -107,16 +107,15 @@ function draftConfigReducer(
         backgroundImage: undefined,
       };
     }
-    case IMAGE_ELEMENT_IMAGE_PREVIEW_SET: {
-      const { elementId, imageUrl } = action.payload;
+    case STAGE_ELEMENT_DRAFT_UPDATED: {
+      const { element } = action.payload;
       return {
         ...state,
         elements: {
           ...state.elements,
-          [elementId]: {
-            ...state.elements?.[elementId],
-            imageUrl,
-            id: elementId,
+          [element.id]: {
+            ...state.elements?.[element.id],
+            ...element,
           },
         },
       };
