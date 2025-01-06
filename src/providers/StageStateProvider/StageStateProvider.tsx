@@ -1,35 +1,39 @@
-import { SharedStageState } from "@/types/stage";
-import { createContext, Dispatch, useReducer } from "react";
+import { StageEventFragment } from "@/gql/graphql";
+import { keyBy } from "lodash";
+import { useEffect, useReducer } from "react";
+import { stageStateContext } from "./StageStateContext";
+import { defaultInitialState } from "./StageStateContext";
 import { stageStateReducer } from "./reducer";
-import { ActionType } from "./actions";
-
-const defaultInitialState: SharedStageState = {
-  savedConfig: { elements: [] },
-  draftConfig: {},
-  selectedElementId: undefined,
-};
-export const stageStateContext = createContext<{
-  dispatch: Dispatch<ActionType>;
-  state: SharedStageState;
-}>({
-  dispatch: () => {},
-  state: defaultInitialState,
-});
+import { setActiveEngagement } from "./actions";
 
 export function StageStateProvider({
   children,
-  initialSavedConfig,
+  event,
 }: {
   children: React.ReactNode;
-  initialSavedConfig?: SharedStageState["savedConfig"] | null;
+  event: StageEventFragment;
 }) {
   const [state, dispatch] = useReducer(stageStateReducer, {
     ...defaultInitialState,
-    savedConfig: initialSavedConfig ?? defaultInitialState.savedConfig,
+    savedConfig: getInitialSavedConfig(event),
   });
+
+  useEffect(() => {
+    console.log("setting active engagement", event.activeEngagement);
+    dispatch(setActiveEngagement({ engagement: event.activeEngagement }));
+  }, [event.activeEngagement]);
+
   return (
     <stageStateContext.Provider value={{ state, dispatch }}>
       {children}
     </stageStateContext.Provider>
   );
+}
+
+function getInitialSavedConfig(event: StageEventFragment) {
+  return {
+    ...event.stageConfig,
+    elements: keyBy(event.stageConfig?.elements || [], "id"),
+    elementOrder: event.stageConfig?.elements?.map((e) => e.id) || [],
+  };
 }

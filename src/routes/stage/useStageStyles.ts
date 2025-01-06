@@ -1,22 +1,22 @@
-import { useEffect, useMemo } from "react";
-import { EventStageConfig } from "@/gql/graphql";
+import { useMemo } from "react";
+import { StageDraftConfig, StageSavedConfig } from "@/types/stage";
 
 const DEFAULT_FONT_FAMILY = ["sans-serif"];
 
 export function useStageStyles({
-  stageConfig,
+  savedConfig,
   draftConfig,
 }: {
-  stageConfig: EventStageConfig | null | undefined;
-  draftConfig: Partial<EventStageConfig> | null | undefined;
+  savedConfig: StageSavedConfig;
+  draftConfig: StageDraftConfig;
 }) {
   // Styles to apply to the root element
   const rootStyles = useMemo(() => {
     const fontFamily =
-      draftConfig?.fontFamily || stageConfig?.fontFamily || DEFAULT_FONT_FAMILY;
+      draftConfig?.fontFamily || savedConfig?.fontFamily || DEFAULT_FONT_FAMILY;
 
     const backgroundImageUrl =
-      draftConfig?.backgroundImage || stageConfig?.backgroundImage || null;
+      draftConfig?.backgroundImage || savedConfig?.backgroundImage || null;
 
     return {
       "--stage-font-family": fontFamily.join(","),
@@ -28,11 +28,9 @@ export function useStageStyles({
   }, [
     draftConfig?.backgroundImage,
     draftConfig?.fontFamily,
-    stageConfig?.backgroundImage,
-    stageConfig?.fontFamily,
+    savedConfig?.backgroundImage,
+    savedConfig?.fontFamily,
   ]);
-
-  useEffect(() => {}, []);
 
   return { rootStyles };
 }

@@ -1,26 +1,20 @@
-import { AdminEventFragment, EventStageConfig } from "@/gql/graphql";
+import { AdminEventFragment } from "@/gql/graphql";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useCallback, useRef } from "react";
+import { forwardRef, useCallback } from "react";
 import { ImageIcon, TextIcon } from "@radix-ui/react-icons";
-import { useAdminStageState } from "./useAdminStageState";
 import { BackgroundImageInput } from "./BackgroundImageInput";
 import StageElementEditor from "./StageElementEditor";
 import { useStageElementHandlers } from "./useStageElementHandlers";
 import { FontPicker } from "@/components/FontPicker";
 import { useHotkeys } from "@shelf/hotkeys";
+import { useAdminStageState } from "@/providers/StageStateProvider/AdminStageStateContext";
 
-const defaultConfig: EventStageConfig = {
-  elements: [],
-};
-
-export function StageEditor({ event }: { event: AdminEventFragment }) {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const { state, dispatch } = useAdminStageState({
-    initialConfig: event.stageConfig || defaultConfig,
-    eventId: event.id,
-    iframeRef,
-  });
+export const StageEditor = forwardRef<
+  HTMLIFrameElement,
+  { event: AdminEventFragment }
+>(function StageEditor({ event }, ref) {
+  const { state, dispatch } = useAdminStageState();
 
   const handlers = useStageElementHandlers({ dispatch });
 
@@ -40,7 +34,7 @@ export function StageEditor({ event }: { event: AdminEventFragment }) {
         className={`
           relative aspect-video h-full max-h-[1080px] w-full max-w-[1920px]
         `}
-        ref={iframeRef}
+        ref={ref}
       ></iframe>
       <div
         data-name="STAGE_EDITOR_TOOLBAR"
@@ -68,16 +62,8 @@ export function StageEditor({ event }: { event: AdminEventFragment }) {
         <div data-name="STAGE_ELEMENTS_LIST">
           <Label>Stage elements</Label>
           <div className="mb-2 flex flex-col gap-2">
-            {state.savedConfig?.elements?.map((element) => (
-              <StageElementEditor
-                key={element.id}
-                element={element}
-                onUpdate={handlers.handleUpdateElement}
-                onDelete={handlers.handleDeleteElement}
-                selected={state.selectedElementId === element.id}
-                onSelect={handlers.handleSelectElement}
-                activeEngagement={event.activeEngagement}
-              />
+            {state.savedConfig?.elementOrder.map((elementId) => (
+              <StageElementEditor key={elementId} elementId={elementId} />
             ))}
           </div>
           <div className="flex gap-2">
@@ -100,4 +86,4 @@ export function StageEditor({ event }: { event: AdminEventFragment }) {
       </div>
     </div>
   );
-}
+});

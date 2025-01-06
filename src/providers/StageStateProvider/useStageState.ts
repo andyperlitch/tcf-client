@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { stageStateContext } from "./StageStateProvider";
+import { stageStateContext } from "./StageStateContext";
 
 export function useStageState() {
   return useContext(stageStateContext);

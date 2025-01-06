@@ -4,8 +4,9 @@ import { TextAlignPicker } from "@/components/TextAlignPicker";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { NumberInput } from "@/components/ui/number-input";
-import { StageElementFragment, StageEngagementFragment } from "@/gql/graphql";
-import { useStageState } from "@/providers/StageStateProvider/useStageState";
+import { StageElementFragment } from "@/gql/graphql";
+import { updateStageElement } from "@/providers/StageStateProvider/actions";
+import { useAdminStageState } from "@/providers/StageStateProvider/AdminStageStateContext";
 import { FontSizeIcon } from "@radix-ui/react-icons";
 import { useMemo, useCallback, useState } from "react";
 
@@ -47,16 +48,10 @@ function createStyleUpdate(
   return updates;
 }
 
-export function TextElementEditor({
-  element,
-  onUpdate,
-  activeEngagement,
-}: {
-  element: StageElementFragment;
-  onUpdate: (element: StageElementFragment) => void;
-  activeEngagement: StageEngagementFragment | null | undefined;
-}) {
-  const { state } = useStageState();
+export function TextElementEditor({ elementId }: { elementId: string }) {
+  const { state, dispatch } = useAdminStageState();
+  const element = state.savedConfig.elements[elementId];
+  const activeEngagement = state.activeEngagement;
 
   const { fontSize, classNames, color } = useMemo(() => {
     let fontSize: string;
@@ -96,13 +91,17 @@ export function TextElementEditor({
 
   const setClassNames = useCallback(
     (value: string) => {
-      onUpdate({
-        ...element,
-        [activeEngagement ? "engagementClassNames" : "defaultClassNames"]:
-          value,
-      });
+      dispatch(
+        updateStageElement({
+          element: {
+            ...element,
+            [activeEngagement ? "engagementClassNames" : "defaultClassNames"]:
+              value,
+          },
+        })
+      );
     },
-    [element, activeEngagement, onUpdate]
+    [dispatch, element, activeEngagement]
   );
 
   const setColor = useCallback(
@@ -113,9 +112,9 @@ export function TextElementEditor({
         element,
         !!activeEngagement
       );
-      onUpdate(updates);
+      dispatch(updateStageElement({ element: updates }));
     },
-    [element, activeEngagement, onUpdate]
+    [dispatch, element, activeEngagement]
   );
 
   const setFontSize = useCallback(
@@ -126,9 +125,9 @@ export function TextElementEditor({
         element,
         !!activeEngagement
       );
-      onUpdate(updates);
+      dispatch(updateStageElement({ element: updates }));
     },
-    [element, activeEngagement, onUpdate]
+    [dispatch, element, activeEngagement]
   );
 
   const [overrideFontFamily, setOverrideFontFamily] = useState(
@@ -137,9 +136,11 @@ export function TextElementEditor({
 
   const setFontFamily = useCallback(
     (value: string[] | null | undefined) => {
-      onUpdate({ ...element, fontFamily: value });
+      dispatch(
+        updateStageElement({ element: { ...element, fontFamily: value } })
+      );
     },
-    [element, onUpdate]
+    [dispatch, element]
   );
 
   return (

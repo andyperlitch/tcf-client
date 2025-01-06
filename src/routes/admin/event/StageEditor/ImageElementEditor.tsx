@@ -1,29 +1,22 @@
-import { EditableText } from "@/components/EditableText";
-import { StageElementFragment } from "@/gql/graphql";
-import { ImageIcon } from "@radix-ui/react-icons";
+import { BackgroundImageInput } from "./BackgroundImageInput";
+import { updateStageElement } from "@/providers/StageStateProvider/actions";
+import { useAdminStageState } from "@/providers/StageStateProvider/AdminStageStateContext";
 
-export function ImageElementEditor({
-  element,
-}: {
-  element: StageElementFragment;
-}) {
+export function ImageElementEditor({ elementId }: { elementId: string }) {
+  const { state, dispatch } = useAdminStageState();
+  const element = state.savedConfig.elements[elementId];
   return (
     <div data-name="IMAGE_ELEMENT_EDITOR" className="rounded-sm border p-2">
-      <div className="flex items-center gap-2">
-        <div className="mr-2" title="Image element">
-          <ImageIcon />
-        </div>
-        <EditableText
-          showConfirmCancel={false}
-          className="text-sm"
-          placeholder="(unnamed)"
-          value={element.name || ""}
-          setValue={(value) => {
-            console.log(value);
-          }}
-          element="div"
-        />
-      </div>
+      <BackgroundImageInput
+        imageUrl={element.imageUrl}
+        onPreview={() => {}}
+        onSave={(url) => {
+          dispatch(
+            updateStageElement({ element: { ...element, imageUrl: url } })
+          );
+        }}
+        label="Image Source"
+      />
     </div>
   );
 }

@@ -8,12 +8,13 @@ import { StageActiveEngagement } from "@/engagements/StageActiveEngagement";
 import { StageElement } from "./StageElement";
 import { StageChrome } from "./StageChrome";
 import { useStageEvent } from "@/hooks/useStageEvent";
-import { useEventStageState } from "./useEventStageState";
 import { StageEventFragment } from "@/gql/graphql";
 import { useSearchParams } from "react-router-dom";
 import { useGoogleFonts } from "@/hooks/useGoogleFonts";
 import { useStageElementHandlers } from "../admin/event/StageEditor/useStageElementHandlers";
 import { StageStateProvider } from "@/providers/StageStateProvider";
+import { EventStageStateProvider } from "@/providers/StageStateProvider/EventStageStateProvider";
+import { useEventStageState } from "@/providers/StageStateProvider/EventStageStateContext";
 
 const CUSTOM_EVENT_PAGES: Record<string, FC> = {
   funksgiving: FunksGivingStage,
@@ -31,8 +32,10 @@ export function EventStageScreen() {
   }
 
   return (
-    <StageStateProvider initialSavedConfig={data.event.stageConfig}>
-      <Screen event={data.event} />
+    <StageStateProvider event={data.event}>
+      <EventStageStateProvider>
+        <Screen event={data.event} />
+      </EventStageStateProvider>
     </StageStateProvider>
   );
 }
@@ -46,13 +49,12 @@ function Screen({ event }: { event: StageEventFragment }) {
     state: { savedConfig, draftConfig, selectedElementId },
   } = useEventStageState();
 
-  const { handleUpdateElement, handleDeleteElement, handleSelectElement } =
-    useStageElementHandlers({
-      dispatch,
-    });
+  const { handleDeleteElement, handleSelectElement } = useStageElementHandlers({
+    dispatch,
+  });
 
   const { rootStyles } = useStageStyles({
-    stageConfig: savedConfig,
+    savedConfig,
     draftConfig,
   });
 
@@ -87,15 +89,11 @@ function Screen({ event }: { event: StageEventFragment }) {
         <CustomEventPage />
       ) : (
         <StageChrome name="STAGE_CHROME" event={event}>
-          {savedConfig?.elements?.map((element) => (
+          {savedConfig.elementOrder.map((elementId) => (
             <StageElement
-              onSelect={handleSelectElement}
-              selected={selectedElementId === element.id}
-              element={element}
-              key={element.id}
+              key={elementId}
+              elementId={elementId}
               editor={editor}
-              activeEngagement={event.activeEngagement}
-              onUpdate={handleUpdateElement}
             />
           ))}
           {event.activeEngagement && <StageActiveEngagement event={event} />}

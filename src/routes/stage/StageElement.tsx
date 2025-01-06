@@ -3,104 +3,86 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { StageElementBoundingBox } from "./StageElementBoundingBox";
 import { ContentEditableDiv } from "@/components/ContentEditableDiv";
 import { pick } from "lodash";
+import {
+  selectStageElement,
+  updateStageElement,
+} from "@/providers/StageStateProvider/actions";
+import { useEventStageState } from "@/providers/StageStateProvider/EventStageStateContext";
+
+function useActiveClassNamesAndStyles(
+  element: StageElementFragment,
+  activeEngagement: StageEngagementFragment | null | undefined
+) {
+  return useMemo(() => {
+    const className = `
+      absolute
+
+      ${
+        activeEngagement
+          ? element.engagementClassNames || ""
+          : element.defaultClassNames || ""
+      }
+    `;
+    const styles = activeEngagement
+      ? element.engagementStyles
+      : element.defaultStyles;
+    return { className, styles };
+  }, [element, activeEngagement]);
+}
 
 export function StageElement({
-  element,
-  element: {
-    engagementClassNames,
-    defaultClassNames,
-    engagementStyles,
-    defaultStyles,
-  },
-  activeEngagement,
+  elementId,
   editor,
-  onUpdate,
-  onSelect,
-  selected,
 }: {
-  element: StageElementFragment;
-  activeEngagement: StageEngagementFragment | null | undefined;
+  elementId: string;
   editor: boolean;
-  onUpdate: (element: StageElementFragment) => void;
-  onSelect: (id: string) => void;
-  selected: boolean;
 }) {
-  const className = `
-    absolute
+  const { state } = useEventStageState();
+  const { type } = state.savedConfig.elements[elementId];
 
-    ${activeEngagement ? engagementClassNames || "" : defaultClassNames || ""}
-  `;
-  const styles = activeEngagement ? engagementStyles : defaultStyles;
-
-  if (element.type === "text") {
-    return (
-      <TextStageElement
-        onSelect={onSelect}
-        selected={selected}
-        element={element}
-        className={className}
-        styles={styles}
-        activeEngagement={activeEngagement}
-        editor={editor}
-        onUpdate={onUpdate}
-      />
-    );
+  if (type === "text") {
+    return <TextStageElement elementId={elementId} editor={editor} />;
   }
 
-  if (element.type === "image") {
-    return (
-      <ImageStageElement
-        onSelect={onSelect}
-        selected={selected}
-        element={element}
-        className={className}
-        styles={styles}
-        activeEngagement={activeEngagement}
-        editor={editor}
-        onUpdate={onUpdate}
-      />
-    );
+  if (type === "image") {
+    return <ImageStageElement elementId={elementId} editor={editor} />;
   }
 
   return null;
 }
 
 function TextStageElement({
-  element: { id, text },
-  styles: activeStyles,
-  className,
-  element,
-  activeEngagement,
+  elementId,
   editor,
-  onUpdate,
-  onSelect,
-  selected,
 }: {
-  element: StageElementFragment;
-  activeEngagement: StageEngagementFragment | null | undefined;
+  elementId: string;
   editor: boolean;
-  onUpdate: (element: StageElementFragment) => void;
-  onSelect: (id: string) => void;
-  selected: boolean;
-  className: string;
-  styles: React.CSSProperties;
 }) {
+  const { state, dispatch } = useEventStageState();
+  const element = state.savedConfig.elements[elementId];
+  const { className, styles: activeStyles } = useActiveClassNamesAndStyles(
+    element,
+    state.activeEngagement
+  );
   const ref = useRef<HTMLDivElement>(null);
   const box = pick(activeStyles, ["width", "height", "top", "left"]);
   const [editing, setEditing] = useState(false);
-  const [internalText, setInternalText] = useState(text || "");
+  const [internalText, setInternalText] = useState(element.text || "");
+  const selected = state.selectedElementId === elementId;
 
   useEffect(() => {
-    if (!editing && internalText !== text) {
-      onUpdate({ ...element, text: internalText });
+    if (!editing && internalText !== element.text) {
+      dispatch(
+        updateStageElement({ element: { ...element, text: internalText } })
+      );
     }
-  }, [editing, internalText, text, onUpdate, element]);
+  }, [editing, internalText, element, dispatch]);
 
   const handleSelect = useCallback(() => {
     if (editor && !selected) {
-      onSelect(id);
+      dispatch(selectStageElement({ id: elementId }));
     }
-  }, [editor, selected, id, onSelect]);
+  }, [editor, selected, elementId, dispatch]);
 
   const handleKeyUp = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -118,6 +100,12 @@ function TextStageElement({
     (event: React.FormEvent<HTMLDivElement>) =>
       setInternalText((event.target as HTMLDivElement).innerText),
     [setInternalText]
+  );
+
+  const onUpdate = useCallback(
+    (element: StageElementFragment) =>
+      dispatch(updateStageElement({ element })),
+    [dispatch]
   );
 
   const styles = useMemo(() => {
@@ -138,7 +126,7 @@ function TextStageElement({
         editable={editing}
         ref={ref}
         data-name="TEXT_STAGE_ELEMENT"
-        data-id={id}
+        data-id={elementId}
         className={`
           ${className}
           ${editing ? "z-20" : ""}
@@ -148,7 +136,7 @@ function TextStageElement({
         `}
         style={styles}
         onClick={handleSelect}
-        text={editing ? internalText : text}
+        text={editing ? internalText : element.text}
         onChange={handleChange}
         onKeyUp={handleKeyUp}
         onBlur={() => setEditing(false)}
@@ -157,10 +145,10 @@ function TextStageElement({
         <StageElementBoundingBox
           box={box}
           selected={selected}
-          onSelect={onSelect}
+          onSelect={handleSelect}
           ref={ref}
           element={element}
-          activeEngagement={activeEngagement}
+          activeEngagement={state.activeEngagement}
           onUpdate={onUpdate}
           onDoubleClick={() => setEditing(true)}
         />
@@ -170,53 +158,52 @@ function TextStageElement({
 }
 
 function ImageStageElement({
-  element: { id, imageUrl },
-  className,
-  styles,
-  element,
-  activeEngagement,
+  elementId,
   editor,
-  onUpdate,
-  onSelect,
-  selected,
 }: {
-  element: StageElementFragment;
-  activeEngagement: StageEngagementFragment | null | undefined;
+  elementId: string;
   editor: boolean;
-  onUpdate: (element: StageElementFragment) => void;
-  onSelect: (id: string) => void;
-  selected: boolean;
-  className: string;
-  styles: React.CSSProperties;
 }) {
+  const { state, dispatch } = useEventStageState();
+  const element = state.savedConfig.elements[elementId];
+  const draftElement = state.draftConfig?.elements?.[elementId];
+  const { className, styles: activeStyles } = useActiveClassNamesAndStyles(
+    element,
+    state.activeEngagement
+  );
   const ref = useRef<HTMLDivElement>(null);
-  const box = pick(styles, ["width", "height", "top", "left"]);
-
+  const box = pick(activeStyles, ["width", "height", "top", "left"]);
+  const draftImageUrl = draftElement?.imageUrl;
+  const selected = state.selectedElementId === elementId;
   return (
     <>
       <div
         ref={ref}
         data-name="IMAGE_STAGE_ELEMENT"
-        data-id={id}
+        data-id={elementId}
         className={`
           ${className}
           ${editor ? "" : "transition-all duration-1000"}
         `}
         style={{
-          ...styles,
-          backgroundImage: `url(${imageUrl || ""})`,
+          ...activeStyles,
+          backgroundImage: `url(${draftImageUrl || element.imageUrl || ""})`,
         }}
-        onClick={editor ? () => onSelect(id) : undefined}
+        onClick={
+          editor
+            ? () => dispatch(selectStageElement({ id: elementId }))
+            : undefined
+        }
       />
       {editor && (
         <StageElementBoundingBox
           box={box}
           selected={selected}
-          onSelect={onSelect}
+          onSelect={() => dispatch(selectStageElement({ id: elementId }))}
           ref={ref}
           element={element}
-          activeEngagement={activeEngagement}
-          onUpdate={onUpdate}
+          activeEngagement={state.activeEngagement}
+          onUpdate={(element) => dispatch(updateStageElement({ element }))}
         />
       )}
     </>

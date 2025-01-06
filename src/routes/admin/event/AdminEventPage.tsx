@@ -1,5 +1,5 @@
 import { AdminContainer } from "@/components/AdminContainer";
-import { ReactNode } from "react";
+import { ReactNode, useRef } from "react";
 import { LiveSwitch } from "./LiveSwitch";
 import { CreateNewEngagementButton } from "@/components/CreateNewEngagementButton";
 import { EngagementsList } from "@/components/EngagementsList";
@@ -21,12 +21,14 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { StageEditor } from "./StageEditor/StageEditor";
 import { StageStateProvider } from "@/providers/StageStateProvider";
+import { AdminStageStateProvider } from "@/providers/StageStateProvider/AdminStageStateProvider";
 
 const enableControlView = false;
 
 export function AdminEventPage() {
   const { slug } = useParamsSafe("slug");
   const navigate = useNavigate();
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const { data, loading, error } = useAdminGetEventQuery({
     fetchPolicy: "network-only",
@@ -184,8 +186,10 @@ export function AdminEventPage() {
           <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
             Stage Editor
           </h2>
-          <StageStateProvider initialSavedConfig={data.event.stageConfig}>
-            <StageEditor event={data.event} />
+          <StageStateProvider event={data.event}>
+            <AdminStageStateProvider event={data.event} iframeRef={iframeRef}>
+              <StageEditor event={data.event} ref={iframeRef} />
+            </AdminStageStateProvider>
           </StageStateProvider>
 
           <div

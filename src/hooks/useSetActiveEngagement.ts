@@ -18,7 +18,6 @@ export function useSetActiveEngagement({
   const [changeEvent, { loading }] =
     useAdminChangeEventActiveEngagementMutation({
       onCompleted(data) {
-        console.log(`andy data`, data);
         // Update Apollo cache with the new Event data
         client.writeQuery({
           query: AdminGetEventDocument,

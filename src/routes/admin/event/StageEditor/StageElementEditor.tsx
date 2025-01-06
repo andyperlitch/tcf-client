@@ -1,18 +1,21 @@
 import { EditableText } from "@/components/EditableText";
-import { StageElementFragment, StageEngagementFragment } from "@/gql/graphql";
 import { TextElementEditor } from "./TextElementEditor";
 import { ImageIcon, TextIcon, TrashIcon } from "@radix-ui/react-icons";
 import { ImageElementEditor } from "./ImageElementEditor";
 import { Button } from "@/components/ui/button";
+import { useAdminStageState } from "@/providers/StageStateProvider/AdminStageStateContext";
+import {
+  deleteStageElement,
+  selectStageElement,
+  updateStageElement,
+} from "@/providers/StageStateProvider/actions";
 
 const TYPE_META: Record<
   string,
   {
     Icon: React.ElementType;
     Editor: React.ElementType<{
-      element: StageElementFragment;
-      onUpdate: (element: StageElementFragment) => void;
-      activeEngagement: StageEngagementFragment | null | undefined;
+      elementId: string;
     }>;
   }
 > = {
@@ -27,20 +30,13 @@ const TYPE_META: Record<
 };
 
 export default function StageElementEditor({
-  element,
-  onUpdate,
-  onDelete,
-  selected,
-  onSelect,
-  activeEngagement,
+  elementId,
 }: {
-  element: StageElementFragment;
-  onUpdate: (element: StageElementFragment) => void;
-  onDelete: (id: string) => void;
-  selected: boolean;
-  onSelect: (id: string | undefined) => void;
-  activeEngagement: StageEngagementFragment | null | undefined;
+  elementId: string;
 }) {
+  const { state, dispatch } = useAdminStageState();
+  const element = state.savedConfig.elements[elementId];
+  const selected = state.selectedElementId === elementId;
   const { type } = element;
   const { Icon, Editor } = TYPE_META[type];
   return (
@@ -51,7 +47,7 @@ export default function StageElementEditor({
 
         ${selected ? "border-white" : "border-white/20"}
       `}
-      onClick={() => onSelect(element.id)}
+      onClick={() => dispatch(selectStageElement({ id: elementId }))}
     >
       <div
         data-name="STAGE_ELEMENT_EDITOR_HEADER"
@@ -73,10 +69,14 @@ export default function StageElementEditor({
             placeholder="(unnamed)"
             value={element.name || ""}
             setValue={(value) => {
-              onUpdate({
-                ...element,
-                name: value,
-              });
+              dispatch(
+                updateStageElement({
+                  element: {
+                    ...element,
+                    name: value,
+                  },
+                })
+              );
             }}
             element="div"
           />
@@ -85,18 +85,12 @@ export default function StageElementEditor({
           size="sm"
           type="button"
           variant="destructive"
-          onClick={() => onDelete(element.id)}
+          onClick={() => dispatch(deleteStageElement({ id: elementId }))}
         >
           <TrashIcon />
         </Button>
       </div>
-      {selected && (
-        <Editor
-          element={element}
-          onUpdate={onUpdate}
-          activeEngagement={activeEngagement}
-        />
-      )}
+      {selected && <Editor elementId={elementId} />}
     </div>
   );
 }

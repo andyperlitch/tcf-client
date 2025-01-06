@@ -1,4 +1,4 @@
-import { StageElementFragment } from "@/gql/graphql";
+import { StageElementFragment, StageEngagementFragment } from "@/gql/graphql";
 
 // Text Element Actions
 export const TEXT_ELEMENT_ADDED = "TEXT_ELEMENT_ADDED";
@@ -66,6 +66,22 @@ export const addImageElement = (
   payload: AddImageElementAction["payload"]
 ): AddImageElementAction => ({
   type: IMAGE_ELEMENT_ADDED,
+  payload,
+});
+
+export const IMAGE_ELEMENT_IMAGE_PREVIEW_SET =
+  "IMAGE_ELEMENT_IMAGE_PREVIEW_SET";
+interface SetImageElementImagePreviewAction {
+  type: typeof IMAGE_ELEMENT_IMAGE_PREVIEW_SET;
+  payload: {
+    imageUrl: string;
+    elementId: string;
+  };
+}
+export const setImageElementImagePreview = (
+  payload: SetImageElementImagePreviewAction["payload"]
+): SetImageElementImagePreviewAction => ({
+  type: IMAGE_ELEMENT_IMAGE_PREVIEW_SET,
   payload,
 });
 
@@ -159,6 +175,21 @@ export const selectStageElement = (
   payload,
 });
 
+// Active Engagement Actions
+export const SET_ACTIVE_ENGAGEMENT = "SET_ACTIVE_ENGAGEMENT";
+interface SetActiveEngagementAction {
+  type: typeof SET_ACTIVE_ENGAGEMENT;
+  payload: {
+    engagement: StageEngagementFragment | null | undefined;
+  };
+}
+export const setActiveEngagement = (
+  payload: SetActiveEngagementAction["payload"]
+): SetActiveEngagementAction => ({
+  type: SET_ACTIVE_ENGAGEMENT,
+  payload,
+});
+
 // Create the union type for all actions
 export type ActionType =
   | AddTextElementAction
@@ -168,4 +199,6 @@ export type ActionType =
   | SetBackgroundPreviewAction
   | SaveBackgroundImageAction
   | ChangeDefaultFontAction
-  | SelectStageElementAction;
+  | SelectStageElementAction
+  | SetImageElementImagePreviewAction
+  | SetActiveEngagementAction;
