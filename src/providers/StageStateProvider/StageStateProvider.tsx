@@ -19,7 +19,6 @@ export function StageStateProvider({
   });
 
   useEffect(() => {
-    console.log("setting active engagement", event.activeEngagement);
     dispatch(setActiveEngagement({ engagement: event.activeEngagement }));
   }, [event.activeEngagement]);
 
