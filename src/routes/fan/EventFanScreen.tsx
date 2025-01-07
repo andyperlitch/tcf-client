@@ -122,7 +122,7 @@ function Screen({ event }: { event: FanEventFragment }) {
         className={`
           absolute left-0 top-0 h-full w-full
 
-          ${editor ? "z-0" : "z-20"}
+          ${editor ? "z-20" : "z-0"}
         `}
       >
         {state.savedConfig.elementOrder.map((elementId) => (
