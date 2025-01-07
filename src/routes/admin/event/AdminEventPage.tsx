@@ -22,13 +22,22 @@ import { Link, useNavigate } from "react-router-dom";
 import { StageEditor } from "./StageEditor/StageEditor";
 import { StageStateProvider } from "@/providers/StageStateProvider";
 import { AdminStageStateProvider } from "@/providers/StageStateProvider/AdminStageStateProvider";
+import { AdminFanStateProvider } from "@/providers/FanStateProvider/AdminFanStateProvider";
+import { FanStateProvider } from "@/providers/FanStateProvider";
+import { FanEditor } from "./FanEditor/FanEditor";
+import useLocalStorage from "use-local-storage";
 
 const enableControlView = false;
 
 export function AdminEventPage() {
   const { slug } = useParamsSafe("slug");
   const navigate = useNavigate();
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const stageIframeRef = useRef<HTMLIFrameElement>(null);
+  const fanIframeRef = useRef<HTMLIFrameElement>(null);
+  const [editorMode, setEditorMode] = useLocalStorage<"stage" | "mobile">(
+    "editorMode",
+    "stage"
+  );
 
   const { data, loading, error } = useAdminGetEventQuery({
     fetchPolicy: "network-only",
@@ -183,14 +192,39 @@ export function AdminEventPage() {
               </Button>
             )}
           </div>
-          <h2 className="mt-10 flex items-baseline space-x-5 text-2xl">
-            Stage Editor
-          </h2>
-          <StageStateProvider event={data.event}>
-            <AdminStageStateProvider event={data.event} iframeRef={iframeRef}>
-              <StageEditor event={data.event} ref={iframeRef} />
-            </AdminStageStateProvider>
-          </StageStateProvider>
+          <div className="mt-10 flex items-center gap-2">
+            <h2 className="text-2xl">
+              {editorMode === "stage" ? "Stage" : "Mobile"} Editor
+            </h2>
+            <Button
+              variant="outline"
+              onClick={() =>
+                setEditorMode(editorMode === "stage" ? "mobile" : "stage")
+              }
+            >
+              switch to {editorMode === "stage" ? "mobile" : "stage"} editor
+            </Button>
+          </div>
+          {editorMode === "stage" && (
+            <StageStateProvider event={data.event}>
+              <AdminStageStateProvider
+                event={data.event}
+                iframeRef={stageIframeRef}
+              >
+                <StageEditor event={data.event} ref={stageIframeRef} />
+              </AdminStageStateProvider>
+            </StageStateProvider>
+          )}
+          {editorMode === "mobile" && (
+            <FanStateProvider event={data.event}>
+              <AdminFanStateProvider
+                event={data.event}
+                iframeRef={fanIframeRef}
+              >
+                <FanEditor event={data.event} ref={fanIframeRef} />
+              </AdminFanStateProvider>
+            </FanStateProvider>
+          )}
 
           <div
             data-name="ENGAGEMENTS"

@@ -1,16 +1,15 @@
-import { useFanEvent } from "@/hooks/useFanEvent";
 import { FanActiveEngagement } from "../../../engagements/FanActiveEngagement";
 import { useFunksgivingBackground } from "./useFunksgivingBackground";
 import { NoEngagementFan } from "./NoEngagementFan";
+import { FanEventFragment } from "@/gql/graphql";
 
-export function FunksgivingFanScreen() {
+export function FunksgivingFanScreen({ event }: { event: FanEventFragment }) {
   useFunksgivingBackground();
-  const { data } = useFanEvent("funksgiving");
 
   return (
     <div>
-      {data?.event?.activeEngagement ? (
-        <FanActiveEngagement engagement={data.event.activeEngagement} />
+      {event?.activeEngagement ? (
+        <FanActiveEngagement engagement={event.activeEngagement} />
       ) : (
         <NoEngagementFan />
       )}

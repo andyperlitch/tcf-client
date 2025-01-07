@@ -1,8 +1,8 @@
-import { StageElementFragment, StageEngagementFragment } from "@/gql/graphql";
+import { ScreenElementFragment, StageEngagementFragment } from "@/gql/graphql";
 import { useMemo } from "react";
 
 export function useActiveClassNamesAndStyles(
-  element: StageElementFragment,
+  element: ScreenElementFragment,
   activeEngagement: StageEngagementFragment | null | undefined
 ) {
   return useMemo(() => {

@@ -1,21 +1,21 @@
 import { ActionType } from "./actions";
 import { Dispatch, useContext } from "react";
-import { SharedStageState } from "@/types/screen";
+import { SharedFanState } from "@/types/screen";
 import { createContext } from "react";
 
-export const defaultInitialState: SharedStageState = {
+export const defaultInitialState: SharedFanState = {
   savedConfig: { elements: {}, elementOrder: [] },
   draftConfig: {},
   selectedElementId: undefined,
 };
-export interface StageStateContextType {
+export interface FanStateContextType {
   dispatch: Dispatch<ActionType>;
-  state: SharedStageState;
+  state: SharedFanState;
 }
-export const stageStateContext = createContext<StageStateContextType>({
+export const fanStateContext = createContext<FanStateContextType>({
   dispatch: () => {},
   state: defaultInitialState,
 });
-export function useStageState() {
-  return useContext(stageStateContext);
+export function useFanState() {
+  return useContext(fanStateContext);
 }

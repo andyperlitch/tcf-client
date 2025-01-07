@@ -132,7 +132,7 @@ export function NewPhotoForm({
       {!previewSrc && (
         <p
           className={cn(
-            "pt-4 text-center font-hand text-3xl transition-opacity",
+            "pt-4 text-center font-fan text-3xl transition-opacity",
             {
               "opacity-0": loading || succeeded,
             }

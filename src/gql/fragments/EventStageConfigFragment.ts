@@ -9,7 +9,7 @@ gql`
     backgroundImage
     fontFamily
     elements {
-      ...StageElement
+      ...ScreenElement
     }
   }
 `;

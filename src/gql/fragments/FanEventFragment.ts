@@ -8,6 +8,7 @@ gql`
     description
     date
     location
+    slug
     fanConfig {
       ...EventFanConfig
     }

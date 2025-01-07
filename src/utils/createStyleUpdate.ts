@@ -1,4 +1,4 @@
-import { StageElementFragment } from "@/gql/graphql";
+import { ScreenElementFragment } from "@/gql/graphql";
 
 /**
  * In many cases, if a style is set to the same value on an engagement as default,
@@ -7,7 +7,7 @@ import { StageElementFragment } from "@/gql/graphql";
 export function createStyleUpdate(
   styleField: string,
   updatedValue: string,
-  element: StageElementFragment,
+  element: ScreenElementFragment,
   engagement: boolean
 ) {
   if (engagement) {

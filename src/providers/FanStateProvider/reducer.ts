@@ -1,26 +1,21 @@
-import { SharedStageState } from "@/types/screen";
 import { combineReducers } from "@/utils/combineReducers";
+import { ActionType } from "./actions";
+import { SharedFanState } from "@/types/screen";
 import {
-  ActionType,
-  QR_CODE_FOREGROUND_COLOR_CHANGED,
-  QR_CODE_BACKGROUND_COLOR_CHANGED,
-  QR_CODE_WRAPPER_BACKGROUND_COLOR_CHANGED,
-} from "./actions";
-import {
-  BACKGROUND_PREVIEW_SET,
-  TEXT_ELEMENT_ADDED,
-  DEFAULT_FONT_CHANGED,
-  SCREEN_ELEMENT_DELETED,
-  SCREEN_ELEMENT_UPDATED,
-  IMAGE_ELEMENT_ADDED,
-  SCREEN_ELEMENT_SELECTED,
   BACKGROUND_IMAGE_SAVED,
-  SET_ACTIVE_ENGAGEMENT,
+  BACKGROUND_PREVIEW_SET,
+  DEFAULT_FONT_CHANGED,
+  IMAGE_ELEMENT_ADDED,
+  SCREEN_ELEMENT_DELETED,
   SCREEN_ELEMENT_DRAFT_UPDATED,
+  SCREEN_ELEMENT_SELECTED,
+  SCREEN_ELEMENT_UPDATED,
+  SET_ACTIVE_ENGAGEMENT,
+  TEXT_ELEMENT_ADDED,
 } from "../sharedActions";
 import { omit } from "lodash";
 
-export const stageStateReducer = combineReducers<SharedStageState, ActionType>({
+export const fanStateReducer = combineReducers<SharedFanState, ActionType>({
   savedConfig: savedConfigReducer,
   draftConfig: draftConfigReducer,
   selectedElementId: selectedElementIdReducer,
@@ -28,7 +23,7 @@ export const stageStateReducer = combineReducers<SharedStageState, ActionType>({
 });
 
 function savedConfigReducer(
-  state: SharedStageState["savedConfig"],
+  state: SharedFanState["savedConfig"],
   action: ActionType
 ) {
   switch (action.type) {
@@ -89,31 +84,14 @@ function savedConfigReducer(
         backgroundImage: action.payload.backgroundImage,
       };
     }
-    case QR_CODE_FOREGROUND_COLOR_CHANGED: {
-      return {
-        ...state,
-        qrForegroundColor: action.payload.qrForegroundColor,
-      };
-    }
-    case QR_CODE_BACKGROUND_COLOR_CHANGED: {
-      return {
-        ...state,
-        qrBackgroundColor: action.payload.qrBackgroundColor,
-      };
-    }
-    case QR_CODE_WRAPPER_BACKGROUND_COLOR_CHANGED: {
-      return {
-        ...state,
-        qrWrapperBackgroundColor: action.payload.qrWrapperBackgroundColor,
-      };
-    }
-    default:
+    default: {
       return state;
+    }
   }
 }
 
 function draftConfigReducer(
-  state: SharedStageState["draftConfig"],
+  state: SharedFanState["draftConfig"],
   action: ActionType
 ) {
   switch (action.type) {
@@ -142,13 +120,14 @@ function draftConfigReducer(
         },
       };
     }
-    default:
+    default: {
       return state;
+    }
   }
 }
 
 function selectedElementIdReducer(
-  state: SharedStageState["selectedElementId"],
+  state: SharedFanState["selectedElementId"],
   action: ActionType
 ) {
   switch (action.type) {
@@ -167,7 +146,7 @@ function selectedElementIdReducer(
 }
 
 function activeEngagementReducer(
-  state: SharedStageState["activeEngagement"],
+  state: SharedFanState["activeEngagement"],
   action: ActionType
 ) {
   switch (action.type) {

@@ -4,6 +4,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      aspectRatio: {
+        portrait: "9/16",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -83,6 +86,7 @@ export default {
           "sans-serif",
         ],
         stage: ["var(--stage-font-family)"],
+        fan: ["var(--fan-font-family)"],
         margarine: ["Margarine", "sans-serif"],
       },
     },

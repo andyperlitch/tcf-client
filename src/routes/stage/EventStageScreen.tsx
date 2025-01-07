@@ -11,10 +11,15 @@ import { useStageEvent } from "@/hooks/useStageEvent";
 import { StageEventFragment } from "@/gql/graphql";
 import { useSearchParams } from "react-router-dom";
 import { useGoogleFonts } from "@/hooks/useGoogleFonts";
-import { useStageElementHandlers } from "../admin/event/StageEditor/useStageElementHandlers";
 import { StageStateProvider } from "@/providers/StageStateProvider";
 import { EventStageStateProvider } from "@/providers/StageStateProvider/EventStageStateProvider";
 import { useEventStageState } from "@/providers/StageStateProvider/EventStageStateContext";
+import { FullScreenLoader } from "@/components/Loader";
+import { ErrorScreen } from "@/components/ErrorScreen";
+import {
+  deleteScreenElement,
+  selectScreenElement,
+} from "@/providers/sharedActions";
 
 const CUSTOM_EVENT_PAGES: Record<string, FC> = {
   funksgiving: FunksGivingStage,
@@ -25,10 +30,13 @@ export function EventStageScreen() {
 
   useStageScreenViewport();
 
-  const { data } = useStageEvent(slug);
+  const { data, loading, error } = useStageEvent(slug);
 
   if (!data?.event) {
-    return <div>Loading...</div>;
+    if (loading) {
+      return <FullScreenLoader />;
+    }
+    return <ErrorScreen error={error} />;
   }
 
   return (
@@ -47,16 +55,10 @@ function Screen({ event }: { event: StageEventFragment }) {
   const {
     dispatch,
     state: { savedConfig, draftConfig, selectedElementId },
+    state,
   } = useEventStageState();
 
-  const { handleDeleteElement, handleSelectElement } = useStageElementHandlers({
-    dispatch,
-  });
-
-  const { rootStyles } = useStageStyles({
-    savedConfig,
-    draftConfig,
-  });
+  const { rootStyles } = useStageStyles({ state });
 
   useGoogleFonts({
     fontFamily: draftConfig?.fontFamily || savedConfig?.fontFamily || [],
@@ -65,10 +67,20 @@ function Screen({ event }: { event: StageEventFragment }) {
   useHotkeys({
     Backspace: useCallback(() => {
       if (editor && selectedElementId) {
-        handleDeleteElement(selectedElementId);
+        dispatch(deleteScreenElement({ id: selectedElementId }));
       }
-    }, [editor, selectedElementId, handleDeleteElement]),
+    }, [editor, selectedElementId, dispatch]),
   });
+
+  const handleDeselectAll = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      const dataName = (e.target as HTMLElement).getAttribute("data-name");
+      if (editor && !dataName?.startsWith("BOUNDING_BOX")) {
+        dispatch(selectScreenElement({ id: undefined }));
+      }
+    },
+    [editor, dispatch]
+  );
 
   return (
     <div
@@ -77,13 +89,7 @@ function Screen({ event }: { event: StageEventFragment }) {
       relative flex h-screen w-screen flex-col gap-4 overflow-hidden
     `}
       style={rootStyles}
-      onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-        const dataName = (e.target as HTMLElement).getAttribute("data-name");
-        if (editor && !dataName?.startsWith("BOUNDING_BOX")) {
-          console.log(`andy dataName`, dataName);
-          handleSelectElement(undefined);
-        }
-      }}
+      onClick={handleDeselectAll}
     >
       {CustomEventPage ? (
         <CustomEventPage />

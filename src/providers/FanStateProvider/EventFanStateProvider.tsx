@@ -1,16 +1,16 @@
 import { useMemo } from "react";
-import { eventStageStateContext } from "./EventStageStateContext";
+import { eventFanStateContext } from "./EventFanStateContext";
 import { useCallback } from "react";
 import { ActionType } from "./actions";
 import { useIframe } from "@/hooks/use-iframe";
-import { useStageState } from "./StageStateContext";
+import { useFanState } from "./FanStateContext";
 
-export function EventStageStateProvider({
+export function EventFanStateProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { dispatch, state } = useStageState();
+  const { dispatch, state } = useFanState();
 
   const handler = useCallback(
     (message: ActionType) => {
@@ -38,8 +38,8 @@ export function EventStageStateProvider({
   );
 
   return (
-    <eventStageStateContext.Provider value={value}>
+    <eventFanStateContext.Provider value={value}>
       {children}
-    </eventStageStateContext.Provider>
+    </eventFanStateContext.Provider>
   );
 }

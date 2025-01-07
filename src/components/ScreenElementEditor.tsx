@@ -3,20 +3,23 @@ import { TextElementEditor } from "./TextElementEditor";
 import { ImageIcon, TextIcon, TrashIcon } from "@radix-ui/react-icons";
 import { ImageElementEditor } from "./ImageElementEditor";
 import { Button } from "@/components/ui/button";
-import { useAdminStageState } from "@/providers/StageStateProvider/AdminStageStateContext";
 import {
-  deleteStageElement,
-  selectStageElement,
-  updateStageElement,
-} from "@/providers/StageStateProvider/actions";
+  deleteScreenElement,
+  EventScreenAction,
+  selectScreenElement,
+  updateScreenElement,
+} from "@/providers/sharedActions";
+import {
+  ScreenElementEditorProps,
+  SharedFanState,
+  SharedStageState,
+} from "@/types/screen";
 
 const TYPE_META: Record<
   string,
   {
     Icon: React.ElementType;
-    Editor: React.ElementType<{
-      elementId: string;
-    }>;
+    Editor: React.ElementType<ScreenElementEditorProps>;
   }
 > = {
   text: {
@@ -29,12 +32,17 @@ const TYPE_META: Record<
   },
 };
 
-export default function StageElementEditor({
+export function ScreenElementEditor({
   elementId,
+  state,
+  dispatch,
+  enableLink,
 }: {
   elementId: string;
+  state: SharedStageState | SharedFanState;
+  dispatch: (message: EventScreenAction) => void;
+  enableLink?: boolean;
 }) {
-  const { state, dispatch } = useAdminStageState();
   const element = state.savedConfig.elements[elementId];
   const selected = state.selectedElementId === elementId;
   const { type } = element;
@@ -47,7 +55,7 @@ export default function StageElementEditor({
 
         ${selected ? "border-white" : "border-white/20"}
       `}
-      onClick={() => dispatch(selectStageElement({ id: elementId }))}
+      onClick={() => dispatch(selectScreenElement({ id: elementId }))}
     >
       <div
         data-name="STAGE_ELEMENT_EDITOR_HEADER"
@@ -70,7 +78,7 @@ export default function StageElementEditor({
             value={element.name || ""}
             setValue={(value) => {
               dispatch(
-                updateStageElement({
+                updateScreenElement({
                   element: {
                     ...element,
                     name: value,
@@ -85,12 +93,19 @@ export default function StageElementEditor({
           size="sm"
           type="button"
           variant="destructive"
-          onClick={() => dispatch(deleteStageElement({ id: elementId }))}
+          onClick={() => dispatch(deleteScreenElement({ id: elementId }))}
         >
           <TrashIcon />
         </Button>
       </div>
-      {selected && <Editor elementId={elementId} />}
+      {selected && (
+        <Editor
+          elementId={elementId}
+          dispatch={dispatch}
+          state={state}
+          enableLink={enableLink}
+        />
+      )}
     </div>
   );
 }

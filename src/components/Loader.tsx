@@ -10,3 +10,11 @@ export function Loader({ className }: { className?: string }) {
     </div>
   );
 }
+
+export function FullScreenLoader() {
+  return (
+    <div className="flex h-screen w-screen items-center justify-center">
+      <Loader />
+    </div>
+  );
+}

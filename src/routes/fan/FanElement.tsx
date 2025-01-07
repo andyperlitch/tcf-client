@@ -1,21 +1,21 @@
-import { useEventStageState } from "@/providers/StageStateProvider/EventStageStateContext";
+import { useEventFanState } from "@/providers/FanStateProvider/EventFanStateContext";
 import { TextScreenElement } from "../../components/ScreenTextElement";
 import { ImageStageElement } from "../../components/ScreenImageElement";
 
-export function StageElement({
+export function FanElement({
   elementId,
   editor,
 }: {
   elementId: string;
   editor: boolean;
 }) {
-  const { state, dispatch } = useEventStageState();
+  const { state, dispatch } = useEventFanState();
   const { type } = state.savedConfig.elements[elementId];
 
   if (type === "text") {
     return (
       <TextScreenElement
-        className="font-stage"
+        className="font-fan"
         elementId={elementId}
         editor={editor}
         state={state}

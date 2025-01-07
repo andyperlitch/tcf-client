@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 gql`
-  fragment StageElement on StageElement {
+  fragment ScreenElement on ScreenElement {
     id
     type
     name
@@ -12,5 +12,6 @@ gql`
     engagementClassNames
     text
     fontFamily
+    linkHref
   }
 `;

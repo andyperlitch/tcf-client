@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import { SharedStageState } from "@/types/screen";
+import { SharedFanState } from "@/types/screen";
 
 const DEFAULT_FONT_FAMILY = ["sans-serif"];
 
-export function useStageStyles({ state }: { state: SharedStageState }) {
+export function useFanStyles({ state }: { state: SharedFanState }) {
   // Styles to apply to the root element
   const rootStyles = useMemo(() => {
     const fontFamily =
@@ -17,7 +17,7 @@ export function useStageStyles({ state }: { state: SharedStageState }) {
       null;
 
     return {
-      "--stage-font-family": fontFamily.join(","),
+      "--fan-font-family": fontFamily.join(","),
       backgroundImage: backgroundImageUrl
         ? `url(${backgroundImageUrl})`
         : undefined,

@@ -4,7 +4,7 @@ import { useEffect, useReducer } from "react";
 import { stageStateContext } from "./StageStateContext";
 import { defaultInitialState } from "./StageStateContext";
 import { stageStateReducer } from "./reducer";
-import { setActiveEngagement } from "./actions";
+import { setActiveEngagement } from "../sharedActions";
 
 export function StageStateProvider({
   children,
@@ -17,7 +17,6 @@ export function StageStateProvider({
     ...defaultInitialState,
     savedConfig: getInitialSavedConfig(event),
   };
-  console.log(`andy initialState`, initialState);
   const [state, dispatch] = useReducer(stageStateReducer, initialState);
 
   useEffect(() => {

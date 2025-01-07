@@ -1,23 +1,36 @@
-import { useEventStageState } from "@/providers/StageStateProvider/EventStageStateContext";
-import { useRef, useState, useEffect, useCallback, useMemo } from "react";
-import { ContentEditableDiv } from "@/components/ContentEditableDiv";
-import { StageElementBoundingBox } from "./StageElementBoundingBox";
 import {
-  selectStageElement,
-  updateStageElement,
-} from "@/providers/StageStateProvider/actions";
-import { StageElementFragment } from "@/gql/graphql";
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  Dispatch,
+} from "react";
+import { ContentEditableDiv } from "@/components/ContentEditableDiv";
+import { ScreenElementBoundingBox } from "./ScreenElementBoundingBox";
+import {
+  EventScreenAction,
+  selectScreenElement,
+  updateScreenElement,
+} from "@/providers/sharedActions";
+import { ScreenElementFragment } from "@/gql/graphql";
 import { useActiveClassNamesAndStyles } from "@/hooks/useActiveClassNamesAndStyles";
 import { pick } from "lodash";
+import { SharedStageState, SharedFanState } from "@/types/screen";
 
-export function TextStageElement({
+export function TextScreenElement({
   elementId,
   editor,
+  state,
+  dispatch,
+  className: otherClassName,
 }: {
   elementId: string;
   editor: boolean;
+  state: SharedStageState | SharedFanState;
+  dispatch: Dispatch<EventScreenAction>;
+  className?: string;
 }) {
-  const { state, dispatch } = useEventStageState();
   const element = state.savedConfig.elements[elementId];
   const { className, styles: activeStyles } = useActiveClassNamesAndStyles(
     element,
@@ -32,16 +45,20 @@ export function TextStageElement({
   useEffect(() => {
     if (!editing && internalText !== element.text) {
       dispatch(
-        updateStageElement({ element: { ...element, text: internalText } })
+        updateScreenElement({ element: { ...element, text: internalText } })
       );
     }
   }, [editing, internalText, element, dispatch]);
 
-  const handleSelect = useCallback(() => {
-    if (editor && !selected) {
-      dispatch(selectStageElement({ id: elementId }));
+  const handleClick = useCallback(() => {
+    if (editor) {
+      if (!selected) {
+        dispatch(selectScreenElement({ id: elementId }));
+      }
+    } else if (element.linkHref) {
+      window.open(element.linkHref, "_blank");
     }
-  }, [editor, selected, elementId, dispatch]);
+  }, [editor, selected, elementId, dispatch, element.linkHref]);
 
   const handleKeyUp = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -62,8 +79,8 @@ export function TextStageElement({
   );
 
   const onUpdate = useCallback(
-    (element: StageElementFragment) =>
-      dispatch(updateStageElement({ element })),
+    (element: ScreenElementFragment) =>
+      dispatch(updateScreenElement({ element })),
     [dispatch]
   );
 
@@ -88,23 +105,22 @@ export function TextStageElement({
         data-id={elementId}
         className={`
           ${className}
+          ${otherClassName}
           ${editing ? "z-20" : ""}
           ${editor ? "" : "transition-all duration-1000"}
-
-          font-stage
         `}
         style={styles}
-        onClick={handleSelect}
+        onClick={handleClick}
         text={editing ? internalText : element.text}
         onChange={handleChange}
         onKeyUp={handleKeyUp}
         onBlur={() => setEditing(false)}
       />
       {editor && (
-        <StageElementBoundingBox
+        <ScreenElementBoundingBox
           box={box}
           selected={selected}
-          onSelect={handleSelect}
+          onSelect={handleClick}
           ref={ref}
           element={element}
           activeEngagement={state.activeEngagement}

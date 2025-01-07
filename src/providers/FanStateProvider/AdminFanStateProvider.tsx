@@ -2,23 +2,23 @@ import { useMemo, useRef, useEffect, RefObject } from "react";
 import { isEqual } from "lodash";
 import {
   AdminEventFragment,
-  UpdateEventStageConfigInput,
-  useAdminUpdateEventStageConfigMutation,
+  UpdateEventFanConfigInput,
+  useAdminUpdateEventFanConfigMutation,
 } from "@/gql/graphql";
-import { adminStageStateContext } from "./AdminStageStateContext";
+import { adminFanStateContext } from "./AdminFanStateContext";
 import { stripTypename } from "@/utils/stripTypename";
 import { useCallback } from "react";
-import { StageSavedConfig } from "@/types/screen";
-import { useStageState } from "./StageStateContext";
+import { FanSavedConfig } from "@/types/screen";
+import { useFanState } from "./FanStateContext";
 import { createLogger } from "@/utils/createLogger";
 import { debounce } from "lodash";
 import { ActionType } from "./actions";
 import { useIframe } from "@/hooks/use-iframe";
 import { changeDefaultFont } from "../sharedActions";
 
-const logger = createLogger("AdminStageStateProvider");
+const logger = createLogger("AdminFanStateProvider");
 
-function configToInput(config: StageSavedConfig): UpdateEventStageConfigInput {
+function configToInput(config: FanSavedConfig): UpdateEventFanConfigInput {
   const { elementOrder, elements: elementLookup, ...rest } = config;
   return {
     ...stripTypename(rest),
@@ -28,7 +28,7 @@ function configToInput(config: StageSavedConfig): UpdateEventStageConfigInput {
   };
 }
 
-export function AdminStageStateProvider({
+export function AdminFanStateProvider({
   children,
   event,
   iframeRef,
@@ -37,25 +37,25 @@ export function AdminStageStateProvider({
   event: AdminEventFragment;
   iframeRef?: RefObject<HTMLIFrameElement> | null;
 }) {
-  const [updateEventStageConfig] = useAdminUpdateEventStageConfigMutation();
+  const [updateEventFanConfig] = useAdminUpdateEventFanConfigMutation();
 
   const onSave = useCallback(
-    (input: StageSavedConfig) => {
+    (input: FanSavedConfig) => {
       logger.info("useOnSave", input);
-      updateEventStageConfig({
+      updateEventFanConfig({
         variables: {
           id: event.id,
           data: configToInput(input),
         },
       });
     },
-    [event.id, updateEventStageConfig]
+    [event.id, updateEventFanConfig]
   );
 
   // Create debounced version of onSave
   const debouncedOnSave = useMemo(
     () =>
-      debounce((config: StageSavedConfig) => {
+      debounce((config: FanSavedConfig) => {
         logger.log("debouncedOnSave: ", {
           config,
         });
@@ -64,7 +64,7 @@ export function AdminStageStateProvider({
     [onSave]
   );
 
-  const { state, dispatch } = useStageState();
+  const { state, dispatch } = useFanState();
 
   // iframe handling
   const handler = useCallback(
@@ -115,8 +115,8 @@ export function AdminStageStateProvider({
   );
 
   return (
-    <adminStageStateContext.Provider value={value}>
+    <adminFanStateContext.Provider value={value}>
       {children}
-    </adminStageStateContext.Provider>
+    </adminFanStateContext.Provider>
   );
 }

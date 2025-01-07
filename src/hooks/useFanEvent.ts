@@ -5,10 +5,15 @@ import {
   useOnActiveEngagementChangedSubscription,
 } from "@/gql/graphql";
 
-export function useFanEvent(slug: string) {
+type Options = Partial<
+  Omit<Parameters<typeof useFanGetEventQuery>[0], "variables">
+>;
+
+export function useFanEvent(slug: string, options: Options = {}) {
   const { data, loading, error } = useFanGetEventQuery({
+    ...options,
     variables: {
-      slug,
+      slug: slug,
     },
   });
 

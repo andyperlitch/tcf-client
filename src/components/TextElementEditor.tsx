@@ -4,14 +4,19 @@ import { TextAlignPicker } from "@/components/TextAlignPicker";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { NumberInput } from "@/components/ui/number-input";
-import { updateStageElement } from "@/providers/StageStateProvider/actions";
-import { useAdminStageState } from "@/providers/StageStateProvider/AdminStageStateContext";
+import { updateScreenElement } from "@/providers/sharedActions";
 import { FontSizeIcon } from "@radix-ui/react-icons";
 import { useMemo, useCallback, useState } from "react";
 import { createStyleUpdate } from "@/utils/createStyleUpdate";
+import { ScreenElementEditorProps } from "@/types/screen";
+import { LinkInput } from "./LinkInput";
 
-export function TextElementEditor({ elementId }: { elementId: string }) {
-  const { state, dispatch } = useAdminStageState();
+export function TextElementEditor({
+  elementId,
+  dispatch,
+  state,
+  enableLink,
+}: ScreenElementEditorProps) {
   const element = state.savedConfig.elements[elementId];
   const activeEngagement = state.activeEngagement;
 
@@ -51,55 +56,27 @@ export function TextElementEditor({ elementId }: { elementId: string }) {
     element.defaultStyles?.color,
   ]);
 
-  const setClassNames = useCallback(
-    (value: string) => {
-      dispatch(
-        updateStageElement({
-          element: {
-            ...element,
-            [activeEngagement ? "engagementClassNames" : "defaultClassNames"]:
-              value,
-          },
-        })
-      );
-    },
-    [dispatch, element, activeEngagement]
-  );
-
-  const setColor = useCallback(
-    (value: string) => {
-      const updates = createStyleUpdate(
-        "color",
-        value,
-        element,
-        !!activeEngagement
-      );
-      dispatch(updateStageElement({ element: updates }));
-    },
-    [dispatch, element, activeEngagement]
-  );
-
-  const setFontSize = useCallback(
-    (newValue: string) => {
-      const updates = createStyleUpdate(
-        "fontSize",
-        newValue,
-        element,
-        !!activeEngagement
-      );
-      dispatch(updateStageElement({ element: updates }));
-    },
-    [dispatch, element, activeEngagement]
-  );
-
   const [overrideFontFamily, setOverrideFontFamily] = useState(
     Boolean(element.fontFamily && element.fontFamily.length > 0)
+  );
+
+  const [addLink, setAddLink] = useState(
+    Boolean(element.linkHref && element.linkHref.length > 0)
   );
 
   const setFontFamily = useCallback(
     (value: string[] | null | undefined) => {
       dispatch(
-        updateStageElement({ element: { ...element, fontFamily: value } })
+        updateScreenElement({ element: { ...element, fontFamily: value } })
+      );
+    },
+    [dispatch, element]
+  );
+
+  const setLinkHref = useCallback(
+    (value: string) => {
+      dispatch(
+        updateScreenElement({ element: { ...element, linkHref: value } })
       );
     },
     [dispatch, element]
@@ -118,18 +95,57 @@ export function TextElementEditor({ elementId }: { elementId: string }) {
             fromValue={fromVWFontSize}
             toValue={toVWFontSize}
             value={fontSize}
-            onChange={setFontSize}
+            onChange={useCallback(
+              (newValue: string) => {
+                const updates = createStyleUpdate(
+                  "fontSize",
+                  newValue,
+                  element,
+                  !!activeEngagement
+                );
+                dispatch(updateScreenElement({ element: updates }));
+              },
+              [dispatch, element, activeEngagement]
+            )}
           />
         </div>
         <div data-name="TEXT_ALIGN_EDITOR">
-          <TextAlignPicker value={classNames || ""} onChange={setClassNames} />
+          <TextAlignPicker
+            value={classNames || ""}
+            onChange={useCallback(
+              (value) => {
+                dispatch(
+                  updateScreenElement({
+                    element: {
+                      ...element,
+                      [activeEngagement
+                        ? "engagementClassNames"
+                        : "defaultClassNames"]: value,
+                    },
+                  })
+                );
+              },
+              [dispatch, element, activeEngagement]
+            )}
+          />
         </div>
         <div data-name="TEXT_COLOR_EDITOR">
           <ColorPicker
             trigger="square"
             picker="chrome"
             value={color}
-            onChange={setColor}
+            onChange={useCallback(
+              (value) => {
+                const updates = createStyleUpdate(
+                  "color",
+                  value,
+                  element,
+                  !!activeEngagement
+                );
+                dispatch(updateScreenElement({ element: updates }));
+              },
+              [dispatch, element, activeEngagement]
+            )}
           />
         </div>
       </div>
@@ -148,6 +164,18 @@ export function TextElementEditor({ elementId }: { elementId: string }) {
           </Button>
         )}
       </div>
+
+      {enableLink && (
+        <div data-name="LINK_EDITOR">
+          {addLink ? (
+            <LinkInput value={element.linkHref || ""} onChange={setLinkHref} />
+          ) : (
+            <Button variant="link" onClick={() => setAddLink(true)}>
+              Add Link
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

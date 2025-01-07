@@ -13,8 +13,8 @@ export function InlineConfirmCancel({
   return (
     <div
       className={`
-        absolute left-0 top-[100%] flex justify-center space-x-2 bg-background
-        p-2 align-middle
+        absolute left-0 top-[100%] z-50 flex justify-center space-x-2
+        bg-background p-2 align-middle
       `}
     >
       <Button

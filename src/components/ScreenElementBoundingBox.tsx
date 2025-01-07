@@ -8,21 +8,21 @@ import {
   forwardRef,
 } from "react";
 
-import { StageElementFragment } from "@/gql/graphql";
+import { ScreenElementFragment } from "@/gql/graphql";
 import { useEffect } from "react";
 
-export const StageElementBoundingBox = forwardRef<
+export const ScreenElementBoundingBox = forwardRef<
   HTMLDivElement,
   {
     selected: boolean;
     onSelect: (elementId: string) => void;
-    element: StageElementFragment;
+    element: ScreenElementFragment;
     activeEngagement: StageEngagementFragment | null | undefined;
-    onUpdate: (element: StageElementFragment) => void;
+    onUpdate: (element: ScreenElementFragment) => void;
     onDoubleClick?: () => void;
     box: Pick<CSSProperties, "width" | "height" | "top" | "left">;
   }
->(function StageElementBoundingBox(
+>(function ScreenElementBoundingBox(
   {
     selected,
     onSelect,

@@ -5,7 +5,7 @@ import {
 } from "@radix-ui/react-icons";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { useMemo, useCallback } from "react";
-import { TextAlign } from "@/types/stage";
+import { TextAlign } from "@/types/screen";
 
 export interface Props {
   /**

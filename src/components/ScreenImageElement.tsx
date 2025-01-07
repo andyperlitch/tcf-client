@@ -1,21 +1,26 @@
 import { useActiveClassNamesAndStyles } from "@/hooks/useActiveClassNamesAndStyles";
 import {
-  selectStageElement,
-  updateStageElement,
-} from "@/providers/StageStateProvider/actions";
-import { useEventStageState } from "@/providers/StageStateProvider/EventStageStateContext";
+  EventScreenAction,
+  selectScreenElement,
+  updateScreenElement,
+} from "@/providers/sharedActions";
 import { pick } from "lodash";
-import { useRef } from "react";
-import { StageElementBoundingBox } from "./StageElementBoundingBox";
+import { Dispatch, useCallback, useRef } from "react";
+import { ScreenElementBoundingBox } from "./ScreenElementBoundingBox";
+import { SharedFanState } from "@/types/screen";
+import { SharedStageState } from "@/types/screen";
 
 export function ImageStageElement({
   elementId,
   editor,
+  state,
+  dispatch,
 }: {
   elementId: string;
   editor: boolean;
+  state: SharedStageState | SharedFanState;
+  dispatch: Dispatch<EventScreenAction>;
 }) {
-  const { state, dispatch } = useEventStageState();
   const element = state.savedConfig.elements[elementId];
   const draftElement = state.draftConfig?.elements?.[elementId];
   const { className, styles: activeStyles } = useActiveClassNamesAndStyles(
@@ -26,6 +31,16 @@ export function ImageStageElement({
   const box = pick(activeStyles, ["width", "height", "top", "left"]);
   const draftImageUrl = draftElement?.imageUrl;
   const selected = state.selectedElementId === elementId;
+
+  const handleClick = useCallback(() => {
+    if (editor) {
+      if (!selected) {
+        dispatch(selectScreenElement({ id: elementId }));
+      }
+    } else if (element.linkHref) {
+      window.open(element.linkHref, "_blank");
+    }
+  }, [editor, selected, elementId, dispatch, element.linkHref]);
   return (
     <>
       <div
@@ -40,21 +55,17 @@ export function ImageStageElement({
           ...activeStyles,
           backgroundImage: `url(${draftImageUrl || element.imageUrl || ""})`,
         }}
-        onClick={
-          editor
-            ? () => dispatch(selectStageElement({ id: elementId }))
-            : undefined
-        }
+        onClick={handleClick}
       />
       {editor && (
-        <StageElementBoundingBox
+        <ScreenElementBoundingBox
           box={box}
           selected={selected}
-          onSelect={() => dispatch(selectStageElement({ id: elementId }))}
+          onSelect={() => dispatch(selectScreenElement({ id: elementId }))}
           ref={ref}
           element={element}
           activeEngagement={state.activeEngagement}
-          onUpdate={(element) => dispatch(updateStageElement({ element }))}
+          onUpdate={(element) => dispatch(updateScreenElement({ element }))}
         />
       )}
     </>

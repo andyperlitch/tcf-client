@@ -1,32 +1,32 @@
-import { AdminEventFragment } from "@/gql/graphql";
+import { BackgroundImageInput } from "@/components/BackgroundImageInput";
+import { FontPicker } from "@/components/FontPicker";
+import { ScreenElementEditor } from "@/components/ScreenElementEditor";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { forwardRef, useCallback } from "react";
-import { ImageIcon, TextIcon } from "@radix-ui/react-icons";
-import { BackgroundImageInput } from "../../../../components/BackgroundImageInput";
-import { ScreenElementEditor } from "../../../../components/ScreenElementEditor";
-import { FontPicker } from "@/components/FontPicker";
-import { useHotkeys } from "@shelf/hotkeys";
-import { useAdminStageState } from "@/providers/StageStateProvider/AdminStageStateContext";
-import { QRCodeEditor } from "./QRCodeEditor";
+import { AdminEventFragment } from "@/gql/graphql";
+import { useAdminFanState } from "@/providers/FanStateProvider/AdminFanStateContext";
 import {
+  addImageElement,
+  addTextElement,
   changeDefaultFont,
   deleteScreenElement,
   saveBackgroundImage,
   setBackgroundPreview,
-  addTextElement,
-  addImageElement,
 } from "@/providers/sharedActions";
+import { ImageIcon } from "@radix-ui/react-icons";
+import { TextIcon } from "@radix-ui/react-icons";
+import { useHotkeys } from "@shelf/hotkeys";
+import { forwardRef, useCallback } from "react";
 import {
-  createDefaultStageImageElement,
-  createDefaultStageTextElement,
+  createDefaultFanImageElement,
+  createDefaultFanTextElement,
 } from "./utils";
 
-export const StageEditor = forwardRef<
+export const FanEditor = forwardRef<
   HTMLIFrameElement,
   { event: AdminEventFragment }
->(function StageEditor({ event }, ref) {
-  const { state, dispatch } = useAdminStageState();
+>(function FanEditor({ event }, ref) {
+  const { state, dispatch } = useAdminFanState();
 
   useHotkeys({
     Backspace: useCallback(() => {
@@ -37,39 +37,24 @@ export const StageEditor = forwardRef<
   });
 
   return (
-    <div className="flex gap-2" data-name="STAGE_EDITOR">
-      <iframe
-        id="stage-preview"
-        src={`/stage/${event.slug}?editor=true`}
-        className={`
-          relative aspect-video h-full max-h-[1080px] w-full max-w-[1920px]
-        `}
-        ref={ref}
-      ></iframe>
+    <div className="flex gap-2" data-name="FAN_EDITOR">
+      <div
+        data-name="IFRAME_WRAPPER"
+        className={`flex flex-1 items-center justify-center`}
+      >
+        <iframe
+          id="fan-preview"
+          src={`/e/${event.slug}?editor=true`}
+          className={`relative aspect-portrait h-[1080px] h-full`}
+          ref={ref}
+        ></iframe>
+      </div>
       <div
         data-name="STAGE_EDITOR_TOOLBAR"
         className="flex w-1/3 flex-col gap-4"
       >
-        {/* font picker */}
-        <FontPicker
-          label="Default Font"
-          title="Default Font"
-          description={[
-            `Select the fonts you want to use by default.`,
-            `You can browse Google Fonts or add your own custom fonts.`,
-            `You may override this on a per-element basis.`,
-          ].join(" ")}
-          value={state.savedConfig?.fontFamily}
-          onChange={useCallback(
-            (fontFamily) => {
-              dispatch(changeDefaultFont({ fontFamily }));
-            },
-            [dispatch]
-          )}
-        />
-
         <BackgroundImageInput
-          imageUrl={event.stageConfig?.backgroundImage}
+          imageUrl={event.fanConfig?.backgroundImage}
           onPreview={useCallback(
             (imageUrl) => {
               dispatch(setBackgroundPreview({ backgroundImage: imageUrl }));
@@ -83,11 +68,24 @@ export const StageEditor = forwardRef<
             [dispatch]
           )}
         />
-
-        <QRCodeEditor />
-
+        <FontPicker
+          label="Default Font"
+          title="Default Font"
+          description={[
+            `Select the fonts you want to use by default.`,
+            `You can browse Google Fonts or add your own custom fonts.`,
+            `You may override this on a per-element basis.`,
+          ].join(" ")}
+          value={state.savedConfig?.fontFamily || event.stageConfig?.fontFamily}
+          onChange={useCallback(
+            (fontFamily) => {
+              dispatch(changeDefaultFont({ fontFamily }));
+            },
+            [dispatch]
+          )}
+        />
         <div data-name="STAGE_ELEMENTS_LIST">
-          <Label>Stage elements</Label>
+          <Label>Screen Elements</Label>
           <div className="mb-2 flex flex-col gap-2">
             {state.savedConfig?.elementOrder.map((elementId) => (
               <ScreenElementEditor
@@ -95,6 +93,7 @@ export const StageEditor = forwardRef<
                 elementId={elementId}
                 state={state}
                 dispatch={dispatch}
+                enableLink
               />
             ))}
           </div>
@@ -103,7 +102,7 @@ export const StageEditor = forwardRef<
               size="sm"
               onClick={useCallback(() => {
                 dispatch(
-                  addTextElement({ element: createDefaultStageTextElement() })
+                  addTextElement({ element: createDefaultFanTextElement() })
                 );
               }, [dispatch])}
               variant="advisory"
@@ -114,7 +113,9 @@ export const StageEditor = forwardRef<
               size="sm"
               onClick={useCallback(() => {
                 dispatch(
-                  addImageElement({ element: createDefaultStageImageElement() })
+                  addImageElement({
+                    element: createDefaultFanImageElement(),
+                  })
                 );
               }, [dispatch])}
               variant="constructive"
