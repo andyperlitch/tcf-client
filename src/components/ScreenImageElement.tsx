@@ -4,13 +4,12 @@ import {
   selectScreenElement,
   updateScreenElement,
 } from "@/providers/sharedActions";
-import { pick } from "lodash";
-import { Dispatch, useCallback, useRef } from "react";
+import { Dispatch, useCallback, useMemo, useRef } from "react";
 import { ScreenElementBoundingBox } from "./ScreenElementBoundingBox";
 import { SharedFanState } from "@/types/screen";
 import { SharedStageState } from "@/types/screen";
 
-export function ImageStageElement({
+export function ScreenImageElement({
   elementId,
   editor,
   state,
@@ -28,9 +27,18 @@ export function ImageStageElement({
     state.activeEngagement
   );
   const ref = useRef<HTMLDivElement>(null);
-  const box = pick(activeStyles, ["width", "height", "top", "left"]);
   const draftImageUrl = draftElement?.imageUrl;
   const selected = state.selectedElementId === elementId;
+
+  const { wrapperStyles, contentStyles } = useMemo(() => {
+    const { width, height, top, left, ...rest } = activeStyles;
+    const wrapperStyles = { width, height, top, left };
+    const contentStyles = {
+      ...rest,
+      backgroundImage: `url(${draftImageUrl || element.imageUrl || ""})`,
+    };
+    return { wrapperStyles, contentStyles };
+  }, [activeStyles, draftImageUrl, element.imageUrl]);
 
   const handleClick = useCallback(() => {
     if (editor) {
@@ -42,24 +50,31 @@ export function ImageStageElement({
     }
   }, [editor, selected, elementId, dispatch, element.linkHref]);
   return (
-    <>
+    <div
+      ref={ref}
+      data-name="IMAGE_STAGE_ELEMENT_WRAPPER"
+      data-id={elementId}
+      className={`
+        absolute
+
+        ${editor ? "" : "transition-all duration-1000"}
+      `}
+      style={wrapperStyles}
+    >
       <div
-        ref={ref}
         data-name="IMAGE_STAGE_ELEMENT"
         data-id={elementId}
         className={`
+          h-full w-full
+
           ${className}
           ${editor ? "" : "transition-all duration-1000"}
         `}
-        style={{
-          ...activeStyles,
-          backgroundImage: `url(${draftImageUrl || element.imageUrl || ""})`,
-        }}
+        style={contentStyles}
         onClick={handleClick}
       />
       {editor && (
         <ScreenElementBoundingBox
-          box={box}
           selected={selected}
           onSelect={() => dispatch(selectScreenElement({ id: elementId }))}
           ref={ref}
@@ -68,6 +83,6 @@ export function ImageStageElement({
           onUpdate={(element) => dispatch(updateScreenElement({ element }))}
         />
       )}
-    </>
+    </div>
   );
 }

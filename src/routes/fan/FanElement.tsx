@@ -1,6 +1,6 @@
 import { useEventFanState } from "@/providers/FanStateProvider/EventFanStateContext";
-import { TextScreenElement } from "../../components/ScreenTextElement";
-import { ImageStageElement } from "../../components/ScreenImageElement";
+import { ScreenTextElement } from "../../components/ScreenTextElement";
+import { ScreenImageElement } from "../../components/ScreenImageElement";
 
 export function FanElement({
   elementId,
@@ -14,7 +14,7 @@ export function FanElement({
 
   if (type === "text") {
     return (
-      <TextScreenElement
+      <ScreenTextElement
         className="font-fan"
         elementId={elementId}
         editor={editor}
@@ -26,7 +26,7 @@ export function FanElement({
 
   if (type === "image") {
     return (
-      <ImageStageElement
+      <ScreenImageElement
         elementId={elementId}
         editor={editor}
         state={state}

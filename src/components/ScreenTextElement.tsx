@@ -15,10 +15,9 @@ import {
 } from "@/providers/sharedActions";
 import { ScreenElementFragment } from "@/gql/graphql";
 import { useActiveClassNamesAndStyles } from "@/hooks/useActiveClassNamesAndStyles";
-import { pick } from "lodash";
 import { SharedStageState, SharedFanState } from "@/types/screen";
 
-export function TextScreenElement({
+export function ScreenTextElement({
   elementId,
   editor,
   state,
@@ -36,8 +35,7 @@ export function TextScreenElement({
     element,
     state.activeEngagement
   );
-  const ref = useRef<HTMLDivElement>(null);
-  const box = pick(activeStyles, ["width", "height", "top", "left"]);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [editing, setEditing] = useState(false);
   const [internalText, setInternalText] = useState(element.text || "");
   const selected = state.selectedElementId === elementId;
@@ -84,32 +82,44 @@ export function TextScreenElement({
     [dispatch]
   );
 
-  const styles = useMemo(() => {
+  const { wrapperStyles, contentStyles } = useMemo(() => {
+    const { width, height, top, left, ...rest } = activeStyles;
+    const wrapperStyles = { width, height, top, left };
+    const contentStyles = rest;
     if (element.fontFamily) {
-      return {
-        ...activeStyles,
-        fontFamily: element.fontFamily.join(","),
-      };
+      contentStyles.fontFamily = element.fontFamily;
     }
     return {
-      ...activeStyles,
+      wrapperStyles,
+      contentStyles,
     };
   }, [activeStyles, element.fontFamily]);
 
   return (
-    <>
+    <div
+      data-name="TEXT_STAGE_ELEMENT_WRAPPER"
+      data-id={elementId}
+      ref={wrapperRef}
+      className={`
+        absolute
+
+        ${editor ? "" : "transition-all duration-1000"}
+      `}
+      style={wrapperStyles}
+    >
       <ContentEditableDiv
         editable={editing}
-        ref={ref}
         data-name="TEXT_STAGE_ELEMENT"
         data-id={elementId}
         className={`
+          h-full w-full
+
           ${className}
           ${otherClassName}
           ${editing ? "z-20" : ""}
           ${editor ? "" : "transition-all duration-1000"}
         `}
-        style={styles}
+        style={contentStyles}
         onClick={handleClick}
         text={editing ? internalText : element.text}
         onChange={handleChange}
@@ -118,16 +128,15 @@ export function TextScreenElement({
       />
       {editor && (
         <ScreenElementBoundingBox
-          box={box}
           selected={selected}
           onSelect={handleClick}
-          ref={ref}
+          ref={wrapperRef}
           element={element}
           activeEngagement={state.activeEngagement}
           onUpdate={onUpdate}
           onDoubleClick={() => setEditing(true)}
         />
       )}
-    </>
+    </div>
   );
 }

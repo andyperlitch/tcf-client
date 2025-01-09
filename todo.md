@@ -40,7 +40,7 @@
 - [x] add image to image element
 - [x] change background-size for image element
 - [x] specify colors for the QR code component
-- [ ] wrap elements in a div
+- [x] wrap elements in a div
 - [ ] pseudo-engagement mode for testing
 - [ ] fix engagements to use font-stage
 - [ ] auto-upload images for stage elements

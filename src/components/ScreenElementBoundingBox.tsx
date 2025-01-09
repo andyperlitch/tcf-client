@@ -1,12 +1,5 @@
 import { StageEngagementFragment } from "@/gql/graphql";
-import {
-  CSSProperties,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-  forwardRef,
-} from "react";
+import { useCallback, useMemo, useState, forwardRef } from "react";
 
 import { ScreenElementFragment } from "@/gql/graphql";
 import { useEffect } from "react";
@@ -20,22 +13,12 @@ export const ScreenElementBoundingBox = forwardRef<
     activeEngagement: StageEngagementFragment | null | undefined;
     onUpdate: (element: ScreenElementFragment) => void;
     onDoubleClick?: () => void;
-    box: Pick<CSSProperties, "width" | "height" | "top" | "left">;
   }
 >(function ScreenElementBoundingBox(
-  {
-    selected,
-    onSelect,
-    element,
-    activeEngagement,
-    onUpdate,
-    onDoubleClick,
-    box,
-  },
-  elementRef
+  { selected, onSelect, element, activeEngagement, onUpdate, onDoubleClick },
+  wrapperRef
 ) {
   const { pxToVw, pxToVh } = usePixelToViewport();
-  const bboxRef = useRef<HTMLDivElement>(null);
   const handleClick = useCallback(() => {
     if (!selected) {
       onSelect(element.id);
@@ -43,8 +26,7 @@ export const ScreenElementBoundingBox = forwardRef<
     return true;
   }, [selected, onSelect, element.id]);
   const moveElementHandlers = useMoveElementHandlers({
-    elementRef: elementRef as React.RefObject<HTMLDivElement>,
-    bboxRef,
+    elementRef: wrapperRef as React.RefObject<HTMLDivElement>,
     onUpdatePosition: useCallback(
       ({ x, y }) => {
         const translatedXandY = {
@@ -131,26 +113,22 @@ export const ScreenElementBoundingBox = forwardRef<
   );
 
   const scaleSEHandlers = useResizeElementHandlers({
-    elementRef: elementRef as React.RefObject<HTMLDivElement>,
-    bboxRef,
+    elementRef: wrapperRef as React.RefObject<HTMLDivElement>,
     anchorLocation: "se",
     onUpdateSize,
   });
   const scaleSWHandlers = useResizeElementHandlers({
-    elementRef: elementRef as React.RefObject<HTMLDivElement>,
-    bboxRef,
+    elementRef: wrapperRef as React.RefObject<HTMLDivElement>,
     anchorLocation: "sw",
     onUpdateSize,
   });
   const scaleNEHandlers = useResizeElementHandlers({
-    elementRef: elementRef as React.RefObject<HTMLDivElement>,
-    bboxRef,
+    elementRef: wrapperRef as React.RefObject<HTMLDivElement>,
     anchorLocation: "ne",
     onUpdateSize,
   });
   const scaleNWHandlers = useResizeElementHandlers({
-    elementRef: elementRef as React.RefObject<HTMLDivElement>,
-    bboxRef,
+    elementRef: wrapperRef as React.RefObject<HTMLDivElement>,
     anchorLocation: "nw",
     onUpdateSize,
   });
@@ -163,22 +141,8 @@ export const ScreenElementBoundingBox = forwardRef<
     ? "opacity-100"
     : "opacity-0 hover:opacity-50";
 
-  const [style, setStyle] = useState<CSSProperties>({});
-
-  useEffect(() => {
-    const el = (elementRef as React.RefObject<HTMLDivElement>)?.current;
-    if (!el) return;
-    const detectedRect = el.getBoundingClientRect();
-    setStyle({
-      width: box.width || `${detectedRect.width}px`,
-      height: box.height || `${detectedRect.height}px`,
-      top: box.top || detectedRect.top,
-      left: box.left || detectedRect.left,
-    });
-  }, [box.height, box.left, box.top, box.width, elementRef]);
-
   return (
-    <div className={`absolute`} style={style} ref={bboxRef}>
+    <div className={`absolute h-full w-full`}>
       {/* bounding box */}
       <div
         {...moveElementHandlers}
@@ -277,11 +241,9 @@ function usePixelToViewport() {
 function useMoveElementHandlers({
   onUpdatePosition,
   elementRef,
-  bboxRef,
 }: {
   onUpdatePosition: (position: { x: number; y: number }) => void;
   elementRef: React.RefObject<HTMLDivElement>;
-  bboxRef: React.RefObject<HTMLDivElement>;
 }) {
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -302,9 +264,10 @@ function useMoveElementHandlers({
     };
 
     // remove the `transition-all` class from the element
-    if (elementRef.current && "classList" in elementRef.current) {
-      // elementRef.current.classList.remove("transition-all");
-    }
+    // if (elementRef.current && "classList" in elementRef.current) {
+    //   elementRef.current.classList.remove("transition-all");
+    //   elementRef.current.classList.remove("duration-1000");
+    // }
 
     // create a listener on window for mouse move
     const onMouseMove = (e: MouseEvent) => {
@@ -314,11 +277,6 @@ function useMoveElementHandlers({
       // update the element's transform position
       if (elementRef.current && "style" in elementRef.current) {
         elementRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-      }
-
-      // update the bounding box's position
-      if (bboxRef.current && "style" in bboxRef.current) {
-        bboxRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
       }
     };
     window.addEventListener("mousemove", onMouseMove);
@@ -337,15 +295,15 @@ function useMoveElementHandlers({
         elementRef.current.style.transform = "translate(0px, 0px)";
       }
 
-      // reset the bounding box's transform position
-      if (bboxRef.current && "style" in bboxRef.current) {
-        bboxRef.current.style.transform = "translate(0px, 0px)";
-      }
-
-      // add the `transition-all` class back to the element
-      if (elementRef.current && "classList" in elementRef.current) {
-        // elementRef.current.classList.add("transition-all");
-      }
+      // add the `transition-all` class back to the element,
+      // but this needs to be wrapped in a setTimeout because onUpdatePosition
+      // is asynchronous
+      // setTimeout(() => {
+      //   if (elementRef.current && "classList" in elementRef.current) {
+      //     elementRef.current.classList.add("transition-all");
+      //     elementRef.current.classList.add("duration-1000");
+      //   }
+      // }, 0);
 
       // remove the mouse move listener
       window.removeEventListener("mousemove", onMouseMove);
@@ -361,12 +319,10 @@ function useMoveElementHandlers({
 
 function useResizeElementHandlers({
   elementRef,
-  bboxRef,
   onUpdateSize,
   anchorLocation,
 }: {
   elementRef: React.RefObject<HTMLDivElement>;
-  bboxRef: React.RefObject<HTMLDivElement>;
   onUpdateSize: (
     boundingBox: Pick<DOMRect, "width" | "height" | "top" | "left">
   ) => void;
@@ -434,13 +390,6 @@ function useResizeElementHandlers({
         elementRef.current.style.height = `${newHeight}px`;
         elementRef.current.style.top = `${newTop}px`;
         elementRef.current.style.left = `${newLeft}px`;
-      }
-
-      if (bboxRef.current && "style" in bboxRef.current) {
-        bboxRef.current.style.width = `${newWidth}px`;
-        bboxRef.current.style.height = `${newHeight}px`;
-        bboxRef.current.style.top = `${newTop}px`;
-        bboxRef.current.style.left = `${newLeft}px`;
       }
     };
 

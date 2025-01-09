@@ -1,6 +1,6 @@
 import { useEventStageState } from "@/providers/StageStateProvider/EventStageStateContext";
-import { TextScreenElement } from "../../components/ScreenTextElement";
-import { ImageStageElement } from "../../components/ScreenImageElement";
+import { ScreenTextElement } from "../../components/ScreenTextElement";
+import { ScreenImageElement } from "../../components/ScreenImageElement";
 
 export function StageElement({
   elementId,
@@ -14,7 +14,7 @@ export function StageElement({
 
   if (type === "text") {
     return (
-      <TextScreenElement
+      <ScreenTextElement
         className="font-stage"
         elementId={elementId}
         editor={editor}
@@ -26,7 +26,7 @@ export function StageElement({
 
   if (type === "image") {
     return (
-      <ImageStageElement
+      <ScreenImageElement
         elementId={elementId}
         editor={editor}
         state={state}
