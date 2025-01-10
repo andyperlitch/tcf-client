@@ -95,6 +95,9 @@ function Screen({ event }: { event: StageEventFragment }) {
         <CustomEventPage />
       ) : (
         <StageChrome name="STAGE_CHROME" event={event}>
+          {event.activeEngagement && editor && (
+            <StageActiveEngagement event={event} />
+          )}
           {savedConfig.elementOrder.map((elementId) => (
             <StageElement
               key={elementId}
@@ -102,7 +105,9 @@ function Screen({ event }: { event: StageEventFragment }) {
               editor={editor}
             />
           ))}
-          {event.activeEngagement && <StageActiveEngagement event={event} />}
+          {event.activeEngagement && !editor && (
+            <StageActiveEngagement event={event} />
+          )}
         </StageChrome>
       )}
     </div>

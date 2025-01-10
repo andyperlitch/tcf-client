@@ -20,6 +20,7 @@ gql`
     requireApproval
     askSharePermission
     sharePrompt
+    pollInterval
   }
   fragment PhotoCarouselAdminDataFields on PhotoCarouselAdminData {
     visibleSubmission

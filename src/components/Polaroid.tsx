@@ -1,6 +1,6 @@
 import { useImageLoader } from "@/hooks/useImageLoader";
 import { cn } from "@/lib/utils";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 export function Polaroid({
   width = "20vw",
@@ -25,13 +25,24 @@ export function Polaroid({
   initialStyle?: React.CSSProperties;
 }) {
   const { imageLoaded } = useImageLoader({ url: photoUrl });
+  const [currentStyle, setCurrentStyle] = useState(initialStyle);
   const imageStyles = useMemo(() => ({ width }), [width]);
   const textStyles = useMemo(() => ({ width }), [width]);
+
+  useEffect(() => {
+    if (imageLoaded) {
+      // Only update to loadedStyle after the initial render
+      const timeoutId = setTimeout(() => {
+        setCurrentStyle(loadedStyle);
+      }, 100);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [imageLoaded, loadedStyle]);
 
   return (
     <div
       className={cn(`polaroid rounded-sm bg-white p-4 shadow-md`, className)}
-      style={imageLoaded ? loadedStyle : initialStyle}
+      style={currentStyle}
     >
       {photoUrl && <img style={imageStyles} src={photoUrl} />}
 

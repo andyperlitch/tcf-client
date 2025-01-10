@@ -50,6 +50,8 @@ export const StageEditor = forwardRef<
         data-name="STAGE_EDITOR_TOOLBAR"
         className="flex w-1/3 flex-col gap-4"
       >
+        {/* active engagement */}
+        {/* <ActiveEngagementMode /> */}
         {/* font picker */}
         <FontPicker
           label="Default Font"
