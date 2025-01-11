@@ -132,7 +132,7 @@ export function NewPhotoForm({
       {!previewSrc && (
         <p
           className={cn(
-            "pt-4 text-center font-fan text-3xl transition-opacity",
+            "pt-4 text-center font-fan text-2xl transition-opacity",
             {
               "opacity-0": loading || succeeded,
             }
@@ -175,7 +175,7 @@ export function NewPhotoForm({
                     </div>
                     <div
                       className={`
-                        mt-4 whitespace-nowrap font-hand text-4xl font-bold
+                        mt-4 whitespace-nowrap font-fan text-4xl font-bold
                         text-background
                       `}
                     >
@@ -191,7 +191,7 @@ export function NewPhotoForm({
                 className={`
                   flex h-[90vw] w-[70vw] flex-col items-center justify-center
                   gap-4 border-8 border-dashed border-[#FFFFFF33] bg-slate-600
-                  text-center text-2xl font-bold text-[#FFFFFF33]
+                  text-center font-fan text-2xl font-bold text-[#FFFFFF33]
                 `}
               >
                 <div className="flex gap-2">

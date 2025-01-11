@@ -107,7 +107,9 @@ function Screen({ event }: { event: FanEventFragment }) {
   return (
     <div
       data-name="FAN_ROOT"
-      className={`relative flex h-screen w-screen flex-col gap-4 overflow-auto`}
+      className={`
+        relative flex h-screen w-screen flex-col gap-4 overflow-auto pt-16
+      `}
       style={rootStyles}
       onClick={handleDeselectAll}
     >

@@ -29,12 +29,12 @@ export function FanPhotoCarouselEngagement({
         `}
       >
         <div className="text-6xl">🤳</div>
-        <h3 className="font-hand text-5xl">
+        <h3 className="font-fan text-2xl">
           You should see your photo on the screen soon!
         </h3>
         {data?.canCreateSubmission && (
           <Button
-            className="font-hand text-4xl"
+            className="font-fan text-2xl"
             variant="default"
             onClick={() => setHasSubmitted(false)}
           >
