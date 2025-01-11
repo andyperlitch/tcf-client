@@ -1,4 +1,4 @@
-import { SharedStageState } from "@/types/screen";
+import { SharedFanState, SharedStageState } from "@/types/screen";
 import { combineReducers } from "@/utils/combineReducers";
 import {
   ActionType,
@@ -17,6 +17,7 @@ import {
   BACKGROUND_IMAGE_SAVED,
   SET_ACTIVE_ENGAGEMENT,
   SCREEN_ELEMENT_DRAFT_UPDATED,
+  SET_ENGAGEMENT_MODE,
 } from "../sharedActions";
 import { omit } from "lodash";
 
@@ -25,6 +26,7 @@ export const stageStateReducer = combineReducers<SharedStageState, ActionType>({
   draftConfig: draftConfigReducer,
   selectedElementId: selectedElementIdReducer,
   activeEngagement: activeEngagementReducer,
+  engagementMode: engagementModeReducer,
 });
 
 function savedConfigReducer(
@@ -173,6 +175,18 @@ function activeEngagementReducer(
   switch (action.type) {
     case SET_ACTIVE_ENGAGEMENT: {
       return action.payload.engagement;
+    }
+    default:
+      return state;
+  }
+}
+function engagementModeReducer(
+  state: SharedFanState["engagementMode"],
+  action: ActionType
+) {
+  switch (action.type) {
+    case SET_ENGAGEMENT_MODE: {
+      return action.payload.mode;
     }
     default:
       return state;

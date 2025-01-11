@@ -7,6 +7,7 @@ export const defaultInitialState: SharedStageState = {
   savedConfig: { elements: {}, elementOrder: [] },
   draftConfig: {},
   selectedElementId: undefined,
+  engagementMode: "actual",
 };
 export interface StageStateContextType {
   dispatch: Dispatch<ActionType>;

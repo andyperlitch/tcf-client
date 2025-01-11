@@ -9,6 +9,7 @@ import {
   DeleteScreenElementAction,
   UpdateScreenElementAction,
   AddTextElementAction,
+  SetEngagementModeAction,
 } from "../sharedActions";
 
 // QR Code Actions
@@ -73,4 +74,5 @@ export type ActionType =
   | UpdateScreenElementDraftAction
   | ChangeQRCodeForegroundColorAction
   | ChangeQRCodeBackgroundColorAction
-  | ChangeQRCodeWrapperBackgroundColorAction;
+  | ChangeQRCodeWrapperBackgroundColorAction
+  | SetEngagementModeAction;

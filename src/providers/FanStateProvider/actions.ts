@@ -9,6 +9,7 @@ import {
   SelectScreenElementAction,
   SetActiveEngagementAction,
   UpdateScreenElementDraftAction,
+  SetEngagementModeAction,
 } from "../sharedActions";
 
 export type ActionType =
@@ -21,4 +22,5 @@ export type ActionType =
   | ChangeDefaultFontAction
   | SelectScreenElementAction
   | SetActiveEngagementAction
-  | UpdateScreenElementDraftAction;
+  | UpdateScreenElementDraftAction
+  | SetEngagementModeAction;

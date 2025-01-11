@@ -7,6 +7,7 @@ export const defaultInitialState: SharedFanState = {
   savedConfig: { elements: {}, elementOrder: [] },
   draftConfig: {},
   selectedElementId: undefined,
+  engagementMode: "actual",
 };
 export interface FanStateContextType {
   dispatch: Dispatch<ActionType>;

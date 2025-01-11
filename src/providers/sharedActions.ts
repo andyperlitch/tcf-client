@@ -3,7 +3,7 @@ import {
   ScreenElementFragment,
   StageEngagementFragment,
 } from "@/gql/graphql";
-import { ScreenDraftElement } from "@/types/screen";
+import { EngagementMode, ScreenDraftElement } from "@/types/screen";
 
 // Text Element Actions
 export const TEXT_ELEMENT_ADDED = "TEXT_ELEMENT_ADDED";
@@ -157,6 +157,21 @@ export const setActiveEngagement = (
   payload,
 });
 
+// Engagement Mode Actions
+export const SET_ENGAGEMENT_MODE = "SET_ENGAGEMENT_MODE";
+export interface SetEngagementModeAction {
+  type: typeof SET_ENGAGEMENT_MODE;
+  payload: {
+    mode: EngagementMode;
+  };
+}
+export const setEngagementMode = (
+  payload: SetEngagementModeAction["payload"]
+): SetEngagementModeAction => ({
+  type: SET_ENGAGEMENT_MODE,
+  payload,
+});
+
 export type EventScreenAction =
   | AddTextElementAction
   | AddImageElementAction
@@ -167,4 +182,5 @@ export type EventScreenAction =
   | SetActiveEngagementAction
   | SetBackgroundPreviewAction
   | SaveBackgroundImageAction
-  | ChangeDefaultFontAction;
+  | ChangeDefaultFontAction
+  | SetEngagementModeAction;

@@ -22,11 +22,14 @@ export type StageDraftConfig = Partial<Omit<EventStageConfig, "elements">> & {
   elementOrder?: string[];
 };
 
+export type EngagementMode = "none" | "guide" | "actual";
+
 export interface SharedStageState {
   savedConfig: StageSavedConfig;
   draftConfig: StageDraftConfig;
   selectedElementId?: string | null;
   activeEngagement?: StageEngagementFragment | null;
+  engagementMode: EngagementMode;
 }
 
 export type FanSavedConfig = Partial<Omit<EventFanConfig, "elements">> & {
@@ -44,6 +47,7 @@ export interface SharedFanState {
   draftConfig: FanDraftConfig;
   selectedElementId?: string | null;
   activeEngagement?: FanEngagementFragment | null;
+  engagementMode: EngagementMode;
 }
 
 export type ScreenElementEditorProps = {

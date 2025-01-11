@@ -11,6 +11,7 @@ import {
   SCREEN_ELEMENT_SELECTED,
   SCREEN_ELEMENT_UPDATED,
   SET_ACTIVE_ENGAGEMENT,
+  SET_ENGAGEMENT_MODE,
   TEXT_ELEMENT_ADDED,
 } from "../sharedActions";
 import { omit } from "lodash";
@@ -20,6 +21,7 @@ export const fanStateReducer = combineReducers<SharedFanState, ActionType>({
   draftConfig: draftConfigReducer,
   selectedElementId: selectedElementIdReducer,
   activeEngagement: activeEngagementReducer,
+  engagementMode: engagementModeReducer,
 });
 
 function savedConfigReducer(
@@ -152,6 +154,19 @@ function activeEngagementReducer(
   switch (action.type) {
     case SET_ACTIVE_ENGAGEMENT: {
       return action.payload.engagement;
+    }
+    default:
+      return state;
+  }
+}
+
+function engagementModeReducer(
+  state: SharedFanState["engagementMode"],
+  action: ActionType
+) {
+  switch (action.type) {
+    case SET_ENGAGEMENT_MODE: {
+      return action.payload.mode;
     }
     default:
       return state;
