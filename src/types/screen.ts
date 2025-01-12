@@ -22,7 +22,11 @@ export type StageDraftConfig = Partial<Omit<EventStageConfig, "elements">> & {
   elementOrder?: string[];
 };
 
-export type EngagementMode = "none" | "guide" | "actual";
+export enum EngagementMode {
+  None = "none",
+  Guide = "guide",
+  Actual = "actual",
+}
 
 export interface SharedStageState {
   savedConfig: StageSavedConfig;

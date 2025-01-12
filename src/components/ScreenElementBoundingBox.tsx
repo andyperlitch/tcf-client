@@ -1,4 +1,3 @@
-import { StageEngagementFragment } from "@/gql/graphql";
 import { useCallback, useMemo, useState, forwardRef } from "react";
 
 import { ScreenElementFragment } from "@/gql/graphql";
@@ -10,7 +9,7 @@ export const ScreenElementBoundingBox = forwardRef<
     selected: boolean;
     onSelect: (elementId: string) => void;
     element: ScreenElementFragment;
-    activeEngagement: StageEngagementFragment | null | undefined;
+    activeEngagement: boolean;
     onUpdate: (element: ScreenElementFragment) => void;
     onDoubleClick?: () => void;
   }

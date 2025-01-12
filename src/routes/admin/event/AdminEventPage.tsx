@@ -26,6 +26,7 @@ import { AdminFanStateProvider } from "@/providers/FanStateProvider/AdminFanStat
 import { FanStateProvider } from "@/providers/FanStateProvider";
 import { FanEditor } from "./FanEditor/FanEditor";
 import useLocalStorage from "use-local-storage";
+import { EngagementMode } from "@/types/screen";
 
 const enableControlView = false;
 
@@ -37,6 +38,10 @@ export function AdminEventPage() {
   const [editorMode, setEditorMode] = useLocalStorage<"stage" | "mobile">(
     "editorMode",
     "stage"
+  );
+  const [engagementMode, setEngagementMode] = useLocalStorage<EngagementMode>(
+    "engagementMode",
+    EngagementMode.None
   );
 
   const { data, loading, error } = useAdminGetEventQuery({
@@ -206,7 +211,11 @@ export function AdminEventPage() {
             </Button>
           </div>
           {editorMode === "stage" && (
-            <StageStateProvider event={data.event}>
+            <StageStateProvider
+              event={data.event}
+              engagementMode={engagementMode}
+              setEngagementMode={setEngagementMode}
+            >
               <AdminStageStateProvider
                 event={data.event}
                 iframeRef={stageIframeRef}
@@ -216,7 +225,11 @@ export function AdminEventPage() {
             </StageStateProvider>
           )}
           {editorMode === "mobile" && (
-            <FanStateProvider event={data.event}>
+            <FanStateProvider
+              event={data.event}
+              engagementMode={engagementMode}
+              setEngagementMode={setEngagementMode}
+            >
               <AdminFanStateProvider
                 event={data.event}
                 iframeRef={fanIframeRef}

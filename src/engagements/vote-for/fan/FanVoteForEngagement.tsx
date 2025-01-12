@@ -42,7 +42,7 @@ export function FanVoteForEngagement({
   return (
     <div
       data-name="vote-for-container"
-      className={`flex h-screen w-screen flex-col items-center space-y-4`}
+      className={`flex min-h-[83vh] w-screen flex-col items-center space-y-4`}
     >
       <div className="flex h-[30vh] flex-col items-center justify-center">
         <h1 className="font-hand text-5xl">{engagement.description}</h1>

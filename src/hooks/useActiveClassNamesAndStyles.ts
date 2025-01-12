@@ -1,23 +1,29 @@
-import { ScreenElementFragment, StageEngagementFragment } from "@/gql/graphql";
+import { ScreenElementFragment } from "@/gql/graphql";
 import { useMemo } from "react";
 
 export function useActiveClassNamesAndStyles(
   element: ScreenElementFragment,
-  activeEngagement: StageEngagementFragment | null | undefined
+  hasActiveEngagement: boolean
 ) {
   return useMemo(() => {
     const className = `
       absolute
 
       ${
-        activeEngagement
+        hasActiveEngagement
           ? element.engagementClassNames || ""
           : element.defaultClassNames || ""
       }
     `;
-    const styles = activeEngagement
+    const styles = hasActiveEngagement
       ? element.engagementStyles
       : element.defaultStyles;
     return { className, styles };
-  }, [element, activeEngagement]);
+  }, [
+    element.engagementClassNames,
+    element.defaultClassNames,
+    element.engagementStyles,
+    element.defaultStyles,
+    hasActiveEngagement,
+  ]);
 }

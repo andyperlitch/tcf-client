@@ -4,6 +4,7 @@ import useWindowSize from "@/hooks/useWindowSize";
 import { StageEventFragment } from "@/gql/graphql";
 import { StageEngagementTitle } from "../../engagements/StageEngagementTitle";
 import { useEventStageState } from "@/providers/StageStateProvider/EventStageStateContext";
+import { EngagementMode } from "@/types/screen";
 
 interface StageChromeProps {
   children: React.ReactNode;
@@ -16,6 +17,12 @@ export function StageChrome({ children, name, event }: StageChromeProps) {
   const { width } = useWindowSize();
   const { state } = useEventStageState();
 
+  const hasActiveEngagement =
+    state.engagementMode === EngagementMode.Guide ||
+    Boolean(
+      state.engagementMode === EngagementMode.Actual && state.activeEngagement
+    );
+
   return (
     <div
       data-name={name}
@@ -27,15 +34,14 @@ export function StageChrome({ children, name, event }: StageChromeProps) {
       <div
         data-name={`${name}_SIDEBAR`}
         className={`
-          flex-0 flex h-full w-[21vw] flex-col justify-end transition-opacity
-          duration-1000
+          flex-0 flex h-full w-[21vw] flex-col justify-end p-[2vh]
+          transition-opacity duration-1000
 
-          ${event?.activeEngagement ? "opacity-100" : "opacity-0"}
+          ${hasActiveEngagement ? "opacity-100" : "opacity-0"}
         `}
       >
         <StageEngagementTitle event={event} />
         <StageQR
-          className="mb-4 mr-4 mt-4"
           event={event}
           eventSlug={slug}
           width={width * 0.17}

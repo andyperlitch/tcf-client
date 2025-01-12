@@ -15,7 +15,11 @@ import {
 } from "@/providers/sharedActions";
 import { ScreenElementFragment } from "@/gql/graphql";
 import { useActiveClassNamesAndStyles } from "@/hooks/useActiveClassNamesAndStyles";
-import { SharedStageState, SharedFanState } from "@/types/screen";
+import {
+  SharedStageState,
+  SharedFanState,
+  EngagementMode,
+} from "@/types/screen";
 
 export function ScreenTextElement({
   elementId,
@@ -31,9 +35,15 @@ export function ScreenTextElement({
   className?: string;
 }) {
   const element = state.savedConfig.elements[elementId];
+  const hasActiveEngagement =
+    state.engagementMode === EngagementMode.Guide ||
+    Boolean(
+      state.activeEngagement && state.engagementMode === EngagementMode.Actual
+    );
+
   const { className, styles: activeStyles } = useActiveClassNamesAndStyles(
     element,
-    state.activeEngagement
+    hasActiveEngagement
   );
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [editing, setEditing] = useState(false);
@@ -132,7 +142,7 @@ export function ScreenTextElement({
           onSelect={handleClick}
           ref={wrapperRef}
           element={element}
-          activeEngagement={state.activeEngagement}
+          activeEngagement={hasActiveEngagement}
           onUpdate={onUpdate}
           onDoubleClick={() => setEditing(true)}
         />

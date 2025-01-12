@@ -16,11 +16,14 @@ import {
   setBackgroundPreview,
   addTextElement,
   addImageElement,
+  setEngagementMode,
 } from "@/providers/sharedActions";
 import {
   createDefaultStageImageElement,
   createDefaultStageTextElement,
 } from "./utils";
+import { EngagementMode } from "@/types/screen";
+import { EngagementModeSwitcher } from "@/components/EngagementModeSwitcher";
 
 export const StageEditor = forwardRef<
   HTMLIFrameElement,
@@ -51,7 +54,15 @@ export const StageEditor = forwardRef<
         className="flex w-1/3 flex-col gap-4"
       >
         {/* active engagement */}
-        {/* <ActiveEngagementMode /> */}
+        <EngagementModeSwitcher
+          value={state.engagementMode}
+          onChange={useCallback(
+            (mode: EngagementMode) => {
+              dispatch(setEngagementMode({ mode }));
+            },
+            [dispatch]
+          )}
+        />
         {/* font picker */}
         <FontPicker
           label="Default Font"

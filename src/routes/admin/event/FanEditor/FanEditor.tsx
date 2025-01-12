@@ -12,6 +12,7 @@ import {
   deleteScreenElement,
   saveBackgroundImage,
   setBackgroundPreview,
+  setEngagementMode,
 } from "@/providers/sharedActions";
 import { ImageIcon } from "@radix-ui/react-icons";
 import { TextIcon } from "@radix-ui/react-icons";
@@ -21,6 +22,8 @@ import {
   createDefaultFanImageElement,
   createDefaultFanTextElement,
 } from "./utils";
+import { EngagementMode } from "@/types/screen";
+import { EngagementModeSwitcher } from "@/components/EngagementModeSwitcher";
 
 export const FanEditor = forwardRef<
   HTMLIFrameElement,
@@ -45,7 +48,7 @@ export const FanEditor = forwardRef<
         <iframe
           id="fan-preview"
           src={`/e/${event.slug}?editor=true`}
-          className={`relative aspect-portrait h-[1080px] h-full`}
+          className={`relative aspect-portrait h-[1080px]`}
           ref={ref}
         ></iframe>
       </div>
@@ -53,6 +56,16 @@ export const FanEditor = forwardRef<
         data-name="STAGE_EDITOR_TOOLBAR"
         className="flex w-1/3 flex-col gap-4"
       >
+        {/* active engagement */}
+        <EngagementModeSwitcher
+          value={state.engagementMode}
+          onChange={useCallback(
+            (mode: EngagementMode) => {
+              dispatch(setEngagementMode({ mode }));
+            },
+            [dispatch]
+          )}
+        />
         <BackgroundImageInput
           imageUrl={event.fanConfig?.backgroundImage}
           onPreview={useCallback(

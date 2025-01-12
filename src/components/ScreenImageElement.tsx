@@ -6,7 +6,7 @@ import {
 } from "@/providers/sharedActions";
 import { Dispatch, useCallback, useMemo, useRef } from "react";
 import { ScreenElementBoundingBox } from "./ScreenElementBoundingBox";
-import { SharedFanState } from "@/types/screen";
+import { EngagementMode, SharedFanState } from "@/types/screen";
 import { SharedStageState } from "@/types/screen";
 
 export function ScreenImageElement({
@@ -22,9 +22,15 @@ export function ScreenImageElement({
 }) {
   const element = state.savedConfig.elements[elementId];
   const draftElement = state.draftConfig?.elements?.[elementId];
+  const hasActiveEngagement =
+    state.engagementMode === EngagementMode.Guide ||
+    Boolean(
+      state.activeEngagement && state.engagementMode === EngagementMode.Actual
+    );
+
   const { className, styles: activeStyles } = useActiveClassNamesAndStyles(
     element,
-    state.activeEngagement
+    hasActiveEngagement
   );
   const ref = useRef<HTMLDivElement>(null);
   const draftImageUrl = draftElement?.imageUrl;
@@ -79,7 +85,7 @@ export function ScreenImageElement({
           onSelect={() => dispatch(selectScreenElement({ id: elementId }))}
           ref={ref}
           element={element}
-          activeEngagement={state.activeEngagement}
+          activeEngagement={hasActiveEngagement}
           onUpdate={(element) => dispatch(updateScreenElement({ element }))}
         />
       )}

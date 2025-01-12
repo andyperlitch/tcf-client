@@ -19,6 +19,9 @@ import {
   deleteScreenElement,
   selectScreenElement,
 } from "@/providers/sharedActions";
+import { EngagementMode } from "@/types/screen";
+import { FanGuideEngagement } from "./FanGuideEngagement";
+import useLocalStorage from "use-local-storage";
 
 const CUSTOM_EVENT_PAGES: Record<string, FC<{ event: FanEventFragment }>> = {
   funksgiving: FunksgivingFanScreen,
@@ -28,6 +31,12 @@ export function EventFanScreen() {
   const { slug } = useParamsSafe("slug");
   const { pathname } = useLocation();
   const { user } = useAuth();
+  const [engagementMode, setEngagementMode] = useLocalStorage<EngagementMode>(
+    "engagementMode",
+    EngagementMode.None
+  );
+
+  console.log(`FAN SCREEN engagementMode`, engagementMode);
 
   const { data, loading, error } = useFanEvent(slug, {
     skip: !user,
@@ -59,7 +68,11 @@ export function EventFanScreen() {
   }
 
   return (
-    <FanStateProvider event={data.event}>
+    <FanStateProvider
+      event={data.event}
+      engagementMode={engagementMode}
+      setEngagementMode={setEngagementMode}
+    >
       <EventFanStateProvider>
         <Screen event={data.event} />
       </EventFanStateProvider>
@@ -108,14 +121,18 @@ function Screen({ event }: { event: FanEventFragment }) {
     <div
       data-name="FAN_ROOT"
       className={`
-        relative flex h-screen w-screen flex-col gap-4 overflow-auto pt-16
+        relative flex h-screen w-screen flex-col gap-4 overflow-auto pt-[10vh]
       `}
       style={rootStyles}
       onClick={handleDeselectAll}
     >
       <div data-name="FAN_ENGAGEMENT" className="relative z-10">
-        {state.activeEngagement && (
-          <FanActiveEngagement engagement={state.activeEngagement} />
+        {state.engagementMode === EngagementMode.Actual &&
+          state.activeEngagement && (
+            <FanActiveEngagement engagement={state.activeEngagement} />
+          )}
+        {state.engagementMode === EngagementMode.Guide && (
+          <FanGuideEngagement />
         )}
       </div>
 

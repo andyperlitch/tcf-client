@@ -20,6 +20,9 @@ import {
   deleteScreenElement,
   selectScreenElement,
 } from "@/providers/sharedActions";
+import { EngagementMode } from "@/types/screen";
+import { StageGuideEngagement } from "./StageGuideEngagement";
+import useLocalStorage from "use-local-storage";
 
 const CUSTOM_EVENT_PAGES: Record<string, FC> = {
   funksgiving: FunksGivingStage,
@@ -32,6 +35,11 @@ export function EventStageScreen() {
 
   const { data, loading, error } = useStageEvent(slug);
 
+  const [engagementMode, setEngagementMode] = useLocalStorage<EngagementMode>(
+    "engagementMode",
+    EngagementMode.None
+  );
+
   if (!data?.event) {
     if (loading) {
       return <FullScreenLoader />;
@@ -40,7 +48,11 @@ export function EventStageScreen() {
   }
 
   return (
-    <StageStateProvider event={data.event}>
+    <StageStateProvider
+      event={data.event}
+      engagementMode={engagementMode}
+      setEngagementMode={setEngagementMode}
+    >
       <EventStageStateProvider>
         <Screen event={data.event} />
       </EventStageStateProvider>
@@ -82,6 +94,33 @@ function Screen({ event }: { event: StageEventFragment }) {
     [editor, dispatch]
   );
 
+  let children: React.ReactNode;
+
+  if (editor) {
+    children = (
+      <>
+        {state.engagementMode === EngagementMode.Actual &&
+          state.activeEngagement && <StageActiveEngagement event={event} />}
+        {state.engagementMode === EngagementMode.Guide && (
+          <StageGuideEngagement />
+        )}
+        {savedConfig.elementOrder.map((elementId) => (
+          <StageElement key={elementId} elementId={elementId} editor={editor} />
+        ))}
+      </>
+    );
+  } else {
+    children = (
+      <>
+        {savedConfig.elementOrder.map((elementId) => (
+          <StageElement key={elementId} elementId={elementId} editor={editor} />
+        ))}
+        {/* in non-editor, show actual engagement above elements */}
+        {event.activeEngagement && <StageActiveEngagement event={event} />}
+      </>
+    );
+  }
+
   return (
     <div
       data-name="STAGE_ROOT"
@@ -95,19 +134,7 @@ function Screen({ event }: { event: StageEventFragment }) {
         <CustomEventPage />
       ) : (
         <StageChrome name="STAGE_CHROME" event={event}>
-          {event.activeEngagement && editor && (
-            <StageActiveEngagement event={event} />
-          )}
-          {savedConfig.elementOrder.map((elementId) => (
-            <StageElement
-              key={elementId}
-              elementId={elementId}
-              editor={editor}
-            />
-          ))}
-          {event.activeEngagement && !editor && (
-            <StageActiveEngagement event={event} />
-          )}
+          {children}
         </StageChrome>
       )}
     </div>
