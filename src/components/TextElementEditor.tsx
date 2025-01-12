@@ -10,6 +10,7 @@ import { useMemo, useCallback, useState } from "react";
 import { createStyleUpdate } from "@/utils/createStyleUpdate";
 import { ScreenElementEditorProps } from "@/types/screen";
 import { LinkInput } from "./LinkInput";
+import { isEngagementActive } from "@/utils/isEngagementActive";
 
 export function TextElementEditor({
   elementId,
@@ -18,11 +19,11 @@ export function TextElementEditor({
   enableLink,
 }: ScreenElementEditorProps) {
   const element = state.savedConfig.elements[elementId];
-  const activeEngagement = state.activeEngagement;
+  const engagementIsActive = isEngagementActive(state);
 
   const { fontSize, classNames, color } = useMemo(() => {
     let fontSize: string;
-    if (activeEngagement) {
+    if (engagementIsActive) {
       fontSize =
         element.engagementStyles?.fontSize ??
         element.defaultStyles?.fontSize ??
@@ -31,12 +32,12 @@ export function TextElementEditor({
       fontSize = element.defaultStyles?.fontSize ?? "1.5vw";
     }
 
-    const classNames = activeEngagement
+    const classNames = engagementIsActive
       ? element.engagementClassNames
       : element.defaultClassNames;
 
     let color: string;
-    if (activeEngagement) {
+    if (engagementIsActive) {
       color =
         element.engagementStyles?.color ??
         element.defaultStyles?.color ??
@@ -47,7 +48,7 @@ export function TextElementEditor({
 
     return { fontSize, classNames, color };
   }, [
-    activeEngagement,
+    engagementIsActive,
     element.defaultClassNames,
     element.defaultStyles?.fontSize,
     element.engagementClassNames,
@@ -101,11 +102,11 @@ export function TextElementEditor({
                   "fontSize",
                   newValue,
                   element,
-                  !!activeEngagement
+                  engagementIsActive
                 );
                 dispatch(updateScreenElement({ element: updates }));
               },
-              [dispatch, element, activeEngagement]
+              [dispatch, element, engagementIsActive]
             )}
           />
         </div>
@@ -118,14 +119,14 @@ export function TextElementEditor({
                   updateScreenElement({
                     element: {
                       ...element,
-                      [activeEngagement
+                      [engagementIsActive
                         ? "engagementClassNames"
                         : "defaultClassNames"]: value,
                     },
                   })
                 );
               },
-              [dispatch, element, activeEngagement]
+              [dispatch, element, engagementIsActive]
             )}
           />
         </div>
@@ -140,11 +141,11 @@ export function TextElementEditor({
                   "color",
                   value,
                   element,
-                  !!activeEngagement
+                  engagementIsActive
                 );
                 dispatch(updateScreenElement({ element: updates }));
               },
-              [dispatch, element, activeEngagement]
+              [dispatch, element, engagementIsActive]
             )}
           />
         </div>

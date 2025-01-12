@@ -9,6 +9,7 @@ import { createStyleUpdate } from "@/utils/createStyleUpdate";
 import { ScreenElementEditorProps } from "@/types/screen";
 import { LinkInput } from "./LinkInput";
 import { Button } from "./ui/button";
+import { isEngagementActive } from "@/utils/isEngagementActive";
 
 export function ImageElementEditor({
   elementId,
@@ -17,17 +18,18 @@ export function ImageElementEditor({
   enableLink,
 }: ScreenElementEditorProps) {
   const element = state.savedConfig.elements[elementId];
+  const engagementIsActive = isEngagementActive(state);
 
   const [addLink, setAddLink] = useState(
     Boolean(element.linkHref && element.linkHref.length > 0)
   );
 
   const { backgroundSize } = useMemo(() => {
-    const backgroundSize = state.activeEngagement
+    const backgroundSize = engagementIsActive
       ? element.engagementStyles.backgroundSize
       : element.defaultStyles.backgroundSize;
     return { backgroundSize };
-  }, [state.activeEngagement, element]);
+  }, [engagementIsActive, element]);
 
   const handleBackgroundSizeChange = useCallback(
     (size: string) => {
@@ -35,11 +37,11 @@ export function ImageElementEditor({
         "backgroundSize",
         size,
         element,
-        !!state.activeEngagement
+        engagementIsActive
       );
       dispatch(updateScreenElement({ element: updates }));
     },
-    [dispatch, element, state.activeEngagement]
+    [dispatch, element, engagementIsActive]
   );
 
   const setLinkHref = useCallback(
