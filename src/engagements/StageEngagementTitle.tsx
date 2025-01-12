@@ -18,7 +18,7 @@ export function StageEngagementTitle({
   const inlineStyles = useMemo(
     () => ({
       fontSize: `${
-        event?.activeEngagement?.title?.length || 0 > 18 ? "1.7vw" : "2.2vw"
+        (event?.activeEngagement?.title?.length || 0) > 10 ? "1.8vw" : "2.1vw"
       }`,
     }),
     [event?.activeEngagement?.title?.length]

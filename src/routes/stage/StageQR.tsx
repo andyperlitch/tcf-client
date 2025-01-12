@@ -43,7 +43,7 @@ export const StageQR = memo(
           stageQrTextStyles: {
             width: `${width}px`,
             color: fgColor,
-            fontSize: "2.3vw",
+            fontSize: "1.8vw",
           },
           stageQrStyles: {
             marginTop: "1vh",
