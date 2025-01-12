@@ -13,6 +13,5 @@ gql`
     text
     fontFamily
     linkHref
-    areaId
   }
 `;
