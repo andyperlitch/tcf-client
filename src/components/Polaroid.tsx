@@ -46,7 +46,10 @@ export function Polaroid({
     >
       {photoUrl && <img style={imageStyles} src={photoUrl} />}
 
-      <div className="p-4 font-hand text-4xl text-black" style={textStyles}>
+      <div
+        className="p-4 font-stage text-[1.5vw] text-black"
+        style={textStyles}
+      >
         {caption || " "}
       </div>
     </div>

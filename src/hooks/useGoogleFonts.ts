@@ -11,7 +11,11 @@ function encodeFontFamily(font: string) {
  * Also returns a function to remove the fonts from the document head.
  * Loads both regular and italic styles for each weight.
  */
-export function useGoogleFonts({ fontFamily }: { fontFamily?: string[] }) {
+export function useGoogleFonts({
+  fontFamily,
+}: {
+  fontFamily?: string[] | null;
+}) {
   useEffect(() => {
     if (!fontFamily) return;
 

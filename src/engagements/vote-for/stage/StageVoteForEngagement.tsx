@@ -75,7 +75,7 @@ export function StageVoteForEngagement({
       <div data-name="CHOICE-RANGE-REF" className="w-full flex-1" />
       <div
         ref={choiceContainerRef}
-        data-name="CHOICE-CONTAINER"
+        data-name="CHOICES_CONTAINER"
         className={`flex w-full flex-row justify-around`}
       >
         {data?.submissions.map((choice) => (
@@ -151,7 +151,7 @@ const Choice = ({
 
   return (
     <div
-      data-name="CHOICES-CONTAINER"
+      data-name="CHOICE_CONTAINER"
       key={choice.id}
       className={`
         relative flex flex-col items-center justify-center pb-4
@@ -172,7 +172,7 @@ const Choice = ({
       />
 
       <div
-        data-name="CHOICE-IMAGE-WRAPPER"
+        data-name="CHOICE_IMAGE_WRAPPER"
         style={imageWrapperStyles}
         className={`
           relative flex items-center justify-center rounded-full border-8
@@ -188,7 +188,7 @@ const Choice = ({
         )}
         {url && (
           <img
-            data-name="CHOICE-IMAGE"
+            data-name="CHOICE_IMAGE"
             src={url}
             style={imageStyles}
             className={`
@@ -201,7 +201,7 @@ const Choice = ({
       </div>
 
       <div
-        data-name="CHOICE-VOTE-COUNT"
+        data-name="CHOICE_VOTE_COUNT"
         style={voteStyles}
         className={`
           relative z-10 flex items-center justify-center rounded-full
@@ -215,13 +215,13 @@ const Choice = ({
       </div>
 
       <div
-        data-name="CHOICE-TITLE"
+        data-name="CHOICE_TITLE"
         style={{
           boxShadow: `3px -3px 0 ${data.color}`,
         }}
         className={`
           relative z-10 mb-2 max-w-[30vw] rounded-lg bg-foreground pb-0 pl-4
-          pr-4 pt-0 text-center font-hand text-3xl text-background
+          pr-4 pt-0 text-center font-stage text-[1.5vw] text-background
         `}
       >
         {data.title}

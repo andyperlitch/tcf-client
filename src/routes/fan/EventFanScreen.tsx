@@ -29,14 +29,14 @@ const CUSTOM_EVENT_PAGES: Record<string, FC<{ event: FanEventFragment }>> = {
 
 export function EventFanScreen() {
   const { slug } = useParamsSafe("slug");
+  const [searchParams] = useSearchParams();
+  const editor = searchParams.get("editor") === "true";
   const { pathname } = useLocation();
   const { user } = useAuth();
   const [engagementMode, setEngagementMode] = useLocalStorage<EngagementMode>(
     "engagementMode",
     EngagementMode.None
   );
-
-  console.log(`FAN SCREEN engagementMode`, engagementMode);
 
   const { data, loading, error } = useFanEvent(slug, {
     skip: !user,
@@ -70,7 +70,7 @@ export function EventFanScreen() {
   return (
     <FanStateProvider
       event={data.event}
-      engagementMode={engagementMode}
+      engagementMode={editor ? engagementMode : EngagementMode.Actual}
       setEngagementMode={setEngagementMode}
     >
       <EventFanStateProvider>

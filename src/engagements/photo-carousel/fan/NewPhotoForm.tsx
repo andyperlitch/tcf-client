@@ -213,11 +213,11 @@ export function NewPhotoForm({
           <div className="mt-2 text-center text-sm text-muted-foreground">
             caption
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex w-[70vw] items-center gap-2">
             <Textarea
               ref={captionInputRef}
               className={`
-                grow border-slate-200 font-hand text-2xl text-black shadow-inner
+                grow border-slate-200 font-fan text-xl text-black shadow-inner
               `}
               placeholder="Add a caption..."
               value={caption}

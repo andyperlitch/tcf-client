@@ -20,6 +20,7 @@ import {
   SharedFanState,
   EngagementMode,
 } from "@/types/screen";
+import { useGoogleFonts } from "@/hooks/useGoogleFonts";
 
 export function ScreenTextElement({
   elementId,
@@ -57,6 +58,8 @@ export function ScreenTextElement({
       );
     }
   }, [editing, internalText, element, dispatch]);
+
+  useGoogleFonts({ fontFamily: element.fontFamily });
 
   const handleClick = useCallback(() => {
     if (editor) {

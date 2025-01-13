@@ -45,7 +45,7 @@ export function FanVoteForEngagement({
       className={`flex min-h-[83vh] w-screen flex-col items-center space-y-4`}
     >
       <div className="flex h-[30vh] flex-col items-center justify-center">
-        <h1 className="font-hand text-5xl">{engagement.description}</h1>
+        <h1 className="font-fan text-[2vw]">{engagement.description}</h1>
       </div>
       <div data-name="choices" className="flex flex-wrap justify-center">
         {choices.map((choice) => (
@@ -123,7 +123,7 @@ const Choice = ({
         }}
         className={`
           absolute -bottom-4 z-10 whitespace-nowrap rounded-lg bg-foreground
-          px-2 pb-0 pt-0 text-center font-hand text-3xl text-background
+          px-2 pb-0 pt-0 text-center font-fan text-[3vw] text-background
 
           ${isChosen ? styles.bounce : ""}
         `}

@@ -36,7 +36,7 @@ export function Nice({
       </div>
       <div
         className={`
-          font-hand text-6xl
+          font-fan text-6xl
 
           ${styles.text}
         `}

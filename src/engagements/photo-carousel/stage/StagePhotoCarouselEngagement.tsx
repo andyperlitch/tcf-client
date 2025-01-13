@@ -131,7 +131,7 @@ export function StagePhotoCarouselEngagement({
         <div
           data-name="PHOTOS-EMPTY"
           className={`
-            font-hand text-4xl
+            font-stage text-[4vw]
 
             ${annoyedStyles.annoyedShake}
           `}
