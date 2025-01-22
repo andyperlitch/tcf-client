@@ -2,6 +2,10 @@
 import { ProtectedArea } from "@/components/ProtectedArea";
 import { lazy } from "react";
 import { Outlet } from "react-router-dom";
+import { AdminGigsPage } from "./gigs";
+import { AdminGigPage } from "./gigs/gig";
+import { AdminSongsPage } from "./songs";
+import { AdminUsersPage } from "./users";
 
 // Lazy load admin components
 const AdminHome = lazy(() => import("@/routes/admin/home"));
@@ -49,6 +53,23 @@ export const adminRoutes = {
     {
       path: "/admin/events/:slug/engagements/:engagementId/submissions/:submissionId",
       element: <AdminSubmissionPage />,
+    },
+    {
+      path: "/admin/users",
+      element: <AdminUsersPage />,
+    },
+    // BAND-SPECIFIC ADMIN ROUTES
+    {
+      path: "/admin/gigs",
+      element: <AdminGigsPage />,
+    },
+    {
+      path: "/admin/gigs/:gigId",
+      element: <AdminGigPage />,
+    },
+    {
+      path: "/admin/songs",
+      element: <AdminSongsPage />,
     },
   ],
 };

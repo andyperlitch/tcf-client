@@ -2,7 +2,12 @@ import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { ModeToggle } from "./ModeToggle";
 import { buttonVariants } from "./ui/button";
-import { CalendarIcon, PersonIcon } from "@radix-ui/react-icons";
+import {
+  BackpackIcon,
+  CalendarIcon,
+  PersonIcon,
+  ResumeIcon,
+} from "@radix-ui/react-icons";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const ADMIN_NAV_ITEMS = [
@@ -11,6 +16,18 @@ const ADMIN_NAV_ITEMS = [
     title: "Events",
     href: "/admin/events",
     icon: <CalendarIcon />,
+  },
+  {
+    id: "songs",
+    title: "Songs",
+    href: "/admin/songs",
+    icon: <ResumeIcon />,
+  },
+  {
+    id: "gigs",
+    title: "Gigs",
+    href: "/admin/gigs",
+    icon: <BackpackIcon />,
   },
   {
     id: "users",
@@ -29,10 +46,10 @@ export function AdminContainer({
 }) {
   return (
     <div
-      data-name="ADMIN-CONTAINER"
+      data-name="ADMIN_CONTAINER"
       className={`
-        relative z-[2] mx-auto mt-0 flex flex-row justify-center rounded-lg
-        max-w-screen
+        relative z-[2] mt-0 flex flex-row justify-center rounded-lg min-w-screen
+        min-h-screen
       `}
     >
       <nav
