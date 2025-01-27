@@ -39,12 +39,57 @@ export type CreateEventInput = {
   slug: Scalars['String']['input'];
 };
 
+export type CreateGigInput = {
+  date: Scalars['DateTime']['input'];
+  name: Scalars['String']['input'];
+};
+
+export type CreateGigSetInput = {
+  name: Scalars['String']['input'];
+};
+
+export type CreateGigSongInput = {
+  songId: Scalars['Int']['input'];
+};
+
+export type CreateLeadSheetSectionInput = {
+  barLength?: InputMaybe<Scalars['String']['input']>;
+  details?: InputMaybe<Array<LeadSheetDetailInput>>;
+  lyricHint?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  timeCode?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type CreateReactionInput = {
   type: Scalars['String']['input'];
 };
 
+export type CreateSongInput = {
+  artist?: InputMaybe<Scalars['String']['input']>;
+  chartUrl?: InputMaybe<Scalars['String']['input']>;
+  coverArtUrl?: InputMaybe<Scalars['String']['input']>;
+  duration?: InputMaybe<Scalars['Int']['input']>;
+  feel?: InputMaybe<Scalars['String']['input']>;
+  fileUrl?: InputMaybe<Scalars['String']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
+  leadSheetEditUrl?: InputMaybe<Scalars['String']['input']>;
+  leadSheetId?: InputMaybe<Scalars['Int']['input']>;
+  leadSheetUrl?: InputMaybe<Scalars['String']['input']>;
+  lyrics?: InputMaybe<Scalars['String']['input']>;
+  practicePriority?: InputMaybe<Scalars['String']['input']>;
+  spotifyUrl?: InputMaybe<Scalars['String']['input']>;
+  tempo?: InputMaybe<Scalars['Int']['input']>;
+  title: Scalars['String']['input'];
+  youtubeUrl?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type CreateSubmissionInput = {
   data: Scalars['Json']['input'];
+};
+
+export type CurrentGigSongChangedPayload = {
+  __typename?: 'CurrentGigSongChangedPayload';
+  gigSongId: Scalars['Int']['output'];
 };
 
 export type Engagement = {
@@ -136,6 +181,71 @@ export type GenerateImageResponse = {
   uri?: Maybe<Scalars['String']['output']>;
 };
 
+export type Gig = {
+  __typename?: 'Gig';
+  createdAt: Scalars['DateTime']['output'];
+  currentGigSong?: Maybe<GigSong>;
+  currentGigSongId?: Maybe<Scalars['String']['output']>;
+  date?: Maybe<Scalars['DateTime']['output']>;
+  eventId?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  nowPlayingEngagementId?: Maybe<Scalars['Int']['output']>;
+  sets: Array<GigSet>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type GigSet = {
+  __typename?: 'GigSet';
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  songs: Array<GigSong>;
+};
+
+export type GigSong = {
+  __typename?: 'GigSong';
+  id: Scalars['Int']['output'];
+  order: Scalars['Int']['output'];
+  setId: Scalars['Int']['output'];
+  song?: Maybe<Song>;
+  songId: Scalars['Int']['output'];
+};
+
+export type LeadSheet = {
+  __typename?: 'LeadSheet';
+  id: Scalars['Int']['output'];
+  sections: Array<LeadSheetSection>;
+};
+
+export type LeadSheetDetail = {
+  __typename?: 'LeadSheetDetail';
+  content: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  type: LeadSheetDetailType;
+};
+
+export type LeadSheetDetailInput = {
+  content: Scalars['String']['input'];
+  id: Scalars['String']['input'];
+  type: LeadSheetDetailType;
+};
+
+export enum LeadSheetDetailType {
+  Chords = 'CHORDS',
+  Text = 'TEXT'
+}
+
+export type LeadSheetSection = {
+  __typename?: 'LeadSheetSection';
+  barLength?: Maybe<Scalars['String']['output']>;
+  details: Array<LeadSheetDetail>;
+  id: Scalars['Int']['output'];
+  lyricHint?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  order: Scalars['Int']['output'];
+  timeCode?: Maybe<Scalars['String']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   adminCreatePresignedUrl: PresignedUrlResponse;
@@ -143,21 +253,40 @@ export type Mutation = {
   changeEventActiveEngagement: Event;
   createEngagement: Engagement;
   createEvent: Event;
+  createGig: Gig;
+  createGigSet: GigSet;
+  createGigSong: GigSong;
+  createLeadSheet: LeadSheet;
+  createLeadSheetSection: LeadSheetSection;
   createReaction: Reaction;
+  createSong: Song;
   createSubmission: Submission;
   createSubmissionPresignedUrl: PresignedUrlResponse;
   deleteEngagement: Engagement;
   deleteEvent: Event;
+  deleteGig: Gig;
+  deleteGigSet: GigSet;
+  deleteGigSong: GigSong;
+  deleteLeadSheet: LeadSheet;
+  deleteLeadSheetSection: LeadSheetSection;
   deleteReaction: Reaction;
+  deleteSong: Song;
   deleteSubmission: Submission;
   login?: Maybe<User>;
   moveEngagement: Array<Engagement>;
   signup: User;
+  syncSongsFromGoogleSheets: Array<Song>;
+  updateCurrentGigSong: Gig;
   updateEngagement: Engagement;
   updateEvent: Event;
   updateEventFanConfig: EventFanConfig;
   updateEventStageConfig: EventStageConfig;
+  updateGig: Gig;
+  updateGigSet: GigSet;
+  updateLeadSheet: LeadSheet;
+  updateLeadSheetSection: LeadSheetSection;
   updateReaction: Reaction;
+  updateSong: Song;
   updateSubmission: Submission;
 };
 
@@ -189,9 +318,42 @@ export type MutationCreateEventArgs = {
 };
 
 
+export type MutationCreateGigArgs = {
+  data: CreateGigInput;
+};
+
+
+export type MutationCreateGigSetArgs = {
+  data: CreateGigSetInput;
+  gigId: Scalars['Int']['input'];
+};
+
+
+export type MutationCreateGigSongArgs = {
+  data: CreateGigSongInput;
+  gigSetId: Scalars['Int']['input'];
+};
+
+
+export type MutationCreateLeadSheetArgs = {
+  songId: Scalars['Int']['input'];
+};
+
+
+export type MutationCreateLeadSheetSectionArgs = {
+  data: CreateLeadSheetSectionInput;
+  leadSheetId: Scalars['Int']['input'];
+};
+
+
 export type MutationCreateReactionArgs = {
   submissionId: Scalars['Int']['input'];
   type: Scalars['String']['input'];
+};
+
+
+export type MutationCreateSongArgs = {
+  data: CreateSongInput;
 };
 
 
@@ -217,8 +379,38 @@ export type MutationDeleteEventArgs = {
 };
 
 
+export type MutationDeleteGigArgs = {
+  gigId: Scalars['Int']['input'];
+};
+
+
+export type MutationDeleteGigSetArgs = {
+  gigSetId: Scalars['Int']['input'];
+};
+
+
+export type MutationDeleteGigSongArgs = {
+  gigSongId: Scalars['Int']['input'];
+};
+
+
+export type MutationDeleteLeadSheetArgs = {
+  leadSheetId: Scalars['Int']['input'];
+};
+
+
+export type MutationDeleteLeadSheetSectionArgs = {
+  leadSheetSectionId: Scalars['Int']['input'];
+};
+
+
 export type MutationDeleteReactionArgs = {
   reactionId: Scalars['Int']['input'];
+};
+
+
+export type MutationDeleteSongArgs = {
+  songId: Scalars['Int']['input'];
 };
 
 
@@ -241,6 +433,17 @@ export type MutationMoveEngagementArgs = {
 
 export type MutationSignupArgs = {
   data: SignupInput;
+};
+
+
+export type MutationSyncSongsFromGoogleSheetsArgs = {
+  input: SyncSongsFromGoogleSheetsInput;
+};
+
+
+export type MutationUpdateCurrentGigSongArgs = {
+  gigId: Scalars['Int']['input'];
+  gigSongId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -268,9 +471,39 @@ export type MutationUpdateEventStageConfigArgs = {
 };
 
 
+export type MutationUpdateGigArgs = {
+  data: UpdateGigInput;
+  gigId: Scalars['Int']['input'];
+};
+
+
+export type MutationUpdateGigSetArgs = {
+  data: UpdateGigSetInput;
+  gigSetId: Scalars['Int']['input'];
+};
+
+
+export type MutationUpdateLeadSheetArgs = {
+  data: UpdateLeadSheetInput;
+  leadSheetId: Scalars['Int']['input'];
+};
+
+
+export type MutationUpdateLeadSheetSectionArgs = {
+  data: UpdateLeadSheetSectionInput;
+  leadSheetSectionId: Scalars['Int']['input'];
+};
+
+
 export type MutationUpdateReactionArgs = {
   reactionId: Scalars['Int']['input'];
   type: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateSongArgs = {
+  data: UpdateSongInput;
+  songId: Scalars['Int']['input'];
 };
 
 
@@ -416,7 +649,11 @@ export type Query = {
   engagements: Array<Engagement>;
   event?: Maybe<Event>;
   events: Array<Event>;
+  gig?: Maybe<Gig>;
+  gigs: Array<Gig>;
   randomName: Scalars['String']['output'];
+  song?: Maybe<Song>;
+  songs: Array<Song>;
   submission?: Maybe<Submission>;
   submissions: Array<Submission>;
   validateGoogleFont: Scalars['Boolean']['output'];
@@ -446,6 +683,16 @@ export type QueryEngagementsArgs = {
 
 export type QueryEventArgs = {
   slug: Scalars['String']['input'];
+};
+
+
+export type QueryGigArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type QuerySongArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -559,6 +806,28 @@ export type SlidesViewData = {
   currentSlide: Scalars['Int']['output'];
 };
 
+export type Song = {
+  __typename?: 'Song';
+  artist?: Maybe<Scalars['String']['output']>;
+  chartUrl?: Maybe<Scalars['String']['output']>;
+  coverArtUrl?: Maybe<Scalars['String']['output']>;
+  duration?: Maybe<Scalars['Int']['output']>;
+  feel?: Maybe<Scalars['String']['output']>;
+  fileUrl?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  key?: Maybe<Scalars['String']['output']>;
+  leadSheet?: Maybe<LeadSheet>;
+  leadSheetEditUrl?: Maybe<Scalars['String']['output']>;
+  leadSheetId?: Maybe<Scalars['Int']['output']>;
+  leadSheetUrl?: Maybe<Scalars['String']['output']>;
+  lyrics?: Maybe<Scalars['String']['output']>;
+  practicePriority?: Maybe<Scalars['String']['output']>;
+  spotifyUrl?: Maybe<Scalars['String']['output']>;
+  tempo?: Maybe<Scalars['Int']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+  youtubeUrl?: Maybe<Scalars['String']['output']>;
+};
+
 export type Submission = {
   __typename?: 'Submission';
   createdAt: Scalars['DateTime']['output'];
@@ -584,6 +853,7 @@ export type SubmissionDeletedPayload = {
 export type Subscription = {
   __typename?: 'Subscription';
   activeEngagementChanged?: Maybe<Engagement>;
+  currentGigSongChanged: CurrentGigSongChangedPayload;
   engagementViewDataChanged?: Maybe<EngagementViewDataChangedPayload>;
   reactionsCreated?: Maybe<ReactionsCreatedPayload>;
   submissionCreated?: Maybe<SubmissionCreatedPayload>;
@@ -593,6 +863,11 @@ export type Subscription = {
 
 export type SubscriptionActiveEngagementChangedArgs = {
   eventSlug: Scalars['String']['input'];
+};
+
+
+export type SubscriptionCurrentGigSongChangedArgs = {
+  gigId: Scalars['String']['input'];
 };
 
 
@@ -613,6 +888,10 @@ export type SubscriptionSubmissionCreatedArgs = {
 
 export type SubscriptionSubmissionDeletedArgs = {
   engagementId: Scalars['Int']['input'];
+};
+
+export type SyncSongsFromGoogleSheetsInput = {
+  spreadsheetId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateEngagementInput = {
@@ -652,8 +931,49 @@ export type UpdateEventStageConfigInput = {
   qrWrapperBackgroundColor?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateGigInput = {
+  date?: InputMaybe<Scalars['DateTime']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateGigSetInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  setOrder?: InputMaybe<Array<Scalars['Int']['input']>>;
+};
+
+export type UpdateLeadSheetInput = {
+  order?: InputMaybe<Array<Scalars['Int']['input']>>;
+};
+
+export type UpdateLeadSheetSectionInput = {
+  barLength?: InputMaybe<Scalars['String']['input']>;
+  details?: InputMaybe<Array<LeadSheetDetailInput>>;
+  lyricHint?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  timeCode?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateReactionInput = {
   type: Scalars['String']['input'];
+};
+
+export type UpdateSongInput = {
+  artist?: InputMaybe<Scalars['String']['input']>;
+  chartUrl?: InputMaybe<Scalars['String']['input']>;
+  coverArtUrl?: InputMaybe<Scalars['String']['input']>;
+  duration?: InputMaybe<Scalars['Int']['input']>;
+  feel?: InputMaybe<Scalars['String']['input']>;
+  fileUrl?: InputMaybe<Scalars['String']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
+  leadSheetEditUrl?: InputMaybe<Scalars['String']['input']>;
+  leadSheetId?: InputMaybe<Scalars['Int']['input']>;
+  leadSheetUrl?: InputMaybe<Scalars['String']['input']>;
+  lyrics?: InputMaybe<Scalars['String']['input']>;
+  practicePriority?: InputMaybe<Scalars['String']['input']>;
+  spotifyUrl?: InputMaybe<Scalars['String']['input']>;
+  tempo?: InputMaybe<Scalars['Int']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  youtubeUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateSubmissionInput = {
