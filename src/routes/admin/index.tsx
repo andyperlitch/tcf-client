@@ -8,6 +8,7 @@ import { AdminSongsPage } from "./songs";
 import { AdminUsersPage } from "./users";
 import { AdminLeadSheetPage } from "./songs/song/lead-sheet/AdminLeadSheetPage";
 import { AdminSongPage } from "./songs/song/AdminSongPage";
+import { AdminFilesPage } from "./files/AdminFilesPage";
 
 // Lazy load admin components
 const AdminHome = lazy(() => import("@/routes/admin/home"));
@@ -80,6 +81,10 @@ export const adminRoutes = {
     {
       path: "/admin/songs/:songId/lead-sheet/:leadSheetId",
       element: <AdminLeadSheetPage />,
+    },
+    {
+      path: "/admin/files",
+      element: <AdminFilesPage />,
     },
   ],
 };

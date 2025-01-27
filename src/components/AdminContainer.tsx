@@ -5,6 +5,7 @@ import { buttonVariants } from "./ui/button";
 import {
   BackpackIcon,
   CalendarIcon,
+  FileIcon,
   PersonIcon,
   ResumeIcon,
 } from "@radix-ui/react-icons";
@@ -34,6 +35,12 @@ const ADMIN_NAV_ITEMS = [
     title: "Users",
     href: "/admin/users",
     icon: <PersonIcon />,
+  },
+  {
+    id: "files",
+    title: "Files",
+    href: "/admin/files",
+    icon: <FileIcon />,
   },
 ] as const;
 
