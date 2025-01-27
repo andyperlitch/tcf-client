@@ -1,0 +1,48 @@
+import { gql } from "@apollo/client";
+
+gql`
+  fragment Song on Song {
+    id
+    title
+    artist
+    tempo
+    lyrics
+    feel
+    fileUrl
+    spotifyUrl
+    youtubeUrl
+    coverArtUrl
+    duration
+    key
+    practicePriority
+    chartUrl
+    leadSheetUrl
+    leadSheetEditUrl
+    leadSheetId
+  }
+`;
+
+gql`
+  fragment LeadSheet on LeadSheet {
+    id
+    sections {
+      ...LeadSheetSection
+    }
+  }
+`;
+
+gql`
+  fragment LeadSheetSection on LeadSheetSection {
+    id
+    name
+    order
+    timeCode
+    barLength
+    details {
+      id
+      type
+      content
+    }
+    lyricHint
+  }
+`;

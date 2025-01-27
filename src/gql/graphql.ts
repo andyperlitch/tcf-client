@@ -1081,6 +1081,173 @@ export type VoteForAdminConfigFieldsFragment = { __typename?: 'VoteForAdminConfi
 
 export type VoteForAdminDataFieldsFragment = { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> };
 
+export type SongFragment = { __typename?: 'Song', id: number, title?: string | null, artist?: string | null, tempo?: number | null, lyrics?: string | null, feel?: string | null, fileUrl?: string | null, spotifyUrl?: string | null, youtubeUrl?: string | null, coverArtUrl?: string | null, duration?: number | null, key?: string | null, practicePriority?: string | null, chartUrl?: string | null, leadSheetUrl?: string | null, leadSheetEditUrl?: string | null, leadSheetId?: number | null };
+
+export type LeadSheetFragment = { __typename?: 'LeadSheet', id: number, sections: Array<{ __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> }> };
+
+export type LeadSheetSectionFragment = { __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> };
+
+export type BandCreateGigMutationVariables = Exact<{
+  data: CreateGigInput;
+}>;
+
+
+export type BandCreateGigMutation = { __typename?: 'Mutation', createGig: { __typename?: 'Gig', id: number } };
+
+export type BandUpdateGigMutationVariables = Exact<{
+  gigId: Scalars['Int']['input'];
+  data: UpdateGigInput;
+}>;
+
+
+export type BandUpdateGigMutation = { __typename?: 'Mutation', updateGig: { __typename?: 'Gig', id: number } };
+
+export type BandDeleteGigMutationVariables = Exact<{
+  gigId: Scalars['Int']['input'];
+}>;
+
+
+export type BandDeleteGigMutation = { __typename?: 'Mutation', deleteGig: { __typename?: 'Gig', id: number } };
+
+export type BandCreateGigSetMutationVariables = Exact<{
+  gigId: Scalars['Int']['input'];
+  data: CreateGigSetInput;
+}>;
+
+
+export type BandCreateGigSetMutation = { __typename?: 'Mutation', createGigSet: { __typename?: 'GigSet', id: number } };
+
+export type BandUpdateGigSetMutationVariables = Exact<{
+  gigSetId: Scalars['Int']['input'];
+  data: UpdateGigSetInput;
+}>;
+
+
+export type BandUpdateGigSetMutation = { __typename?: 'Mutation', updateGigSet: { __typename?: 'GigSet', id: number } };
+
+export type BandDeleteGigSetMutationVariables = Exact<{
+  gigSetId: Scalars['Int']['input'];
+}>;
+
+
+export type BandDeleteGigSetMutation = { __typename?: 'Mutation', deleteGigSet: { __typename?: 'GigSet', id: number } };
+
+export type BandCreateGigSongMutationVariables = Exact<{
+  gigSetId: Scalars['Int']['input'];
+  data: CreateGigSongInput;
+}>;
+
+
+export type BandCreateGigSongMutation = { __typename?: 'Mutation', createGigSong: { __typename?: 'GigSong', id: number } };
+
+export type BandDeleteGigSongMutationVariables = Exact<{
+  gigSongId: Scalars['Int']['input'];
+}>;
+
+
+export type BandDeleteGigSongMutation = { __typename?: 'Mutation', deleteGigSong: { __typename?: 'GigSong', id: number } };
+
+export type BandUpdateCurrentGigSongMutationVariables = Exact<{
+  gigId: Scalars['Int']['input'];
+  gigSongId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type BandUpdateCurrentGigSongMutation = { __typename?: 'Mutation', updateCurrentGigSong: { __typename?: 'Gig', id: number } };
+
+export type BandSyncSongsFromGoogleSheetsMutationVariables = Exact<{
+  input: SyncSongsFromGoogleSheetsInput;
+}>;
+
+
+export type BandSyncSongsFromGoogleSheetsMutation = { __typename?: 'Mutation', syncSongsFromGoogleSheets: Array<{ __typename?: 'Song', id: number, title?: string | null, artist?: string | null, tempo?: number | null, lyrics?: string | null, feel?: string | null, fileUrl?: string | null, spotifyUrl?: string | null, youtubeUrl?: string | null, coverArtUrl?: string | null, duration?: number | null, key?: string | null, practicePriority?: string | null, chartUrl?: string | null, leadSheetUrl?: string | null, leadSheetEditUrl?: string | null, leadSheetId?: number | null }> };
+
+export type BandCreateSongMutationVariables = Exact<{
+  data: CreateSongInput;
+}>;
+
+
+export type BandCreateSongMutation = { __typename?: 'Mutation', createSong: { __typename?: 'Song', id: number } };
+
+export type BandUpdateSongMutationVariables = Exact<{
+  songId: Scalars['Int']['input'];
+  data: UpdateSongInput;
+}>;
+
+
+export type BandUpdateSongMutation = { __typename?: 'Mutation', updateSong: { __typename?: 'Song', id: number } };
+
+export type BandDeleteSongMutationVariables = Exact<{
+  songId: Scalars['Int']['input'];
+}>;
+
+
+export type BandDeleteSongMutation = { __typename?: 'Mutation', deleteSong: { __typename?: 'Song', id: number } };
+
+export type BandCreateLeadSheetMutationVariables = Exact<{
+  songId: Scalars['Int']['input'];
+}>;
+
+
+export type BandCreateLeadSheetMutation = { __typename?: 'Mutation', createLeadSheet: { __typename?: 'LeadSheet', id: number } };
+
+export type BandUpdateLeadSheetMutationVariables = Exact<{
+  leadSheetId: Scalars['Int']['input'];
+  data: UpdateLeadSheetInput;
+}>;
+
+
+export type BandUpdateLeadSheetMutation = { __typename?: 'Mutation', updateLeadSheet: { __typename?: 'LeadSheet', id: number } };
+
+export type BandDeleteLeadSheetMutationVariables = Exact<{
+  leadSheetId: Scalars['Int']['input'];
+}>;
+
+
+export type BandDeleteLeadSheetMutation = { __typename?: 'Mutation', deleteLeadSheet: { __typename?: 'LeadSheet', id: number } };
+
+export type BandCreateLeadSheetSectionMutationVariables = Exact<{
+  leadSheetId: Scalars['Int']['input'];
+  data: CreateLeadSheetSectionInput;
+}>;
+
+
+export type BandCreateLeadSheetSectionMutation = { __typename?: 'Mutation', createLeadSheetSection: { __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> } };
+
+export type BandUpdateLeadSheetSectionMutationVariables = Exact<{
+  leadSheetSectionId: Scalars['Int']['input'];
+  data: UpdateLeadSheetSectionInput;
+}>;
+
+
+export type BandUpdateLeadSheetSectionMutation = { __typename?: 'Mutation', updateLeadSheetSection: { __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> } };
+
+export type BandDeleteLeadSheetSectionMutationVariables = Exact<{
+  leadSheetSectionId: Scalars['Int']['input'];
+}>;
+
+
+export type BandDeleteLeadSheetSectionMutation = { __typename?: 'Mutation', deleteLeadSheetSection: { __typename?: 'LeadSheetSection', id: number } };
+
+export type BandSongsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BandSongsQuery = { __typename?: 'Query', songs: Array<{ __typename?: 'Song', id: number, title?: string | null, artist?: string | null, tempo?: number | null, lyrics?: string | null, feel?: string | null, fileUrl?: string | null, spotifyUrl?: string | null, youtubeUrl?: string | null, coverArtUrl?: string | null, duration?: number | null, key?: string | null, practicePriority?: string | null, chartUrl?: string | null, leadSheetUrl?: string | null, leadSheetEditUrl?: string | null, leadSheetId?: number | null }> };
+
+export type BandSongQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type BandSongQuery = { __typename?: 'Query', song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null, tempo?: number | null, lyrics?: string | null, feel?: string | null, fileUrl?: string | null, spotifyUrl?: string | null, youtubeUrl?: string | null, coverArtUrl?: string | null, duration?: number | null, key?: string | null, practicePriority?: string | null, chartUrl?: string | null, leadSheetUrl?: string | null, leadSheetEditUrl?: string | null, leadSheetId?: number | null } | null };
+
+export type BandSongWithLeadSheetQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type BandSongWithLeadSheetQuery = { __typename?: 'Query', song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null, tempo?: number | null, lyrics?: string | null, feel?: string | null, fileUrl?: string | null, spotifyUrl?: string | null, youtubeUrl?: string | null, coverArtUrl?: string | null, duration?: number | null, key?: string | null, practicePriority?: string | null, chartUrl?: string | null, leadSheetUrl?: string | null, leadSheetEditUrl?: string | null, leadSheetId?: number | null, leadSheet?: { __typename?: 'LeadSheet', id: number, sections: Array<{ __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> }> } | null } | null };
+
 export type AdminEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, qrCodeCta?: string | null, startTime?: any | null, order: number, endTime?: any | null, type: EngagementType, data?: { __typename?: 'NowPlayingAdminData', currentSong?: number | null } | { __typename?: 'PhotoCarouselAdminData', visibleSubmission?: number | null, rejectedQueue: Array<number>, unapprovedQueue: Array<number>, unseenQueue: Array<number>, seenQueuePointer: number, seenQueue: Array<number> } | { __typename?: 'SlidesAdminData', currentSlide: number } | { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, config?: { __typename?: 'NowPlayingAdminConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselAdminConfig', maxSubmissionsPerUser: number, requireApproval: boolean, askSharePermission?: boolean | null, sharePrompt?: string | null, pollInterval?: number | null } | { __typename?: 'SlidesAdminConfig', autoPlay: boolean } | { __typename?: 'VoteForAdminConfig', votesPerUser: number, allowUserSubmissions: boolean, maxSubmissionsPerUser: number } | null, viewConfig: { __typename?: 'NowPlayingViewConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number, askSharePermission?: boolean | null, sharePrompt?: string | null } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'NowPlayingViewData', currentSong?: number | null } | { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } };
 
 export type AdminEventFragment = { __typename?: 'Event', id: number, name: string, date?: any | null, live: boolean, location?: string | null, locked: boolean, description?: string | null, slug: string, createdAt: any, updatedAt: any, activeEngagementId?: number | null, stageConfig?: { __typename?: 'EventStageConfig', qrForegroundColor?: string | null, qrBackgroundColor?: string | null, qrTextColor?: string | null, qrWrapperBackgroundColor?: string | null, backgroundImage?: string | null, fontFamily?: Array<string> | null, elements?: Array<{ __typename?: 'ScreenElement', id: string, type: string, name?: string | null, imageUrl?: string | null, defaultStyles?: any | null, engagementStyles?: any | null, defaultClassNames?: string | null, engagementClassNames?: string | null, text?: string | null, fontFamily?: Array<string> | null, linkHref?: string | null }> | null } | null, fanConfig?: { __typename?: 'EventFanConfig', backgroundImage?: string | null, fontFamily?: Array<string> | null, elements?: Array<{ __typename?: 'ScreenElement', id: string, type: string, name?: string | null, imageUrl?: string | null, defaultStyles?: any | null, engagementStyles?: any | null, defaultClassNames?: string | null, engagementClassNames?: string | null, text?: string | null, fontFamily?: Array<string> | null, linkHref?: string | null }> | null } | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, qrCodeCta?: string | null, startTime?: any | null, order: number, endTime?: any | null, type: EngagementType, data?: { __typename?: 'NowPlayingAdminData', currentSong?: number | null } | { __typename?: 'PhotoCarouselAdminData', visibleSubmission?: number | null, rejectedQueue: Array<number>, unapprovedQueue: Array<number>, unseenQueue: Array<number>, seenQueuePointer: number, seenQueue: Array<number> } | { __typename?: 'SlidesAdminData', currentSlide: number } | { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, config?: { __typename?: 'NowPlayingAdminConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselAdminConfig', maxSubmissionsPerUser: number, requireApproval: boolean, askSharePermission?: boolean | null, sharePrompt?: string | null, pollInterval?: number | null } | { __typename?: 'SlidesAdminConfig', autoPlay: boolean } | { __typename?: 'VoteForAdminConfig', votesPerUser: number, allowUserSubmissions: boolean, maxSubmissionsPerUser: number } | null, viewConfig: { __typename?: 'NowPlayingViewConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number, askSharePermission?: boolean | null, sharePrompt?: string | null } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'NowPlayingViewData', currentSong?: number | null } | { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null, engagements: Array<{ __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, qrCodeCta?: string | null, startTime?: any | null, order: number, endTime?: any | null, type: EngagementType, data?: { __typename?: 'NowPlayingAdminData', currentSong?: number | null } | { __typename?: 'PhotoCarouselAdminData', visibleSubmission?: number | null, rejectedQueue: Array<number>, unapprovedQueue: Array<number>, unseenQueue: Array<number>, seenQueuePointer: number, seenQueue: Array<number> } | { __typename?: 'SlidesAdminData', currentSlide: number } | { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, config?: { __typename?: 'NowPlayingAdminConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselAdminConfig', maxSubmissionsPerUser: number, requireApproval: boolean, askSharePermission?: boolean | null, sharePrompt?: string | null, pollInterval?: number | null } | { __typename?: 'SlidesAdminConfig', autoPlay: boolean } | { __typename?: 'VoteForAdminConfig', votesPerUser: number, allowUserSubmissions: boolean, maxSubmissionsPerUser: number } | null, viewConfig: { __typename?: 'NowPlayingViewConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number, askSharePermission?: boolean | null, sharePrompt?: string | null } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'NowPlayingViewData', currentSong?: number | null } | { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } }> };
@@ -1400,6 +1567,50 @@ export type OnSubmissionDeletedSubscriptionVariables = Exact<{
 
 export type OnSubmissionDeletedSubscription = { __typename?: 'Subscription', submissionDeleted?: { __typename?: 'SubmissionDeletedPayload', submissionId: number } | null };
 
+export const SongFragmentDoc = gql`
+    fragment Song on Song {
+  id
+  title
+  artist
+  tempo
+  lyrics
+  feel
+  fileUrl
+  spotifyUrl
+  youtubeUrl
+  coverArtUrl
+  duration
+  key
+  practicePriority
+  chartUrl
+  leadSheetUrl
+  leadSheetEditUrl
+  leadSheetId
+}
+    `;
+export const LeadSheetSectionFragmentDoc = gql`
+    fragment LeadSheetSection on LeadSheetSection {
+  id
+  name
+  order
+  timeCode
+  barLength
+  details {
+    id
+    type
+    content
+  }
+  lyricHint
+}
+    `;
+export const LeadSheetFragmentDoc = gql`
+    fragment LeadSheet on LeadSheet {
+  id
+  sections {
+    ...LeadSheetSection
+  }
+}
+    ${LeadSheetSectionFragmentDoc}`;
 export const ScreenElementFragmentDoc = gql`
     fragment ScreenElement on ScreenElement {
   id
@@ -1844,6 +2055,765 @@ export const StageSubmissionFragmentDoc = gql`
 ${VoteForSubmissionFieldsFragmentDoc}
 ${SlidesSubmissionFieldsFragmentDoc}
 ${NowPlayingSubmissionFieldsFragmentDoc}`;
+export const BandCreateGigDocument = gql`
+    mutation bandCreateGig($data: CreateGigInput!) {
+  createGig(data: $data) {
+    id
+  }
+}
+    `;
+export type BandCreateGigMutationFn = Apollo.MutationFunction<BandCreateGigMutation, BandCreateGigMutationVariables>;
+
+/**
+ * __useBandCreateGigMutation__
+ *
+ * To run a mutation, you first call `useBandCreateGigMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandCreateGigMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandCreateGigMutation, { data, loading, error }] = useBandCreateGigMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useBandCreateGigMutation(baseOptions?: Apollo.MutationHookOptions<BandCreateGigMutation, BandCreateGigMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandCreateGigMutation, BandCreateGigMutationVariables>(BandCreateGigDocument, options);
+      }
+export type BandCreateGigMutationHookResult = ReturnType<typeof useBandCreateGigMutation>;
+export type BandCreateGigMutationResult = Apollo.MutationResult<BandCreateGigMutation>;
+export type BandCreateGigMutationOptions = Apollo.BaseMutationOptions<BandCreateGigMutation, BandCreateGigMutationVariables>;
+export const BandUpdateGigDocument = gql`
+    mutation bandUpdateGig($gigId: Int!, $data: UpdateGigInput!) {
+  updateGig(gigId: $gigId, data: $data) {
+    id
+  }
+}
+    `;
+export type BandUpdateGigMutationFn = Apollo.MutationFunction<BandUpdateGigMutation, BandUpdateGigMutationVariables>;
+
+/**
+ * __useBandUpdateGigMutation__
+ *
+ * To run a mutation, you first call `useBandUpdateGigMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandUpdateGigMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandUpdateGigMutation, { data, loading, error }] = useBandUpdateGigMutation({
+ *   variables: {
+ *      gigId: // value for 'gigId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useBandUpdateGigMutation(baseOptions?: Apollo.MutationHookOptions<BandUpdateGigMutation, BandUpdateGigMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandUpdateGigMutation, BandUpdateGigMutationVariables>(BandUpdateGigDocument, options);
+      }
+export type BandUpdateGigMutationHookResult = ReturnType<typeof useBandUpdateGigMutation>;
+export type BandUpdateGigMutationResult = Apollo.MutationResult<BandUpdateGigMutation>;
+export type BandUpdateGigMutationOptions = Apollo.BaseMutationOptions<BandUpdateGigMutation, BandUpdateGigMutationVariables>;
+export const BandDeleteGigDocument = gql`
+    mutation bandDeleteGig($gigId: Int!) {
+  deleteGig(gigId: $gigId) {
+    id
+  }
+}
+    `;
+export type BandDeleteGigMutationFn = Apollo.MutationFunction<BandDeleteGigMutation, BandDeleteGigMutationVariables>;
+
+/**
+ * __useBandDeleteGigMutation__
+ *
+ * To run a mutation, you first call `useBandDeleteGigMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandDeleteGigMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandDeleteGigMutation, { data, loading, error }] = useBandDeleteGigMutation({
+ *   variables: {
+ *      gigId: // value for 'gigId'
+ *   },
+ * });
+ */
+export function useBandDeleteGigMutation(baseOptions?: Apollo.MutationHookOptions<BandDeleteGigMutation, BandDeleteGigMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandDeleteGigMutation, BandDeleteGigMutationVariables>(BandDeleteGigDocument, options);
+      }
+export type BandDeleteGigMutationHookResult = ReturnType<typeof useBandDeleteGigMutation>;
+export type BandDeleteGigMutationResult = Apollo.MutationResult<BandDeleteGigMutation>;
+export type BandDeleteGigMutationOptions = Apollo.BaseMutationOptions<BandDeleteGigMutation, BandDeleteGigMutationVariables>;
+export const BandCreateGigSetDocument = gql`
+    mutation bandCreateGigSet($gigId: Int!, $data: CreateGigSetInput!) {
+  createGigSet(gigId: $gigId, data: $data) {
+    id
+  }
+}
+    `;
+export type BandCreateGigSetMutationFn = Apollo.MutationFunction<BandCreateGigSetMutation, BandCreateGigSetMutationVariables>;
+
+/**
+ * __useBandCreateGigSetMutation__
+ *
+ * To run a mutation, you first call `useBandCreateGigSetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandCreateGigSetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandCreateGigSetMutation, { data, loading, error }] = useBandCreateGigSetMutation({
+ *   variables: {
+ *      gigId: // value for 'gigId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useBandCreateGigSetMutation(baseOptions?: Apollo.MutationHookOptions<BandCreateGigSetMutation, BandCreateGigSetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandCreateGigSetMutation, BandCreateGigSetMutationVariables>(BandCreateGigSetDocument, options);
+      }
+export type BandCreateGigSetMutationHookResult = ReturnType<typeof useBandCreateGigSetMutation>;
+export type BandCreateGigSetMutationResult = Apollo.MutationResult<BandCreateGigSetMutation>;
+export type BandCreateGigSetMutationOptions = Apollo.BaseMutationOptions<BandCreateGigSetMutation, BandCreateGigSetMutationVariables>;
+export const BandUpdateGigSetDocument = gql`
+    mutation bandUpdateGigSet($gigSetId: Int!, $data: UpdateGigSetInput!) {
+  updateGigSet(gigSetId: $gigSetId, data: $data) {
+    id
+  }
+}
+    `;
+export type BandUpdateGigSetMutationFn = Apollo.MutationFunction<BandUpdateGigSetMutation, BandUpdateGigSetMutationVariables>;
+
+/**
+ * __useBandUpdateGigSetMutation__
+ *
+ * To run a mutation, you first call `useBandUpdateGigSetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandUpdateGigSetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandUpdateGigSetMutation, { data, loading, error }] = useBandUpdateGigSetMutation({
+ *   variables: {
+ *      gigSetId: // value for 'gigSetId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useBandUpdateGigSetMutation(baseOptions?: Apollo.MutationHookOptions<BandUpdateGigSetMutation, BandUpdateGigSetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandUpdateGigSetMutation, BandUpdateGigSetMutationVariables>(BandUpdateGigSetDocument, options);
+      }
+export type BandUpdateGigSetMutationHookResult = ReturnType<typeof useBandUpdateGigSetMutation>;
+export type BandUpdateGigSetMutationResult = Apollo.MutationResult<BandUpdateGigSetMutation>;
+export type BandUpdateGigSetMutationOptions = Apollo.BaseMutationOptions<BandUpdateGigSetMutation, BandUpdateGigSetMutationVariables>;
+export const BandDeleteGigSetDocument = gql`
+    mutation bandDeleteGigSet($gigSetId: Int!) {
+  deleteGigSet(gigSetId: $gigSetId) {
+    id
+  }
+}
+    `;
+export type BandDeleteGigSetMutationFn = Apollo.MutationFunction<BandDeleteGigSetMutation, BandDeleteGigSetMutationVariables>;
+
+/**
+ * __useBandDeleteGigSetMutation__
+ *
+ * To run a mutation, you first call `useBandDeleteGigSetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandDeleteGigSetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandDeleteGigSetMutation, { data, loading, error }] = useBandDeleteGigSetMutation({
+ *   variables: {
+ *      gigSetId: // value for 'gigSetId'
+ *   },
+ * });
+ */
+export function useBandDeleteGigSetMutation(baseOptions?: Apollo.MutationHookOptions<BandDeleteGigSetMutation, BandDeleteGigSetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandDeleteGigSetMutation, BandDeleteGigSetMutationVariables>(BandDeleteGigSetDocument, options);
+      }
+export type BandDeleteGigSetMutationHookResult = ReturnType<typeof useBandDeleteGigSetMutation>;
+export type BandDeleteGigSetMutationResult = Apollo.MutationResult<BandDeleteGigSetMutation>;
+export type BandDeleteGigSetMutationOptions = Apollo.BaseMutationOptions<BandDeleteGigSetMutation, BandDeleteGigSetMutationVariables>;
+export const BandCreateGigSongDocument = gql`
+    mutation bandCreateGigSong($gigSetId: Int!, $data: CreateGigSongInput!) {
+  createGigSong(gigSetId: $gigSetId, data: $data) {
+    id
+  }
+}
+    `;
+export type BandCreateGigSongMutationFn = Apollo.MutationFunction<BandCreateGigSongMutation, BandCreateGigSongMutationVariables>;
+
+/**
+ * __useBandCreateGigSongMutation__
+ *
+ * To run a mutation, you first call `useBandCreateGigSongMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandCreateGigSongMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandCreateGigSongMutation, { data, loading, error }] = useBandCreateGigSongMutation({
+ *   variables: {
+ *      gigSetId: // value for 'gigSetId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useBandCreateGigSongMutation(baseOptions?: Apollo.MutationHookOptions<BandCreateGigSongMutation, BandCreateGigSongMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandCreateGigSongMutation, BandCreateGigSongMutationVariables>(BandCreateGigSongDocument, options);
+      }
+export type BandCreateGigSongMutationHookResult = ReturnType<typeof useBandCreateGigSongMutation>;
+export type BandCreateGigSongMutationResult = Apollo.MutationResult<BandCreateGigSongMutation>;
+export type BandCreateGigSongMutationOptions = Apollo.BaseMutationOptions<BandCreateGigSongMutation, BandCreateGigSongMutationVariables>;
+export const BandDeleteGigSongDocument = gql`
+    mutation bandDeleteGigSong($gigSongId: Int!) {
+  deleteGigSong(gigSongId: $gigSongId) {
+    id
+  }
+}
+    `;
+export type BandDeleteGigSongMutationFn = Apollo.MutationFunction<BandDeleteGigSongMutation, BandDeleteGigSongMutationVariables>;
+
+/**
+ * __useBandDeleteGigSongMutation__
+ *
+ * To run a mutation, you first call `useBandDeleteGigSongMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandDeleteGigSongMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandDeleteGigSongMutation, { data, loading, error }] = useBandDeleteGigSongMutation({
+ *   variables: {
+ *      gigSongId: // value for 'gigSongId'
+ *   },
+ * });
+ */
+export function useBandDeleteGigSongMutation(baseOptions?: Apollo.MutationHookOptions<BandDeleteGigSongMutation, BandDeleteGigSongMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandDeleteGigSongMutation, BandDeleteGigSongMutationVariables>(BandDeleteGigSongDocument, options);
+      }
+export type BandDeleteGigSongMutationHookResult = ReturnType<typeof useBandDeleteGigSongMutation>;
+export type BandDeleteGigSongMutationResult = Apollo.MutationResult<BandDeleteGigSongMutation>;
+export type BandDeleteGigSongMutationOptions = Apollo.BaseMutationOptions<BandDeleteGigSongMutation, BandDeleteGigSongMutationVariables>;
+export const BandUpdateCurrentGigSongDocument = gql`
+    mutation bandUpdateCurrentGigSong($gigId: Int!, $gigSongId: Int) {
+  updateCurrentGigSong(gigId: $gigId, gigSongId: $gigSongId) {
+    id
+  }
+}
+    `;
+export type BandUpdateCurrentGigSongMutationFn = Apollo.MutationFunction<BandUpdateCurrentGigSongMutation, BandUpdateCurrentGigSongMutationVariables>;
+
+/**
+ * __useBandUpdateCurrentGigSongMutation__
+ *
+ * To run a mutation, you first call `useBandUpdateCurrentGigSongMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandUpdateCurrentGigSongMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandUpdateCurrentGigSongMutation, { data, loading, error }] = useBandUpdateCurrentGigSongMutation({
+ *   variables: {
+ *      gigId: // value for 'gigId'
+ *      gigSongId: // value for 'gigSongId'
+ *   },
+ * });
+ */
+export function useBandUpdateCurrentGigSongMutation(baseOptions?: Apollo.MutationHookOptions<BandUpdateCurrentGigSongMutation, BandUpdateCurrentGigSongMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandUpdateCurrentGigSongMutation, BandUpdateCurrentGigSongMutationVariables>(BandUpdateCurrentGigSongDocument, options);
+      }
+export type BandUpdateCurrentGigSongMutationHookResult = ReturnType<typeof useBandUpdateCurrentGigSongMutation>;
+export type BandUpdateCurrentGigSongMutationResult = Apollo.MutationResult<BandUpdateCurrentGigSongMutation>;
+export type BandUpdateCurrentGigSongMutationOptions = Apollo.BaseMutationOptions<BandUpdateCurrentGigSongMutation, BandUpdateCurrentGigSongMutationVariables>;
+export const BandSyncSongsFromGoogleSheetsDocument = gql`
+    mutation bandSyncSongsFromGoogleSheets($input: SyncSongsFromGoogleSheetsInput!) {
+  syncSongsFromGoogleSheets(input: $input) {
+    ...Song
+  }
+}
+    ${SongFragmentDoc}`;
+export type BandSyncSongsFromGoogleSheetsMutationFn = Apollo.MutationFunction<BandSyncSongsFromGoogleSheetsMutation, BandSyncSongsFromGoogleSheetsMutationVariables>;
+
+/**
+ * __useBandSyncSongsFromGoogleSheetsMutation__
+ *
+ * To run a mutation, you first call `useBandSyncSongsFromGoogleSheetsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandSyncSongsFromGoogleSheetsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandSyncSongsFromGoogleSheetsMutation, { data, loading, error }] = useBandSyncSongsFromGoogleSheetsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useBandSyncSongsFromGoogleSheetsMutation(baseOptions?: Apollo.MutationHookOptions<BandSyncSongsFromGoogleSheetsMutation, BandSyncSongsFromGoogleSheetsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandSyncSongsFromGoogleSheetsMutation, BandSyncSongsFromGoogleSheetsMutationVariables>(BandSyncSongsFromGoogleSheetsDocument, options);
+      }
+export type BandSyncSongsFromGoogleSheetsMutationHookResult = ReturnType<typeof useBandSyncSongsFromGoogleSheetsMutation>;
+export type BandSyncSongsFromGoogleSheetsMutationResult = Apollo.MutationResult<BandSyncSongsFromGoogleSheetsMutation>;
+export type BandSyncSongsFromGoogleSheetsMutationOptions = Apollo.BaseMutationOptions<BandSyncSongsFromGoogleSheetsMutation, BandSyncSongsFromGoogleSheetsMutationVariables>;
+export const BandCreateSongDocument = gql`
+    mutation bandCreateSong($data: CreateSongInput!) {
+  createSong(data: $data) {
+    id
+  }
+}
+    `;
+export type BandCreateSongMutationFn = Apollo.MutationFunction<BandCreateSongMutation, BandCreateSongMutationVariables>;
+
+/**
+ * __useBandCreateSongMutation__
+ *
+ * To run a mutation, you first call `useBandCreateSongMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandCreateSongMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandCreateSongMutation, { data, loading, error }] = useBandCreateSongMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useBandCreateSongMutation(baseOptions?: Apollo.MutationHookOptions<BandCreateSongMutation, BandCreateSongMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandCreateSongMutation, BandCreateSongMutationVariables>(BandCreateSongDocument, options);
+      }
+export type BandCreateSongMutationHookResult = ReturnType<typeof useBandCreateSongMutation>;
+export type BandCreateSongMutationResult = Apollo.MutationResult<BandCreateSongMutation>;
+export type BandCreateSongMutationOptions = Apollo.BaseMutationOptions<BandCreateSongMutation, BandCreateSongMutationVariables>;
+export const BandUpdateSongDocument = gql`
+    mutation bandUpdateSong($songId: Int!, $data: UpdateSongInput!) {
+  updateSong(songId: $songId, data: $data) {
+    id
+  }
+}
+    `;
+export type BandUpdateSongMutationFn = Apollo.MutationFunction<BandUpdateSongMutation, BandUpdateSongMutationVariables>;
+
+/**
+ * __useBandUpdateSongMutation__
+ *
+ * To run a mutation, you first call `useBandUpdateSongMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandUpdateSongMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandUpdateSongMutation, { data, loading, error }] = useBandUpdateSongMutation({
+ *   variables: {
+ *      songId: // value for 'songId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useBandUpdateSongMutation(baseOptions?: Apollo.MutationHookOptions<BandUpdateSongMutation, BandUpdateSongMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandUpdateSongMutation, BandUpdateSongMutationVariables>(BandUpdateSongDocument, options);
+      }
+export type BandUpdateSongMutationHookResult = ReturnType<typeof useBandUpdateSongMutation>;
+export type BandUpdateSongMutationResult = Apollo.MutationResult<BandUpdateSongMutation>;
+export type BandUpdateSongMutationOptions = Apollo.BaseMutationOptions<BandUpdateSongMutation, BandUpdateSongMutationVariables>;
+export const BandDeleteSongDocument = gql`
+    mutation bandDeleteSong($songId: Int!) {
+  deleteSong(songId: $songId) {
+    id
+  }
+}
+    `;
+export type BandDeleteSongMutationFn = Apollo.MutationFunction<BandDeleteSongMutation, BandDeleteSongMutationVariables>;
+
+/**
+ * __useBandDeleteSongMutation__
+ *
+ * To run a mutation, you first call `useBandDeleteSongMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandDeleteSongMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandDeleteSongMutation, { data, loading, error }] = useBandDeleteSongMutation({
+ *   variables: {
+ *      songId: // value for 'songId'
+ *   },
+ * });
+ */
+export function useBandDeleteSongMutation(baseOptions?: Apollo.MutationHookOptions<BandDeleteSongMutation, BandDeleteSongMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandDeleteSongMutation, BandDeleteSongMutationVariables>(BandDeleteSongDocument, options);
+      }
+export type BandDeleteSongMutationHookResult = ReturnType<typeof useBandDeleteSongMutation>;
+export type BandDeleteSongMutationResult = Apollo.MutationResult<BandDeleteSongMutation>;
+export type BandDeleteSongMutationOptions = Apollo.BaseMutationOptions<BandDeleteSongMutation, BandDeleteSongMutationVariables>;
+export const BandCreateLeadSheetDocument = gql`
+    mutation bandCreateLeadSheet($songId: Int!) {
+  createLeadSheet(songId: $songId) {
+    id
+  }
+}
+    `;
+export type BandCreateLeadSheetMutationFn = Apollo.MutationFunction<BandCreateLeadSheetMutation, BandCreateLeadSheetMutationVariables>;
+
+/**
+ * __useBandCreateLeadSheetMutation__
+ *
+ * To run a mutation, you first call `useBandCreateLeadSheetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandCreateLeadSheetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandCreateLeadSheetMutation, { data, loading, error }] = useBandCreateLeadSheetMutation({
+ *   variables: {
+ *      songId: // value for 'songId'
+ *   },
+ * });
+ */
+export function useBandCreateLeadSheetMutation(baseOptions?: Apollo.MutationHookOptions<BandCreateLeadSheetMutation, BandCreateLeadSheetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandCreateLeadSheetMutation, BandCreateLeadSheetMutationVariables>(BandCreateLeadSheetDocument, options);
+      }
+export type BandCreateLeadSheetMutationHookResult = ReturnType<typeof useBandCreateLeadSheetMutation>;
+export type BandCreateLeadSheetMutationResult = Apollo.MutationResult<BandCreateLeadSheetMutation>;
+export type BandCreateLeadSheetMutationOptions = Apollo.BaseMutationOptions<BandCreateLeadSheetMutation, BandCreateLeadSheetMutationVariables>;
+export const BandUpdateLeadSheetDocument = gql`
+    mutation bandUpdateLeadSheet($leadSheetId: Int!, $data: UpdateLeadSheetInput!) {
+  updateLeadSheet(leadSheetId: $leadSheetId, data: $data) {
+    id
+  }
+}
+    `;
+export type BandUpdateLeadSheetMutationFn = Apollo.MutationFunction<BandUpdateLeadSheetMutation, BandUpdateLeadSheetMutationVariables>;
+
+/**
+ * __useBandUpdateLeadSheetMutation__
+ *
+ * To run a mutation, you first call `useBandUpdateLeadSheetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandUpdateLeadSheetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandUpdateLeadSheetMutation, { data, loading, error }] = useBandUpdateLeadSheetMutation({
+ *   variables: {
+ *      leadSheetId: // value for 'leadSheetId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useBandUpdateLeadSheetMutation(baseOptions?: Apollo.MutationHookOptions<BandUpdateLeadSheetMutation, BandUpdateLeadSheetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandUpdateLeadSheetMutation, BandUpdateLeadSheetMutationVariables>(BandUpdateLeadSheetDocument, options);
+      }
+export type BandUpdateLeadSheetMutationHookResult = ReturnType<typeof useBandUpdateLeadSheetMutation>;
+export type BandUpdateLeadSheetMutationResult = Apollo.MutationResult<BandUpdateLeadSheetMutation>;
+export type BandUpdateLeadSheetMutationOptions = Apollo.BaseMutationOptions<BandUpdateLeadSheetMutation, BandUpdateLeadSheetMutationVariables>;
+export const BandDeleteLeadSheetDocument = gql`
+    mutation bandDeleteLeadSheet($leadSheetId: Int!) {
+  deleteLeadSheet(leadSheetId: $leadSheetId) {
+    id
+  }
+}
+    `;
+export type BandDeleteLeadSheetMutationFn = Apollo.MutationFunction<BandDeleteLeadSheetMutation, BandDeleteLeadSheetMutationVariables>;
+
+/**
+ * __useBandDeleteLeadSheetMutation__
+ *
+ * To run a mutation, you first call `useBandDeleteLeadSheetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandDeleteLeadSheetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandDeleteLeadSheetMutation, { data, loading, error }] = useBandDeleteLeadSheetMutation({
+ *   variables: {
+ *      leadSheetId: // value for 'leadSheetId'
+ *   },
+ * });
+ */
+export function useBandDeleteLeadSheetMutation(baseOptions?: Apollo.MutationHookOptions<BandDeleteLeadSheetMutation, BandDeleteLeadSheetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandDeleteLeadSheetMutation, BandDeleteLeadSheetMutationVariables>(BandDeleteLeadSheetDocument, options);
+      }
+export type BandDeleteLeadSheetMutationHookResult = ReturnType<typeof useBandDeleteLeadSheetMutation>;
+export type BandDeleteLeadSheetMutationResult = Apollo.MutationResult<BandDeleteLeadSheetMutation>;
+export type BandDeleteLeadSheetMutationOptions = Apollo.BaseMutationOptions<BandDeleteLeadSheetMutation, BandDeleteLeadSheetMutationVariables>;
+export const BandCreateLeadSheetSectionDocument = gql`
+    mutation bandCreateLeadSheetSection($leadSheetId: Int!, $data: CreateLeadSheetSectionInput!) {
+  createLeadSheetSection(leadSheetId: $leadSheetId, data: $data) {
+    ...LeadSheetSection
+  }
+}
+    ${LeadSheetSectionFragmentDoc}`;
+export type BandCreateLeadSheetSectionMutationFn = Apollo.MutationFunction<BandCreateLeadSheetSectionMutation, BandCreateLeadSheetSectionMutationVariables>;
+
+/**
+ * __useBandCreateLeadSheetSectionMutation__
+ *
+ * To run a mutation, you first call `useBandCreateLeadSheetSectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandCreateLeadSheetSectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandCreateLeadSheetSectionMutation, { data, loading, error }] = useBandCreateLeadSheetSectionMutation({
+ *   variables: {
+ *      leadSheetId: // value for 'leadSheetId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useBandCreateLeadSheetSectionMutation(baseOptions?: Apollo.MutationHookOptions<BandCreateLeadSheetSectionMutation, BandCreateLeadSheetSectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandCreateLeadSheetSectionMutation, BandCreateLeadSheetSectionMutationVariables>(BandCreateLeadSheetSectionDocument, options);
+      }
+export type BandCreateLeadSheetSectionMutationHookResult = ReturnType<typeof useBandCreateLeadSheetSectionMutation>;
+export type BandCreateLeadSheetSectionMutationResult = Apollo.MutationResult<BandCreateLeadSheetSectionMutation>;
+export type BandCreateLeadSheetSectionMutationOptions = Apollo.BaseMutationOptions<BandCreateLeadSheetSectionMutation, BandCreateLeadSheetSectionMutationVariables>;
+export const BandUpdateLeadSheetSectionDocument = gql`
+    mutation bandUpdateLeadSheetSection($leadSheetSectionId: Int!, $data: UpdateLeadSheetSectionInput!) {
+  updateLeadSheetSection(leadSheetSectionId: $leadSheetSectionId, data: $data) {
+    ...LeadSheetSection
+  }
+}
+    ${LeadSheetSectionFragmentDoc}`;
+export type BandUpdateLeadSheetSectionMutationFn = Apollo.MutationFunction<BandUpdateLeadSheetSectionMutation, BandUpdateLeadSheetSectionMutationVariables>;
+
+/**
+ * __useBandUpdateLeadSheetSectionMutation__
+ *
+ * To run a mutation, you first call `useBandUpdateLeadSheetSectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandUpdateLeadSheetSectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandUpdateLeadSheetSectionMutation, { data, loading, error }] = useBandUpdateLeadSheetSectionMutation({
+ *   variables: {
+ *      leadSheetSectionId: // value for 'leadSheetSectionId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useBandUpdateLeadSheetSectionMutation(baseOptions?: Apollo.MutationHookOptions<BandUpdateLeadSheetSectionMutation, BandUpdateLeadSheetSectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandUpdateLeadSheetSectionMutation, BandUpdateLeadSheetSectionMutationVariables>(BandUpdateLeadSheetSectionDocument, options);
+      }
+export type BandUpdateLeadSheetSectionMutationHookResult = ReturnType<typeof useBandUpdateLeadSheetSectionMutation>;
+export type BandUpdateLeadSheetSectionMutationResult = Apollo.MutationResult<BandUpdateLeadSheetSectionMutation>;
+export type BandUpdateLeadSheetSectionMutationOptions = Apollo.BaseMutationOptions<BandUpdateLeadSheetSectionMutation, BandUpdateLeadSheetSectionMutationVariables>;
+export const BandDeleteLeadSheetSectionDocument = gql`
+    mutation bandDeleteLeadSheetSection($leadSheetSectionId: Int!) {
+  deleteLeadSheetSection(leadSheetSectionId: $leadSheetSectionId) {
+    id
+  }
+}
+    `;
+export type BandDeleteLeadSheetSectionMutationFn = Apollo.MutationFunction<BandDeleteLeadSheetSectionMutation, BandDeleteLeadSheetSectionMutationVariables>;
+
+/**
+ * __useBandDeleteLeadSheetSectionMutation__
+ *
+ * To run a mutation, you first call `useBandDeleteLeadSheetSectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBandDeleteLeadSheetSectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bandDeleteLeadSheetSectionMutation, { data, loading, error }] = useBandDeleteLeadSheetSectionMutation({
+ *   variables: {
+ *      leadSheetSectionId: // value for 'leadSheetSectionId'
+ *   },
+ * });
+ */
+export function useBandDeleteLeadSheetSectionMutation(baseOptions?: Apollo.MutationHookOptions<BandDeleteLeadSheetSectionMutation, BandDeleteLeadSheetSectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BandDeleteLeadSheetSectionMutation, BandDeleteLeadSheetSectionMutationVariables>(BandDeleteLeadSheetSectionDocument, options);
+      }
+export type BandDeleteLeadSheetSectionMutationHookResult = ReturnType<typeof useBandDeleteLeadSheetSectionMutation>;
+export type BandDeleteLeadSheetSectionMutationResult = Apollo.MutationResult<BandDeleteLeadSheetSectionMutation>;
+export type BandDeleteLeadSheetSectionMutationOptions = Apollo.BaseMutationOptions<BandDeleteLeadSheetSectionMutation, BandDeleteLeadSheetSectionMutationVariables>;
+export const BandSongsDocument = gql`
+    query bandSongs {
+  songs {
+    ...Song
+  }
+}
+    ${SongFragmentDoc}`;
+
+/**
+ * __useBandSongsQuery__
+ *
+ * To run a query within a React component, call `useBandSongsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBandSongsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBandSongsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBandSongsQuery(baseOptions?: Apollo.QueryHookOptions<BandSongsQuery, BandSongsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BandSongsQuery, BandSongsQueryVariables>(BandSongsDocument, options);
+      }
+export function useBandSongsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BandSongsQuery, BandSongsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BandSongsQuery, BandSongsQueryVariables>(BandSongsDocument, options);
+        }
+export function useBandSongsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<BandSongsQuery, BandSongsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<BandSongsQuery, BandSongsQueryVariables>(BandSongsDocument, options);
+        }
+export type BandSongsQueryHookResult = ReturnType<typeof useBandSongsQuery>;
+export type BandSongsLazyQueryHookResult = ReturnType<typeof useBandSongsLazyQuery>;
+export type BandSongsSuspenseQueryHookResult = ReturnType<typeof useBandSongsSuspenseQuery>;
+export type BandSongsQueryResult = Apollo.QueryResult<BandSongsQuery, BandSongsQueryVariables>;
+export const BandSongDocument = gql`
+    query bandSong($id: Int!) {
+  song(id: $id) {
+    ...Song
+  }
+}
+    ${SongFragmentDoc}`;
+
+/**
+ * __useBandSongQuery__
+ *
+ * To run a query within a React component, call `useBandSongQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBandSongQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBandSongQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useBandSongQuery(baseOptions: Apollo.QueryHookOptions<BandSongQuery, BandSongQueryVariables> & ({ variables: BandSongQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BandSongQuery, BandSongQueryVariables>(BandSongDocument, options);
+      }
+export function useBandSongLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BandSongQuery, BandSongQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BandSongQuery, BandSongQueryVariables>(BandSongDocument, options);
+        }
+export function useBandSongSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<BandSongQuery, BandSongQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<BandSongQuery, BandSongQueryVariables>(BandSongDocument, options);
+        }
+export type BandSongQueryHookResult = ReturnType<typeof useBandSongQuery>;
+export type BandSongLazyQueryHookResult = ReturnType<typeof useBandSongLazyQuery>;
+export type BandSongSuspenseQueryHookResult = ReturnType<typeof useBandSongSuspenseQuery>;
+export type BandSongQueryResult = Apollo.QueryResult<BandSongQuery, BandSongQueryVariables>;
+export const BandSongWithLeadSheetDocument = gql`
+    query bandSongWithLeadSheet($id: Int!) {
+  song(id: $id) {
+    ...Song
+    leadSheet {
+      ...LeadSheet
+    }
+  }
+}
+    ${SongFragmentDoc}
+${LeadSheetFragmentDoc}`;
+
+/**
+ * __useBandSongWithLeadSheetQuery__
+ *
+ * To run a query within a React component, call `useBandSongWithLeadSheetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBandSongWithLeadSheetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBandSongWithLeadSheetQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useBandSongWithLeadSheetQuery(baseOptions: Apollo.QueryHookOptions<BandSongWithLeadSheetQuery, BandSongWithLeadSheetQueryVariables> & ({ variables: BandSongWithLeadSheetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BandSongWithLeadSheetQuery, BandSongWithLeadSheetQueryVariables>(BandSongWithLeadSheetDocument, options);
+      }
+export function useBandSongWithLeadSheetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BandSongWithLeadSheetQuery, BandSongWithLeadSheetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BandSongWithLeadSheetQuery, BandSongWithLeadSheetQueryVariables>(BandSongWithLeadSheetDocument, options);
+        }
+export function useBandSongWithLeadSheetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<BandSongWithLeadSheetQuery, BandSongWithLeadSheetQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<BandSongWithLeadSheetQuery, BandSongWithLeadSheetQueryVariables>(BandSongWithLeadSheetDocument, options);
+        }
+export type BandSongWithLeadSheetQueryHookResult = ReturnType<typeof useBandSongWithLeadSheetQuery>;
+export type BandSongWithLeadSheetLazyQueryHookResult = ReturnType<typeof useBandSongWithLeadSheetLazyQuery>;
+export type BandSongWithLeadSheetSuspenseQueryHookResult = ReturnType<typeof useBandSongWithLeadSheetSuspenseQuery>;
+export type BandSongWithLeadSheetQueryResult = Apollo.QueryResult<BandSongWithLeadSheetQuery, BandSongWithLeadSheetQueryVariables>;
 export const AdminChangeEventActiveEngagementDocument = gql`
     mutation adminChangeEventActiveEngagement($eventId: Int!, $engagementId: Int) {
   changeEventActiveEngagement(engagementId: $engagementId, eventId: $eventId) {

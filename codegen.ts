@@ -10,6 +10,7 @@ const config: CodegenConfig = {
     "src/gql/queries/**/*.ts",
     "src/gql/mutations/**/*.ts",
     "src/gql/subscriptions/**/*.ts",
+    "src/gql/band/**/*.ts",
   ],
   ignoreNoDocuments: true, // for better experience with the watcher
   generates: {

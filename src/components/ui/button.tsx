@@ -53,9 +53,11 @@ const buttonVariants = cva(
         `,
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: `
-          bg-transparent text-primary underline-offset-4
+          bg-transparent text-link underline-offset-4
 
-          hover:underline
+          focus:outline-none
+
+          hover:text-linkHover hover:underline
         `,
       },
       size: {
@@ -63,6 +65,7 @@ const buttonVariants = cva(
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9 p-0",
+        link: "h-auto p-0",
       },
     },
     compoundVariants: [

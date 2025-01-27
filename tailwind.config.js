@@ -13,6 +13,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
+        link: "hsl(var(--link-color))",
+        linkHover: "hsl(var(--link-hover-color))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -91,5 +93,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [import("tailwindcss-animate")],
 };

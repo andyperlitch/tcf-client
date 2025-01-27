@@ -1,0 +1,8 @@
+{
+  "client": {
+    "service": {
+      "name": "thecasualfunk",
+      "url": "http://localhost:3000/graphql"
+    }
+  }
+}
