@@ -5,7 +5,7 @@ export function uploadFile({
 }: {
   file: File;
   presignedUrl: string;
-  onProgress: (progress: number) => void;
+  onProgress?: (progress: number) => void;
 }) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();

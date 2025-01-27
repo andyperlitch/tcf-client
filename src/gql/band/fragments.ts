@@ -21,3 +21,28 @@ gql`
     leadSheetId
   }
 `;
+
+gql`
+  fragment LeadSheet on LeadSheet {
+    id
+    sections {
+      ...LeadSheetSection
+    }
+  }
+`;
+
+gql`
+  fragment LeadSheetSection on LeadSheetSection {
+    id
+    name
+    order
+    timeCode
+    barLength
+    details {
+      id
+      type
+      content
+    }
+    lyricHint
+  }
+`;

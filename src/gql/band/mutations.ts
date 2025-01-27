@@ -140,7 +140,7 @@ gql`
   ) {
     # LeadSheetSection!
     createLeadSheetSection(leadSheetId: $leadSheetId, data: $data) {
-      id
+      ...LeadSheetSection
     }
   }
 `;
@@ -154,7 +154,7 @@ gql`
       leadSheetSectionId: $leadSheetSectionId
       data: $data
     ) {
-      id
+      ...LeadSheetSection
     }
   }
 `;

@@ -10,18 +10,30 @@ import { Fragment } from "react/jsx-runtime";
 
 export type CrumbMeta = [string, string];
 
-export function SimpleCrumbs({ crumbs }: { crumbs: CrumbMeta[] }) {
+export function SimpleCrumbs({
+  crumbs,
+  trailingSeparator = true,
+}: {
+  crumbs: CrumbMeta[];
+  trailingSeparator?: boolean;
+}) {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {crumbs.map(([href, label]) => (
-          <Fragment key={href}>
-            <BreadcrumbItem key={href}>
-              <BreadcrumbLink asChild>
-                <Link to={href}>{label}</Link>
-              </BreadcrumbLink>
+        {crumbs.map(([hrefOrId, label], index) => (
+          <Fragment key={hrefOrId}>
+            <BreadcrumbItem key={hrefOrId}>
+              {hrefOrId.startsWith("/") ? (
+                <BreadcrumbLink asChild>
+                  <Link to={hrefOrId}>{label}</Link>
+                </BreadcrumbLink>
+              ) : (
+                <div className="font-bold">{label}</div>
+              )}
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
+            {(index < crumbs.length - 1 || trailingSeparator) && (
+              <BreadcrumbSeparator />
+            )}
           </Fragment>
         ))}
       </BreadcrumbList>

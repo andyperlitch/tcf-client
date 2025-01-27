@@ -39,6 +39,7 @@ import { Loader } from "@/components/Loader";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import useLocalStorage from "use-local-storage";
 import { LeadSheetCell } from "./LeadSheetCell";
+import { Link } from "react-router-dom";
 
 export function MasterSongList() {
   const { data, loading, error } = useBandSongsQuery();
@@ -87,7 +88,14 @@ const columns: ColumnDef<SongFragment>[] = [
   {
     accessorKey: "title",
     header: "Title",
-    cell: ({ row }) => <div className="font-bold">{row.getValue("title")}</div>,
+    cell: ({ row }) => (
+      <Link
+        to={`/admin/songs/${row.original.id}`}
+        className="font-bold hover:underline"
+      >
+        {row.getValue("title")}
+      </Link>
+    ),
   },
   {
     accessorKey: "artist",

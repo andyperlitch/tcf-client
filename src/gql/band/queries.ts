@@ -7,3 +7,22 @@ gql`
     }
   }
 `;
+
+gql`
+  query bandSong($id: Int!) {
+    song(id: $id) {
+      ...Song
+    }
+  }
+`;
+
+gql`
+  query bandSongWithLeadSheet($id: Int!) {
+    song(id: $id) {
+      ...Song
+      leadSheet {
+        ...LeadSheet
+      }
+    }
+  }
+`;

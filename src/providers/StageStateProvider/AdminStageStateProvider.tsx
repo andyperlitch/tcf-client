@@ -39,19 +39,6 @@ export function AdminStageStateProvider({
 }) {
   const [updateEventStageConfig] = useAdminUpdateEventStageConfigMutation();
 
-  const onSave = useCallback(
-    (input: StageSavedConfig) => {
-      logger.info("useOnSave", input);
-      updateEventStageConfig({
-        variables: {
-          id: event.id,
-          data: configToInput(input),
-        },
-      });
-    },
-    [event.id, updateEventStageConfig]
-  );
-
   // Create debounced version of onSave
   const debouncedOnSave = useMemo(
     () =>
@@ -59,9 +46,14 @@ export function AdminStageStateProvider({
         logger.log("debouncedOnSave: ", {
           config,
         });
-        onSave(config);
+        updateEventStageConfig({
+          variables: {
+            id: event.id,
+            data: configToInput(config),
+          },
+        });
       }, 500),
-    [onSave]
+    [event.id, updateEventStageConfig]
   );
 
   const { state, dispatch } = useStageState();
