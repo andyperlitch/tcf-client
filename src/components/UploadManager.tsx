@@ -9,6 +9,7 @@ import { useGetPresignedUrlsMutation } from "@/gql/graphql";
 import { useState, useCallback } from "react";
 import prettyBytes from "pretty-bytes";
 import { useApolloClient } from "@apollo/client";
+import { useToast } from "@/hooks/use-toast";
 
 const CHUNK_SIZE = 10 * 1024 * 1024;
 
@@ -16,6 +17,7 @@ export function UploadManager() {
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState<number>(0);
   const [uploading, setUploading] = useState(false);
+  const { toast } = useToast();
 
   const [startUpload] = useStartMultipartUploadMutation();
   const [getPresignedUrls] = useGetPresignedUrlsMutation();
@@ -113,14 +115,21 @@ export function UploadManager() {
         variables: { uploadId, key, parts: uploadedParts },
       });
 
-      alert("Upload complete!");
+      toast({
+        title: "Upload complete!",
+        variant: "constructive",
+      });
     } catch (error) {
       console.error("Upload failed", error);
-      alert("Upload failed. Please try again.");
+      toast({
+        title: "Upload failed. Please try again.",
+        variant: "destructive",
+        description: (error as Error).message,
+      });
     } finally {
       setUploading(false);
     }
-  }, [file, startUpload, getPresignedUrls, completeUpload]);
+  }, [file, startUpload, getPresignedUrls, completeUpload, toast]);
 
   return (
     <div className="w-96 rounded-lg border p-4">
