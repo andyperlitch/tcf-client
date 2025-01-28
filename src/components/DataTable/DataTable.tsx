@@ -34,10 +34,14 @@ export function DataTable<TData>({
   id,
   data,
   columns,
+  showGlobalFilter = true,
+  globalFilterPlaceholder = "Filter...",
 }: {
   id: string;
   data: TData[];
   columns: ColumnDef<TData>[];
+  showGlobalFilter?: boolean;
+  globalFilterPlaceholder?: string;
 }) {
   const [sorting, setSorting] = useLocalStorage<SortingState>(
     `${id}-sorting`,
@@ -88,12 +92,14 @@ export function DataTable<TData>({
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter songs..."
-          value={(table.getState().globalFilter as string) ?? ""}
-          onChange={(event) => table.setGlobalFilter(event.target.value)}
-          className="max-w-sm"
-        />
+        {showGlobalFilter && (
+          <Input
+            placeholder={globalFilterPlaceholder}
+            value={(table.getState().globalFilter as string) ?? ""}
+            onChange={(event) => table.setGlobalFilter(event.target.value)}
+            className="max-w-sm"
+          />
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
