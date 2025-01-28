@@ -201,3 +201,11 @@ gql`
     }
   }
 `;
+
+gql`
+  mutation DeleteUpload($id: Int!) {
+    deleteUpload(id: $id) {
+      id
+    }
+  }
+`;

@@ -273,6 +273,7 @@ export type Mutation = {
   deleteReaction: Reaction;
   deleteSong: Song;
   deleteSubmission: Submission;
+  deleteUpload: Upload;
   getPresignedUrls: Array<Scalars['String']['output']>;
   login?: Maybe<User>;
   moveEngagement: Array<Engagement>;
@@ -426,6 +427,11 @@ export type MutationDeleteSongArgs = {
 
 export type MutationDeleteSubmissionArgs = {
   submissionId: Scalars['Int']['input'];
+};
+
+
+export type MutationDeleteUploadArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -1322,6 +1328,13 @@ export type CompleteMultipartUploadMutationVariables = Exact<{
 
 
 export type CompleteMultipartUploadMutation = { __typename?: 'Mutation', completeMultipartUpload: { __typename?: 'Upload', id: number, key: string, fileName: string, fileType: string, fileSize: number, uploadId?: string | null, status: UploadStatus, createdAt: any, updatedAt: any, uploader?: { __typename?: 'User', id: number, name?: string | null, username?: string | null, email?: string | null } | null, parts?: Array<{ __typename?: 'UploadPart', partNumber: number, eTag: string }> | null } };
+
+export type DeleteUploadMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type DeleteUploadMutation = { __typename?: 'Mutation', deleteUpload: { __typename?: 'Upload', id: number } };
 
 export type BandSongsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2928,6 +2941,39 @@ export function useCompleteMultipartUploadMutation(baseOptions?: Apollo.Mutation
 export type CompleteMultipartUploadMutationHookResult = ReturnType<typeof useCompleteMultipartUploadMutation>;
 export type CompleteMultipartUploadMutationResult = Apollo.MutationResult<CompleteMultipartUploadMutation>;
 export type CompleteMultipartUploadMutationOptions = Apollo.BaseMutationOptions<CompleteMultipartUploadMutation, CompleteMultipartUploadMutationVariables>;
+export const DeleteUploadDocument = gql`
+    mutation DeleteUpload($id: Int!) {
+  deleteUpload(id: $id) {
+    id
+  }
+}
+    `;
+export type DeleteUploadMutationFn = Apollo.MutationFunction<DeleteUploadMutation, DeleteUploadMutationVariables>;
+
+/**
+ * __useDeleteUploadMutation__
+ *
+ * To run a mutation, you first call `useDeleteUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUploadMutation, { data, loading, error }] = useDeleteUploadMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteUploadMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUploadMutation, DeleteUploadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUploadMutation, DeleteUploadMutationVariables>(DeleteUploadDocument, options);
+      }
+export type DeleteUploadMutationHookResult = ReturnType<typeof useDeleteUploadMutation>;
+export type DeleteUploadMutationResult = Apollo.MutationResult<DeleteUploadMutation>;
+export type DeleteUploadMutationOptions = Apollo.BaseMutationOptions<DeleteUploadMutation, DeleteUploadMutationVariables>;
 export const BandSongsDocument = gql`
     query bandSongs {
   songs {
