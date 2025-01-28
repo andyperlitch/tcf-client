@@ -46,3 +46,27 @@ gql`
     lyricHint
   }
 `;
+
+gql`
+  fragment Upload on Upload {
+    id
+    key
+    fileName
+    fileType
+    fileSize
+    uploadId
+    uploader {
+      id
+      name
+      username
+      email
+    }
+    parts {
+      partNumber
+      eTag
+    }
+    status
+    createdAt
+    updatedAt
+  }
+`;

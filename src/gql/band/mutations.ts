@@ -166,3 +166,38 @@ gql`
     }
   }
 `;
+
+gql`
+  mutation StartMultipartUpload(
+    $fileName: String!
+    $fileType: String!
+    $fileSize: Int!
+  ) {
+    startMultipartUpload(
+      fileName: $fileName
+      fileType: $fileType
+      fileSize: $fileSize
+    ) {
+      uploadId
+      key
+    }
+  }
+`;
+
+gql`
+  mutation GetPresignedUrls($uploadId: ID!, $key: String!, $parts: Int!) {
+    getPresignedUrls(uploadId: $uploadId, key: $key, parts: $parts)
+  }
+`;
+
+gql`
+  mutation CompleteMultipartUpload(
+    $uploadId: ID!
+    $key: String!
+    $parts: [UploadPartInput!]!
+  ) {
+    completeMultipartUpload(uploadId: $uploadId, key: $key, parts: $parts) {
+      ...Upload
+    }
+  }
+`;

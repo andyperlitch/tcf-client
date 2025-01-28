@@ -251,6 +251,7 @@ export type Mutation = {
   adminCreatePresignedUrl: PresignedUrlResponse;
   adminGenerateImage: GenerateImageResponse;
   changeEventActiveEngagement: Event;
+  completeMultipartUpload: Upload;
   createEngagement: Engagement;
   createEvent: Event;
   createGig: Gig;
@@ -272,9 +273,11 @@ export type Mutation = {
   deleteReaction: Reaction;
   deleteSong: Song;
   deleteSubmission: Submission;
+  getPresignedUrls: Array<Scalars['String']['output']>;
   login?: Maybe<User>;
   moveEngagement: Array<Engagement>;
   signup: User;
+  startMultipartUpload: Upload;
   syncSongsFromGoogleSheets: Array<Song>;
   updateCurrentGigSong: Gig;
   updateEngagement: Engagement;
@@ -304,6 +307,13 @@ export type MutationAdminGenerateImageArgs = {
 export type MutationChangeEventActiveEngagementArgs = {
   engagementId?: InputMaybe<Scalars['Int']['input']>;
   eventId: Scalars['Int']['input'];
+};
+
+
+export type MutationCompleteMultipartUploadArgs = {
+  key: Scalars['String']['input'];
+  parts: Array<UploadPartInput>;
+  uploadId: Scalars['ID']['input'];
 };
 
 
@@ -419,6 +429,13 @@ export type MutationDeleteSubmissionArgs = {
 };
 
 
+export type MutationGetPresignedUrlsArgs = {
+  key: Scalars['String']['input'];
+  parts: Scalars['Int']['input'];
+  uploadId: Scalars['ID']['input'];
+};
+
+
 export type MutationLoginArgs = {
   emailOrUsername: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -433,6 +450,13 @@ export type MutationMoveEngagementArgs = {
 
 export type MutationSignupArgs = {
   data: SignupInput;
+};
+
+
+export type MutationStartMultipartUploadArgs = {
+  fileName: Scalars['String']['input'];
+  fileSize: Scalars['Int']['input'];
+  fileType: Scalars['String']['input'];
 };
 
 
@@ -656,6 +680,8 @@ export type Query = {
   songs: Array<Song>;
   submission?: Maybe<Submission>;
   submissions: Array<Submission>;
+  upload?: Maybe<Upload>;
+  uploads: Array<Upload>;
   validateGoogleFont: Scalars['Boolean']['output'];
   whoami?: Maybe<User>;
 };
@@ -703,6 +729,11 @@ export type QuerySubmissionArgs = {
 
 export type QuerySubmissionsArgs = {
   engagementId: Scalars['Int']['input'];
+};
+
+
+export type QueryUploadArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -980,6 +1011,40 @@ export type UpdateSubmissionInput = {
   data: Scalars['Json']['input'];
 };
 
+export type Upload = {
+  __typename?: 'Upload';
+  createdAt: Scalars['DateTime']['output'];
+  fileName: Scalars['String']['output'];
+  fileSize: Scalars['Int']['output'];
+  fileType: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  key: Scalars['String']['output'];
+  parts?: Maybe<Array<UploadPart>>;
+  status: UploadStatus;
+  updatedAt: Scalars['DateTime']['output'];
+  uploadId?: Maybe<Scalars['String']['output']>;
+  uploader?: Maybe<User>;
+  uploaderId?: Maybe<Scalars['Int']['output']>;
+};
+
+export type UploadPart = {
+  __typename?: 'UploadPart';
+  eTag: Scalars['String']['output'];
+  partNumber: Scalars['Int']['output'];
+};
+
+export type UploadPartInput = {
+  eTag: Scalars['String']['input'];
+  partNumber: Scalars['Int']['input'];
+};
+
+export enum UploadStatus {
+  Canceled = 'CANCELED',
+  Completed = 'COMPLETED',
+  Failed = 'FAILED',
+  InProgress = 'IN_PROGRESS'
+}
+
 export type User = {
   __typename?: 'User';
   email?: Maybe<Scalars['String']['output']>;
@@ -1086,6 +1151,8 @@ export type SongFragment = { __typename?: 'Song', id: number, title?: string | n
 export type LeadSheetFragment = { __typename?: 'LeadSheet', id: number, sections: Array<{ __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> }> };
 
 export type LeadSheetSectionFragment = { __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> };
+
+export type UploadFragment = { __typename?: 'Upload', id: number, key: string, fileName: string, fileType: string, fileSize: number, uploadId?: string | null, status: UploadStatus, createdAt: any, updatedAt: any, uploader?: { __typename?: 'User', id: number, name?: string | null, username?: string | null, email?: string | null } | null, parts?: Array<{ __typename?: 'UploadPart', partNumber: number, eTag: string }> | null };
 
 export type BandCreateGigMutationVariables = Exact<{
   data: CreateGigInput;
@@ -1229,6 +1296,33 @@ export type BandDeleteLeadSheetSectionMutationVariables = Exact<{
 
 export type BandDeleteLeadSheetSectionMutation = { __typename?: 'Mutation', deleteLeadSheetSection: { __typename?: 'LeadSheetSection', id: number } };
 
+export type StartMultipartUploadMutationVariables = Exact<{
+  fileName: Scalars['String']['input'];
+  fileType: Scalars['String']['input'];
+  fileSize: Scalars['Int']['input'];
+}>;
+
+
+export type StartMultipartUploadMutation = { __typename?: 'Mutation', startMultipartUpload: { __typename?: 'Upload', uploadId?: string | null, key: string } };
+
+export type GetPresignedUrlsMutationVariables = Exact<{
+  uploadId: Scalars['ID']['input'];
+  key: Scalars['String']['input'];
+  parts: Scalars['Int']['input'];
+}>;
+
+
+export type GetPresignedUrlsMutation = { __typename?: 'Mutation', getPresignedUrls: Array<string> };
+
+export type CompleteMultipartUploadMutationVariables = Exact<{
+  uploadId: Scalars['ID']['input'];
+  key: Scalars['String']['input'];
+  parts: Array<UploadPartInput> | UploadPartInput;
+}>;
+
+
+export type CompleteMultipartUploadMutation = { __typename?: 'Mutation', completeMultipartUpload: { __typename?: 'Upload', id: number, key: string, fileName: string, fileType: string, fileSize: number, uploadId?: string | null, status: UploadStatus, createdAt: any, updatedAt: any, uploader?: { __typename?: 'User', id: number, name?: string | null, username?: string | null, email?: string | null } | null, parts?: Array<{ __typename?: 'UploadPart', partNumber: number, eTag: string }> | null } };
+
 export type BandSongsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1247,6 +1341,18 @@ export type BandSongWithLeadSheetQueryVariables = Exact<{
 
 
 export type BandSongWithLeadSheetQuery = { __typename?: 'Query', song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null, tempo?: number | null, lyrics?: string | null, feel?: string | null, fileUrl?: string | null, spotifyUrl?: string | null, youtubeUrl?: string | null, coverArtUrl?: string | null, duration?: number | null, key?: string | null, practicePriority?: string | null, chartUrl?: string | null, leadSheetUrl?: string | null, leadSheetEditUrl?: string | null, leadSheetId?: number | null, leadSheet?: { __typename?: 'LeadSheet', id: number, sections: Array<{ __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> }> } | null } | null };
+
+export type UploadsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UploadsQuery = { __typename?: 'Query', uploads: Array<{ __typename?: 'Upload', id: number, key: string, fileName: string, fileType: string, fileSize: number, uploadId?: string | null, status: UploadStatus, createdAt: any, updatedAt: any, uploader?: { __typename?: 'User', id: number, name?: string | null, username?: string | null, email?: string | null } | null, parts?: Array<{ __typename?: 'UploadPart', partNumber: number, eTag: string }> | null }> };
+
+export type UploadQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type UploadQuery = { __typename?: 'Query', upload?: { __typename?: 'Upload', id: number, key: string, fileName: string, fileType: string, fileSize: number, uploadId?: string | null, status: UploadStatus, createdAt: any, updatedAt: any, uploader?: { __typename?: 'User', id: number, name?: string | null, username?: string | null, email?: string | null } | null, parts?: Array<{ __typename?: 'UploadPart', partNumber: number, eTag: string }> | null } | null };
 
 export type AdminEngagementFragment = { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, qrCodeCta?: string | null, startTime?: any | null, order: number, endTime?: any | null, type: EngagementType, data?: { __typename?: 'NowPlayingAdminData', currentSong?: number | null } | { __typename?: 'PhotoCarouselAdminData', visibleSubmission?: number | null, rejectedQueue: Array<number>, unapprovedQueue: Array<number>, unseenQueue: Array<number>, seenQueuePointer: number, seenQueue: Array<number> } | { __typename?: 'SlidesAdminData', currentSlide: number } | { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, config?: { __typename?: 'NowPlayingAdminConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselAdminConfig', maxSubmissionsPerUser: number, requireApproval: boolean, askSharePermission?: boolean | null, sharePrompt?: string | null, pollInterval?: number | null } | { __typename?: 'SlidesAdminConfig', autoPlay: boolean } | { __typename?: 'VoteForAdminConfig', votesPerUser: number, allowUserSubmissions: boolean, maxSubmissionsPerUser: number } | null, viewConfig: { __typename?: 'NowPlayingViewConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number, askSharePermission?: boolean | null, sharePrompt?: string | null } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'NowPlayingViewData', currentSong?: number | null } | { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } };
 
@@ -1611,6 +1717,29 @@ export const LeadSheetFragmentDoc = gql`
   }
 }
     ${LeadSheetSectionFragmentDoc}`;
+export const UploadFragmentDoc = gql`
+    fragment Upload on Upload {
+  id
+  key
+  fileName
+  fileType
+  fileSize
+  uploadId
+  uploader {
+    id
+    name
+    username
+    email
+  }
+  parts {
+    partNumber
+    eTag
+  }
+  status
+  createdAt
+  updatedAt
+}
+    `;
 export const ScreenElementFragmentDoc = gql`
     fragment ScreenElement on ScreenElement {
   id
@@ -2691,6 +2820,114 @@ export function useBandDeleteLeadSheetSectionMutation(baseOptions?: Apollo.Mutat
 export type BandDeleteLeadSheetSectionMutationHookResult = ReturnType<typeof useBandDeleteLeadSheetSectionMutation>;
 export type BandDeleteLeadSheetSectionMutationResult = Apollo.MutationResult<BandDeleteLeadSheetSectionMutation>;
 export type BandDeleteLeadSheetSectionMutationOptions = Apollo.BaseMutationOptions<BandDeleteLeadSheetSectionMutation, BandDeleteLeadSheetSectionMutationVariables>;
+export const StartMultipartUploadDocument = gql`
+    mutation StartMultipartUpload($fileName: String!, $fileType: String!, $fileSize: Int!) {
+  startMultipartUpload(
+    fileName: $fileName
+    fileType: $fileType
+    fileSize: $fileSize
+  ) {
+    uploadId
+    key
+  }
+}
+    `;
+export type StartMultipartUploadMutationFn = Apollo.MutationFunction<StartMultipartUploadMutation, StartMultipartUploadMutationVariables>;
+
+/**
+ * __useStartMultipartUploadMutation__
+ *
+ * To run a mutation, you first call `useStartMultipartUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartMultipartUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startMultipartUploadMutation, { data, loading, error }] = useStartMultipartUploadMutation({
+ *   variables: {
+ *      fileName: // value for 'fileName'
+ *      fileType: // value for 'fileType'
+ *      fileSize: // value for 'fileSize'
+ *   },
+ * });
+ */
+export function useStartMultipartUploadMutation(baseOptions?: Apollo.MutationHookOptions<StartMultipartUploadMutation, StartMultipartUploadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StartMultipartUploadMutation, StartMultipartUploadMutationVariables>(StartMultipartUploadDocument, options);
+      }
+export type StartMultipartUploadMutationHookResult = ReturnType<typeof useStartMultipartUploadMutation>;
+export type StartMultipartUploadMutationResult = Apollo.MutationResult<StartMultipartUploadMutation>;
+export type StartMultipartUploadMutationOptions = Apollo.BaseMutationOptions<StartMultipartUploadMutation, StartMultipartUploadMutationVariables>;
+export const GetPresignedUrlsDocument = gql`
+    mutation GetPresignedUrls($uploadId: ID!, $key: String!, $parts: Int!) {
+  getPresignedUrls(uploadId: $uploadId, key: $key, parts: $parts)
+}
+    `;
+export type GetPresignedUrlsMutationFn = Apollo.MutationFunction<GetPresignedUrlsMutation, GetPresignedUrlsMutationVariables>;
+
+/**
+ * __useGetPresignedUrlsMutation__
+ *
+ * To run a mutation, you first call `useGetPresignedUrlsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGetPresignedUrlsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [getPresignedUrlsMutation, { data, loading, error }] = useGetPresignedUrlsMutation({
+ *   variables: {
+ *      uploadId: // value for 'uploadId'
+ *      key: // value for 'key'
+ *      parts: // value for 'parts'
+ *   },
+ * });
+ */
+export function useGetPresignedUrlsMutation(baseOptions?: Apollo.MutationHookOptions<GetPresignedUrlsMutation, GetPresignedUrlsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GetPresignedUrlsMutation, GetPresignedUrlsMutationVariables>(GetPresignedUrlsDocument, options);
+      }
+export type GetPresignedUrlsMutationHookResult = ReturnType<typeof useGetPresignedUrlsMutation>;
+export type GetPresignedUrlsMutationResult = Apollo.MutationResult<GetPresignedUrlsMutation>;
+export type GetPresignedUrlsMutationOptions = Apollo.BaseMutationOptions<GetPresignedUrlsMutation, GetPresignedUrlsMutationVariables>;
+export const CompleteMultipartUploadDocument = gql`
+    mutation CompleteMultipartUpload($uploadId: ID!, $key: String!, $parts: [UploadPartInput!]!) {
+  completeMultipartUpload(uploadId: $uploadId, key: $key, parts: $parts) {
+    ...Upload
+  }
+}
+    ${UploadFragmentDoc}`;
+export type CompleteMultipartUploadMutationFn = Apollo.MutationFunction<CompleteMultipartUploadMutation, CompleteMultipartUploadMutationVariables>;
+
+/**
+ * __useCompleteMultipartUploadMutation__
+ *
+ * To run a mutation, you first call `useCompleteMultipartUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCompleteMultipartUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [completeMultipartUploadMutation, { data, loading, error }] = useCompleteMultipartUploadMutation({
+ *   variables: {
+ *      uploadId: // value for 'uploadId'
+ *      key: // value for 'key'
+ *      parts: // value for 'parts'
+ *   },
+ * });
+ */
+export function useCompleteMultipartUploadMutation(baseOptions?: Apollo.MutationHookOptions<CompleteMultipartUploadMutation, CompleteMultipartUploadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CompleteMultipartUploadMutation, CompleteMultipartUploadMutationVariables>(CompleteMultipartUploadDocument, options);
+      }
+export type CompleteMultipartUploadMutationHookResult = ReturnType<typeof useCompleteMultipartUploadMutation>;
+export type CompleteMultipartUploadMutationResult = Apollo.MutationResult<CompleteMultipartUploadMutation>;
+export type CompleteMultipartUploadMutationOptions = Apollo.BaseMutationOptions<CompleteMultipartUploadMutation, CompleteMultipartUploadMutationVariables>;
 export const BandSongsDocument = gql`
     query bandSongs {
   songs {
@@ -2814,6 +3051,85 @@ export type BandSongWithLeadSheetQueryHookResult = ReturnType<typeof useBandSong
 export type BandSongWithLeadSheetLazyQueryHookResult = ReturnType<typeof useBandSongWithLeadSheetLazyQuery>;
 export type BandSongWithLeadSheetSuspenseQueryHookResult = ReturnType<typeof useBandSongWithLeadSheetSuspenseQuery>;
 export type BandSongWithLeadSheetQueryResult = Apollo.QueryResult<BandSongWithLeadSheetQuery, BandSongWithLeadSheetQueryVariables>;
+export const UploadsDocument = gql`
+    query uploads {
+  uploads {
+    ...Upload
+  }
+}
+    ${UploadFragmentDoc}`;
+
+/**
+ * __useUploadsQuery__
+ *
+ * To run a query within a React component, call `useUploadsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUploadsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUploadsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUploadsQuery(baseOptions?: Apollo.QueryHookOptions<UploadsQuery, UploadsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UploadsQuery, UploadsQueryVariables>(UploadsDocument, options);
+      }
+export function useUploadsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UploadsQuery, UploadsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UploadsQuery, UploadsQueryVariables>(UploadsDocument, options);
+        }
+export function useUploadsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UploadsQuery, UploadsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UploadsQuery, UploadsQueryVariables>(UploadsDocument, options);
+        }
+export type UploadsQueryHookResult = ReturnType<typeof useUploadsQuery>;
+export type UploadsLazyQueryHookResult = ReturnType<typeof useUploadsLazyQuery>;
+export type UploadsSuspenseQueryHookResult = ReturnType<typeof useUploadsSuspenseQuery>;
+export type UploadsQueryResult = Apollo.QueryResult<UploadsQuery, UploadsQueryVariables>;
+export const UploadDocument = gql`
+    query upload($id: Int!) {
+  upload(id: $id) {
+    ...Upload
+  }
+}
+    ${UploadFragmentDoc}`;
+
+/**
+ * __useUploadQuery__
+ *
+ * To run a query within a React component, call `useUploadQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUploadQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUploadQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUploadQuery(baseOptions: Apollo.QueryHookOptions<UploadQuery, UploadQueryVariables> & ({ variables: UploadQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UploadQuery, UploadQueryVariables>(UploadDocument, options);
+      }
+export function useUploadLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UploadQuery, UploadQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UploadQuery, UploadQueryVariables>(UploadDocument, options);
+        }
+export function useUploadSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UploadQuery, UploadQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UploadQuery, UploadQueryVariables>(UploadDocument, options);
+        }
+export type UploadQueryHookResult = ReturnType<typeof useUploadQuery>;
+export type UploadLazyQueryHookResult = ReturnType<typeof useUploadLazyQuery>;
+export type UploadSuspenseQueryHookResult = ReturnType<typeof useUploadSuspenseQuery>;
+export type UploadQueryResult = Apollo.QueryResult<UploadQuery, UploadQueryVariables>;
 export const AdminChangeEventActiveEngagementDocument = gql`
     mutation adminChangeEventActiveEngagement($eventId: Int!, $engagementId: Int) {
   changeEventActiveEngagement(engagementId: $engagementId, eventId: $eventId) {

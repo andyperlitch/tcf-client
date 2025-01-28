@@ -26,3 +26,19 @@ gql`
     }
   }
 `;
+
+gql`
+  query uploads {
+    uploads {
+      ...Upload
+    }
+  }
+`;
+
+gql`
+  query upload($id: Int!) {
+    upload(id: $id) {
+      ...Upload
+    }
+  }
+`;

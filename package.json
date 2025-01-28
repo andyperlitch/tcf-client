@@ -50,6 +50,7 @@
     "lodash": "^4.17.21",
     "nanoid": "^5.0.9",
     "papaparse": "^5.4.1",
+    "pretty-bytes": "^6.1.1",
     "react": "^18.3.1",
     "react-color": "^2.19.3",
     "react-day-picker": "9.5.0",

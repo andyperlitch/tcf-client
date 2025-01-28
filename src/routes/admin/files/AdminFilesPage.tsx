@@ -1,6 +1,4 @@
 import { AdminContainer } from "@/components/AdminContainer";
-
-/*
 import { DataTable } from "@/components/DataTable";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { Loader } from "@/components/Loader";
@@ -9,13 +7,14 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { UploadManager } from "@/components/UploadManager";
+import { UploadFragment, useUploadsQuery } from "@/gql/graphql";
+import { toFullS3Url } from "@/utils/toFullS3Url";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
-*/
+import prettyBytes from "pretty-bytes";
 
 export function AdminFilesPage() {
   return (
@@ -24,6 +23,7 @@ export function AdminFilesPage() {
         <div className="flex flex-row items-center gap-4">
           <h1 className="text-3xl">Files</h1>
         </div>
+        <UploadManager />
         <FilesList />
       </div>
     </AdminContainer>
@@ -31,52 +31,54 @@ export function AdminFilesPage() {
 }
 
 function FilesList() {
-  // const { data, loading, error } = useAdminFilesQuery();
+  const { data, loading, error } = useUploadsQuery();
 
-  // if (loading) return <Loader />;
+  if (loading) return <Loader />;
 
-  // if (error) {
-  //   return <ErrorMessage error={error} />;
-  // }
+  if (error) {
+    return <ErrorMessage error={error} />;
+  }
 
   return (
-    // <DataTable<FileFragment>
-    //   id="master-song-list"
-    //   data={data?.songs ?? []}
-    //   columns={columns}
-    // />
-    <div>FilesList</div>
+    <DataTable<UploadFragment>
+      id="master-song-list"
+      data={data?.uploads ?? []}
+      columns={columns}
+    />
   );
 }
-/*
-const columns: ColumnDef<FileFragment>[] = [
+
+const columns: ColumnDef<UploadFragment>[] = [
   {
-    id: "name",
+    accessorKey: "fileName",
     header: "Name",
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    cell: ({ row }) => <div>{row.getValue("fileName")}</div>,
   },
   {
-    id: "size",
+    accessorKey: "fileSize",
     header: "Size",
-    cell: ({ row }) => <div>{row.getValue("size")}</div>,
+    cell: ({ row }) => <div>{prettyBytes(row.getValue("fileSize"))}</div>,
   },
   {
-    id: "type",
+    accessorKey: "fileType",
     header: "Type",
-    cell: ({ row }) => <div>{row.getValue("type")}</div>,
+    cell: ({ row }) => <div>{row.getValue("fileType")}</div>,
   },
   // upload date
   {
-    id: "uploadDate",
+    accessorKey: "createdAt",
     header: "Upload Date",
-    cell: ({ row }) => <div>{row.getValue("uploadDate")}</div>,
+    cell: ({ row }) => (
+      <div>{new Date(row.getValue("createdAt")).toLocaleString()}</div>
+    ),
   },
   // upload user
   {
-    id: "uploadUser",
-    header: "Upload User",
-    cell: ({ row }) => <div>{row.getValue("uploadUser")}</div>,
+    accessorKey: "uploader",
+    header: "Uploaded By",
+    cell: ({ row }) => <div>{(row.getValue("uploader") as any)?.name}</div>,
   },
+
   {
     id: "actions",
     enableHiding: false,
@@ -92,19 +94,24 @@ const columns: ColumnDef<FileFragment>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(file.id.toString())}
-            >
-              Copy presigned download URL
+            <DropdownMenuItem asChild>
+              <a
+                href={toFullS3Url(file.key)}
+                download={file.fileName}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Download
+              </a>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Download</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Button variant="link" onClick={() => {}}>
+                Delete
+              </Button>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
   },
 ];
-*/
