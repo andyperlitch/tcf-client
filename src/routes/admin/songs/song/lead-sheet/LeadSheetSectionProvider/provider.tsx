@@ -1,19 +1,18 @@
 import {
-  LeadSheetSectionFragment,
   UpdateLeadSheetSectionInput,
   useBandUpdateLeadSheetSectionMutation,
 } from "@/gql/graphql";
 import { useEffect, useMemo, useReducer, useRef } from "react";
 import { reducer } from "./reducer";
 import { debounce } from "lodash";
-import { LeadSheetSectionContext } from "./context";
+import { LeadSheetSectionContext, LeadSheetSectionState } from "./context";
 
 export function LeadSheetSectionProvider({
   children,
   initialState,
 }: {
   children: React.ReactNode;
-  initialState: LeadSheetSectionFragment;
+  initialState: LeadSheetSectionState;
 }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const lastSaveStateRef = useRef(JSON.stringify(state));
@@ -21,7 +20,7 @@ export function LeadSheetSectionProvider({
 
   const debouncedSave = useMemo(
     () =>
-      debounce((section: LeadSheetSectionFragment) => {
+      debounce((section: LeadSheetSectionState) => {
         updateLeadSheetSection({
           variables: {
             leadSheetSectionId: section.id,
@@ -49,10 +48,10 @@ export function LeadSheetSectionProvider({
 }
 
 function sectionToInput(
-  section: LeadSheetSectionFragment
+  section: LeadSheetSectionState
 ): UpdateLeadSheetSectionInput {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id, __typename, order, ...rest } = section;
+  const { id, __typename, order, lastAddedDetailId, ...rest } = section;
   const input: UpdateLeadSheetSectionInput = {
     ...rest,
     details: section.details.map((d) => ({

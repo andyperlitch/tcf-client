@@ -39,11 +39,17 @@ gql`
     timeCode
     barLength
     details {
-      id
-      type
-      content
+      ...LeadSheetDetail
     }
     lyricHint
+  }
+`;
+
+gql`
+  fragment LeadSheetDetail on LeadSheetDetail {
+    id
+    type
+    content
   }
 `;
 

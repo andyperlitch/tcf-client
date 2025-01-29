@@ -232,6 +232,7 @@ export type LeadSheetDetailInput = {
 
 export enum LeadSheetDetailType {
   Chords = 'CHORDS',
+  Image = 'IMAGE',
   Text = 'TEXT'
 }
 
@@ -249,6 +250,7 @@ export type LeadSheetSection = {
 export type Mutation = {
   __typename?: 'Mutation';
   adminCreatePresignedUrl: PresignedUrlResponse;
+  adminDeleteFromS3: Scalars['Boolean']['output'];
   adminGenerateImage: GenerateImageResponse;
   changeEventActiveEngagement: Event;
   completeMultipartUpload: Upload;
@@ -297,6 +299,11 @@ export type Mutation = {
 
 export type MutationAdminCreatePresignedUrlArgs = {
   mimeType: Scalars['String']['input'];
+};
+
+
+export type MutationAdminDeleteFromS3Args = {
+  key: Scalars['String']['input'];
 };
 
 
@@ -1158,6 +1165,8 @@ export type LeadSheetFragment = { __typename?: 'LeadSheet', id: number, sections
 
 export type LeadSheetSectionFragment = { __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> };
 
+export type LeadSheetDetailFragment = { __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string };
+
 export type UploadFragment = { __typename?: 'Upload', id: number, key: string, fileName: string, fileType: string, fileSize: number, uploadId?: string | null, status: UploadStatus, createdAt: any, updatedAt: any, uploader?: { __typename?: 'User', id: number, name?: string | null, username?: string | null, email?: string | null } | null, parts?: Array<{ __typename?: 'UploadPart', partNumber: number, eTag: string }> | null };
 
 export type BandCreateGigMutationVariables = Exact<{
@@ -1439,6 +1448,13 @@ export type AdminDeleteEventMutationVariables = Exact<{
 
 export type AdminDeleteEventMutation = { __typename?: 'Mutation', deleteEvent: { __typename?: 'Event', id: number, name: string, date?: any | null, live: boolean, location?: string | null, locked: boolean, description?: string | null, slug: string, createdAt: any, updatedAt: any, activeEngagementId?: number | null, stageConfig?: { __typename?: 'EventStageConfig', qrForegroundColor?: string | null, qrBackgroundColor?: string | null, qrTextColor?: string | null, qrWrapperBackgroundColor?: string | null, backgroundImage?: string | null, fontFamily?: Array<string> | null, elements?: Array<{ __typename?: 'ScreenElement', id: string, type: string, name?: string | null, imageUrl?: string | null, defaultStyles?: any | null, engagementStyles?: any | null, defaultClassNames?: string | null, engagementClassNames?: string | null, text?: string | null, fontFamily?: Array<string> | null, linkHref?: string | null }> | null } | null, fanConfig?: { __typename?: 'EventFanConfig', backgroundImage?: string | null, fontFamily?: Array<string> | null, elements?: Array<{ __typename?: 'ScreenElement', id: string, type: string, name?: string | null, imageUrl?: string | null, defaultStyles?: any | null, engagementStyles?: any | null, defaultClassNames?: string | null, engagementClassNames?: string | null, text?: string | null, fontFamily?: Array<string> | null, linkHref?: string | null }> | null } | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, qrCodeCta?: string | null, startTime?: any | null, order: number, endTime?: any | null, type: EngagementType, data?: { __typename?: 'NowPlayingAdminData', currentSong?: number | null } | { __typename?: 'PhotoCarouselAdminData', visibleSubmission?: number | null, rejectedQueue: Array<number>, unapprovedQueue: Array<number>, unseenQueue: Array<number>, seenQueuePointer: number, seenQueue: Array<number> } | { __typename?: 'SlidesAdminData', currentSlide: number } | { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, config?: { __typename?: 'NowPlayingAdminConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselAdminConfig', maxSubmissionsPerUser: number, requireApproval: boolean, askSharePermission?: boolean | null, sharePrompt?: string | null, pollInterval?: number | null } | { __typename?: 'SlidesAdminConfig', autoPlay: boolean } | { __typename?: 'VoteForAdminConfig', votesPerUser: number, allowUserSubmissions: boolean, maxSubmissionsPerUser: number } | null, viewConfig: { __typename?: 'NowPlayingViewConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number, askSharePermission?: boolean | null, sharePrompt?: string | null } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'NowPlayingViewData', currentSong?: number | null } | { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null, engagements: Array<{ __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, qrCodeCta?: string | null, startTime?: any | null, order: number, endTime?: any | null, type: EngagementType, data?: { __typename?: 'NowPlayingAdminData', currentSong?: number | null } | { __typename?: 'PhotoCarouselAdminData', visibleSubmission?: number | null, rejectedQueue: Array<number>, unapprovedQueue: Array<number>, unseenQueue: Array<number>, seenQueuePointer: number, seenQueue: Array<number> } | { __typename?: 'SlidesAdminData', currentSlide: number } | { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, config?: { __typename?: 'NowPlayingAdminConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselAdminConfig', maxSubmissionsPerUser: number, requireApproval: boolean, askSharePermission?: boolean | null, sharePrompt?: string | null, pollInterval?: number | null } | { __typename?: 'SlidesAdminConfig', autoPlay: boolean } | { __typename?: 'VoteForAdminConfig', votesPerUser: number, allowUserSubmissions: boolean, maxSubmissionsPerUser: number } | null, viewConfig: { __typename?: 'NowPlayingViewConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number, askSharePermission?: boolean | null, sharePrompt?: string | null } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'NowPlayingViewData', currentSong?: number | null } | { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } }> } };
 
+export type AdminDeleteFromS3MutationVariables = Exact<{
+  key: Scalars['String']['input'];
+}>;
+
+
+export type AdminDeleteFromS3Mutation = { __typename?: 'Mutation', adminDeleteFromS3: boolean };
+
 export type AdminDeleteSubmissionMutationVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
@@ -1707,6 +1723,13 @@ export const SongFragmentDoc = gql`
   leadSheetId
 }
     `;
+export const LeadSheetDetailFragmentDoc = gql`
+    fragment LeadSheetDetail on LeadSheetDetail {
+  id
+  type
+  content
+}
+    `;
 export const LeadSheetSectionFragmentDoc = gql`
     fragment LeadSheetSection on LeadSheetSection {
   id
@@ -1715,13 +1738,11 @@ export const LeadSheetSectionFragmentDoc = gql`
   timeCode
   barLength
   details {
-    id
-    type
-    content
+    ...LeadSheetDetail
   }
   lyricHint
 }
-    `;
+    ${LeadSheetDetailFragmentDoc}`;
 export const LeadSheetFragmentDoc = gql`
     fragment LeadSheet on LeadSheet {
   id
@@ -3377,6 +3398,37 @@ export function useAdminDeleteEventMutation(baseOptions?: Apollo.MutationHookOpt
 export type AdminDeleteEventMutationHookResult = ReturnType<typeof useAdminDeleteEventMutation>;
 export type AdminDeleteEventMutationResult = Apollo.MutationResult<AdminDeleteEventMutation>;
 export type AdminDeleteEventMutationOptions = Apollo.BaseMutationOptions<AdminDeleteEventMutation, AdminDeleteEventMutationVariables>;
+export const AdminDeleteFromS3Document = gql`
+    mutation adminDeleteFromS3($key: String!) {
+  adminDeleteFromS3(key: $key)
+}
+    `;
+export type AdminDeleteFromS3MutationFn = Apollo.MutationFunction<AdminDeleteFromS3Mutation, AdminDeleteFromS3MutationVariables>;
+
+/**
+ * __useAdminDeleteFromS3Mutation__
+ *
+ * To run a mutation, you first call `useAdminDeleteFromS3Mutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminDeleteFromS3Mutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminDeleteFromS3Mutation, { data, loading, error }] = useAdminDeleteFromS3Mutation({
+ *   variables: {
+ *      key: // value for 'key'
+ *   },
+ * });
+ */
+export function useAdminDeleteFromS3Mutation(baseOptions?: Apollo.MutationHookOptions<AdminDeleteFromS3Mutation, AdminDeleteFromS3MutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminDeleteFromS3Mutation, AdminDeleteFromS3MutationVariables>(AdminDeleteFromS3Document, options);
+      }
+export type AdminDeleteFromS3MutationHookResult = ReturnType<typeof useAdminDeleteFromS3Mutation>;
+export type AdminDeleteFromS3MutationResult = Apollo.MutationResult<AdminDeleteFromS3Mutation>;
+export type AdminDeleteFromS3MutationOptions = Apollo.BaseMutationOptions<AdminDeleteFromS3Mutation, AdminDeleteFromS3MutationVariables>;
 export const AdminDeleteSubmissionDocument = gql`
     mutation adminDeleteSubmission($id: Int!) {
   deleteSubmission(submissionId: $id) {

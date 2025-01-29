@@ -2,8 +2,12 @@ import { LeadSheetSectionFragment } from "@/gql/graphql";
 import { createContext, Dispatch, useContext } from "react";
 import { ActionType } from "./reducer";
 
+export type LeadSheetSectionState = LeadSheetSectionFragment & {
+  lastAddedDetailId?: string | null;
+};
+
 type LeadSheetSectionContextType = {
-  state: LeadSheetSectionFragment;
+  state: LeadSheetSectionState;
   dispatch: Dispatch<ActionType>;
 };
 

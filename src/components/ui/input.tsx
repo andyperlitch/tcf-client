@@ -5,10 +5,11 @@ import { cn } from "@/lib/utils";
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   replaceClassName?: boolean;
+  selectOnFocus?: boolean;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, replaceClassName, type, ...props }, ref) => {
+  ({ className, replaceClassName, type, selectOnFocus, ...props }, ref) => {
     return (
       <input
         type={type}
@@ -33,6 +34,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 className
               )
         }
+        onFocus={(e) => {
+          if (selectOnFocus) {
+            e.currentTarget.select();
+          }
+          props.onFocus?.(e);
+        }}
         ref={ref}
         {...props}
       />

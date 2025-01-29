@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import {
   LeadSheetFragment,
+  LeadSheetSectionFragmentDoc,
   SongFragment,
   useBandCreateLeadSheetSectionMutation,
 } from "@/gql/graphql";
 import { useToast } from "@/hooks/use-toast";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { LeadSheetSectionHeaderCell } from "./LeadSheetSectionHeaderCell";
 import { LeadSheetSectionLengthCell } from "./LeadSheetSectionLengthCell";
 import { LeadSheetSectionDetailsCell } from "./LeadSheetSectionDetailsCell";
@@ -19,17 +20,35 @@ import {
 } from "@/components/ui/table";
 import { LeadSheetSectionProvider } from "./LeadSheetSectionProvider/provider";
 import { LeadSheetSectionActionsCell } from "./LeadSheetSectionActionsCell";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import hoverStyles from "@/styles/ShowChildOnHover.module.css";
 
 export function LeadSheetEditor({
   songWithLeadSheet: song,
 }: {
   songWithLeadSheet: SongFragment & { leadSheet: LeadSheetFragment };
 }) {
+  const [showLyricHints, setShowLyricHints] = useState(
+    song.leadSheet.sections.some((section) => {
+      return Boolean(section.lyricHint);
+    })
+  );
+  const [showTimeCodes, setShowTimeCodes] = useState(
+    song.leadSheet.sections.some((section) => {
+      return Boolean(section.timeCode);
+    })
+  );
+
   const sections = useMemo(() => {
     return song.leadSheet?.sections ?? [];
   }, [song.leadSheet]);
 
   const { toast } = useToast();
+
+  const [lastAddedSectionId, setLastAddedSectionId] = useState<number | null>(
+    null
+  );
 
   const [createSection, { loading: createSectionLoading }] =
     useBandCreateLeadSheetSectionMutation({
@@ -38,21 +57,51 @@ export function LeadSheetEditor({
 
         const newSection = data.createLeadSheetSection;
 
+        cache.writeFragment({
+          id: cache.identify(newSection),
+          fragment: LeadSheetSectionFragmentDoc,
+          fragmentName: "LeadSheetSection",
+          data: newSection,
+        });
+
         // Update the cache for LeadSheetFragment
         cache.modify({
           id: cache.identify(song.leadSheet),
           fields: {
-            sections: (existingSections = []) => [
+            sections: (existingSections = [], { toReference }) => [
               ...existingSections,
-              newSection,
+              toReference(newSection, true),
             ],
           },
         });
+
+        setLastAddedSectionId(newSection.id);
       },
     });
 
   return (
-    <div className="flex flex-col items-center space-y-4 rounded-sm border p-4">
+    <div
+      data-name="LEAD_SHEET_EDITOR"
+      className={`flex flex-col items-center space-y-4 p-4`}
+    >
+      <div data-name="LEAD_SHEET_CONTROLS" className="flex w-full gap-2">
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="lyric-hints"
+            checked={showLyricHints}
+            onCheckedChange={(checked) => setShowLyricHints(!!checked)}
+          />
+          <Label htmlFor="lyric-hints">show lyric hints</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="time-code"
+            checked={showTimeCodes}
+            onCheckedChange={(checked) => setShowTimeCodes(!!checked)}
+          />
+          <Label htmlFor="time-code">show time codes</Label>
+        </div>
+      </div>
       {sections.length === 0 && (
         <div
           className={`
@@ -76,17 +125,29 @@ export function LeadSheetEditor({
           <TableBody>
             {sections.map((section) => (
               <LeadSheetSectionProvider key={section.id} initialState={section}>
-                <TableRow>
-                  <TableCell>
-                    <LeadSheetSectionHeaderCell />
+                <TableRow className="hover:bg-muted/10">
+                  <TableCell className={`align-top`}>
+                    <LeadSheetSectionHeaderCell
+                      autoFocus={lastAddedSectionId === section.id}
+                      showLyricHints={showLyricHints}
+                      showTimeCodes={showTimeCodes}
+                    />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="align-top">
                     <LeadSheetSectionLengthCell />
                   </TableCell>
-                  <TableCell>
-                    <LeadSheetSectionDetailsCell />
+                  <TableCell
+                    className={`
+                      relative align-top
+
+                      ${hoverStyles.hoverParent}
+                    `}
+                  >
+                    <LeadSheetSectionDetailsCell
+                      addDetailButtonsClassName={hoverStyles.hoverChild}
+                    />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="align-top">
                     <LeadSheetSectionActionsCell />
                   </TableCell>
                 </TableRow>

@@ -22,6 +22,16 @@ const badgeVariants = cva(
 
           hover:bg-secondary/80
         `,
+        info: `
+          border-transparent bg-informational text-informational-foreground
+
+          hover:bg-informational/80
+        `,
+        advisory: `
+          border-transparent bg-advisory text-advisory-foreground
+
+          hover:bg-advisory/80
+        `,
         destructive: `
           border-transparent bg-destructive text-destructive-foreground shadow
 
@@ -33,6 +43,7 @@ const badgeVariants = cva(
         default: "px-2 py-0.5 text-xs",
         sm: "px-0.5 py-0.2 text-xs",
         lg: "px-3 py-1 text-sm",
+        xl: "px-3 py-1 text-lg",
       },
     },
     defaultVariants: {

@@ -1,6 +1,7 @@
 import { toFullS3Url } from "@/utils/toFullS3Url";
 import {
   forwardRef,
+  ReactNode,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -44,6 +45,7 @@ export const ImageInput = forwardRef<
     name: string;
     noPreview?: boolean;
     className?: string;
+    emptyMessage?: ReactNode;
   }
 >(
   (
@@ -57,6 +59,7 @@ export const ImageInput = forwardRef<
       name,
       noPreview,
       className,
+      emptyMessage = "No image selected",
     },
     ref
   ) => {
@@ -133,7 +136,7 @@ export const ImageInput = forwardRef<
               className={`rounded border border-input`}
             />
             <Button
-              variant="default"
+              variant="advisory"
               size="icon"
               onClick={() => {
                 onChange(null);
@@ -178,15 +181,15 @@ export const ImageInput = forwardRef<
             `}
             onClick={() => inputRef.current?.click()}
           >
-            <p
+            <div
               className={`
                 ${noPreview ? "" : "text-center"}
 
                 text-sm text-muted-foreground
               `}
             >
-              No image selected
-            </p>
+              {emptyMessage}
+            </div>
           </div>
         )}
         <input

@@ -6,7 +6,14 @@ import { useBandDeleteLeadSheetSectionMutation } from "@/gql/graphql";
 export function LeadSheetSectionActionsCell() {
   const { state } = useLeadSheetSection();
 
-  const [deleteSection] = useBandDeleteLeadSheetSectionMutation();
+  const [deleteSection] = useBandDeleteLeadSheetSectionMutation({
+    update(cache) {
+      cache.evict({
+        id: cache.identify({ __typename: "LeadSheetSection", id: state.id }),
+      });
+      cache.gc();
+    },
+  });
 
   return (
     <div>

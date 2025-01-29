@@ -37,6 +37,12 @@ export function FetchGoogleSheetsButton() {
       variant="informational"
       size="sm"
       onClick={handleClick}
+      tooltip={
+        <div>
+          <p>This will upsert songs in the database.</p>
+          <p>Database lead sheets and album art will be unaffected.</p>
+        </div>
+      }
     >
       <ReloadIcon className="mr-2 h-4 w-4" />
       Sync Songs from Google Sheets

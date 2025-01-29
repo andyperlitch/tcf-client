@@ -1,12 +1,13 @@
-import { Input } from "@/components/ui/input";
 import { useLeadSheetSection } from "./LeadSheetSectionProvider/context";
 import { changeFields } from "./LeadSheetSectionProvider/reducer";
+import { Textarea } from "@/components/ui/textarea";
 
 export function LeadSheetSectionLengthCell() {
   const { state, dispatch } = useLeadSheetSection();
 
   return (
-    <Input
+    <Textarea
+      className="border-none outline-none"
       value={state.barLength ?? ""}
       onChange={(e) => {
         dispatch(changeFields({ barLength: e.target.value }));

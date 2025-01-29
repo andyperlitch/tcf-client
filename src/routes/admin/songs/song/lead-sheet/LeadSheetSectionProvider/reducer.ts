@@ -1,9 +1,9 @@
 import {
   LeadSheetDetailType,
-  LeadSheetSectionFragment,
   UpdateLeadSheetSectionInput,
 } from "@/gql/graphql";
 import { filterNulls } from "@/utils/filterNulls";
+import { LeadSheetSectionState } from "./context";
 
 const FIELDS_CHANGED = "FIELDS_CHANGED";
 interface FieldsChangedAction {
@@ -69,14 +69,18 @@ export type ActionType =
   | DetailUpdatedAction;
 
 export const reducer = (
-  state: LeadSheetSectionFragment,
+  state: LeadSheetSectionState,
   action: ActionType
-): LeadSheetSectionFragment => {
+): LeadSheetSectionState => {
   switch (action.type) {
     case FIELDS_CHANGED:
       return { ...state, ...filterNulls(action.payload) };
     case DETAIL_ADDED:
-      return { ...state, details: [...state.details, action.payload] };
+      return {
+        ...state,
+        details: [...state.details, action.payload],
+        lastAddedDetailId: action.payload.id,
+      };
     case DETAIL_REMOVED:
       return {
         ...state,
