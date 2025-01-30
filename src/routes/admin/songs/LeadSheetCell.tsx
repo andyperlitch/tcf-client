@@ -25,9 +25,7 @@ export function LeadSheetCell({ song }: { song: SongFragment }) {
     createLeadSheet({ variables: { songId: song.id } })
       .then((res) => {
         if (res.data?.createLeadSheet.id) {
-          navigate(
-            `/admin/songs/${song.id}/lead-sheet/${res.data.createLeadSheet.id}`
-          );
+          navigate(`/admin/songs/${song.id}`);
         }
       })
       .catch((error) => {
@@ -52,7 +50,7 @@ export function LeadSheetCell({ song }: { song: SongFragment }) {
         </a>
       )}
       {song.leadSheetId ? (
-        <Link to={`/admin/songs/${song.id}/lead-sheet/${song.leadSheetId}`}>
+        <Link to={`/admin/songs/${song.id}`}>
           <Pencil1Icon className="h-4 w-4" />
         </Link>
       ) : (

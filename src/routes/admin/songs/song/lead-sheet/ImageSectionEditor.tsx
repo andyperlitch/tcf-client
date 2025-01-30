@@ -4,29 +4,19 @@ import {
   useAdminDeleteFromS3Mutation,
 } from "@/gql/graphql";
 import { RemoveDetailButton } from "./RemoveDetailButton";
-import { useCallback, useMemo, useState } from "react";
-import { useLeadSheetSection } from "./LeadSheetSectionProvider/context";
-import { updateDetail } from "./LeadSheetSectionProvider/reducer";
+import { useCallback, useState } from "react";
 import { ImageInput } from "@/components/ui/image-input";
 import { uploadFile } from "@/utils/uploadFile";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import {
+  DEFAULT_IMAGE_DETAIL,
+  DEFAULT_IMAGE_HEIGHT,
+  DEFAULT_IMAGE_WIDTH,
+} from "./consts";
+import { useImageDetail } from "./useImageDetail";
 
-interface ParsedImageDetail {
-  url: string;
-  width?: number;
-  height?: number;
-  constraintDimension: "width" | "height";
-}
-
-const DEFAULT_IMAGE_DETAIL: ParsedImageDetail = {
-  url: "",
-  constraintDimension: "width",
-};
-
-const DEFAULT_WIDTH = 300;
-const DEFAULT_HEIGHT = 50;
 export function ImageSectionEditor({
   detail,
 }: {
@@ -66,7 +56,7 @@ export function ImageSectionEditor({
           .then(({ key }) => {
             setValue({
               url: key,
-              width: DEFAULT_WIDTH,
+              width: DEFAULT_IMAGE_WIDTH,
               constraintDimension: "width",
             });
             setSelectedImage(null);
@@ -150,12 +140,12 @@ export function ImageSectionEditor({
           }
           width={
             value.constraintDimension === "width"
-              ? value.width || DEFAULT_WIDTH
+              ? value.width || DEFAULT_IMAGE_WIDTH
               : undefined
           }
           height={
             value.constraintDimension === "height"
-              ? value.height || DEFAULT_HEIGHT
+              ? value.height || DEFAULT_IMAGE_HEIGHT
               : undefined
           }
           value={selectedImage}
@@ -183,46 +173,4 @@ export function ImageSectionEditor({
       </div>
     </div>
   );
-}
-
-function useImageDetail(detail: LeadSheetDetailFragment) {
-  const { dispatch } = useLeadSheetSection();
-  return useMemo(() => {
-    const serialized =
-      detail.content.trim() || JSON.stringify(DEFAULT_IMAGE_DETAIL);
-    const value = parseAndValidateContent(serialized) as ParsedImageDetail;
-
-    return [
-      value,
-      (
-        newValue:
-          | ParsedImageDetail
-          | ((oldValue: ParsedImageDetail) => ParsedImageDetail)
-      ) => {
-        const serialized = JSON.stringify(
-          typeof newValue === "function" ? newValue(value) : newValue
-        );
-        dispatch(
-          updateDetail({
-            id: detail.id,
-            content: serialized,
-          })
-        );
-      },
-    ] as const;
-  }, [detail.content, detail.id, dispatch]);
-}
-
-function parseAndValidateContent(content: string): ParsedImageDetail {
-  const parsed = JSON.parse(content) as ParsedImageDetail;
-  if (!parsed.url) {
-    parsed.url = "";
-  }
-  if (parsed.width && typeof parsed.width !== "number") {
-    delete parsed.width;
-  }
-  if (parsed.height && typeof parsed.height !== "number") {
-    delete parsed.height;
-  }
-  return parsed;
 }

@@ -6,7 +6,7 @@ import { AdminGigsPage } from "./gigs";
 import { AdminGigPage } from "./gigs/gig";
 import { AdminSongsPage } from "./songs";
 import { AdminUsersPage } from "./users";
-import { AdminLeadSheetPage } from "./songs/song/lead-sheet/AdminLeadSheetPage";
+// import { AdminLeadSheetPage } from "./songs/song/lead-sheet/AdminLeadSheetPage";
 import { AdminSongPage } from "./songs/song/AdminSongPage";
 import { AdminFilesPage } from "./files/AdminFilesPage";
 
@@ -78,10 +78,10 @@ export const adminRoutes = {
       path: "/admin/songs/:songId",
       element: <AdminSongPage />,
     },
-    {
-      path: "/admin/songs/:songId/lead-sheet/:leadSheetId",
-      element: <AdminLeadSheetPage />,
-    },
+    // {
+    //   path: "/admin/songs/:songId/lead-sheet/:leadSheetId",
+    //   element: <AdminLeadSheetPage />,
+    // },
     {
       path: "/admin/files",
       element: <AdminFilesPage />,

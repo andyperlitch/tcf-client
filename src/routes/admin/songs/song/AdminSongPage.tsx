@@ -3,6 +3,7 @@ import { CrumbMeta, SimpleCrumbs } from "@/components/SimpleCrumbs";
 import {
   LeadSheetFragment,
   SongFragment,
+  useBandDeleteLeadSheetMutation,
   useBandSongWithLeadSheetQuery,
 } from "@/gql/graphql";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
@@ -14,14 +15,17 @@ import { ErrorMessage } from "@/components/ErrorMessage";
 import { TempoBadge } from "@/components/TempoBadge/TempoBadge";
 import { KeyBadge } from "@/components/KeyBadge";
 import { SongFeelBadge } from "@/components/SongFeelBadge";
+import { InlineTypeoutConfirmButton } from "@/components/InlineTypeoutConfirmButton";
+import { ImportLeadSheetFromGoogleSheetsButton } from "./lead-sheet/ImportLeadSheetFromGoogleSheetsButton";
 
 export function AdminSongPage() {
-  const { songId } = useParamsSafe("songId");
-
-  const { data } = useBandSongWithLeadSheetQuery({
-    skip: !songId,
-    variables: { id: parseInt(songId) },
+  const params = useParamsSafe("songId");
+  const songId = parseInt(params.songId);
+  const { data, refetch } = useBandSongWithLeadSheetQuery({
+    skip: typeof songId !== "number",
+    variables: { id: songId },
   });
+  const [deleteLeadSheet] = useBandDeleteLeadSheetMutation();
 
   const crumbs: CrumbMeta[] = [["/admin/songs", "Songs"]];
 
@@ -70,6 +74,19 @@ export function AdminSongPage() {
                       <span>Edit Google Docs Version</span>
                     </a>
                   </Button>
+                  {song.leadSheetUrl && (
+                    <ImportLeadSheetFromGoogleSheetsButton
+                      songId={songId}
+                      leadSheetUrl={song.leadSheetUrl}
+                      tooltip={
+                        song.leadSheetId
+                          ? "Delete existing lead sheet to sync from google"
+                          : undefined
+                      }
+                      disabled={!!song.leadSheetId}
+                      onSuccess={() => refetch()}
+                    />
+                  )}
                 </div>
               </div>
             )}
@@ -78,7 +95,28 @@ export function AdminSongPage() {
                 data-name="LEAD_SHEET_SECTION_HEADER"
                 className={`flex flex-col gap-2`}
               >
-                <h2 className="text-2xl font-bold">Lead Sheet</h2>
+                <div className="flex justify-between gap-2">
+                  <h2 className="text-2xl font-bold">Lead Sheet</h2>
+                  {typeof song.leadSheetId === "number" ? (
+                    <InlineTypeoutConfirmButton
+                      variant="destructive"
+                      message="Are you sure? This cannot be undone."
+                      confirmText="delete"
+                      onConfirm={async () => {
+                        await deleteLeadSheet({
+                          variables: { leadSheetId: song.leadSheetId! },
+                        });
+                        refetch();
+                      }}
+                    >
+                      Delete Lead Sheet
+                    </InlineTypeoutConfirmButton>
+                  ) : (
+                    <Button variant="constructive" className="self-start">
+                      Create Lead Sheet
+                    </Button>
+                  )}
+                </div>
                 <div className="flex gap-2">
                   <div
                     data-name="SONG_INFO"
@@ -90,16 +128,12 @@ export function AdminSongPage() {
                   </div>
                 </div>
               </div>
-              {song.leadSheet ? (
+              {song.leadSheet && (
                 <LeadSheetEditor
                   songWithLeadSheet={
                     song as SongFragment & { leadSheet: LeadSheetFragment }
                   }
                 />
-              ) : (
-                <Button variant="constructive" className="self-start">
-                  Create Lead Sheet
-                </Button>
               )}
             </div>
           </>
