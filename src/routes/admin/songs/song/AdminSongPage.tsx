@@ -18,6 +18,8 @@ import { SongFeelBadge } from "@/components/SongFeelBadge";
 import { InlineTypeoutConfirmButton } from "@/components/InlineTypeoutConfirmButton";
 import { ImportLeadSheetFromGoogleDocButton } from "./lead-sheet/ImportLeadSheetFromGoogleDocButton";
 
+const crumbs: CrumbMeta[] = [["/admin/songs", "Songs"]];
+
 export function AdminSongPage() {
   const params = useParamsSafe("songId");
   const songId = parseInt(params.songId);
@@ -26,8 +28,6 @@ export function AdminSongPage() {
     variables: { id: songId },
   });
   const [deleteLeadSheet] = useBandDeleteLeadSheetMutation();
-
-  const crumbs: CrumbMeta[] = [["/admin/songs", "Songs"]];
 
   const song = data?.song;
 
