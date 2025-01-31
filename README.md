@@ -267,3 +267,33 @@ export const raffleEngagementDefinition: EngagementDefinition<
      </form>
    </Form>
    ```
+
+## Using <Select>
+
+It's a bit tricky to use the <Select> component inside a react-hook-form.
+
+```tsx
+<FormField
+  control={form.control}
+  name="size"
+  render={({ field }) => (
+    <FormItem>
+      <Select onValueChange={field.onChange} defaultValue={field.value}>
+        <FormControl>
+          <SelectTrigger>
+            <SelectValue placeholder="Size" />
+          </SelectTrigger>
+        </FormControl>
+        <SelectContent>
+          {sizes.map((size) => (
+            <SelectItem key={size} value={size}>
+              {size}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+```
