@@ -9,18 +9,11 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
 import { RetryLink } from "@apollo/client/link/retry";
 import { getMainDefinition } from "@apollo/client/utilities";
+import { getBackendDetails } from "@/utils/getBackendDetails";
 
-let httpUri: string;
-let wsUri: string;
-const hostname = window.location.hostname;
-
-if (hostname === "thecasualfunk.com") {
-  httpUri = "https://api.thecasualfunk.com/graphql";
-  wsUri = "wss://api.thecasualfunk.com/graphql";
-} else {
-  httpUri = `http://${hostname}:3000/graphql`;
-  wsUri = `ws://${hostname}:3000/graphql`;
-}
+const { hostname, httpProtocol, wsProtocol } = getBackendDetails();
+const httpUri = `${httpProtocol}://${hostname}/graphql`;
+const wsUri = `${wsProtocol}://${hostname}/graphql`;
 
 // Configure RetryLink with delay and retry attempt settings
 const retryLink = new RetryLink({

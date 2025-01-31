@@ -16,7 +16,7 @@ import { TempoBadge } from "@/components/TempoBadge/TempoBadge";
 import { KeyBadge } from "@/components/KeyBadge";
 import { SongFeelBadge } from "@/components/SongFeelBadge";
 import { InlineTypeoutConfirmButton } from "@/components/InlineTypeoutConfirmButton";
-import { ImportLeadSheetFromGoogleSheetsButton } from "./lead-sheet/ImportLeadSheetFromGoogleSheetsButton";
+import { ImportLeadSheetFromGoogleDocButton } from "./lead-sheet/ImportLeadSheetFromGoogleDocButton";
 
 export function AdminSongPage() {
   const params = useParamsSafe("songId");
@@ -75,7 +75,7 @@ export function AdminSongPage() {
                     </a>
                   </Button>
                   {song.leadSheetUrl && (
-                    <ImportLeadSheetFromGoogleSheetsButton
+                    <ImportLeadSheetFromGoogleDocButton
                       songId={songId}
                       leadSheetUrl={song.leadSheetUrl}
                       tooltip={

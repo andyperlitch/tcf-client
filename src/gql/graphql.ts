@@ -57,6 +57,7 @@ export type CreateLeadSheetSectionInput = {
   details?: InputMaybe<Array<LeadSheetDetailInput>>;
   lyricHint?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Scalars['Int']['input']>;
   timeCode?: InputMaybe<Scalars['String']['input']>;
 };
 
