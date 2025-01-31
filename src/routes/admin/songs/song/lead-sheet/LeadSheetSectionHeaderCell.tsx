@@ -55,7 +55,7 @@ export function LeadSheetSectionHeaderCell({
           onChange={(e) => {
             dispatch(changeFields({ lyricHint: e.target.value }));
           }}
-          placeholder="I'm a little teapot"
+          placeholder="lyric hint"
         />
       )}
     </div>

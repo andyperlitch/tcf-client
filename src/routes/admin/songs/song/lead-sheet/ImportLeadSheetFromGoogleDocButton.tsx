@@ -67,14 +67,16 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
   const doc = useMemo(() => {
     if (htmlLoading) return null;
     else if (!html) return null;
+    logger.log("Fetched html, parsing");
     return new DOMParser().parseFromString(html, "text/html");
   }, [html, htmlLoading]);
 
   // sync lead sheet
   return useCallback(async () => {
     if (!doc) return null;
-    // loop through <tr> elements in the table
+    logger.log("Parsing table for data");
     try {
+      // loop through <tr> elements in the table
       const trs = doc.querySelectorAll("table tr");
       const trPromises = Array.from(trs).map(async (tr, index) => {
         // create the input object
@@ -100,7 +102,7 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
         // the p.lyric contains the `lyricHint`
         const lyricHint = headerCell.querySelector("p.lyric")?.textContent;
         if (lyricHint) {
-          logger.info("Found lyric hint", lyricHint);
+          logger.debug("Found lyric hint", lyricHint);
           leadSheetSectionInput.lyricHint = lyricHint;
         }
 
@@ -109,7 +111,7 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
           "span.leadSheetRecordingTimestamp"
         )?.textContent;
         if (timeCode) {
-          logger.info("Found time code", timeCode);
+          logger.debug("Found time code", timeCode);
           leadSheetSectionInput.timeCode = timeCode;
         }
 
@@ -123,7 +125,7 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
         // all of the td's text content is the `barLength`
         const barLength = lengthCell.textContent;
         if (barLength) {
-          logger.info("Found bar length", barLength);
+          logger.debug("Found bar length", barLength);
           leadSheetSectionInput.barLength = barLength.trim();
         }
 
@@ -137,7 +139,7 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
         const details: LeadSheetDetailInput[] = [];
 
         // iterate through all children of the detailsCell
-        logger.info("Iterating through details cell children");
+        logger.debug("Iterating through details cell children");
         const promises = Array.from(detailsCell.childNodes).map(
           async (child) => {
             // should all be in p tags
@@ -146,7 +148,7 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
 
               // if the p tag has the class "leadSheetChords"
               if (p.classList.contains("leadSheetChords")) {
-                logger.info("Found lead sheet chords", p.textContent?.trim());
+                logger.debug("Found lead sheet chords", p.textContent?.trim());
                 details.push({
                   id: uuid(),
                   content: JSON.stringify(
@@ -158,7 +160,7 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
 
               // if there is a span inside the p, this is just a text detail
               else if (p.querySelector("span")) {
-                logger.info("Found text detail", p.textContent?.trim());
+                logger.debug("Found text detail", p.textContent?.trim());
                 details.push({
                   id: uuid(),
                   content: p.textContent?.trim() || "",
@@ -170,10 +172,10 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
               else if (p.querySelector("img")) {
                 const img = p.querySelector("img") as HTMLImageElement;
                 const url = img.src;
-                logger.info("Found image detail with url: ", url);
+                logger.debug("Found image detail with url: ", url);
 
                 // Fetch the image via the proxy endpoint and convert to File object
-                logger.info("Fetching image via proxy endpoint");
+                logger.debug("Fetching image via proxy endpoint");
                 const response = await fetch(
                   `${httpProtocol}://${hostname}/proxy?targetUrl=${encodeURIComponent(
                     url
@@ -181,12 +183,12 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
                 );
                 const blob = await response.blob();
 
-                logger.info("Converting blob to file");
+                logger.debug("Converting blob to file");
                 const file = new File([blob], `image-${uuid()}.jpg`, {
                   type: "image/jpeg",
                 });
 
-                logger.info("Creating presigned url");
+                logger.debug("Creating presigned url");
                 const { data } = await createPresignedUrl({
                   variables: {
                     mimeType: "image/jpeg",
@@ -199,7 +201,7 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
                   return;
                 }
 
-                logger.info("Uploading file to presigned url");
+                logger.debug("Uploading file to presigned url");
                 const {
                   adminCreatePresignedUrl: { url: presignedUrl, key },
                 } = data;
@@ -214,12 +216,12 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
                     content: convertImageKeyToContentString(key),
                     type: LeadSheetDetailType.Image,
                   };
-                  logger.info("Uploaded file to presigned url", detail);
+                  logger.debug("Uploaded file to presigned url", detail);
                   details.push(detail);
                 });
               }
             } else {
-              logger.info("Skipping child node which was not a p tag", child);
+              logger.debug("Skipping child node which was not a p tag", child);
             }
           }
         );
@@ -233,6 +235,7 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
       const sectionInputs = await Promise.all(trPromises);
 
       // create lead sheet itself
+      logger.log("Creating lead sheet for song", songId);
       const { data: leadSheetData, errors: leadSheetErrors } =
         await createLeadSheet({
           variables: {
@@ -248,6 +251,7 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
       const leadSheetId = leadSheetData?.createLeadSheet.id;
 
       // create lead sheet sections
+      logger.log("Creating lead sheet sections");
       const sectionPromises = sectionInputs.map(async (input) => {
         if (!input) return;
         return createLeadSheetSection({
