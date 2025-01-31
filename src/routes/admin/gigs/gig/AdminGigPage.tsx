@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
+  GigSongFragment,
   useBandCreateGigSetMutation,
   useBandCreateGigSongMutation,
   useBandGigQuery,
@@ -23,8 +24,13 @@ import {
 } from "@/gql/graphql";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { createLogger } from "@/utils/createLogger";
-import { CaretSortIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import {
+  CaretSortIcon,
+  Cross2Icon,
+  ExternalLinkIcon,
+} from "@radix-ui/react-icons";
+import { useCallback, useState } from "react";
+import { Link } from "react-router-dom";
 
 const logger = createLogger("AdminGigPage");
 
@@ -47,8 +53,6 @@ export function AdminGigPage() {
 
   const gig = gigData?.gig;
 
-  const [createGigSong] = useBandCreateGigSongMutation();
-
   return (
     <AdminContainer section="gigs">
       <div className="flex flex-col gap-4">
@@ -63,7 +67,7 @@ export function AdminGigPage() {
             <div
               data-name="GIG_SETS"
               className={`
-                flex flex-col items-stretch justify-center gap-4
+                flex flex-col items-start justify-center gap-4
 
                 md:flex-row
               `}
@@ -76,39 +80,18 @@ export function AdminGigPage() {
                 >
                   <Card className="w-full max-w-[800px]">
                     <CardHeader>
-                      <CardTitle className="text-2xl">
+                      <CardTitle className="text-3xl">
                         Set {index + 1}
                       </CardTitle>
-                      <div data-name="GIG_SET_SONGS">
+                      <div
+                        data-name="GIG_SET_SONGS"
+                        className={`flex flex-col`}
+                      >
                         {set.songs.map((gigSong) => (
-                          <div data-name="GIG_SET_SONG" key={gigSong.id}>
-                            {gigSong.song?.title}
-                          </div>
+                          <GigSong key={gigSong.id} gigSong={gigSong} />
                         ))}
                       </div>
-                      <AddSongInput
-                        onSongSelected={(songId) => {
-                          logger.info("Adding song to set: ", {
-                            songId,
-                            setId: set.id,
-                          });
-
-                          createGigSong({
-                            variables: {
-                              gigSetId: set.id,
-                              data: {
-                                songId,
-                              },
-                            },
-                          }).then(() => {
-                            logger.info("Song added to set: ", {
-                              songId,
-                              setId: set.id,
-                            });
-                            refetchGig();
-                          });
-                        }}
-                      />
+                      <AddSongInput gigSetId={set.id} onSuccess={refetchGig} />
                     </CardHeader>
                   </Card>
                 </div>
@@ -126,14 +109,78 @@ export function AdminGigPage() {
   );
 }
 
+function GigSong({ gigSong }: { gigSong: GigSongFragment }) {
+  return (
+    <div
+      data-name="GIG_SET_SONG"
+      key={gigSong.id}
+      className={`
+        flex items-center justify-between border-b border-border py-2 text-xl
+
+        last:border-b-0
+      `}
+    >
+      <div className="flex items-center gap-2">
+        <div className="text-muted-foreground">{gigSong.order + 1}.</div>
+        <div className="text-2xl font-bold">{gigSong.song?.title}</div>
+        <div className="text-lg italic text-muted-foreground">
+          {gigSong.song?.artist}
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <Link to={`/admin/songs/${gigSong.song?.id}`} target="_blank">
+          <Button variant="ghost" tooltip="View song">
+            <ExternalLinkIcon />
+          </Button>
+        </Link>
+        <Button
+          variant="ghost"
+          tooltip="Remove song from set"
+          className="text-red-500"
+        >
+          <Cross2Icon />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 function AddSongInput({
-  onSongSelected,
+  gigSetId,
+  onSuccess,
 }: {
-  onSongSelected: (songId: number) => void;
+  gigSetId: number;
+  onSuccess?: () => void;
 }) {
+  const [createGigSong] = useBandCreateGigSongMutation();
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const { data: songsData } = useBandSongsQuery();
+
+  const onSongSelected = useCallback(
+    (songId: number) => {
+      logger.info("Adding song to set: ", {
+        songId,
+        setId: gigSetId,
+      });
+
+      createGigSong({
+        variables: {
+          gigSetId,
+          data: {
+            songId,
+          },
+        },
+      }).then(() => {
+        logger.info("Song added to set: ", {
+          songId,
+          setId: gigSetId,
+        });
+        onSuccess?.();
+      });
+    },
+    [createGigSong, gigSetId, onSuccess]
+  );
 
   const songs =
     songsData?.songs.map((song) => ({
