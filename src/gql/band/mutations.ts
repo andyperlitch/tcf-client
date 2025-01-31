@@ -4,7 +4,7 @@ gql`
   mutation bandCreateGig($data: CreateGigInput!) {
     # Gig!
     createGig(data: $data) {
-      id
+      ...Gig
     }
   }
 `;

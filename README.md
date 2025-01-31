@@ -183,3 +183,87 @@ export const raffleEngagementDefinition: EngagementDefinition<
 ```
 
 7. Add your new engagement definition to the `engagementDefinitionsArray` array in `src/engagements/index.ts`.
+
+## Creating forms
+
+1. Define the form schema using zod at the module level.
+
+   ```ts
+   const formSchema = z.object({
+     title: z.string(),
+     description: z.string().optional(),
+     date: z.date(),
+   });
+   ```
+
+2. Call the `useForm` hook to create the form state and handlers.
+
+   ```tsx
+   const form = useForm<z.infer<typeof formSchema>>({
+     resolver: zodResolver(formSchema),
+     defaultValues: {
+       title: "",
+       description: "",
+       date: new Date(),
+     },
+   });
+   ```
+
+3. Define a submit handler function that will be called when the form is submitted.
+
+   ```tsx
+   function onSubmit(values: z.infer<typeof formSchema>) {
+     console.log(values);
+   }
+   ```
+
+4. Render the form using the `Form` component and the `form.handleSubmit` method.
+
+   ```tsx
+   <Form {...form}>
+     <form onSubmit={form.handleSubmit(onSubmit)}>
+       {/* title */}
+       <FormField
+         control={form.control}
+         name="title"
+         render={({ field }) => (
+           <FormItem>
+             <FormLabel htmlFor={field.name}>Name</FormLabel>
+             <FormControl>
+               <Input {...field} />
+             </FormControl>
+             <FormMessage {...field} />
+           </FormItem>
+         )}
+       />
+       {/* description: */}
+       <FormField
+         control={form.control}
+         name="description"
+         render={({ field }) => (
+           <FormItem>
+             <FormLabel htmlFor={field.name}>Description</FormLabel>
+             <FormControl>
+               <Textarea {...field} />
+             </FormControl>
+             <FormMessage {...field} />
+           </FormItem>
+         )}
+       />
+       {/* date: */}
+       <FormField
+         control={form.control}
+         name="date"
+         render={({ field }) => (
+           <FormItem>
+             <FormLabel htmlFor={field.name}>Date</FormLabel>
+             <FormControl>
+               <DatePicker {...field} />
+             </FormControl>
+             <FormMessage {...field} />
+           </FormItem>
+         )}
+       />
+     </form>
+   </Form>
+   ```

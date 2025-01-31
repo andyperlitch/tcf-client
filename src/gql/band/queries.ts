@@ -1,6 +1,12 @@
 import { gql } from "@apollo/client";
 
 gql`
+  query bandGigs {
+    gigs {
+      ...Gig
+    }
+  }
+
   query bandSongs {
     songs {
       ...Song

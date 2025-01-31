@@ -1,6 +1,41 @@
 import { gql } from "@apollo/client";
 
 gql`
+  fragment GigSong on GigSong {
+    id
+    song {
+      id
+      title
+      artist
+    }
+    order
+  }
+
+  fragment GigSet on GigSet {
+    id
+    name
+    songs {
+      ...GigSong
+    }
+  }
+
+  fragment Gig on Gig {
+    id
+    name
+    date
+    createdAt
+    updatedAt
+    eventId
+    nowPlayingEngagementId
+    currentGigSongId
+    currentGigSong {
+      ...GigSong
+    }
+    sets {
+      ...GigSet
+    }
+  }
+
   fragment Song on Song {
     id
     title
