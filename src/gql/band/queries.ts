@@ -7,6 +7,12 @@ gql`
     }
   }
 
+  query bandGig($id: Int!) {
+    gig(id: $id) {
+      ...Gig
+    }
+  }
+
   query bandSongs {
     songs {
       ...Song

@@ -1358,6 +1358,13 @@ export type BandGigsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type BandGigsQuery = { __typename?: 'Query', gigs: Array<{ __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> }> };
 
+export type BandGigQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type BandGigQuery = { __typename?: 'Query', gig?: { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> } | null };
+
 export type BandSongsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3086,6 +3093,46 @@ export type BandGigsQueryHookResult = ReturnType<typeof useBandGigsQuery>;
 export type BandGigsLazyQueryHookResult = ReturnType<typeof useBandGigsLazyQuery>;
 export type BandGigsSuspenseQueryHookResult = ReturnType<typeof useBandGigsSuspenseQuery>;
 export type BandGigsQueryResult = Apollo.QueryResult<BandGigsQuery, BandGigsQueryVariables>;
+export const BandGigDocument = gql`
+    query bandGig($id: Int!) {
+  gig(id: $id) {
+    ...Gig
+  }
+}
+    ${GigFragmentDoc}`;
+
+/**
+ * __useBandGigQuery__
+ *
+ * To run a query within a React component, call `useBandGigQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBandGigQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBandGigQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useBandGigQuery(baseOptions: Apollo.QueryHookOptions<BandGigQuery, BandGigQueryVariables> & ({ variables: BandGigQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BandGigQuery, BandGigQueryVariables>(BandGigDocument, options);
+      }
+export function useBandGigLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BandGigQuery, BandGigQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BandGigQuery, BandGigQueryVariables>(BandGigDocument, options);
+        }
+export function useBandGigSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<BandGigQuery, BandGigQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<BandGigQuery, BandGigQueryVariables>(BandGigDocument, options);
+        }
+export type BandGigQueryHookResult = ReturnType<typeof useBandGigQuery>;
+export type BandGigLazyQueryHookResult = ReturnType<typeof useBandGigLazyQuery>;
+export type BandGigSuspenseQueryHookResult = ReturnType<typeof useBandGigSuspenseQuery>;
+export type BandGigQueryResult = Apollo.QueryResult<BandGigQuery, BandGigQueryVariables>;
 export const BandSongsDocument = gql`
     query bandSongs {
   songs {
