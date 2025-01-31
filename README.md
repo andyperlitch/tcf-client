@@ -297,3 +297,33 @@ It's a bit tricky to use the <Select> component inside a react-hook-form.
   )}
 />
 ```
+
+## Data Tables
+
+Uses [Tanstack Table](https://tanstack.com/table).
+
+1. Define the columns in the `columns` array:
+   ```ts
+   const columns: ColumnDef<DataType>[] = [
+     {
+       accessorKey: "title", // this is important for the row.getValue() method to work
+       header: "Title",
+       cell: ({ row }) => (
+         <Link
+           to={`/admin/songs/${row.original.id}`}
+           className="font-bold hover:underline"
+         >
+           {row.getValue("title")}
+         </Link>
+       ),
+     },
+   ];
+   ```
+2. Pass the columns to the `DataTable` component, and give it a unique id:
+   ```tsx
+   <DataTable<SongFragment>
+     id="master-song-list"
+     data={data?.songs ?? []}
+     columns={columns}
+   />
+   ```

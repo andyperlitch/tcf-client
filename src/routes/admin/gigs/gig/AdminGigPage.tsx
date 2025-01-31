@@ -30,7 +30,11 @@ export function AdminGigPage() {
       </div>
       {gigLoading && <Loader />}
       {gigError && <ErrorMessage error={gigError} retry={refetchGig} />}
-      {gigData?.gig && <div data-name="GIG_DETAILS"></div>}
+      {gigData?.gig && (
+        <div data-name="GIG_DETAILS">
+          <div></div>
+        </div>
+      )}
     </AdminContainer>
   );
 }

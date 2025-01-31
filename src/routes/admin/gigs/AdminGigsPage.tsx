@@ -2,6 +2,7 @@ import { AdminContainer } from "@/components/AdminContainer";
 import { CreateGigButton } from "./CreateGigButton";
 import { useNavigate } from "react-router-dom";
 import { GigFragment } from "@/gql/graphql";
+import { GigList } from "./GigList";
 
 export function AdminGigsPage() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export function AdminGigsPage() {
           <h1 className="text-3xl">Gigs</h1>
           <CreateGigButton onSuccess={onGigCreated} />
         </div>
-        {/* <GigList /> */}
+        <GigList />
       </div>
     </AdminContainer>
   );
