@@ -3,7 +3,11 @@ import { ErrorMessage } from "@/components/ErrorMessage";
 import { Loader } from "@/components/Loader";
 import { CrumbMeta, SimpleCrumbs } from "@/components/SimpleCrumbs";
 import { Button } from "@/components/ui/button";
-import { useBandCreateGigSetMutation, useBandGigQuery } from "@/gql/graphql";
+import {
+  useBandCreateGigSetMutation,
+  useBandDeleteGigSetMutation,
+  useBandGigQuery,
+} from "@/gql/graphql";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { AdminGigSet } from "./AdminGigSet";
 
@@ -23,6 +27,9 @@ export function AdminGigPage() {
     },
     skip: !params.gigId,
   });
+
+  const [deleteGigSet, { loading: deletingGigSet }] =
+    useBandDeleteGigSetMutation();
 
   const gig = gigData?.gig;
 
@@ -51,6 +58,14 @@ export function AdminGigPage() {
                   gigSet={set}
                   gigSetIndex={index}
                   refetchGig={refetchGig}
+                  onDelete={(gigSetId: number) => {
+                    if (deletingGigSet) return;
+                    deleteGigSet({
+                      variables: { gigSetId },
+                    }).then(() => {
+                      refetchGig();
+                    });
+                  }}
                 />
               ))}
             </div>

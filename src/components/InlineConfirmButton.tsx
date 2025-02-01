@@ -13,7 +13,7 @@ export function InlineConfirmButton({
   message = "Are you sure?",
   ...buttonProps
 }: {
-  onConfirm: () => Promise<any>;
+  onConfirm: () => any;
   loading?: boolean;
   error?: ApolloError;
   children: React.ReactNode;
@@ -35,7 +35,7 @@ export function InlineConfirmButton({
 
   const wrappedOnConfirm = useCallback(async () => {
     try {
-      await onConfirm();
+      await Promise.resolve(onConfirm());
       setOpen(false);
     } catch (confirmError) {
       setErrorMessage((confirmError as Error).message);

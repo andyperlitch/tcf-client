@@ -15,15 +15,19 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { GigSong } from "./GigSong";
 import { AddGigSongInput } from "./AddGigSongInput";
+import { TrashIcon } from "@radix-ui/react-icons";
+import { InlineConfirmButton } from "@/components/InlineConfirmButton";
 
 export function AdminGigSet({
   gigSet,
   gigSetIndex,
   refetchGig,
+  onDelete,
 }: {
   gigSet: GigSetFragment;
   gigSetIndex: number;
   refetchGig: () => void;
+  onDelete: (gigSetId: number) => void;
 }) {
   const [deleteGigSong, { loading: deletingGigSong }] =
     useBandDeleteGigSongMutation();
@@ -87,7 +91,20 @@ export function AdminGigSet({
     >
       <Card className="w-full max-w-[800px]">
         <CardHeader>
-          <CardTitle className="text-3xl">Set {gigSetIndex + 1}</CardTitle>
+          <CardTitle className="flex items-center justify-between text-3xl">
+            <div>Set {gigSetIndex + 1}</div>
+
+            <InlineConfirmButton
+              message="Delete this set permanently?"
+              size="icon"
+              variant="link"
+              onConfirm={() => {
+                onDelete(gigSet.id);
+              }}
+            >
+              <TrashIcon className="text-red-500" />
+            </InlineConfirmButton>
+          </CardTitle>
           <DndContext
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}

@@ -19,6 +19,17 @@ gql`
     }
   }
 
+  fragment BasicGig on Gig {
+    id
+    name
+    date
+    createdAt
+    updatedAt
+    eventId
+    nowPlayingEngagementId
+    currentGigSongId
+  }
+
   fragment Gig on Gig {
     id
     name

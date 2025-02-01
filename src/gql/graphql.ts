@@ -1165,6 +1165,8 @@ export type GigSongFragment = { __typename?: 'GigSong', id: number, order: numbe
 
 export type GigSetFragment = { __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> };
 
+export type BasicGigFragment = { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null };
+
 export type GigFragment = { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> };
 
 export type SongFragment = { __typename?: 'Song', id: number, title?: string | null, artist?: string | null, tempo?: number | null, lyrics?: string | null, feel?: string | null, fileUrl?: string | null, spotifyUrl?: string | null, youtubeUrl?: string | null, coverArtUrl?: string | null, duration?: number | null, key?: string | null, practicePriority?: string | null, chartUrl?: string | null, leadSheetUrl?: string | null, leadSheetEditUrl?: string | null, leadSheetId?: number | null };
@@ -1356,7 +1358,7 @@ export type DeleteUploadMutation = { __typename?: 'Mutation', deleteUpload: { __
 export type BandGigsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BandGigsQuery = { __typename?: 'Query', gigs: Array<{ __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> }> };
+export type BandGigsQuery = { __typename?: 'Query', gigs: Array<{ __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null }> };
 
 export type BandGigQueryVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -1722,6 +1724,18 @@ export type OnSubmissionDeletedSubscriptionVariables = Exact<{
 
 export type OnSubmissionDeletedSubscription = { __typename?: 'Subscription', submissionDeleted?: { __typename?: 'SubmissionDeletedPayload', submissionId: number } | null };
 
+export const BasicGigFragmentDoc = gql`
+    fragment BasicGig on Gig {
+  id
+  name
+  date
+  createdAt
+  updatedAt
+  eventId
+  nowPlayingEngagementId
+  currentGigSongId
+}
+    `;
 export const GigSongFragmentDoc = gql`
     fragment GigSong on GigSong {
   id
@@ -3057,10 +3071,10 @@ export type DeleteUploadMutationOptions = Apollo.BaseMutationOptions<DeleteUploa
 export const BandGigsDocument = gql`
     query bandGigs {
   gigs {
-    ...Gig
+    ...BasicGig
   }
 }
-    ${GigFragmentDoc}`;
+    ${BasicGigFragmentDoc}`;
 
 /**
  * __useBandGigsQuery__
