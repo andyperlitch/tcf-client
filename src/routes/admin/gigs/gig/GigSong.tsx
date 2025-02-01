@@ -6,7 +6,13 @@ import { ExternalLinkIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
 import { CSS } from "@dnd-kit/utilities";
 
-export function GigSong({ gigSong }: { gigSong: GigSongFragment }) {
+export function GigSong({
+  gigSong,
+  onDelete,
+}: {
+  gigSong: GigSongFragment;
+  onDelete: (gigSongId: number) => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id: gigSong.id,
@@ -50,6 +56,9 @@ export function GigSong({ gigSong }: { gigSong: GigSongFragment }) {
           variant="ghost"
           tooltip="Remove song from set"
           className="text-red-500"
+          onClick={() => {
+            onDelete(gigSong.id);
+          }}
         >
           <Cross2Icon />
         </Button>

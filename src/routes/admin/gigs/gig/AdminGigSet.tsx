@@ -9,11 +9,13 @@ import { Card } from "@/components/ui/card";
 import {
   GigSetFragment,
   GigSongFragment,
+  useBandDeleteGigSongMutation,
   useBandUpdateGigSetMutation,
 } from "@/gql/graphql";
 import { useCallback, useEffect, useState } from "react";
 import { GigSong } from "./GigSong";
 import { AddGigSongInput } from "./AddGigSongInput";
+
 export function AdminGigSet({
   gigSet,
   gigSetIndex,
@@ -23,6 +25,9 @@ export function AdminGigSet({
   gigSetIndex: number;
   refetchGig: () => void;
 }) {
+  const [deleteGigSong, { loading: deletingGigSong }] =
+    useBandDeleteGigSongMutation();
+
   const [sortedGigSongs, setSortedGigSongs] = useState<GigSongFragment[]>([]);
 
   useEffect(() => {
@@ -93,7 +98,18 @@ export function AdminGigSet({
             >
               <div data-name="GIG_SET_SONGS" className="flex flex-col">
                 {sortedGigSongs.map((gigSong) => (
-                  <GigSong key={gigSong.id} gigSong={gigSong} />
+                  <GigSong
+                    key={gigSong.id}
+                    gigSong={gigSong}
+                    onDelete={() => {
+                      if (deletingGigSong) return;
+                      deleteGigSong({
+                        variables: {
+                          gigSongId: gigSong.id,
+                        },
+                      }).then(refetchGig);
+                    }}
+                  />
                 ))}
               </div>
             </SortableContext>
