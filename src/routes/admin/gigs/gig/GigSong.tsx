@@ -30,19 +30,19 @@ export function GigSong({
       data-name="GIG_SET_SONG"
       key={gigSong.id}
       className={`
-        flex items-center justify-between border-b border-border py-2 text-xl
+        flex items-center justify-between border-b border-border py-2 text-lg
 
         last:border-b-0
       `}
     >
       <div
-        className="flex cursor-grab items-center gap-2"
+        className="flex cursor-grab items-baseline gap-2"
         {...attributes}
         {...listeners}
       >
         <div className="text-muted-foreground">{gigSong.order + 1}.</div>
-        <div className="text-2xl font-bold">{gigSong.song?.title}</div>
-        <div className="text-lg italic text-muted-foreground">
+        <div className="text-xl font-bold">{gigSong.song?.title}</div>
+        <div className="italic text-muted-foreground">
           {gigSong.song?.artist}
         </div>
       </div>

@@ -1,23 +1,15 @@
-import { CommandGroup, CommandItem } from "@/components/ui/command";
-
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandInput,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { useBandCreateGigSongMutation, useBandSongsQuery } from "@/gql/graphql";
 import { createLogger } from "@/utils/createLogger";
-import { CaretSortIcon } from "@radix-ui/react-icons";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { Autocomplete } from "@/components/ui/autocomplete";
 
 const logger = createLogger("AddGigSongInput");
+interface Option {
+  value: string;
+  id: number;
+  label: string;
+  keywords?: string[];
+}
 
 export function AddGigSongInput({
   gigSetId,
@@ -32,9 +24,9 @@ export function AddGigSongInput({
   const { data: songsData } = useBandSongsQuery();
 
   const onSongSelected = useCallback(
-    (songId: number) => {
+    ({ id }: Option) => {
       logger.info("Adding song to set: ", {
-        songId,
+        songId: id,
         setId: gigSetId,
       });
 
@@ -42,68 +34,40 @@ export function AddGigSongInput({
         variables: {
           gigSetId,
           data: {
-            songId,
+            songId: id,
           },
         },
       }).then(() => {
         logger.info("Song added to set: ", {
-          songId,
+          songId: id,
           setId: gigSetId,
         });
         onSuccess?.();
+        setSearchValue("");
       });
     },
     [createGigSong, gigSetId, onSuccess]
   );
 
-  const songs =
-    songsData?.songs.map((song) => ({
-      value: `${song.id}:${song.title} - ${song.artist}`,
-      id: song.id,
-      label: song.title,
-    })) || [];
+  const songs: Option[] = useMemo(
+    () =>
+      songsData?.songs.map((song) => ({
+        value: `${song.id}`,
+        id: song.id,
+        label: song.title || `Untitled (${song.id})`,
+        keywords: [song.title, song.artist].filter(Boolean) as string[],
+      })) || [],
+    [songsData]
+  );
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[200px] justify-between"
-        >
-          add a song...
-          <CaretSortIcon className="opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput
-            placeholder="Search framework..."
-            className="h-9"
-            value={searchValue}
-            onValueChange={setSearchValue}
-          />
-          <CommandList>
-            <CommandEmpty>No songs found.</CommandEmpty>
-            <CommandGroup>
-              {songs.map((song) => (
-                <CommandItem
-                  key={song.id}
-                  value={song.value}
-                  onSelect={(currentValue) => {
-                    const id = Number(currentValue.split(":")[0]);
-                    onSongSelected(id);
-                    setSearchValue("");
-                  }}
-                >
-                  {song.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <Autocomplete
+      items={songs}
+      onSelect={onSongSelected}
+      open={open}
+      setOpen={setOpen}
+      searchValue={searchValue}
+      onSearchValueChange={setSearchValue}
+    />
   );
 }

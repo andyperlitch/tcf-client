@@ -42,6 +42,7 @@ export type CreateEventInput = {
 export type CreateGigInput = {
   date: Scalars['DateTime']['input'];
   eventId?: InputMaybe<Scalars['Int']['input']>;
+  gigLeaderId?: InputMaybe<Scalars['Int']['input']>;
   name: Scalars['String']['input'];
 };
 
@@ -190,6 +191,8 @@ export type Gig = {
   currentGigSongId?: Maybe<Scalars['String']['output']>;
   date?: Maybe<Scalars['DateTime']['output']>;
   eventId?: Maybe<Scalars['Int']['output']>;
+  gigLeader?: Maybe<User>;
+  gigLeaderId?: Maybe<Scalars['Int']['output']>;
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
   nowPlayingEngagementId?: Maybe<Scalars['Int']['output']>;
@@ -697,6 +700,7 @@ export type Query = {
   submissions: Array<Submission>;
   upload?: Maybe<Upload>;
   uploads: Array<Upload>;
+  users: Array<User>;
   validateGoogleFont: Scalars['Boolean']['output'];
   whoami?: Maybe<User>;
 };
@@ -749,6 +753,11 @@ export type QuerySubmissionsArgs = {
 
 export type QueryUploadArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type QueryUsersArgs = {
+  filter?: InputMaybe<UserFilter>;
 };
 
 
@@ -979,6 +988,7 @@ export type UpdateEventStageConfigInput = {
 
 export type UpdateGigInput = {
   date?: InputMaybe<Scalars['DateTime']['input']>;
+  gigLeaderId?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1068,6 +1078,10 @@ export type User = {
   name?: Maybe<Scalars['String']['output']>;
   role: Role;
   username?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserFilter = {
+  includeRoles?: InputMaybe<Array<Role>>;
 };
 
 export type VoteCount = {
@@ -1167,7 +1181,7 @@ export type GigSetFragment = { __typename?: 'GigSet', id: number, name: string, 
 
 export type BasicGigFragment = { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null };
 
-export type GigFragment = { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> };
+export type GigFragment = { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, gigLeaderId?: number | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> };
 
 export type SongFragment = { __typename?: 'Song', id: number, title?: string | null, artist?: string | null, tempo?: number | null, lyrics?: string | null, feel?: string | null, fileUrl?: string | null, spotifyUrl?: string | null, youtubeUrl?: string | null, coverArtUrl?: string | null, duration?: number | null, key?: string | null, practicePriority?: string | null, chartUrl?: string | null, leadSheetUrl?: string | null, leadSheetEditUrl?: string | null, leadSheetId?: number | null };
 
@@ -1184,7 +1198,7 @@ export type BandCreateGigMutationVariables = Exact<{
 }>;
 
 
-export type BandCreateGigMutation = { __typename?: 'Mutation', createGig: { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> } };
+export type BandCreateGigMutation = { __typename?: 'Mutation', createGig: { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, gigLeaderId?: number | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> } };
 
 export type BandUpdateGigMutationVariables = Exact<{
   gigId: Scalars['Int']['input'];
@@ -1365,7 +1379,7 @@ export type BandGigQueryVariables = Exact<{
 }>;
 
 
-export type BandGigQuery = { __typename?: 'Query', gig?: { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> } | null };
+export type BandGigQuery = { __typename?: 'Query', gig?: { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, gigLeaderId?: number | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> } | null };
 
 export type BandSongsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1425,6 +1439,8 @@ export type StageEventFragment = { __typename?: 'Event', id: number, name: strin
 export type StageReactionFragment = { __typename?: 'Reaction', id: number, type: string, createdAt: any };
 
 export type StageSubmissionFragment = { __typename?: 'Submission', id: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> };
+
+export type UserFragment = { __typename?: 'User', id: number, name?: string | null, email?: string | null, role: Role, username?: string | null, lastLogin?: any | null };
 
 export type AdminChangeEventActiveEngagementMutationVariables = Exact<{
   eventId: Scalars['Int']['input'];
@@ -1618,6 +1634,13 @@ export type AdminGetSubmissionsQueryVariables = Exact<{
 
 export type AdminGetSubmissionsQuery = { __typename?: 'Query', submissions: Array<{ __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> }> };
 
+export type AdminGetUsersQueryVariables = Exact<{
+  filter?: InputMaybe<UserFilter>;
+}>;
+
+
+export type AdminGetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, name?: string | null, email?: string | null, role: Role, username?: string | null, lastLogin?: any | null }> };
+
 export type CanCreateSubmissionQueryVariables = Exact<{
   engagementId: Scalars['Int']['input'];
 }>;
@@ -1766,6 +1789,7 @@ export const GigFragmentDoc = gql`
   eventId
   nowPlayingEngagementId
   currentGigSongId
+  gigLeaderId
   currentGigSong {
     ...GigSong
   }
@@ -2291,6 +2315,16 @@ export const StageSubmissionFragmentDoc = gql`
 ${VoteForSubmissionFieldsFragmentDoc}
 ${SlidesSubmissionFieldsFragmentDoc}
 ${NowPlayingSubmissionFieldsFragmentDoc}`;
+export const UserFragmentDoc = gql`
+    fragment User on User {
+  id
+  name
+  email
+  role
+  username
+  lastLogin
+}
+    `;
 export const BandCreateGigDocument = gql`
     mutation bandCreateGig($data: CreateGigInput!) {
   createGig(data: $data) {
@@ -4267,6 +4301,46 @@ export type AdminGetSubmissionsQueryHookResult = ReturnType<typeof useAdminGetSu
 export type AdminGetSubmissionsLazyQueryHookResult = ReturnType<typeof useAdminGetSubmissionsLazyQuery>;
 export type AdminGetSubmissionsSuspenseQueryHookResult = ReturnType<typeof useAdminGetSubmissionsSuspenseQuery>;
 export type AdminGetSubmissionsQueryResult = Apollo.QueryResult<AdminGetSubmissionsQuery, AdminGetSubmissionsQueryVariables>;
+export const AdminGetUsersDocument = gql`
+    query adminGetUsers($filter: UserFilter) {
+  users(filter: $filter) {
+    ...User
+  }
+}
+    ${UserFragmentDoc}`;
+
+/**
+ * __useAdminGetUsersQuery__
+ *
+ * To run a query within a React component, call `useAdminGetUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminGetUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminGetUsersQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useAdminGetUsersQuery(baseOptions?: Apollo.QueryHookOptions<AdminGetUsersQuery, AdminGetUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminGetUsersQuery, AdminGetUsersQueryVariables>(AdminGetUsersDocument, options);
+      }
+export function useAdminGetUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminGetUsersQuery, AdminGetUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminGetUsersQuery, AdminGetUsersQueryVariables>(AdminGetUsersDocument, options);
+        }
+export function useAdminGetUsersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdminGetUsersQuery, AdminGetUsersQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AdminGetUsersQuery, AdminGetUsersQueryVariables>(AdminGetUsersDocument, options);
+        }
+export type AdminGetUsersQueryHookResult = ReturnType<typeof useAdminGetUsersQuery>;
+export type AdminGetUsersLazyQueryHookResult = ReturnType<typeof useAdminGetUsersLazyQuery>;
+export type AdminGetUsersSuspenseQueryHookResult = ReturnType<typeof useAdminGetUsersSuspenseQuery>;
+export type AdminGetUsersQueryResult = Apollo.QueryResult<AdminGetUsersQuery, AdminGetUsersQueryVariables>;
 export const CanCreateSubmissionDocument = gql`
     query canCreateSubmission($engagementId: Int!) {
   canCreateSubmission(engagementId: $engagementId)

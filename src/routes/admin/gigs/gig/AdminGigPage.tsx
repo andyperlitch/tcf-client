@@ -10,6 +10,7 @@ import {
 } from "@/gql/graphql";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { AdminGigSet } from "./AdminGigSet";
+import { GigLeaderPicker } from "./GigLeaderPicker";
 
 const crumbs: CrumbMeta[] = [["/admin/gigs", "Gigs"]];
 
@@ -44,6 +45,10 @@ export function AdminGigPage() {
         {gigError && <ErrorMessage error={gigError} retry={refetchGig} />}
         {gig && (
           <div data-name="GIG_DETAILS" className="flex flex-col gap-4">
+            <div data-name="GIG_MAIN_CONTROLS">
+              <GigLeaderPicker gig={gig} />
+            </div>
+
             <div
               data-name="GIG_SETS"
               className={`

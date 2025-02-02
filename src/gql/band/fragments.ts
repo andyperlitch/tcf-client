@@ -39,6 +39,7 @@ gql`
     eventId
     nowPlayingEngagementId
     currentGigSongId
+    gigLeaderId
     currentGigSong {
       ...GigSong
     }
