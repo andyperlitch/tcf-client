@@ -186,20 +186,22 @@ export const raffleEngagementDefinition: EngagementDefinition<
 
 ## Creating forms
 
-1. Define the form schema using zod at the module level.
+1. Define the form schema using zod at the module level. Also create a convenience type for the form values.
 
    ```ts
    const formSchema = z.object({
-     title: z.string(),
+     title: z.string().min(1, "Title required"),
      description: z.string().optional(),
      date: z.date(),
    });
+
+   type FormSchema = z.infer<typeof formSchema>;
    ```
 
 2. Call the `useForm` hook to create the form state and handlers.
 
    ```tsx
-   const form = useForm<z.infer<typeof formSchema>>({
+   const form = useForm<FormSchema>({
      resolver: zodResolver(formSchema),
      defaultValues: {
        title: "",
@@ -212,7 +214,7 @@ export const raffleEngagementDefinition: EngagementDefinition<
 3. Define a submit handler function that will be called when the form is submitted.
 
    ```tsx
-   function onSubmit(values: z.infer<typeof formSchema>) {
+   function onSubmit(values: FormSchema) {
      console.log(values);
    }
    ```
@@ -221,7 +223,10 @@ export const raffleEngagementDefinition: EngagementDefinition<
 
    ```tsx
    <Form {...form}>
-     <form onSubmit={form.handleSubmit(onSubmit)}>
+     <form
+       onSubmit={form.handleSubmit(onSubmit)}
+       className={`flex flex-col gap-4`}
+     >
        {/* title */}
        <FormField
          control={form.control}
@@ -268,7 +273,7 @@ export const raffleEngagementDefinition: EngagementDefinition<
    </Form>
    ```
 
-## Using <Select>
+## Using `<Select>`
 
 It's a bit tricky to use the <Select> component inside a react-hook-form.
 
