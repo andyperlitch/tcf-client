@@ -7,6 +7,7 @@ import { LeadSheetCell } from "./LeadSheetCell";
 import { Link } from "react-router-dom";
 import { DataTable } from "@/components/DataTable";
 import { SongActionsCell } from "./SongActionsCell";
+import { TempoSetter } from "@/components/TempoSetter";
 export function MasterSongList() {
   const { data, loading, error } = useBandSongsQuery();
 
@@ -71,7 +72,7 @@ const columns: ColumnDef<SongFragment>[] = [
   {
     accessorKey: "tempo",
     header: "Tempo",
-    cell: ({ row }) => <div>{row.getValue("tempo")}</div>,
+    cell: ({ row }) => <TempoSetter song={row.original} />,
   },
   {
     accessorKey: "key",

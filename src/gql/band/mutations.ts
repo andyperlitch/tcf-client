@@ -86,7 +86,7 @@ gql`
   mutation bandCreateSong($data: CreateSongInput!) {
     # Song!
     createSong(data: $data) {
-      id
+      ...Song
     }
   }
 `;
@@ -94,7 +94,7 @@ gql`
   mutation bandUpdateSong($songId: Int!, $data: UpdateSongInput!) {
     # Song!
     updateSong(songId: $songId, data: $data) {
-      id
+      ...Song
     }
   }
 `;
@@ -110,7 +110,7 @@ gql`
   mutation bandCreateLeadSheet($songId: Int!) {
     # LeadSheet!
     createLeadSheet(songId: $songId) {
-      id
+      ...LeadSheet
     }
   }
 `;
@@ -121,7 +121,7 @@ gql`
   ) {
     # LeadSheet!
     updateLeadSheet(leadSheetId: $leadSheetId, data: $data) {
-      id
+      ...LeadSheet
     }
   }
 `;
