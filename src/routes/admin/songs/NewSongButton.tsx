@@ -47,7 +47,7 @@ export function NewSongButton() {
   });
 
   const onSubmit = (values: FormSchema) => {
-    createSong({ variables: { data: values } })
+    createSong({ variables: { data: values }, refetchQueries: ["bandSongs"] })
       .then((result) => {
         form.reset();
         setOpen(false);

@@ -1,11 +1,11 @@
 import { DataTable } from "@/components/DataTable";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { Loader } from "@/components/Loader";
-import { GigFragment, useBandGigsQuery } from "@/gql/graphql";
+import { BasicGigFragment, useBandGigsQuery } from "@/gql/graphql";
 import { ColumnDef } from "@tanstack/react-table";
 import { Link } from "react-router-dom";
 
-const columns: ColumnDef<GigFragment>[] = [
+const columns: ColumnDef<BasicGigFragment>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -27,7 +27,7 @@ export function GigList() {
   if (error) return <ErrorMessage error={error} retry={refetch} />;
 
   return (
-    <DataTable<GigFragment>
+    <DataTable<BasicGigFragment>
       id="gig-list"
       data={data?.gigs ?? []}
       columns={columns}
