@@ -23,20 +23,30 @@ import { LeadSheetSectionActionsCell } from "./LeadSheetSectionActionsCell";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import hoverStyles from "@/styles/ShowChildOnHover.module.css";
+import { LeadSheetLyricsCell } from "./LeadSheetLyricsCell";
+import useLocalStorage from "use-local-storage";
 
 export function LeadSheetEditor({
   songWithLeadSheet: song,
 }: {
   songWithLeadSheet: SongFragment & { leadSheet: LeadSheetFragment };
 }) {
-  const [showLyricHints, setShowLyricHints] = useState(
+  const [showLyricHints, setShowLyricHints] = useLocalStorage(
+    "show-lyric-hints",
     song.leadSheet.sections.some((section) => {
       return Boolean(section.lyricHint);
     })
   );
-  const [showTimeCodes, setShowTimeCodes] = useState(
+  const [showTimeCodes, setShowTimeCodes] = useLocalStorage(
+    "show-time-codes",
     song.leadSheet.sections.some((section) => {
       return Boolean(section.timeCode);
+    })
+  );
+  const [showLyrics, setShowLyrics] = useLocalStorage(
+    "show-lyrics",
+    song.leadSheet.sections.some((section) => {
+      return Boolean(section.lyrics);
     })
   );
 
@@ -95,6 +105,14 @@ export function LeadSheetEditor({
         </div>
         <div className="flex items-center space-x-2">
           <Checkbox
+            id="lyrics"
+            checked={showLyrics}
+            onCheckedChange={(checked) => setShowLyrics(!!checked)}
+          />
+          <Label htmlFor="lyrics">show lyrics</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Checkbox
             id="time-code"
             checked={showTimeCodes}
             onCheckedChange={(checked) => setShowTimeCodes(!!checked)}
@@ -118,6 +136,7 @@ export function LeadSheetEditor({
             <TableRow>
               <TableHeader className="w-1/3">Name</TableHeader>
               <TableHeader className="w-36">Length</TableHeader>
+              {showLyrics && <TableHeader>Lyrics</TableHeader>}
               <TableHeader>Details</TableHeader>
               <TableHeader>Actions</TableHeader>
             </TableRow>
@@ -136,6 +155,11 @@ export function LeadSheetEditor({
                   <TableCell className="align-top">
                     <LeadSheetSectionLengthCell />
                   </TableCell>
+                  {showLyrics && (
+                    <TableCell className={`align-top`}>
+                      <LeadSheetLyricsCell />
+                    </TableCell>
+                  )}
                   <TableCell
                     className={`
                       relative align-top

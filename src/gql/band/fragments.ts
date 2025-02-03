@@ -89,6 +89,7 @@ gql`
       ...LeadSheetDetail
     }
     lyricHint
+    lyrics
   }
 `;
 

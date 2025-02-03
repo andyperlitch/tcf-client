@@ -247,6 +247,7 @@ export type LeadSheetSection = {
   details: Array<LeadSheetDetail>;
   id: Scalars['Int']['output'];
   lyricHint?: Maybe<Scalars['String']['output']>;
+  lyrics?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   order: Scalars['Int']['output'];
   timeCode?: Maybe<Scalars['String']['output']>;
@@ -1005,6 +1006,7 @@ export type UpdateLeadSheetSectionInput = {
   barLength?: InputMaybe<Scalars['String']['input']>;
   details?: InputMaybe<Array<LeadSheetDetailInput>>;
   lyricHint?: InputMaybe<Scalars['String']['input']>;
+  lyrics?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   timeCode?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1185,9 +1187,9 @@ export type GigFragment = { __typename?: 'Gig', id: number, name: string, date?:
 
 export type SongFragment = { __typename?: 'Song', id: number, title?: string | null, artist?: string | null, tempo?: number | null, lyrics?: string | null, feel?: string | null, fileUrl?: string | null, spotifyUrl?: string | null, youtubeUrl?: string | null, coverArtUrl?: string | null, duration?: number | null, key?: string | null, practicePriority?: string | null, chartUrl?: string | null, leadSheetUrl?: string | null, leadSheetEditUrl?: string | null, leadSheetId?: number | null };
 
-export type LeadSheetFragment = { __typename?: 'LeadSheet', id: number, sections: Array<{ __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> }> };
+export type LeadSheetFragment = { __typename?: 'LeadSheet', id: number, sections: Array<{ __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, lyrics?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> }> };
 
-export type LeadSheetSectionFragment = { __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> };
+export type LeadSheetSectionFragment = { __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, lyrics?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> };
 
 export type LeadSheetDetailFragment = { __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string };
 
@@ -1295,7 +1297,7 @@ export type BandCreateLeadSheetMutationVariables = Exact<{
 }>;
 
 
-export type BandCreateLeadSheetMutation = { __typename?: 'Mutation', createLeadSheet: { __typename?: 'LeadSheet', id: number, sections: Array<{ __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> }> } };
+export type BandCreateLeadSheetMutation = { __typename?: 'Mutation', createLeadSheet: { __typename?: 'LeadSheet', id: number, sections: Array<{ __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, lyrics?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> }> } };
 
 export type BandUpdateLeadSheetMutationVariables = Exact<{
   leadSheetId: Scalars['Int']['input'];
@@ -1303,7 +1305,7 @@ export type BandUpdateLeadSheetMutationVariables = Exact<{
 }>;
 
 
-export type BandUpdateLeadSheetMutation = { __typename?: 'Mutation', updateLeadSheet: { __typename?: 'LeadSheet', id: number, sections: Array<{ __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> }> } };
+export type BandUpdateLeadSheetMutation = { __typename?: 'Mutation', updateLeadSheet: { __typename?: 'LeadSheet', id: number, sections: Array<{ __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, lyrics?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> }> } };
 
 export type BandDeleteLeadSheetMutationVariables = Exact<{
   leadSheetId: Scalars['Int']['input'];
@@ -1318,7 +1320,7 @@ export type BandCreateLeadSheetSectionMutationVariables = Exact<{
 }>;
 
 
-export type BandCreateLeadSheetSectionMutation = { __typename?: 'Mutation', createLeadSheetSection: { __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> } };
+export type BandCreateLeadSheetSectionMutation = { __typename?: 'Mutation', createLeadSheetSection: { __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, lyrics?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> } };
 
 export type BandUpdateLeadSheetSectionMutationVariables = Exact<{
   leadSheetSectionId: Scalars['Int']['input'];
@@ -1326,7 +1328,7 @@ export type BandUpdateLeadSheetSectionMutationVariables = Exact<{
 }>;
 
 
-export type BandUpdateLeadSheetSectionMutation = { __typename?: 'Mutation', updateLeadSheetSection: { __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> } };
+export type BandUpdateLeadSheetSectionMutation = { __typename?: 'Mutation', updateLeadSheetSection: { __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, lyrics?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> } };
 
 export type BandDeleteLeadSheetSectionMutationVariables = Exact<{
   leadSheetSectionId: Scalars['Int']['input'];
@@ -1398,7 +1400,7 @@ export type BandSongWithLeadSheetQueryVariables = Exact<{
 }>;
 
 
-export type BandSongWithLeadSheetQuery = { __typename?: 'Query', song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null, tempo?: number | null, lyrics?: string | null, feel?: string | null, fileUrl?: string | null, spotifyUrl?: string | null, youtubeUrl?: string | null, coverArtUrl?: string | null, duration?: number | null, key?: string | null, practicePriority?: string | null, chartUrl?: string | null, leadSheetUrl?: string | null, leadSheetEditUrl?: string | null, leadSheetId?: number | null, leadSheet?: { __typename?: 'LeadSheet', id: number, sections: Array<{ __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> }> } | null } | null };
+export type BandSongWithLeadSheetQuery = { __typename?: 'Query', song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null, tempo?: number | null, lyrics?: string | null, feel?: string | null, fileUrl?: string | null, spotifyUrl?: string | null, youtubeUrl?: string | null, coverArtUrl?: string | null, duration?: number | null, key?: string | null, practicePriority?: string | null, chartUrl?: string | null, leadSheetUrl?: string | null, leadSheetEditUrl?: string | null, leadSheetId?: number | null, leadSheet?: { __typename?: 'LeadSheet', id: number, sections: Array<{ __typename?: 'LeadSheetSection', id: number, name: string, order: number, timeCode?: string | null, barLength?: string | null, lyricHint?: string | null, lyrics?: string | null, details: Array<{ __typename?: 'LeadSheetDetail', id: string, type: LeadSheetDetailType, content: string }> }> } | null } | null };
 
 export type UploadsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1838,6 +1840,7 @@ export const LeadSheetSectionFragmentDoc = gql`
     ...LeadSheetDetail
   }
   lyricHint
+  lyrics
 }
     ${LeadSheetDetailFragmentDoc}`;
 export const LeadSheetFragmentDoc = gql`
