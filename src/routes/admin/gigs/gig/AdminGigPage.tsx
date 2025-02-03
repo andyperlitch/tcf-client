@@ -52,13 +52,14 @@ export function AdminGigPage() {
             <div
               data-name="GIG_SETS"
               className={`
-                flex flex-col items-start justify-center gap-4
+                flex flex-col items-start justify-start gap-4
 
-                md:flex-row
+                lg:flex-row lg:flex-wrap
               `}
             >
               {gig.sets.map((set, index) => (
                 <AdminGigSet
+                  className="max-w-[800px] flex-1"
                   key={set.id}
                   gigSet={set}
                   gigSetIndex={index}

@@ -23,11 +23,13 @@ export function AdminGigSet({
   gigSetIndex,
   refetchGig,
   onDelete,
+  className,
 }: {
   gigSet: GigSetFragment;
   gigSetIndex: number;
   refetchGig: () => void;
   onDelete: (gigSetId: number) => void;
+  className?: string;
 }) {
   const [deleteGigSong, { loading: deletingGigSong }] =
     useBandDeleteGigSongMutation();
@@ -87,9 +89,13 @@ export function AdminGigSet({
     <div
       data-name="GIG_SET"
       key={gigSet.id}
-      className={`flex flex-1 items-center`}
+      className={`
+        flex items-center
+
+        ${className}
+      `}
     >
-      <Card className="w-full max-w-[800px]">
+      <Card className="w-full">
         <CardHeader>
           <CardTitle className="flex items-center justify-between text-3xl">
             <div>Set {gigSetIndex + 1}</div>
