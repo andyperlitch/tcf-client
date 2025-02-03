@@ -91,8 +91,10 @@ function useSyncLeadSheet({ url, songId }: { url: string; songId: number }) {
           return;
         }
 
-        // the h3 contains the `name`
-        const name = headerCell.querySelector("h3")?.textContent;
+        // the first span in the h3 contains the `name`
+        const name = headerCell
+          .querySelector("h3")
+          ?.querySelector("span")?.textContent;
         if (!name) {
           logger.error("No name found");
           return;
