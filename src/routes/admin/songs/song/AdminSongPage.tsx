@@ -36,7 +36,7 @@ export function AdminSongPage() {
 
   return (
     <AdminContainer section="songs">
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-8">
         {!song && <ErrorMessage error={new Error("Song not found")} />}
         {song && (
           <>
@@ -59,62 +59,92 @@ export function AdminSongPage() {
                 tabbable
               />
             </div>
-            <div data-name="SONG_DETAILS" className="flex flex-col gap-2">
-              <h2 className="text-2xl font-bold">Details</h2>
-              <SongDetailsEditor song={song} />
-            </div>
-            {song.leadSheetEditUrl && (
+            <div
+              className={`
+                flex flex-col gap-8
+
+                xl:flex-row xl:gap-4
+              `}
+            >
               <div
-                data-name="GOOGLE_LEAD_SHEET_SECTION"
-                className="flex flex-col gap-2"
+                data-name="SONG_DETAILS"
+                className={`flex flex-1 flex-col gap-2`}
               >
-                <h2 className="text-2xl font-bold">Lead Sheet (Google Docs)</h2>
-                <p>
-                  To remove this section, clear the LeadSheet and
-                  LeadSheetEditUrl columns in the{" "}
-                  <a
-                    href="https://docs.google.com/spreadsheets/d/1gRXICNsQmi5L-OkP0Qr5F8q2EO7IGlkeLXaKmX59g90/edit?gid=0#gid=0"
-                    target="_blank"
-                  >
-                    google sheet
-                    <ExternalLinkIcon className="inline-block" />
-                  </a>
-                  .
-                </p>
-                <div className="flex gap-2">
-                  <Button asChild>
-                    <a
-                      href={song.leadSheetEditUrl}
-                      target="_blank"
-                      className={`flex items-center gap-1`}
-                    >
-                      <ExternalLinkIcon className="inline-block" />
-                      <span>Edit Google Docs Version</span>
-                    </a>
-                  </Button>
-                  {song.leadSheetUrl && (
-                    <ImportLeadSheetFromGoogleDocButton
-                      songId={songId}
-                      leadSheetUrl={song.leadSheetUrl}
-                      tooltip={
-                        song.leadSheetId
-                          ? "Delete existing lead sheet to sync from google"
-                          : undefined
-                      }
-                      disabled={!!song.leadSheetId}
-                      onSuccess={() => refetch()}
-                    />
-                  )}
-                </div>
+                <h2
+                  className={`text-xl section-title italic text-muted-foreground`}
+                >
+                  Details
+                </h2>
+                <SongDetailsEditor song={song} />
               </div>
-            )}
-            <div data-name="LEAD_SHEET_SECTION" className="flex flex-col gap-2">
+              {song.leadSheetEditUrl && (
+                <div
+                  data-name="GOOGLE_LEAD_SHEET_SECTION"
+                  className="flex flex-1 flex-col gap-2"
+                >
+                  <h2
+                    className={`
+                      text-xl section-title italic text-muted-foreground
+                    `}
+                  >
+                    Lead Sheet (Google Docs)
+                  </h2>
+                  <p>
+                    To remove this section, clear the LeadSheet and
+                    LeadSheetEditUrl columns in the{" "}
+                    <a
+                      href="https://docs.google.com/spreadsheets/d/1gRXICNsQmi5L-OkP0Qr5F8q2EO7IGlkeLXaKmX59g90/edit?gid=0#gid=0"
+                      target="_blank"
+                    >
+                      google sheet
+                      <ExternalLinkIcon className="inline-block" />
+                    </a>
+                    .
+                  </p>
+                  <div className="flex gap-2">
+                    <Button asChild>
+                      <a
+                        href={song.leadSheetEditUrl}
+                        target="_blank"
+                        className={`flex items-center gap-1`}
+                      >
+                        <ExternalLinkIcon className="inline-block" />
+                        <span>Edit Google Docs Version</span>
+                      </a>
+                    </Button>
+                    {song.leadSheetUrl && (
+                      <ImportLeadSheetFromGoogleDocButton
+                        songId={songId}
+                        leadSheetUrl={song.leadSheetUrl}
+                        tooltip={
+                          song.leadSheetId
+                            ? "Delete existing lead sheet to sync from google"
+                            : undefined
+                        }
+                        disabled={!!song.leadSheetId}
+                        onSuccess={() => refetch()}
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div
+              data-name="LEAD_SHEET_SECTION"
+              className={`flex flex-col gap-2`}
+            >
               <div
                 data-name="LEAD_SHEET_SECTION_HEADER"
                 className={`flex flex-col gap-2`}
               >
                 <div className="flex justify-between gap-2">
-                  <h2 className="text-2xl font-bold">Lead Sheet</h2>
+                  <h2
+                    className={`
+                      text-xl section-title italic text-muted-foreground
+                    `}
+                  >
+                    Lead Sheet
+                  </h2>
                   {typeof song.leadSheetId === "number" ? (
                     <InlineTypeoutConfirmButton
                       variant="destructive"
