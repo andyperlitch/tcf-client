@@ -5,6 +5,7 @@ import {
   SongFragment,
   useBandDeleteLeadSheetMutation,
   useBandSongWithLeadSheetQuery,
+  useBandUpdateSongMutation,
 } from "@/gql/graphql";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { LeadSheetEditor } from "./lead-sheet/LeadSheetEditor";
@@ -17,6 +18,7 @@ import { KeyBadge } from "@/components/KeyBadge";
 import { SongFeelBadge } from "@/components/SongFeelBadge";
 import { InlineTypeoutConfirmButton } from "@/components/InlineTypeoutConfirmButton";
 import { ImportLeadSheetFromGoogleDocButton } from "./lead-sheet/ImportLeadSheetFromGoogleDocButton";
+import { EditableText } from "@/components/EditableText";
 
 const crumbs: CrumbMeta[] = [["/admin/songs", "Songs"]];
 
@@ -28,6 +30,7 @@ export function AdminSongPage() {
     variables: { id: songId },
   });
   const [deleteLeadSheet] = useBandDeleteLeadSheetMutation();
+  const [updateSong] = useBandUpdateSongMutation();
 
   const song = data?.song;
 
@@ -39,7 +42,22 @@ export function AdminSongPage() {
           <>
             <div data-name="SONG_HEADER" className="flex flex-col gap-2">
               <SimpleCrumbs crumbs={crumbs} />
-              <h1 className="text-3xl font-bold">{song.title || "Untitled"}</h1>
+              <EditableText
+                className="text-3xl font-bold"
+                value={song.title || "-"}
+                setValue={(value) =>
+                  updateSong({
+                    variables: {
+                      songId,
+                      data: {
+                        title: value,
+                      },
+                    },
+                  })
+                }
+                element="h1"
+                tabbable
+              />
             </div>
             <div data-name="SONG_DETAILS" className="flex flex-col gap-2">
               <h2 className="text-2xl font-bold">Details</h2>

@@ -3,8 +3,12 @@ import { ResizableInput } from "./ResizableInput";
 import { InlineConfirmCancel } from "./InlineConfirmCancel";
 import { useToast } from "@/hooks/use-toast";
 
-// EditableTextProps interface
-interface EditableTextProps<T extends keyof JSX.IntrinsicElements> {
+// Split into base props and the mutually exclusive ones
+type BaseEditableTextProps<T extends keyof JSX.IntrinsicElements> = {
+  /**
+   * The name of the field, used for debugging
+   */
+  name?: string;
   value: string;
   setValue: (value: string) => void | Promise<any>;
   /**
@@ -25,22 +29,60 @@ interface EditableTextProps<T extends keyof JSX.IntrinsicElements> {
    * Whether to show the confirm/cancel buttons
    */
   showConfirmCancel?: boolean;
+};
+
+// Props when tabbable is true
+type TabbableProps = {
+  /**
+   * Whether to allow a user to "tab into" editing this field
+   */
+  tabbable: true;
   /**
    * Whether to cancel on blur
    */
-  cancelOnBlur?: boolean;
-}
+  cancelOnBlur?: false;
+};
+
+// Props when cancelOnBlur is true
+type CancelOnBlurProps = {
+  /**
+   * Whether to cancel on blur
+   */
+  cancelOnBlur: true;
+  /**
+   * Whether to allow a user to "tab into" editing this field
+   */
+  tabbable?: false;
+};
+
+// Props when neither is true
+type NeitherProps = {
+  /**
+   * Whether to allow a user to "tab into" editing this field
+   */
+  tabbable?: false;
+  /**
+   * Whether to cancel on blur
+   */
+  cancelOnBlur?: false;
+};
+
+// Combine into final interface
+type EditableTextProps<T extends keyof JSX.IntrinsicElements> =
+  BaseEditableTextProps<T> & (TabbableProps | CancelOnBlurProps | NeitherProps);
 
 export function EditableText<T extends keyof JSX.IntrinsicElements>({
   value,
   setValue,
   element: Element,
   elementProps = {} as JSX.IntrinsicElements[T],
-  placeholder,
+  placeholder = "-",
   showConfirmCancel = true,
   locked = false,
   className,
   cancelOnBlur = false,
+  tabbable = false,
+  name,
 }: EditableTextProps<T>) {
   const { toast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -61,16 +103,26 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
         setEditing(false);
       });
     } else {
-      setEditing(false);
+      // delay by a tick so that tab functionality works
+      setTimeout(() => {
+        setEditing(false);
+      }, 0);
     }
   };
 
-  const checkForEnterOrEscape = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       onConfirm();
     }
     if (e.key === "Escape") {
       onCancel();
+    }
+    if (e.key === "Tab") {
+      if (cancelOnBlur) {
+        onCancel();
+      } else if (tabbable) {
+        onConfirm();
+      }
     }
   };
 
@@ -83,6 +135,7 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
   // Select all text in the input when entering edit mode
   useEffect(() => {
     if (editing && inputRef.current) {
+      console.log("selecting text");
       inputRef.current.select();
     }
   }, [editing]);
@@ -91,16 +144,9 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
     Element,
     {
       className,
+      // Spread elementProps and handle click
       ...elementProps,
-      onDoubleClick: () =>
-        locked &&
-        toast({
-          variant: "destructive",
-          title: "Event locked",
-          description: "You cannot edit this field",
-        }),
-      onClick: () => !editing && !locked && setEditing(true), // Spread elementProps and handle click
-    }, // Spread elementProps and handle click
+    },
     editing ? (
       <ResizableInput
         className={`
@@ -113,19 +159,45 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
         value={localValue}
         containerClassName="relative"
         onChange={(e) => setLocalValue(e.target.value)}
-        onKeyDown={checkForEnterOrEscape}
-        onBlur={cancelOnBlur ? onCancel : undefined}
+        onKeyDown={handleKeyDown}
+        onBlur={cancelOnBlur ? onCancel : tabbable ? onConfirm : undefined}
         ref={inputRef}
         data-p1-ignore
+        name={name || "editabletext"}
       >
-        {showConfirmCancel && (
+        {showConfirmCancel && !tabbable && (
           <InlineConfirmCancel confirm={onConfirm} cancel={onCancel} />
         )}
       </ResizableInput>
-    ) : value.trim() === "" && placeholder ? (
-      <span className="italic text-muted-foreground">{placeholder}</span>
+    ) : locked ? (
+      <span
+        onDoubleClick={() =>
+          locked &&
+          toast({
+            variant: "destructive",
+            title: "Event locked",
+            description: "You cannot edit this field",
+          })
+        }
+      >
+        {value || placeholder}
+      </span>
     ) : (
-      value
+      <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          setEditing(true);
+        }}
+        onFocus={() => tabbable && setEditing(true)}
+        className={`
+          text-inherit
+
+          ${value.trim() === "" ? "italic text-muted-foreground" : ""}
+        `}
+      >
+        {value || placeholder}
+      </a>
     )
   );
 }

@@ -16,6 +16,8 @@ interface ResizableInputProps
   children?: React.ReactNode;
 }
 
+const EXTRA_PADDING = 20;
+
 export const ResizableInput = forwardRef<HTMLInputElement, ResizableInputProps>(
   (
     {
@@ -37,7 +39,7 @@ export const ResizableInput = forwardRef<HTMLInputElement, ResizableInputProps>(
     useEffect(() => {
       if (mirrorRef.current && inputRef.current) {
         inputRef.current.style.width = `${
-          mirrorRef.current.offsetWidth + 10
+          mirrorRef.current.offsetWidth + EXTRA_PADDING
         }px`; // Add padding
       }
     }, [value]);

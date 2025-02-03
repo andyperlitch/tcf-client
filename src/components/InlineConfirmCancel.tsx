@@ -22,10 +22,11 @@ export function InlineConfirmCancel({
         variant="constructive"
         onClick={confirm}
         disabled={loading}
+        tabIndex={-1}
       >
         <CheckIcon className="h-4 w-4" />
       </Button>
-      <Button size="sm" variant="destructive" onClick={cancel}>
+      <Button tabIndex={-1} size="sm" variant="destructive" onClick={cancel}>
         <Cross2Icon className="h-4 w-4" />
       </Button>
     </div>

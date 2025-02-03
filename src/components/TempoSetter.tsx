@@ -4,7 +4,13 @@ import { Input } from "./ui/input";
 import { Button, ButtonProps } from "./ui/button";
 import { CheckIcon } from "@radix-ui/react-icons";
 
-export function TempoSetter({ song }: { song: SongFragment }) {
+export function TempoSetter({
+  song,
+  className,
+}: {
+  song: SongFragment;
+  className?: string;
+}) {
   const tempo = song.tempo;
   const [draftValue, setDraftValue] = useState(tempo || 120);
   const [editing, setEditing] = useState(false);
@@ -23,7 +29,7 @@ export function TempoSetter({ song }: { song: SongFragment }) {
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") {
+      if (e.key === "Enter" || e.key === "Tab") {
         saveTempo();
       }
     },
@@ -31,19 +37,27 @@ export function TempoSetter({ song }: { song: SongFragment }) {
   );
 
   return (
-    <div data-name="TEMPO_SETTER" className="inline-flex items-center gap-2">
-      {!editing && <div onClick={editTempo}>{tempo || "-"}</div>}
+    <div data-name="TEMPO_SETTER" className="flex items-center gap-2">
+      {!editing && (
+        <Button
+          className={className}
+          type="button"
+          variant="link"
+          onClick={editTempo}
+          onFocus={editTempo}
+        >
+          {`${tempo} bpm` || "-"}
+        </Button>
+      )}
       {editing && (
         <>
           <Input
+            autoFocus
             type="number"
             disabled={updatingSong}
-            className={`w-16`}
+            className={`w-20`}
             value={draftValue}
-            onChange={(e) => {
-              console.log("onChange", Number(e.target.value));
-              setDraftValue(Number(e.target.value));
-            }}
+            onChange={(e) => setDraftValue(Number(e.target.value))}
             onKeyDown={handleKeyDown}
           />
           <TempoTapper
