@@ -1,15 +1,12 @@
 import { EditableText } from "@/components/EditableText";
-import { InlineConfirmCancel } from "@/components/InlineConfirmCancel";
 import { TempoSetter } from "@/components/TempoSetter";
+import { Button } from "@/components/ui/button";
 import { ImageInput } from "@/components/ui/image-input";
 import { Label } from "@/components/ui/label";
-import {
-  SongFragment,
-  useAdminCreatePresignedUrlMutation,
-  useBandUpdateSongMutation,
-} from "@/gql/graphql";
-import { uploadFile } from "@/utils/uploadFile";
-import { useState } from "react";
+import { Progress } from "@/components/ui/progress";
+import { SongFragment, useBandUpdateSongMutation } from "@/gql/graphql";
+import { useImageInputHandlers } from "@/hooks/useImageInputHandlers";
+import { useCallback, useState } from "react";
 
 export function SongDetailsEditor({
   song,
@@ -19,7 +16,20 @@ export function SongDetailsEditor({
   className?: string;
 }) {
   const [image, setImage] = useState<File | null>(null);
-  const [createPresignedUrl] = useAdminCreatePresignedUrlMutation();
+  const {
+    progress,
+    handleImageChange,
+    handlePasteFromClipboard,
+    deleteFromS3,
+  } = useImageInputHandlers({
+    image,
+    setImage,
+    onUploadComplete: (key) => {
+      updateSong({
+        variables: { songId: song.id, data: { coverArtUrl: key } },
+      });
+    },
+  });
   const [updateSong] = useBandUpdateSongMutation();
 
   return (
@@ -33,46 +43,33 @@ export function SongDetailsEditor({
       <div data-name="LEFT_COLUMN">
         <div data-name="COVER_ART_SECTION">
           <Label>Cover Art</Label>
-          <div className="relative">
+          <div className="relative flex flex-col">
             <ImageInput
               value={image}
               currentImageUrl={song.coverArtUrl}
-              onChange={setImage}
+              emptyMessage={
+                <div className="flex flex-col gap-2 p-2">
+                  <span>Click to select an image or</span>
+                  <Button size="sm" onClick={handlePasteFromClipboard}>
+                    Paste from clipboard
+                  </Button>
+                </div>
+              }
+              onChange={handleImageChange}
               name="coverArtUrl"
               width={200}
               height={200}
               className="h-64 w-64"
+              onCurrentImageClear={useCallback(() => {
+                if (song.coverArtUrl) {
+                  deleteFromS3(song.coverArtUrl);
+                  updateSong({
+                    variables: { songId: song.id, data: { coverArtUrl: null } },
+                  });
+                }
+              }, [deleteFromS3, song.coverArtUrl, updateSong, song.id])}
             />
-            {image && (
-              <InlineConfirmCancel
-                confirm={async () => {
-                  const { data } = await createPresignedUrl({
-                    variables: {
-                      mimeType: image.type,
-                    },
-                  });
-                  const { url, key } = data?.adminCreatePresignedUrl || {};
-                  if (!url || !key) {
-                    throw new Error("Failed to create presigned URL");
-                  }
-                  await uploadFile({
-                    file: image,
-                    presignedUrl: url,
-                  });
-                  await updateSong({
-                    variables: {
-                      songId: song.id,
-                      data: {
-                        coverArtUrl: key,
-                      },
-                    },
-                  });
-                }}
-                cancel={() => {
-                  setImage(null);
-                }}
-              />
-            )}
+            {progress !== null && <Progress value={progress} />}
           </div>
         </div>
       </div>
