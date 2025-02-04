@@ -5,7 +5,7 @@ export function KeyBadge({ songKey }: { songKey: string | null | undefined }) {
     <Badge
       data-name="SONG_KEY"
       size="lg"
-      variant="info"
+      variant="outline"
       className={`font-bold`}
     >
       {songKey || "?"}

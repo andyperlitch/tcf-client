@@ -1,8 +1,16 @@
-export function CenteredMessage({ children }: { children: React.ReactNode }) {
+export function CenteredMessage({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <div
       className={`
         flex h-full w-full items-center justify-center px-4
+
+        ${className}
 
         md:text-3xl
       `}

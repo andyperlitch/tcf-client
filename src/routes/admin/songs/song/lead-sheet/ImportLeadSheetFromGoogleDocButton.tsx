@@ -11,10 +11,11 @@ import { Button } from "@/components/ui/button";
 import { useLeadSheetHtml } from "@/hooks/useLeadSheetHtml";
 import { useCallback, useMemo, useState } from "react";
 import { uploadFile } from "@/utils/uploadFile";
-import { DEFAULT_IMAGE_DETAIL, ParsedImageDetail } from "./consts";
+import { DEFAULT_IMAGE_DETAIL } from "./consts";
 import { DownloadIcon } from "@radix-ui/react-icons";
 import { getBackendDetails } from "@/utils/getBackendDetails";
 import { createLogger } from "@/utils/createLogger";
+import { ParsedImageDetail } from "@/types/leadsheet";
 
 const logger = createLogger("ImportLeadSheetFromGoogleDocButton");
 

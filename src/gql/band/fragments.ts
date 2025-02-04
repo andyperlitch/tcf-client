@@ -10,6 +10,17 @@ gql`
     }
     order
   }
+  fragment DetailedGigSong on GigSong {
+    id
+    song {
+      ...Song
+      leadSheet {
+        ...LeadSheet
+      }
+    }
+    setId
+    order
+  }
 
   fragment GigSet on GigSet {
     id

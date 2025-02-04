@@ -1,148 +1,105 @@
-import { isMobile } from "react-device-detect";
-import { useNavigate } from "react-router-dom";
-import { useMemo } from "react";
-import { useGig } from "../../../hooks/useGig";
-import { LeadSheet } from "./LeadSheet";
 import { ControlBar } from "./ControlBar";
-import { SongViewType } from "./types";
-import { Lyrics } from "./Lyrics";
-import { SongInfo } from "./SongInfo";
-import { useSwipeable } from "react-swipeable";
-import { getPatOnTheBack } from "@/utils/getPatOnTheBack";
-import { HomeButton } from "@/components/HomeButton";
+import { useSetListSongOrBreak } from "./useSetListSong";
 import useLocalStorage from "use-local-storage";
+import { LeadsheetView } from "./LeadsheetView";
+import { InfoView } from "./InfoView";
+import { Loader } from "@/components/Loader";
+import { ErrorMessage } from "@/components/ErrorMessage";
+import { SongView } from "./consts";
+import { useNavigate, useParams } from "react-router-dom";
 import { CenteredMessage } from "@/components/CenteredMessage";
-import { useParamsSafe } from "@/hooks/useParamsSafe";
-import { SetListSong as SetListSongType } from "@/types/songlist";
-
-const BREAK_SONG_INDEX = "BREAK";
+import { getPatOnTheBack } from "@/utils/getPatOnTheBack";
+import { GigSetList } from "@/components/GigSetList";
+import { useSwipeable } from "react-swipeable";
+import { useMemo } from "react";
+import { getSongOrBreakUrl } from "./utils";
+import { isCellPhone } from "@/utils/isCellPhone";
 
 export function SetListSong() {
-  const {
-    gigSlug,
-    setIndex: setIndexString,
-    songIndex: songIndexString,
-  } = useParamsSafe("gigSlug", "setIndex", "songIndex");
-  const setIndex = parseInt(setIndexString || "0", 10);
-  const navigate = useNavigate();
-  const [songView, setSongView] = useLocalStorage<SongViewType>(
-    "songView",
-    "leadsheet"
+  const allParams = useParams();
+  const gigId = Number(allParams.gigId);
+  const gigSongId = allParams.gigSongId ? Number(allParams.gigSongId) : null;
+  const nextSetId = allParams.nextSetId ? Number(allParams.nextSetId) : null;
+  const lastSetId = allParams.lastSetId ? Number(allParams.lastSetId) : null;
+
+  const [view, setView] = useLocalStorage<SongView>(
+    "SetListSong:view",
+    SongView.Leadsheet
   );
-  const { sets, loading } = useGig(gigSlug!);
-  const viewPortWidth = window.innerWidth;
-  const isCellPhone = viewPortWidth < 768;
 
-  const { currentSong, previousLink, nextLink } = useMemo(() => {
-    let currentSong: SetListSongType | undefined;
-    let previousLink: string = "";
-    let nextLink: string = "";
-    if (!loading) {
-      if (songIndexString === BREAK_SONG_INDEX) {
-        console.log(`andy setIndex`, setIndex, sets);
-        previousLink = `/gigs/${gigSlug}/sets/${setIndex}/${
-          sets[setIndex].length - 1
-        }`;
-        nextLink = `/gigs/${gigSlug}/sets/${setIndex + 1}/0`;
-      } else {
-        const songIndex = parseInt(songIndexString || "0", 10);
-        currentSong = sets?.[setIndex]?.[songIndex];
+  const navigate = useNavigate();
 
-        if (currentSong) {
-          if (setIndex === 0 && songIndex === 0) {
-            previousLink = `/gigs/${gigSlug}`;
-          } else if (setIndex === 0) {
-            previousLink = `/gigs/${gigSlug}/sets/${setIndex}/${songIndex - 1}`;
-          } else if (songIndex === 0) {
-            previousLink = `/gigs/${gigSlug}/sets/${
-              setIndex - 1
-            }/${BREAK_SONG_INDEX}`;
-          } else {
-            previousLink = `/gigs/${gigSlug}/sets/${setIndex}/${songIndex - 1}`;
-          }
+  const {
+    gig,
+    gigSongOrBreak,
+    previousSongOrBreak,
+    nextSongOrBreak,
+    loading,
+    error,
+    refetch,
+  } = useSetListSongOrBreak({ gigId, gigSongId, lastSetId, nextSetId });
 
-          if (
-            setIndex === sets.length - 1 &&
-            songIndex === sets[setIndex].length - 1
-          ) {
-            nextLink = `/gigs/${gigSlug}`;
-          } else if (setIndex === sets.length - 1) {
-            nextLink = `/gigs/${gigSlug}/sets/${setIndex}/${songIndex + 1}`;
-          } else if (songIndex === sets[setIndex].length - 1) {
-            nextLink = `/gigs/${gigSlug}/sets/${setIndex}/${BREAK_SONG_INDEX}`;
-          } else {
-            nextLink = `/gigs/${gigSlug}/sets/${setIndex}/${songIndex + 1}`;
-          }
-        } else {
-          // throw new Error("No current song found");
-        }
-      }
-    }
-    return {
-      currentSong,
-      previousLink,
-      nextLink,
-    };
-  }, [gigSlug, loading, setIndex, sets, songIndexString]);
+  const nextSet =
+    gig?.id &&
+    gigSongOrBreak?.__typename === "SetBreak" &&
+    gig?.sets.find((set) => set.id === nextSetId);
 
   const swipeHandlers = useSwipeable(
     useMemo(
       () => ({
         onSwipedRight: () => {
-          if (previousLink) {
-            navigate(previousLink);
+          if (previousSongOrBreak) {
+            navigate(getSongOrBreakUrl(gig, previousSongOrBreak));
           }
         },
         onSwipedLeft: () => {
-          if (nextLink) {
-            navigate(nextLink);
+          if (nextSongOrBreak) {
+            navigate(getSongOrBreakUrl(gig, nextSongOrBreak));
           }
         },
       }),
-      [navigate, nextLink, previousLink]
+      [navigate, nextSongOrBreak, previousSongOrBreak, gig]
     )
   );
 
-  if (loading || !sets.length) {
-    return <div>loading...</div>;
-  }
-
   return (
     <div
-      data-name="SETLIST_SONG"
-      className={`relative flex h-full min-h-screen w-full flex-col`}
-      {...(isMobile ? {} : swipeHandlers)}
+      data-name="SET_LIST_SONG"
+      className="flex min-h-screen flex-col gap-0"
+      {...(isCellPhone ? {} : swipeHandlers)}
     >
-      <HomeButton />
       <ControlBar
-        className={`
-          z-20
-
-          ${
-            isCellPhone
-              ? "fixed top-[100vh] -translate-y-full"
-              : `sticky top-0 border border-b`
-          }
-        `}
-        previousLink={previousLink}
-        nextLink={nextLink}
-        currentSong={currentSong}
-        songView={songView}
-        songIndex={
-          songIndexString === "BREAK" ? "BREAK" : Number(songIndexString)
-        }
-        setSongView={setSongView}
+        gig={gig}
+        gigSongOrBreak={gigSongOrBreak}
+        view={view}
+        setView={setView}
+        previousSongOrBreak={previousSongOrBreak}
+        nextSongOrBreak={nextSongOrBreak}
       />
-      {songIndexString === BREAK_SONG_INDEX ? (
-        <CenteredMessage>{getPatOnTheBack()}</CenteredMessage>
-      ) : (
+      {loading && <Loader />}
+      {error && <ErrorMessage error={error} retry={refetch} />}
+      {gig && gigSongOrBreak?.__typename === "GigSong" && (
         <>
-          {songView === "leadsheet" && (
-            <LeadSheet leadsheetUrl={currentSong?.LeadSheet} />
+          {view === SongView.Leadsheet && (
+            <LeadsheetView gig={gig} gigSong={gigSongOrBreak} view={view} />
           )}
-          {songView === "lyrics" && <Lyrics lyricsUrl={currentSong!.Lyrics} />}
-          {songView === "info" && <SongInfo song={currentSong!} />}
+          {view === SongView.Lyrics && (
+            <LeadsheetView gig={gig} gigSong={gigSongOrBreak} view={view} />
+          )}
+          {view === SongView.Info && (
+            <InfoView gig={gig} gigSong={gigSongOrBreak} />
+          )}
         </>
+      )}
+      {nextSet && (
+        <CenteredMessage className="min-h-[calc(100vh-300px)]">
+          {getPatOnTheBack()}
+          <GigSetList
+            title="Here's what's coming up..."
+            gigId={gig.id}
+            set={nextSet}
+          />
+        </CenteredMessage>
       )}
     </div>
   );

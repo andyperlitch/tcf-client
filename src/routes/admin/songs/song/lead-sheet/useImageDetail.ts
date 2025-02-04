@@ -1,8 +1,9 @@
 import { useMemo } from "react";
-import { DEFAULT_IMAGE_DETAIL, ParsedImageDetail } from "./consts";
+import { DEFAULT_IMAGE_DETAIL } from "./consts";
 import { LeadSheetDetailFragment } from "@/gql/graphql";
 import { useLeadSheetSection } from "./LeadSheetSectionProvider/context";
 import { updateDetail } from "./LeadSheetSectionProvider/reducer";
+import { ParsedImageDetail } from "@/types/leadsheet";
 
 export function useImageDetail(detail: LeadSheetDetailFragment) {
   const { dispatch } = useLeadSheetSection();

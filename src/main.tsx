@@ -84,11 +84,15 @@ const router = createBrowserRouter([
           },
 
           {
-            path: "/gigs/:gigSlug/sets/:setIndex/:songIndex",
+            path: "/gigs/:gigId/songs/:gigSongId",
             element: <SetListSong />,
           },
           {
-            path: "/gigs/:gigSlug",
+            path: "/gigs/:gigId/setbreak/:lastSetId/:nextSetId",
+            element: <SetListSong />,
+          },
+          {
+            path: "/gigs/:gigId",
             element: <Gig />,
           },
           {

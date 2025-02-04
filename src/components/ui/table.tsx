@@ -66,8 +66,6 @@ const TableRow = React.forwardRef<
         border-b transition-colors
 
         data-[state=selected]:bg-muted
-
-        hover:bg-muted/50
       `,
       className
     )}

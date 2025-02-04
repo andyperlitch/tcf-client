@@ -7,10 +7,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { GIGS } from "@/consts/gigs";
 import { Link } from "react-router-dom";
+import { useBandGigsQuery } from "@/gql/graphql";
 
 export function GigPicker() {
+  const { data, loading, error } = useBandGigsQuery();
+  const gigs = data?.gigs;
+
+  if (loading || error || !gigs) {
+    return null;
+  }
+
   return (
     <div data-name="GIG-PICKER" className="fixed bottom-2 right-2 z-10">
       <DropdownMenu>
@@ -21,9 +28,9 @@ export function GigPicker() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          {GIGS.map((gig) => (
-            <Link key={gig.slug} to={`/gigs/${gig.slug}`}>
-              <DropdownMenuItem>{gig.label}</DropdownMenuItem>
+          {gigs.map((gig) => (
+            <Link key={gig.id} to={`/gigs/${gig.id}`}>
+              <DropdownMenuItem>{gig.name}</DropdownMenuItem>
             </Link>
           ))}
         </DropdownMenuContent>

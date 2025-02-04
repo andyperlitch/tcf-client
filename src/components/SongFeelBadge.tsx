@@ -5,5 +5,9 @@ export function SongFeelBadge({
 }: {
   songFeel: string | null | undefined;
 }) {
-  return <Badge size="lg">{songFeel || "?"}</Badge>;
+  return (
+    <Badge variant="outline" size="lg" className="whitespace-nowrap">
+      {songFeel || "?"}
+    </Badge>
+  );
 }

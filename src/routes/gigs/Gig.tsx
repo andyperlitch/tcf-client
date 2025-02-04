@@ -1,72 +1,56 @@
-import { useGig } from "../../hooks/useGig";
-import { Link } from "react-router-dom";
 import { ModeToggle } from "@/components/ModeToggle";
 import { HomeButton } from "@/components/HomeButton";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useBandGigQuery } from "@/gql/graphql";
+import { Loader } from "@/components/Loader";
+import { ErrorMessage } from "@/components/ErrorMessage";
+import { CrumbMeta, SimpleCrumbs } from "@/components/SimpleCrumbs";
+import { GigSetList } from "@/components/GigSetList";
 
 export function Gig() {
-  const { gigSlug } = useParamsSafe("gigSlug");
-  const { sets, gigMeta, loading } = useGig(gigSlug);
+  const { gigId } = useParamsSafe("gigId");
+
+  const { data, loading, error, refetch } = useBandGigQuery({
+    variables: {
+      id: Number(gigId),
+    },
+    skip: !gigId,
+  });
+
+  const gig = data?.gig;
+
+  const crumbs: CrumbMeta[] = [["/gigs", "Gigs"]];
 
   return (
     <>
       <HomeButton />
-      <div className="relative z-[2] mx-auto max-w-5xl justify-center p-4">
-        {loading ? (
-          <div>loading...</div>
-        ) : (
+      <div
+        data-name="GIG_PAGE"
+        className={`
+          relative z-[2] mx-auto flex w-full flex-col justify-center gap-4 p-4
+        `}
+      >
+        {loading && <Loader />}
+        {error && <ErrorMessage error={error} retry={refetch} />}
+        {gig && (
           <>
-            <h2 className={`mb-8 pt-8 text-center font-hand text-6xl`}>
-              <span className="text-gray-500">Gig:</span> {gigMeta?.label}
-            </h2>
+            <SimpleCrumbs crumbs={crumbs} />
+            <h2 className={`text-3xl font-bold`}>{gig.name}</h2>
             <div
               data-name="GIG_SETS"
               className={`
-                flex flex-col
+                flex flex-col gap-2
 
                 md:flex-row md:flex-wrap
               `}
             >
-              {sets.map((set, setIndex) => (
-                <div
-                  data-name="GIG_SET"
-                  key={setIndex}
-                  className={`
-                    rounded-lg p-2
-
-                    md:w-1/2
-                  `}
-                >
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-2xl">
-                        Set {setIndex + 1}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <ol key={setIndex}>
-                        {set.map((song, songIndex) => (
-                          <li
-                            key={song.ID}
-                            className="flex items-center text-xl"
-                          >
-                            {songIndex + 1}.
-                            <Link
-                              to={`/gigs/${gigSlug}/sets/${setIndex}/${songIndex}`}
-                              className="block p-2 pl-8"
-                            >
-                              {song.Title}
-                            </Link>
-                            <div className="text-sm text-gray-500">
-                              {song.Writer}
-                            </div>
-                          </li>
-                        ))}
-                      </ol>
-                    </CardContent>
-                  </Card>
-                </div>
+              {gig.sets.map((set, setIndex) => (
+                <GigSetList
+                  key={set.id}
+                  gigId={gig.id}
+                  set={set}
+                  title={`Set ${setIndex + 1}`}
+                />
               ))}
             </div>
           </>

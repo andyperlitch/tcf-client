@@ -1,9 +1,5 @@
-export interface ParsedImageDetail {
-  url: string;
-  width?: number;
-  height?: number;
-  constraintDimension: "width" | "height";
-}
+import { ParsedImageDetail } from "@/types/leadsheet";
+
 export const DEFAULT_IMAGE_DETAIL: ParsedImageDetail = {
   url: "",
   constraintDimension: "width",

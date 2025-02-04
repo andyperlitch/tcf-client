@@ -1,228 +1,169 @@
-import { Link } from "react-router-dom";
-import { SetListSong } from "@/types/songlist";
-import { SongViewType } from "./types";
-
-import { Button } from "@/components/ui/button";
 import {
-  FileIcon,
-  InfoCircledIcon,
-  QuoteIcon,
+  GigFragment,
+  DetailedGigSongFragment,
+  GigSongFragment,
+} from "@/gql/graphql";
+import { SetBreak, SongView } from "./consts";
+import { Link } from "react-router-dom";
+import {
   RowsIcon,
   TrackNextIcon,
   TrackPreviousIcon,
 } from "@radix-ui/react-icons";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { KeyBadge } from "@/components/KeyBadge";
+import { SongFeelBadge } from "@/components/SongFeelBadge";
+import { TempoBadge } from "@/components/TempoBadge/TempoBadge";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { isMobile } from "react-device-detect";
 import { MiniGigMenu } from "./MiniGigMenu";
+import { isCellPhone } from "@/utils/isCellPhone";
+import { getSongOrBreakTitle } from "./utils";
+import { getSongOrBreakUrl } from "./utils";
 
-const VIEW_SELECT_OPTIONS = [
-  {
-    value: "leadsheet" as SongViewType,
-    label: "Leadsheet",
-    icon: <FileIcon />,
-  },
-  { value: "lyrics" as SongViewType, label: "Lyrics", icon: <QuoteIcon /> },
-  { value: "info" as SongViewType, label: "Info", icon: <InfoCircledIcon /> },
-];
-
-interface ControlBarProps {
-  previousLink: string;
-  nextLink: string;
-  songView: SongViewType;
-  setSongView: (view: SongViewType) => void;
-  className?: string;
-  currentSong?: SetListSong;
-  songIndex: number | "BREAK";
-}
+const BUTTON_DIMENSION_CLASSES = isCellPhone ? "h-5 w-5" : "h-6 w-6";
+const BUTTON_SIZE = isCellPhone ? "sm" : "lg";
+const TITLE_FONT_SIZE = isCellPhone ? "text-md" : "text-2xl";
 
 export function ControlBar({
+  gig,
+  gigSongOrBreak: gigSongOrBreak,
+  view,
+  setView,
   className,
-  previousLink,
-  nextLink,
-  songIndex,
-  songView,
-  currentSong,
-  setSongView,
-}: ControlBarProps) {
-  const viewPortWidth = window.innerWidth;
+  previousSongOrBreak,
+  nextSongOrBreak,
+}: {
+  gig: GigFragment | null;
+  gigSongOrBreak: DetailedGigSongFragment | SetBreak | null;
+  view: SongView;
+  setView: (view: SongView) => void;
+  className?: string;
+  previousSongOrBreak: GigSongFragment | SetBreak | null;
+  nextSongOrBreak: GigSongFragment | SetBreak | null;
+}) {
+  const previousButton = (
+    <Button
+      disabled={!previousSongOrBreak || !gig}
+      variant="constructive"
+      size={BUTTON_SIZE}
+      className={`h-full`}
+    >
+      <TrackPreviousIcon
+        className={`
+          ${BUTTON_DIMENSION_CLASSES}
+        `}
+      />
+    </Button>
+  );
+
+  const nextButton = (
+    <Button
+      disabled={!nextSongOrBreak || !gig}
+      variant="constructive"
+      size={BUTTON_SIZE}
+      className={`h-full`}
+    >
+      <TrackNextIcon
+        className={`
+          ${BUTTON_DIMENSION_CLASSES}
+        `}
+      />
+    </Button>
+  );
+
   return (
     <div
-      data-name="SETLIST_CONTROL_BAR"
+      data-name="SET_LIST_SONG_CONTROL_BAR"
       className={`
-        flex w-full items-center justify-between border bg-background
+        flex items-stretch justify-between border-b border-muted bg-black p-1
+
+        md:p-4
 
         ${className}
       `}
     >
-      <div data-name="SETLIST_CONTROL_BAR_LEFT" className="flex items-center">
-        <PreviousSongButton previousLink={previousLink} />
+      <div data-name="LEFT_BUTTONS" className="flex items-stretch gap-2">
+        {previousSongOrBreak ? (
+          <Link to={getSongOrBreakUrl(gig, previousSongOrBreak)}>
+            {previousButton}
+          </Link>
+        ) : (
+          previousButton
+        )}
+
         <div
-          data-name="SONG_TITLE_INFO"
-          className={`flex flex-col items-start justify-center p-2`}
+          data-name="SET_LIST_SONG_CONTROL_BAR_SONG_TITLE"
+          className={`flex min-h-16 flex-col gap-1`}
         >
-          <h3
-            data-name="SONG_TITLE"
+          <h1
             className={`
-              flex max-w-[60vw] items-center overflow-hidden whitespace-nowrap
+              ${TITLE_FONT_SIZE}
+
               font-bold
             `}
           >
-            {songIndex === "BREAK" || !currentSong ? (
-              "SET BREAK"
-            ) : (
-              <>
-                <span
-                  data-name="SONG_NUMBER"
-                  className={`text-muted-foreground`}
-                >
-                  {songIndex + 1}.
-                </span>
-                <span className="overflow-hidden text-ellipsis">
-                  {currentSong.Title}
-                </span>
-              </>
-            )}
-          </h3>
-
-          {currentSong && (
-            <div
-              data-name="SONG_INFO_LINE"
-              className="flex items-center space-x-2"
-            >
-              {currentSong.Key && (
-                <Badge data-name="SONG_KEY" size="sm">
-                  {currentSong.Key}
-                </Badge>
-              )}
-              {Boolean(currentSong.Tempo) && !isNaN(currentSong.Tempo) && (
-                <span
-                  data-name="SONG_TEMPO"
-                  className={`whitespace-nowrap italic`}
-                >
-                  {currentSong.Tempo} bpm
-                </span>
-              )}
-              {currentSong.Feel && (
-                <div
-                  data-name="SONG_FEEL"
-                  className={`text-xs italic text-muted-foreground`}
-                >
-                  {currentSong.Feel}
-                </div>
+            {gigSongOrBreak?.__typename === "GigSong"
+              ? `${gigSongOrBreak.order + 1}.`
+              : ""}{" "}
+            {getSongOrBreakTitle(gigSongOrBreak)}
+          </h1>
+          {gigSongOrBreak?.__typename === "GigSong" && (
+            <div data-name="BADGES" className="flex gap-2">
+              <KeyBadge songKey={gigSongOrBreak?.song?.key} />
+              <TempoBadge tempo={gigSongOrBreak?.song?.tempo} />
+              {!isCellPhone && (
+                <SongFeelBadge songFeel={gigSongOrBreak?.song?.feel} />
               )}
             </div>
           )}
         </div>
       </div>
 
-      <div
-        data-name="SETLIST_CONTROL_BAR_RIGHT"
-        className={`flex items-center space-x-2`}
-      >
-        <div
-          data-name="VIEW_SELECT_BUTTONS"
-          className={`
-            flex items-center justify-between
-
-            ${
-              viewPortWidth < 768
-                ? `
-                  absolute bottom-full left-1/2 w-[80vw] max-w-[300px]
-                  -translate-x-1/2 -translate-y-2 rounded border bg-background
-                  p-2
-                `
-                : "gap-2"
-            }
-          `}
-        >
-          {VIEW_SELECT_OPTIONS.map((option) => (
+      <div data-name="RIGHT_BUTTONS" className="flex items-stretch gap-2">
+        <Popover>
+          <PopoverTrigger asChild>
             <Button
-              variant={songView === option.value ? "default" : "secondary"}
-              key={option.value}
-              onClick={() => {
-                setSongView(option.value);
-              }}
+              variant="informational"
+              size={BUTTON_SIZE}
+              className={`h-full`}
             >
-              {option.icon}
+              <RowsIcon
+                className={`
+                  ${BUTTON_DIMENSION_CLASSES}
+                `}
+              />
             </Button>
-          ))}
-
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="informational">
-                <RowsIcon />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent>
+          </PopoverTrigger>
+          <PopoverContent>
+            {gigSongOrBreak && gig && (
               <MiniGigMenu
                 className="flex max-h-[60vh] flex-col overflow-y-auto"
-                currentSong={currentSong}
+                currentSongOrBreak={gigSongOrBreak}
+                gig={gig}
+                view={view}
+                setView={setView}
               />
-            </PopoverContent>
-          </Popover>
-        </div>
-
-        <NextSongButton nextLink={nextLink} />
+            )}
+          </PopoverContent>
+        </Popover>
+        {nextSongOrBreak ? (
+          <Link
+            to={
+              nextSongOrBreak.__typename === "SetBreak"
+                ? `/gigs/${gig?.id}/setbreak/${nextSongOrBreak.lastSetId}/${nextSongOrBreak.nextSetId}`
+                : `/gigs/${gig?.id}/songs/${nextSongOrBreak.id}`
+            }
+          >
+            {nextButton}
+          </Link>
+        ) : (
+          nextButton
+        )}
       </div>
     </div>
-  );
-}
-
-function PreviousSongButton({ previousLink }: { previousLink: string }) {
-  return (
-    <Link to={previousLink}>
-      <Button
-        data-name="PREVIOUS_SONG_BUTTON"
-        disabled={!previousLink}
-        className={`
-          m-2
-
-          ${isMobile ? "px-3" : "px-6"}
-        `}
-        size={isMobile ? "sm" : "lg"}
-        type="button"
-        variant="advisory"
-      >
-        <TrackPreviousIcon
-          className={`
-            h-4 w-4
-
-            md:h-6 md:w-6
-          `}
-        />
-      </Button>
-    </Link>
-  );
-}
-
-function NextSongButton({ nextLink }: { nextLink: string }) {
-  return (
-    <Link to={nextLink}>
-      <Button
-        data-name="NEXT_SONG_BUTTON"
-        disabled={!nextLink}
-        className={`
-          m-2
-
-          ${isMobile ? "px-3" : "px-6"}
-        `}
-        size={isMobile ? "sm" : "lg"}
-        type="button"
-        variant="advisory"
-      >
-        <TrackNextIcon
-          className={`
-            h-4 w-4
-
-            md:h-6 md:w-6
-          `}
-        />
-      </Button>
-    </Link>
   );
 }

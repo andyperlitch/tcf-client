@@ -14,7 +14,7 @@ export function TempoBadge({ tempo }: { tempo: number | null | undefined }) {
 
         ${tempo ? (isPaused ? "" : styles.tempoPulse) : ""}
       `}
-      variant="advisory"
+      variant="info"
       style={{
         animationDuration: tempo ? `${60 / tempo}s` : "0s",
       }}
