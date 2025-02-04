@@ -65,7 +65,7 @@ export function MiniGigMenu({
             leadsheet
           </ToggleGroupItem>
           <ToggleGroupItem value={SongView.Lyrics}>lyrics</ToggleGroupItem>
-          <ToggleGroupItem value={SongView.Info}>info</ToggleGroupItem>
+          {/* <ToggleGroupItem value={SongView.Info}>info</ToggleGroupItem> */}
         </ToggleGroup>
       </div>
       <div data-name="GIG_SETS" className="flex flex-col gap-2">
