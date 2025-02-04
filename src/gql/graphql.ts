@@ -188,7 +188,7 @@ export type Gig = {
   __typename?: 'Gig';
   createdAt: Scalars['DateTime']['output'];
   currentGigSong?: Maybe<GigSong>;
-  currentGigSongId?: Maybe<Scalars['String']['output']>;
+  currentGigSongId?: Maybe<Scalars['Int']['output']>;
   date?: Maybe<Scalars['DateTime']['output']>;
   eventId?: Maybe<Scalars['Int']['output']>;
   gigLeader?: Maybe<User>;
@@ -200,17 +200,25 @@ export type Gig = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type GigBreak = {
+  __typename?: 'GigBreak';
+  id: Scalars['Int']['output'];
+};
+
 export type GigSet = {
   __typename?: 'GigSet';
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  order: Scalars['Int']['output'];
   songs: Array<GigSong>;
 };
 
 export type GigSong = {
   __typename?: 'GigSong';
   id: Scalars['Int']['output'];
+  nextSong?: Maybe<GigSong>;
   order: Scalars['Int']['output'];
+  previousSong?: Maybe<GigSong>;
   setId: Scalars['Int']['output'];
   song?: Maybe<Song>;
   songId: Scalars['Int']['output'];
@@ -693,6 +701,7 @@ export type Query = {
   event?: Maybe<Event>;
   events: Array<Event>;
   gig?: Maybe<Gig>;
+  gigSong?: Maybe<GigSong>;
   gigs: Array<Gig>;
   randomName: Scalars['String']['output'];
   song?: Maybe<Song>;
@@ -733,6 +742,11 @@ export type QueryEventArgs = {
 
 
 export type QueryGigArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type QueryGigSongArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -1181,9 +1195,9 @@ export type GigSongFragment = { __typename?: 'GigSong', id: number, order: numbe
 
 export type GigSetFragment = { __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> };
 
-export type BasicGigFragment = { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null };
+export type BasicGigFragment = { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: number | null };
 
-export type GigFragment = { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, gigLeaderId?: number | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> };
+export type GigFragment = { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: number | null, gigLeaderId?: number | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> };
 
 export type SongFragment = { __typename?: 'Song', id: number, title?: string | null, artist?: string | null, tempo?: number | null, lyrics?: string | null, feel?: string | null, fileUrl?: string | null, spotifyUrl?: string | null, youtubeUrl?: string | null, coverArtUrl?: string | null, duration?: number | null, key?: string | null, practicePriority?: string | null, chartUrl?: string | null, leadSheetUrl?: string | null, leadSheetEditUrl?: string | null, leadSheetId?: number | null };
 
@@ -1200,7 +1214,7 @@ export type BandCreateGigMutationVariables = Exact<{
 }>;
 
 
-export type BandCreateGigMutation = { __typename?: 'Mutation', createGig: { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, gigLeaderId?: number | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> } };
+export type BandCreateGigMutation = { __typename?: 'Mutation', createGig: { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: number | null, gigLeaderId?: number | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> } };
 
 export type BandUpdateGigMutationVariables = Exact<{
   gigId: Scalars['Int']['input'];
@@ -1374,14 +1388,14 @@ export type DeleteUploadMutation = { __typename?: 'Mutation', deleteUpload: { __
 export type BandGigsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BandGigsQuery = { __typename?: 'Query', gigs: Array<{ __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null }> };
+export type BandGigsQuery = { __typename?: 'Query', gigs: Array<{ __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: number | null }> };
 
 export type BandGigQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
 
-export type BandGigQuery = { __typename?: 'Query', gig?: { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: string | null, gigLeaderId?: number | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> } | null };
+export type BandGigQuery = { __typename?: 'Query', gig?: { __typename?: 'Gig', id: number, name: string, date?: any | null, createdAt: any, updatedAt: any, eventId?: number | null, nowPlayingEngagementId?: number | null, currentGigSongId?: number | null, gigLeaderId?: number | null, currentGigSong?: { __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null } | null, sets: Array<{ __typename?: 'GigSet', id: number, name: string, songs: Array<{ __typename?: 'GigSong', id: number, order: number, song?: { __typename?: 'Song', id: number, title?: string | null, artist?: string | null } | null }> }> } | null };
 
 export type BandSongsQueryVariables = Exact<{ [key: string]: never; }>;
 

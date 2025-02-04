@@ -18,7 +18,9 @@ export function CreateGigButton({
 }: {
   onSuccess: (gig: GigFragment) => void;
 }) {
-  const [createGig] = useBandCreateGigMutation();
+  const [createGig] = useBandCreateGigMutation({
+    refetchQueries: ["bandGigs"],
+  });
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = async (values: FormSchema) => {
