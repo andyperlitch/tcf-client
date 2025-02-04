@@ -14,8 +14,8 @@ export function getSongOrBreakTitle(
 }
 
 export function getSongOrBreakUrl(
-  gig: GigFragment | null,
-  gigSongOrBreak: GigSongFragment | SetBreak | null
+  gig: Pick<GigFragment, "id"> | null,
+  gigSongOrBreak: Pick<GigSongFragment, "id" | "__typename"> | SetBreak | null
 ): To {
   if (!gig || !gigSongOrBreak) return "";
 

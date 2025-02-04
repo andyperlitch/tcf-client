@@ -65,10 +65,16 @@ gql`
   }
 `;
 gql`
-  mutation bandUpdateCurrentGigSong($gigId: Int!, $gigSongId: Int) {
+  mutation bandUpdateCurrentGigSongIdOrBreak(
+    $gigId: Int!
+    $gigSongIdOrBreak: String
+  ) {
     # Gig!
-    updateCurrentGigSong(gigId: $gigId, gigSongId: $gigSongId) {
-      id
+    updateCurrentGigSongIdOrBreak(
+      gigId: $gigId
+      gigSongIdOrBreak: $gigSongIdOrBreak
+    ) {
+      ...Gig
     }
   }
 `;

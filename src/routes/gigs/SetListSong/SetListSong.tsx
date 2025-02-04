@@ -26,6 +26,10 @@ export function SetListSong() {
     "SetListSong:view",
     SongView.Leadsheet
   );
+  const [followLeader, setFollowLeader] = useLocalStorage<boolean>(
+    "SetListSong:followLeader",
+    true
+  );
 
   const navigate = useNavigate();
 
@@ -37,7 +41,13 @@ export function SetListSong() {
     loading,
     error,
     refetch,
-  } = useSetListSongOrBreak({ gigId, gigSongId, lastSetId, nextSetId });
+  } = useSetListSongOrBreak({
+    gigId,
+    gigSongId,
+    lastSetId,
+    nextSetId,
+    followLeader,
+  });
 
   const nextSet =
     gig?.id &&
@@ -61,6 +71,7 @@ export function SetListSong() {
       [navigate, nextSongOrBreak, previousSongOrBreak, gig]
     )
   );
+  const patOnBack = useMemo(() => getPatOnTheBack(), []);
 
   return (
     <div
@@ -75,6 +86,8 @@ export function SetListSong() {
         setView={setView}
         previousSongOrBreak={previousSongOrBreak}
         nextSongOrBreak={nextSongOrBreak}
+        followLeader={followLeader}
+        setFollowLeader={setFollowLeader}
       />
       {loading && <Loader />}
       {error && <ErrorMessage error={error} retry={refetch} />}
@@ -93,7 +106,7 @@ export function SetListSong() {
       )}
       {nextSet && (
         <CenteredMessage className="min-h-[calc(100vh-300px)]">
-          {getPatOnTheBack()}
+          {patOnBack}
           <GigSetList
             title="Here's what's coming up..."
             gigId={gig.id}

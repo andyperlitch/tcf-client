@@ -38,7 +38,7 @@ gql`
     updatedAt
     eventId
     nowPlayingEngagementId
-    currentGigSongId
+    currentGigSongIdOrBreak
   }
 
   fragment Gig on Gig {
@@ -49,7 +49,7 @@ gql`
     updatedAt
     eventId
     nowPlayingEngagementId
-    currentGigSongId
+    currentGigSongIdOrBreak
     gigLeaderId
     currentGigSong {
       ...GigSong

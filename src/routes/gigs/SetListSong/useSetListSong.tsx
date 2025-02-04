@@ -3,16 +3,25 @@ import {
   GigSongFragment,
   useBandGigQuery,
   useBandGigSongQuery,
+  useBandUpdateCurrentGigSongIdOrBreakMutation,
+  useOnCurrentGigSongIdOrBreakChangedSubscription,
 } from "@/gql/graphql";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { SetBreak } from "./consts";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
+import { getSongOrBreakUrl } from "./utils";
 
 export function useSetListSongOrBreak(params: {
   gigId: number;
   gigSongId?: number | null;
   lastSetId?: number | null;
   nextSetId?: number | null;
+  followLeader?: boolean;
 }) {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const gigId = params.gigId;
   const {
     data: gigData,
@@ -43,6 +52,107 @@ export function useSetListSongOrBreak(params: {
   const loading = gigLoading || gigSongLoading;
   const error = gigError || gigSongError;
   const gig = gigData?.gig || null;
+
+  const { user } = useAuth();
+
+  useOnCurrentGigSongIdOrBreakChangedSubscription({
+    variables: {
+      gigId,
+    },
+    skip: user?.id === gig?.gigLeaderId,
+  });
+
+  const [updateCurrentGigSongIdOrBreak] =
+    useBandUpdateCurrentGigSongIdOrBreakMutation();
+
+  const gigSongIdOrBreak = getGigSongIdOrBreakFromParams(params);
+
+  // PUBLISH
+  useEffect(() => {
+    if (
+      !gigId ||
+      !user?.id ||
+      !gig?.gigLeaderId ||
+      user.id !== gig.gigLeaderId ||
+      gig.currentGigSongIdOrBreak === gigSongIdOrBreak
+    ) {
+      console.log("!gigId", !gigId);
+      console.log("!user?.id", !user?.id);
+      console.log("!gig?.gigLeaderId", !gig?.gigLeaderId);
+      console.log("user.id !== gig.gigLeaderId", user?.id !== gig?.gigLeaderId);
+      console.log(
+        "gig.currentGigSongIdOrBreak === gigSongIdOrBreak",
+        gig?.currentGigSongIdOrBreak === gigSongIdOrBreak
+      );
+      return;
+    }
+    updateCurrentGigSongIdOrBreak({
+      variables: {
+        gigId,
+        gigSongIdOrBreak,
+      },
+    });
+  }, [
+    gig?.currentGigSongIdOrBreak,
+    gig?.gigLeaderId,
+    gigId,
+    gigSongIdOrBreak,
+    updateCurrentGigSongIdOrBreak,
+    user?.id,
+  ]);
+
+  // SUBSCRIBE
+  useEffect(() => {
+    if (
+      params.followLeader &&
+      gig?.currentGigSongIdOrBreak &&
+      gig?.gigLeaderId !== user?.id
+    ) {
+      const parts = gig.currentGigSongIdOrBreak.split(":");
+      const songId = parts[0] === "break" ? null : parseInt(parts[0]);
+      const lastSetId = parts[1] ? parseInt(parts[1]) : null;
+      const nextSetId = parts[2] ? parseInt(parts[2]) : null;
+      if (
+        (songId !== params.gigSongId ||
+          lastSetId !== params.lastSetId ||
+          nextSetId !== params.nextSetId) &&
+        ((songId && !lastSetId && !nextSetId) ||
+          (!songId && lastSetId && nextSetId))
+      ) {
+        toast({
+          variant: "informational",
+          title: "Current song changed",
+        });
+
+        navigate(
+          getSongOrBreakUrl(
+            { id: gigId },
+            songId
+              ? {
+                  __typename: "GigSong" as const,
+                  id: songId,
+                }
+              : {
+                  __typename: "SetBreak" as const,
+                  lastSetId: lastSetId!,
+                  nextSetId: nextSetId!,
+                }
+          )
+        );
+      }
+    }
+  }, [
+    gig?.currentGigSongIdOrBreak,
+    gig?.gigLeaderId,
+    user?.id,
+    gigId,
+    navigate,
+    params.followLeader,
+    params.gigSongId,
+    params.lastSetId,
+    params.nextSetId,
+    toast,
+  ]);
 
   const { previousSongOrBreak, nextSongOrBreak, gigSongOrBreak } =
     useMemo(() => {
@@ -130,4 +240,17 @@ export function useSetListSongOrBreak(params: {
     error,
     refetch,
   };
+}
+
+function getGigSongIdOrBreakFromParams(params: {
+  gigSongId?: number | null;
+  lastSetId?: number | null;
+  nextSetId?: number | null;
+}): string | null {
+  if (params.gigSongId) {
+    return params.gigSongId.toString();
+  } else if (params.lastSetId && params.nextSetId) {
+    return `break:${params.lastSetId}:${params.nextSetId}`;
+  }
+  return null;
 }

@@ -4,6 +4,9 @@ import { SetBreak, SongView } from "./consts";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Fragment as F } from "react/jsx-runtime";
 import { ReactNode } from "react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Beacon } from "@/components/beacon/Beacon";
 
 export function MiniGigMenu({
   currentSongOrBreak,
@@ -11,23 +14,47 @@ export function MiniGigMenu({
   view,
   setView,
   className,
+  followLeader,
+  setFollowLeader,
 }: {
   currentSongOrBreak: DetailedGigSongFragment | SetBreak;
   gig: GigFragment;
   view: SongView;
   setView: (view: SongView) => void;
   className?: string;
+  followLeader: boolean;
+  setFollowLeader: (followLeader: boolean) => void;
 }) {
+  const checkForLinkClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target instanceof HTMLAnchorElement) {
+      setFollowLeader(false);
+    }
+  };
+
   return (
     <div
       data-name="MINI_GIG_MENU"
       className={`
         ${className}
 
-        flex flex-col gap-2
+        flex flex-col items-stretch gap-2
       `}
     >
-      <div data-name="VIEW_SELECTOR" className="flex gap-2">
+      <div data-name="GIG_TITLE">
+        <Link to={`/gigs/${gig.id}`}>{gig.name}</Link>
+      </div>
+      <div
+        data-name="FOLLOW_LEADER"
+        className={`flex items-center justify-between`}
+      >
+        <Label>Follow Gig Leader</Label>
+        <Switch checked={followLeader} onCheckedChange={setFollowLeader} />
+      </div>
+      <div
+        data-name="VIEW_SELECTOR"
+        className={`flex items-center justify-between`}
+      >
+        <Label>View</Label>
         <ToggleGroup
           type="single"
           value={view}
@@ -55,7 +82,7 @@ export function MiniGigMenu({
               )}
               <div data-name="GIG_SET">
                 <h3 className="text-lg">Set {setIndex + 1}</h3>
-                <div data-name="GIG_SET_LIST">
+                <div data-name="GIG_SET_LIST" onMouseDown={checkForLinkClick}>
                   {set.songs.map((song, songIndex) => (
                     <div
                       key={song.id}
@@ -65,6 +92,9 @@ export function MiniGigMenu({
                       <span className="text-muted-foreground">
                         {songIndex + 1}.
                       </span>
+                      {song.id.toString() === gig.currentGigSongIdOrBreak && (
+                        <Beacon state="active" />
+                      )}
                       {currentSongOrBreak.__typename === "GigSong" &&
                       song.id === currentSongOrBreak.id ? (
                         <span className={`font-bold`}>{song.song?.title}</span>

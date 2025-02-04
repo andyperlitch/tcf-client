@@ -36,6 +36,8 @@ export function ControlBar({
   className,
   previousSongOrBreak,
   nextSongOrBreak,
+  followLeader,
+  setFollowLeader,
 }: {
   gig: GigFragment | null;
   gigSongOrBreak: DetailedGigSongFragment | SetBreak | null;
@@ -44,6 +46,8 @@ export function ControlBar({
   className?: string;
   previousSongOrBreak: GigSongFragment | SetBreak | null;
   nextSongOrBreak: GigSongFragment | SetBreak | null;
+  followLeader: boolean;
+  setFollowLeader: (followLeader: boolean) => void;
 }) {
   const previousButton = (
     <Button
@@ -51,6 +55,7 @@ export function ControlBar({
       variant="constructive"
       size={BUTTON_SIZE}
       className={`h-full`}
+      onMouseDown={() => setFollowLeader(false)}
     >
       <TrackPreviousIcon
         className={`
@@ -66,6 +71,7 @@ export function ControlBar({
       variant="constructive"
       size={BUTTON_SIZE}
       className={`h-full`}
+      onMouseDown={() => setFollowLeader(false)}
     >
       <TrackNextIcon
         className={`
@@ -146,6 +152,8 @@ export function ControlBar({
                 gig={gig}
                 view={view}
                 setView={setView}
+                followLeader={followLeader}
+                setFollowLeader={setFollowLeader}
               />
             )}
           </PopoverContent>
