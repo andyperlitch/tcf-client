@@ -155,7 +155,7 @@ export function TextElementEditor({
       <div data-name="FONT_FAMILY">
         {overrideFontFamily && (
           <FontPicker
-            value={element.fontFamily || state.savedConfig.fontFamily || []}
+            value={element.fontFamily || []}
             onChange={setFontFamily}
           />
         )}
