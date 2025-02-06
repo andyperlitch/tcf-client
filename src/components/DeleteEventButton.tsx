@@ -1,7 +1,7 @@
 import { useAdminDeleteEventMutation } from "@/gql/graphql";
-import { InlineConfirmButton } from "./InlineConfirmButton";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { Button } from "./ui/button";
+import { InlineTypeoutConfirmButton } from "./InlineTypeoutConfirmButton";
 
 export function DeleteEventButton({
   id,
@@ -14,13 +14,13 @@ export function DeleteEventButton({
   });
 
   return (
-    <InlineConfirmButton
+    <InlineTypeoutConfirmButton
       onConfirm={() => deleteEvent({ variables: { id } })}
       loading={loading}
       error={error}
       {...buttonProps}
     >
       <TrashIcon />
-    </InlineConfirmButton>
+    </InlineTypeoutConfirmButton>
   );
 }
