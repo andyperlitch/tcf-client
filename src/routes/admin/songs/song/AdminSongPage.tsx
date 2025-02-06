@@ -3,6 +3,7 @@ import { CrumbMeta, SimpleCrumbs } from "@/components/SimpleCrumbs";
 import {
   LeadSheetFragment,
   SongFragment,
+  useBandCreateLeadSheetMutation,
   useBandDeleteLeadSheetMutation,
   useBandSongWithLeadSheetQuery,
   useBandUpdateSongMutation,
@@ -19,7 +20,7 @@ import { SongFeelBadge } from "@/components/SongFeelBadge";
 import { InlineTypeoutConfirmButton } from "@/components/InlineTypeoutConfirmButton";
 import { ImportLeadSheetFromGoogleDocButton } from "./lead-sheet/ImportLeadSheetFromGoogleDocButton";
 import { EditableText } from "@/components/EditableText";
-
+import { useCallback } from "react";
 const crumbs: CrumbMeta[] = [["/admin/songs", "Songs"]];
 
 export function AdminSongPage() {
@@ -31,8 +32,14 @@ export function AdminSongPage() {
   });
   const [deleteLeadSheet] = useBandDeleteLeadSheetMutation();
   const [updateSong] = useBandUpdateSongMutation();
-
+  const [createLeadSheet] = useBandCreateLeadSheetMutation();
   const song = data?.song;
+
+  const handleCreateLeadSheet = useCallback(() => {
+    createLeadSheet({
+      variables: { songId },
+    }).then(() => refetch());
+  }, [createLeadSheet, refetch, songId]);
 
   return (
     <AdminContainer section="songs">
@@ -160,7 +167,11 @@ export function AdminSongPage() {
                       Delete Lead Sheet
                     </InlineTypeoutConfirmButton>
                   ) : (
-                    <Button variant="constructive" className="self-start">
+                    <Button
+                      variant="constructive"
+                      className="self-start"
+                      onClick={handleCreateLeadSheet}
+                    >
                       Create Lead Sheet
                     </Button>
                   )}
