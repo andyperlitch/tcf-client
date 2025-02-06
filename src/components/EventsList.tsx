@@ -1,43 +1,50 @@
 import { format } from "date-fns";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Link } from "react-router-dom";
-import { useAdminGetEventsQuery } from "@/gql/graphql";
+import { AdminEventFragment } from "@/gql/graphql";
 import { DeleteEventButton } from "./DeleteEventButton";
+import { ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "./DataTable";
 
-export function EventsList() {
-  const { /* loading, error,  */ data } = useAdminGetEventsQuery();
+const columns: ColumnDef<AdminEventFragment>[] = [
+  {
+    accessorKey: "name",
+    header: "Name",
+    cell({ row }) {
+      return (
+        <Link to={`/admin/events/${row.original.slug}`}>
+          {row.original.name}
+        </Link>
+      );
+    },
+  },
+  {
+    accessorKey: "date",
+    header: "Date",
+    cell({ row }) {
+      return format(row.original.date, "PPP");
+    },
+  },
+  {
+    accessorKey: "description",
+    header: "Description",
+  },
+  {
+    accessorKey: "actions",
+    header: "Actions",
+    cell({ row }) {
+      return <DeleteEventButton id={row.original.id} />;
+    },
+  },
+];
 
+export function EventsList({ events }: { events: AdminEventFragment[] }) {
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableHeader>Name</TableHeader>
-          <TableHeader>Description</TableHeader>
-          <TableHeader>Date</TableHeader>
-          <TableHeader>Actions</TableHeader>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {data?.events.map((event) => (
-          <TableRow key={event.id}>
-            <TableCell>
-              <Link to={`/admin/events/${event.slug}`}>{event.name}</Link>
-            </TableCell>
-            <TableCell>{event.description}</TableCell>
-            <TableCell>{format(event.date, "PPP")}</TableCell>
-            <TableCell>
-              <DeleteEventButton id={event.id} />
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <DataTable
+      id="events"
+      data={events}
+      columns={columns}
+      showGlobalFilter
+      showColumnVisibility={false}
+    />
   );
 }
