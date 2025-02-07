@@ -7,6 +7,7 @@ gql`
       id
       title
       artist
+      leadSheetId
     }
     order
   }

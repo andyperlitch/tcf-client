@@ -1,13 +1,16 @@
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export function InfoIcon({
   children,
-  icon: Icon,
+  icon: Icon = InfoCircledIcon,
   className,
+  ...props
 }: {
   children: React.ReactNode;
-  icon: React.ElementType;
+  icon?: React.ElementType;
   className?: string;
+  color?: string;
 }) {
   return (
     <Tooltip>
@@ -18,6 +21,7 @@ export function InfoIcon({
 
             ${className}
           `}
+          {...props}
         />
       </TooltipTrigger>
       <TooltipContent>{children}</TooltipContent>

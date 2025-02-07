@@ -1,15 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { GigSongFragment } from "@/gql/graphql";
 import { useSortable } from "@dnd-kit/sortable";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { Cross2Icon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { ExternalLinkIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
 import { CSS } from "@dnd-kit/utilities";
+import { InfoIcon } from "@/components/InfoIcon";
 
 export function GigSong({
+  gigId,
   gigSong,
   onDelete,
 }: {
+  gigId: number;
   gigSong: GigSongFragment;
   onDelete: (gigSongId: number) => void;
 }) {
@@ -45,8 +48,20 @@ export function GigSong({
         <div className="italic text-muted-foreground">
           {gigSong.song?.artist}
         </div>
+        {gigSong.song?.leadSheetId && (
+          <InfoIcon color="green">Lead sheet exists</InfoIcon>
+        )}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center">
+        <Link
+          to={`/gigs/${gigId}/songs/${gigSong.id}`}
+          target="_blank"
+          className="flex items-center gap-2"
+        >
+          <Button variant="ghost" tooltip="Band view">
+            <EyeOpenIcon />
+          </Button>
+        </Link>
         <Link to={`/admin/songs/${gigSong.song?.id}`} target="_blank">
           <Button variant="ghost" tooltip="View song">
             <ExternalLinkIcon />

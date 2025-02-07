@@ -59,6 +59,7 @@ export function AdminGigPage() {
             >
               {gig.sets.map((set, index) => (
                 <AdminGigSet
+                  gigId={gig.id}
                   className="max-w-[800px] flex-1"
                   key={set.id}
                   gigSet={set}
