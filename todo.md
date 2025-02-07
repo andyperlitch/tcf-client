@@ -47,3 +47,5 @@
 - [ ] fix opacity in color picker
 - [ ] opacity on both element types
 - [ ] select multiple elements
+
+- [ ] focus on creation of chords bug
