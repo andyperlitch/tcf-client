@@ -125,18 +125,15 @@ export function NewPhotoForm({
       data-name="NEW_PHOTO_FORM"
       // height set to 85vh to account for the navigation bar in mobile browsers
       className={`
-        flex h-[85vh] w-screen flex-col items-center justify-center space-y-4
+        flex h-[85vh] w-screen flex-col items-center justify-start space-y-4
       `}
     >
       {/* description */}
       {!previewSrc && (
         <p
-          className={cn(
-            "pt-4 text-center font-fan text-2xl transition-opacity",
-            {
-              "opacity-0": loading || succeeded,
-            }
-          )}
+          className={cn("text-center font-fan text-xl transition-opacity", {
+            "opacity-0": loading || succeeded,
+          })}
         >
           {engagement.description || "Caption contest!"}
         </p>
@@ -179,7 +176,9 @@ export function NewPhotoForm({
                         text-background
                       `}
                     >
-                      SWIPE UP TO SEND
+                      SWIPE UP
+                      <br />
+                      TO SEND
                     </div>
                   </div>
                 )}
@@ -217,7 +216,7 @@ export function NewPhotoForm({
             <Textarea
               ref={captionInputRef}
               className={`
-                grow border-slate-200 font-fan text-xl text-black shadow-inner
+                grow border-slate-200 font-fan text-sm text-black shadow-inner
               `}
               placeholder="Add a caption..."
               value={caption}

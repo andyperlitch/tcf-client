@@ -79,7 +79,7 @@ export function TempoSetter({
   );
 }
 
-const BUFFER_SIZE = 5;
+const BUFFER_SIZE = 10;
 function TempoTapper({
   onNewTempo,
   ...buttonProps
