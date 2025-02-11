@@ -104,6 +104,7 @@ export function SongDetailsEditor({
             <Label>Key</Label>
             <EditableText
               className="text-lg font-bold"
+              inputClassName="min-w-8"
               value={song.key || ""}
               setValue={(value) =>
                 updateSong({

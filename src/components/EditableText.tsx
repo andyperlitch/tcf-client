@@ -29,6 +29,10 @@ type BaseEditableTextProps<T extends keyof JSX.IntrinsicElements> = {
    * Whether to show the confirm/cancel buttons
    */
   showConfirmCancel?: boolean;
+  /**
+   * Class name for the input
+   */
+  inputClassName?: string;
 };
 
 // Props when tabbable is true
@@ -83,6 +87,7 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
   cancelOnBlur = false,
   tabbable = false,
   name,
+  inputClassName,
 }: EditableTextProps<T>) {
   const { toast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -154,6 +159,8 @@ export function EditableText<T extends keyof JSX.IntrinsicElements>({
           bg-transparent pb-0 pl-[4px] pr-0 pt-0 text-inherit outline-1
 
           text-[length:inherit]
+
+          ${inputClassName}
         `}
         disabled={loading}
         value={localValue}
