@@ -4,6 +4,9 @@ import { useCallback } from "react";
 import { ActionType } from "./actions";
 import { useIframe } from "@/hooks/use-iframe";
 import { useStageState } from "./StageStateContext";
+import { createLogger } from "@/utils/createLogger";
+
+const logger = createLogger("EventStageStateProvider");
 
 export function EventStageStateProvider({
   children,
@@ -29,13 +32,14 @@ export function EventStageStateProvider({
     [dispatch, dispatchIframe]
   );
 
-  const value = useMemo(
-    () => ({
+  const value = useMemo(() => {
+    logger.info("state", state);
+
+    return {
       state,
       dispatch: wrappedDispatch,
-    }),
-    [state, wrappedDispatch]
-  );
+    };
+  }, [state, wrappedDispatch]);
 
   return (
     <eventStageStateContext.Provider value={value}>
