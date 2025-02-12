@@ -6,4 +6,9 @@ gql`
       ...AdminEvent
     }
   }
+  query adminGetEventById($id: Int!) {
+    eventById(id: $id) {
+      ...AdminEvent
+    }
+  }
 `;

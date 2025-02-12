@@ -11,6 +11,8 @@ import {
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { AdminGigSet } from "./AdminGigSet";
 import { GigLeaderPicker } from "./GigLeaderPicker";
+import { GigEventPicker } from "./GigEventPicker";
+import { GigNowPlayingPicker } from "./GigNowPlayingPicker";
 
 const crumbs: CrumbMeta[] = [["/admin/gigs", "Gigs"]];
 
@@ -45,8 +47,12 @@ export function AdminGigPage() {
         {gigError && <ErrorMessage error={gigError} retry={refetchGig} />}
         {gig && (
           <div data-name="GIG_DETAILS" className="flex flex-col gap-4">
-            <div data-name="GIG_MAIN_CONTROLS">
+            <div data-name="GIG_MAIN_CONTROLS" className="flex gap-2">
               <GigLeaderPicker gig={gig} />
+              <GigEventPicker gig={gig} />
+              {typeof gig.eventId === "number" && (
+                <GigNowPlayingPicker gig={{ ...gig, eventId: gig.eventId }} />
+              )}
             </div>
 
             <div

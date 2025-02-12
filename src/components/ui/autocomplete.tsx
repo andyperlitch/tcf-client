@@ -26,6 +26,7 @@ export function Autocomplete<
   onSelect,
   value,
   placeholder,
+  searchPlaceholder,
   filterFn = (_value, _search, _keywords) => {
     const value = _value.toLowerCase();
     const search = _search.toLowerCase();
@@ -47,6 +48,7 @@ export function Autocomplete<
   setOpen?: (open: boolean) => void;
   value?: TItem | null;
   placeholder?: string;
+  searchPlaceholder?: string;
   // the type of the prop `filter` on the `Command` component
   filterFn?: (value: string, search: string, keywords?: string[]) => number;
 }) {
@@ -85,13 +87,13 @@ export function Autocomplete<
       <PopoverContent className="w-[200px] p-0">
         <Command filter={filterFn}>
           <CommandInput
-            placeholder="Search framework..."
+            placeholder={searchPlaceholder ?? "search..."}
             className="h-9"
             value={currentSearchValue}
             onValueChange={handleSearchValueChange}
           />
           <CommandList>
-            <CommandEmpty>No songs found.</CommandEmpty>
+            <CommandEmpty>Nothing found.</CommandEmpty>
             <CommandGroup>
               {items.map((item) => (
                 <CommandItem

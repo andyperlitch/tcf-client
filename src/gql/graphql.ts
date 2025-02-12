@@ -698,6 +698,7 @@ export type Query = {
   engagement?: Maybe<Engagement>;
   engagements: Array<Engagement>;
   event?: Maybe<Event>;
+  eventById?: Maybe<Event>;
   events: Array<Event>;
   gig?: Maybe<Gig>;
   gigSong?: Maybe<GigSong>;
@@ -737,6 +738,11 @@ export type QueryEngagementsArgs = {
 
 export type QueryEventArgs = {
   slug: Scalars['String']['input'];
+};
+
+
+export type QueryEventByIdArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -1002,8 +1008,10 @@ export type UpdateEventStageConfigInput = {
 
 export type UpdateGigInput = {
   date?: InputMaybe<Scalars['DateTime']['input']>;
+  eventId?: InputMaybe<Scalars['Int']['input']>;
   gigLeaderId?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  nowPlayingEngagementId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateGigSetInput = {
@@ -1653,6 +1661,13 @@ export type AdminGetEventQueryVariables = Exact<{
 
 
 export type AdminGetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: number, name: string, date?: any | null, live: boolean, location?: string | null, locked: boolean, description?: string | null, slug: string, createdAt: any, updatedAt: any, activeEngagementId?: number | null, stageConfig?: { __typename?: 'EventStageConfig', qrForegroundColor?: string | null, qrBackgroundColor?: string | null, qrTextColor?: string | null, qrWrapperBackgroundColor?: string | null, backgroundImage?: string | null, fontFamily?: Array<string> | null, elements?: Array<{ __typename?: 'ScreenElement', id: string, type: string, name?: string | null, imageUrl?: string | null, defaultStyles?: any | null, engagementStyles?: any | null, defaultClassNames?: string | null, engagementClassNames?: string | null, text?: string | null, fontFamily?: Array<string> | null, linkHref?: string | null }> | null } | null, fanConfig?: { __typename?: 'EventFanConfig', backgroundImage?: string | null, fontFamily?: Array<string> | null, elements?: Array<{ __typename?: 'ScreenElement', id: string, type: string, name?: string | null, imageUrl?: string | null, defaultStyles?: any | null, engagementStyles?: any | null, defaultClassNames?: string | null, engagementClassNames?: string | null, text?: string | null, fontFamily?: Array<string> | null, linkHref?: string | null }> | null } | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, qrCodeCta?: string | null, startTime?: any | null, order: number, endTime?: any | null, type: EngagementType, data?: { __typename?: 'NowPlayingAdminData', currentSong?: number | null } | { __typename?: 'PhotoCarouselAdminData', visibleSubmission?: number | null, rejectedQueue: Array<number>, unapprovedQueue: Array<number>, unseenQueue: Array<number>, seenQueuePointer: number, seenQueue: Array<number> } | { __typename?: 'SlidesAdminData', currentSlide: number } | { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, config?: { __typename?: 'NowPlayingAdminConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselAdminConfig', maxSubmissionsPerUser: number, requireApproval: boolean, askSharePermission?: boolean | null, sharePrompt?: string | null, pollInterval?: number | null } | { __typename?: 'SlidesAdminConfig', autoPlay: boolean } | { __typename?: 'VoteForAdminConfig', votesPerUser: number, allowUserSubmissions: boolean, maxSubmissionsPerUser: number } | null, viewConfig: { __typename?: 'NowPlayingViewConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number, askSharePermission?: boolean | null, sharePrompt?: string | null } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'NowPlayingViewData', currentSong?: number | null } | { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null, engagements: Array<{ __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, qrCodeCta?: string | null, startTime?: any | null, order: number, endTime?: any | null, type: EngagementType, data?: { __typename?: 'NowPlayingAdminData', currentSong?: number | null } | { __typename?: 'PhotoCarouselAdminData', visibleSubmission?: number | null, rejectedQueue: Array<number>, unapprovedQueue: Array<number>, unseenQueue: Array<number>, seenQueuePointer: number, seenQueue: Array<number> } | { __typename?: 'SlidesAdminData', currentSlide: number } | { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, config?: { __typename?: 'NowPlayingAdminConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselAdminConfig', maxSubmissionsPerUser: number, requireApproval: boolean, askSharePermission?: boolean | null, sharePrompt?: string | null, pollInterval?: number | null } | { __typename?: 'SlidesAdminConfig', autoPlay: boolean } | { __typename?: 'VoteForAdminConfig', votesPerUser: number, allowUserSubmissions: boolean, maxSubmissionsPerUser: number } | null, viewConfig: { __typename?: 'NowPlayingViewConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number, askSharePermission?: boolean | null, sharePrompt?: string | null } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'NowPlayingViewData', currentSong?: number | null } | { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } }> } | null };
+
+export type AdminGetEventByIdQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type AdminGetEventByIdQuery = { __typename?: 'Query', eventById?: { __typename?: 'Event', id: number, name: string, date?: any | null, live: boolean, location?: string | null, locked: boolean, description?: string | null, slug: string, createdAt: any, updatedAt: any, activeEngagementId?: number | null, stageConfig?: { __typename?: 'EventStageConfig', qrForegroundColor?: string | null, qrBackgroundColor?: string | null, qrTextColor?: string | null, qrWrapperBackgroundColor?: string | null, backgroundImage?: string | null, fontFamily?: Array<string> | null, elements?: Array<{ __typename?: 'ScreenElement', id: string, type: string, name?: string | null, imageUrl?: string | null, defaultStyles?: any | null, engagementStyles?: any | null, defaultClassNames?: string | null, engagementClassNames?: string | null, text?: string | null, fontFamily?: Array<string> | null, linkHref?: string | null }> | null } | null, fanConfig?: { __typename?: 'EventFanConfig', backgroundImage?: string | null, fontFamily?: Array<string> | null, elements?: Array<{ __typename?: 'ScreenElement', id: string, type: string, name?: string | null, imageUrl?: string | null, defaultStyles?: any | null, engagementStyles?: any | null, defaultClassNames?: string | null, engagementClassNames?: string | null, text?: string | null, fontFamily?: Array<string> | null, linkHref?: string | null }> | null } | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, qrCodeCta?: string | null, startTime?: any | null, order: number, endTime?: any | null, type: EngagementType, data?: { __typename?: 'NowPlayingAdminData', currentSong?: number | null } | { __typename?: 'PhotoCarouselAdminData', visibleSubmission?: number | null, rejectedQueue: Array<number>, unapprovedQueue: Array<number>, unseenQueue: Array<number>, seenQueuePointer: number, seenQueue: Array<number> } | { __typename?: 'SlidesAdminData', currentSlide: number } | { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, config?: { __typename?: 'NowPlayingAdminConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselAdminConfig', maxSubmissionsPerUser: number, requireApproval: boolean, askSharePermission?: boolean | null, sharePrompt?: string | null, pollInterval?: number | null } | { __typename?: 'SlidesAdminConfig', autoPlay: boolean } | { __typename?: 'VoteForAdminConfig', votesPerUser: number, allowUserSubmissions: boolean, maxSubmissionsPerUser: number } | null, viewConfig: { __typename?: 'NowPlayingViewConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number, askSharePermission?: boolean | null, sharePrompt?: string | null } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'NowPlayingViewData', currentSong?: number | null } | { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null, engagements: Array<{ __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, qrCodeCta?: string | null, startTime?: any | null, order: number, endTime?: any | null, type: EngagementType, data?: { __typename?: 'NowPlayingAdminData', currentSong?: number | null } | { __typename?: 'PhotoCarouselAdminData', visibleSubmission?: number | null, rejectedQueue: Array<number>, unapprovedQueue: Array<number>, unseenQueue: Array<number>, seenQueuePointer: number, seenQueue: Array<number> } | { __typename?: 'SlidesAdminData', currentSlide: number } | { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, config?: { __typename?: 'NowPlayingAdminConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselAdminConfig', maxSubmissionsPerUser: number, requireApproval: boolean, askSharePermission?: boolean | null, sharePrompt?: string | null, pollInterval?: number | null } | { __typename?: 'SlidesAdminConfig', autoPlay: boolean } | { __typename?: 'VoteForAdminConfig', votesPerUser: number, allowUserSubmissions: boolean, maxSubmissionsPerUser: number } | null, viewConfig: { __typename?: 'NowPlayingViewConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number, askSharePermission?: boolean | null, sharePrompt?: string | null } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'NowPlayingViewData', currentSong?: number | null } | { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } }> } | null };
 
 export type AdminGetEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4344,6 +4359,46 @@ export type AdminGetEventQueryHookResult = ReturnType<typeof useAdminGetEventQue
 export type AdminGetEventLazyQueryHookResult = ReturnType<typeof useAdminGetEventLazyQuery>;
 export type AdminGetEventSuspenseQueryHookResult = ReturnType<typeof useAdminGetEventSuspenseQuery>;
 export type AdminGetEventQueryResult = Apollo.QueryResult<AdminGetEventQuery, AdminGetEventQueryVariables>;
+export const AdminGetEventByIdDocument = gql`
+    query adminGetEventById($id: Int!) {
+  eventById(id: $id) {
+    ...AdminEvent
+  }
+}
+    ${AdminEventFragmentDoc}`;
+
+/**
+ * __useAdminGetEventByIdQuery__
+ *
+ * To run a query within a React component, call `useAdminGetEventByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminGetEventByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminGetEventByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useAdminGetEventByIdQuery(baseOptions: Apollo.QueryHookOptions<AdminGetEventByIdQuery, AdminGetEventByIdQueryVariables> & ({ variables: AdminGetEventByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminGetEventByIdQuery, AdminGetEventByIdQueryVariables>(AdminGetEventByIdDocument, options);
+      }
+export function useAdminGetEventByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminGetEventByIdQuery, AdminGetEventByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminGetEventByIdQuery, AdminGetEventByIdQueryVariables>(AdminGetEventByIdDocument, options);
+        }
+export function useAdminGetEventByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdminGetEventByIdQuery, AdminGetEventByIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AdminGetEventByIdQuery, AdminGetEventByIdQueryVariables>(AdminGetEventByIdDocument, options);
+        }
+export type AdminGetEventByIdQueryHookResult = ReturnType<typeof useAdminGetEventByIdQuery>;
+export type AdminGetEventByIdLazyQueryHookResult = ReturnType<typeof useAdminGetEventByIdLazyQuery>;
+export type AdminGetEventByIdSuspenseQueryHookResult = ReturnType<typeof useAdminGetEventByIdSuspenseQuery>;
+export type AdminGetEventByIdQueryResult = Apollo.QueryResult<AdminGetEventByIdQuery, AdminGetEventByIdQueryVariables>;
 export const AdminGetEventsDocument = gql`
     query adminGetEvents {
   events {
