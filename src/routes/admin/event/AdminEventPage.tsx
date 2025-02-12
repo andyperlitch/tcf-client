@@ -27,6 +27,7 @@ import { FanStateProvider } from "@/providers/FanStateProvider";
 import { FanEditor } from "./FanEditor/FanEditor";
 import useLocalStorage from "use-local-storage";
 import { EngagementMode } from "@/types/screen";
+import { isMobile } from "react-device-detect";
 
 const enableControlView = false;
 
@@ -197,46 +198,50 @@ export function AdminEventPage() {
               </Button>
             )}
           </div>
-          <div className="mt-10 flex items-center gap-2">
-            <h2 className="text-2xl">
-              {editorMode === "stage" ? "Stage" : "Mobile"} Editor
-            </h2>
-            <Button
-              variant="outline"
-              onClick={() =>
-                setEditorMode(editorMode === "stage" ? "mobile" : "stage")
-              }
-            >
-              switch to {editorMode === "stage" ? "mobile" : "stage"} editor
-            </Button>
-          </div>
-          {editorMode === "stage" && (
-            <StageStateProvider
-              event={data.event}
-              engagementMode={engagementMode}
-              setEngagementMode={setEngagementMode}
-            >
-              <AdminStageStateProvider
-                event={data.event}
-                iframeRef={stageIframeRef}
-              >
-                <StageEditor event={data.event} ref={stageIframeRef} />
-              </AdminStageStateProvider>
-            </StageStateProvider>
-          )}
-          {editorMode === "mobile" && (
-            <FanStateProvider
-              event={data.event}
-              engagementMode={engagementMode}
-              setEngagementMode={setEngagementMode}
-            >
-              <AdminFanStateProvider
-                event={data.event}
-                iframeRef={fanIframeRef}
-              >
-                <FanEditor event={data.event} ref={fanIframeRef} />
-              </AdminFanStateProvider>
-            </FanStateProvider>
+          {!isMobile && (
+            <>
+              <div className="mt-10 flex items-center gap-2">
+                <h2 className="text-2xl">
+                  {editorMode === "stage" ? "Stage" : "Mobile"} Editor
+                </h2>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    setEditorMode(editorMode === "stage" ? "mobile" : "stage")
+                  }
+                >
+                  switch to {editorMode === "stage" ? "mobile" : "stage"} editor
+                </Button>
+              </div>
+              {editorMode === "stage" && (
+                <StageStateProvider
+                  event={data.event}
+                  engagementMode={engagementMode}
+                  setEngagementMode={setEngagementMode}
+                >
+                  <AdminStageStateProvider
+                    event={data.event}
+                    iframeRef={stageIframeRef}
+                  >
+                    <StageEditor event={data.event} ref={stageIframeRef} />
+                  </AdminStageStateProvider>
+                </StageStateProvider>
+              )}
+              {editorMode === "mobile" && (
+                <FanStateProvider
+                  event={data.event}
+                  engagementMode={engagementMode}
+                  setEngagementMode={setEngagementMode}
+                >
+                  <AdminFanStateProvider
+                    event={data.event}
+                    iframeRef={fanIframeRef}
+                  >
+                    <FanEditor event={data.event} ref={fanIframeRef} />
+                  </AdminFanStateProvider>
+                </FanStateProvider>
+              )}
+            </>
           )}
 
           <div
