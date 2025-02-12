@@ -10,15 +10,18 @@ export function useImageLoader({
   const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
-    if (!imageLoaded && url) {
+    if (url) {
+      console.log("what");
+      setImageLoaded(false);
       const img = new Image();
       img.src = url;
       img.onload = () => {
+        console.log(`andy img HAS loaded`);
         setImageLoaded(true);
         onLoad?.();
       };
     }
-  }, [url, imageLoaded, onLoad]);
+  }, [url, onLoad]);
 
   return { imageLoaded, url };
 }

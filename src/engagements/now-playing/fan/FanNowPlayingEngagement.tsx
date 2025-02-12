@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { FanEngagementFragment, useFanGetSubmissionQuery } from "@/gql/graphql";
 import { toFullS3Url } from "@/utils/toFullS3Url";
+import { useImageLoader } from "@/hooks/useImageLoader";
 import { Link } from "react-router-dom";
 
 export function FanNowPlayingEngagement({
@@ -25,7 +26,9 @@ export function FanNowPlayingEngagement({
       ? submissionData.submission.data
       : undefined;
 
-  console.log(`andy song`, song);
+  const { imageLoaded, url } = useImageLoader({
+    url: song?.songAlbumArt ? toFullS3Url(song.songAlbumArt) : undefined,
+  });
 
   return (
     <div
@@ -39,10 +42,14 @@ export function FanNowPlayingEngagement({
           bg-white/70 p-4 font-fan text-black
         `}
       >
-        {song?.songAlbumArt ? (
+        {url ? (
           <img
-            src={toFullS3Url(song.songAlbumArt)}
-            className={`w-[70vw] shadow-lg`}
+            src={url}
+            className={`
+              w-[70vw] shadow-lg transition-opacity duration-300
+
+              ${imageLoaded ? `opacity-100` : `opacity-0`}
+            `}
           />
         ) : null}
         <div data-name="SONG_TITLE" className="text-2xl font-bold">

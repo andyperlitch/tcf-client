@@ -1,6 +1,7 @@
 import { AudioVizBars } from "@/components/AudioVizBars";
 import { NowPlayingSubmissionData } from "@/gql/graphql";
 import { useAudioInput } from "@/hooks/useAudioInput";
+import { useImageLoader } from "@/hooks/useImageLoader";
 import { toFullS3Url } from "@/utils/toFullS3Url";
 
 export function DefaultSongViz({
@@ -11,6 +12,9 @@ export function DefaultSongViz({
   width: number;
 }) {
   const { frequencyData } = useAudioInput({ fftSize: 64 });
+  const { imageLoaded, url } = useImageLoader({
+    url: song?.songAlbumArt ? toFullS3Url(song.songAlbumArt) : undefined,
+  });
 
   return (
     <div
@@ -38,10 +42,16 @@ export function DefaultSongViz({
         fillColor="#FFFFFFB3"
       />
       <div className="relative flex items-center gap-4" data-name="SONG_INFO">
-        {song?.songAlbumArt ? (
+        {url ? (
           <img
-            src={toFullS3Url(song.songAlbumArt)}
-            className={`flex w-[20vw] shadow-lg`}
+            src={url}
+            className={`
+              flex h-[20vw] w-[20vw] transition-opacity duration-300
+
+              ${imageLoaded ? `opacity-100` : `opacity-0`}
+
+              shadow-lg
+            `}
           />
         ) : null}
         <div className="flex flex-col gap-0">
