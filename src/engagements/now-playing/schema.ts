@@ -25,5 +25,6 @@ gql`
     songNotes
     songLyrics
     visualizationType
+    spotifyUrl
   }
 `;

@@ -1,29 +1,32 @@
 import {
-  NowPlayingSubmissionData,
   StageEngagementFragment,
+  useStageGetSubmissionQuery,
 } from "@/gql/graphql";
-import { useAudioInput } from "@/hooks/useAudioInput";
 import { useEffect, useRef, useState } from "react";
 import { DefaultSongViz } from "./DefaultSongViz";
-
-const MOCK_SONG: NowPlayingSubmissionData = {
-  order: 1,
-  songAlbumArt: null,
-  songArtist: "Greyboy Allstars",
-  songTitle: "Let the music take your mind",
-  songNotes: null,
-  songLyrics: null,
-};
 
 export function StageNowPlayingEngagement({
   engagement,
 }: {
   engagement: StageEngagementFragment;
 }) {
-  console.log(`andy engagement`, engagement);
-  const { frequencyData } = useAudioInput({ fftSize: 128 });
-
   const rootRef = useRef<HTMLDivElement>(null);
+  const { data: submissionData } = useStageGetSubmissionQuery({
+    skip:
+      engagement.viewData.__typename !== "NowPlayingViewData" ||
+      !engagement.viewData.currentSong,
+    variables: {
+      id:
+        (engagement.viewData.__typename === "NowPlayingViewData" &&
+          engagement.viewData.currentSong) ||
+        0,
+    },
+  });
+
+  const song =
+    submissionData?.submission?.data.__typename === "NowPlayingSubmissionData"
+      ? submissionData.submission.data
+      : undefined;
 
   const [dimensions, setDimensions] = useState<{
     width: number | undefined;
@@ -36,7 +39,6 @@ export function StageNowPlayingEngagement({
         width: rootRef.current.clientWidth,
         height: rootRef.current.clientHeight,
       };
-      console.log(`andy newDimensions`, newDimensions);
       setDimensions(newDimensions);
     }
   }, []);
@@ -46,20 +48,15 @@ export function StageNowPlayingEngagement({
       data-name="NOW_PLAYING_ENGAGEMENT"
       className={`flex h-full w-full items-center justify-center pt-[18vh]`}
     >
-      <div className="h-full w-full p-32">
+      <div className="w-full p-8 pt-0">
         <div
           data-name="AUDIO_VIZ_WRAPPER"
           className="relative h-full w-full"
           ref={rootRef}
         >
-          {dimensions.height && dimensions.width ? (
+          {dimensions.width ? (
             <>
-              <DefaultSongViz
-                song={MOCK_SONG}
-                width={dimensions.width}
-                height={dimensions.height}
-                frequencyData={frequencyData}
-              />
+              <DefaultSongViz song={song} width={dimensions.width} />
             </>
           ) : null}
         </div>

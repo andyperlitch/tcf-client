@@ -1,4 +1,7 @@
+import { createLogger } from "@/utils/createLogger";
 import { useEffect, useState } from "react";
+
+const logger = createLogger("useAudioInput");
 
 function getFrequencyData(analyser: AnalyserNode, dataArray: Uint8Array) {
   analyser.getByteFrequencyData(dataArray);
@@ -11,6 +14,10 @@ export function useAudioInput({ fftSize = 128 }: { fftSize?: number } = {}) {
 
   // Initialize the audio input
   useEffect(() => {
+    if (!navigator.mediaDevices) {
+      logger.warn("No media devices found");
+      return;
+    }
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then(function (stream) {

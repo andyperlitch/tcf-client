@@ -41,7 +41,6 @@ export function StageStateProvider({
 }
 
 function getInitialSavedConfig(event: StageEventFragment) {
-  console.log(`andy event.stageConfig`, event.stageConfig);
   return {
     ...event.stageConfig,
     elements: keyBy(event.stageConfig?.elements || [], "id"),

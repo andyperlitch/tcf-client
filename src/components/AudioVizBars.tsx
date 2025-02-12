@@ -79,7 +79,6 @@ export function AudioVizBars({
       }
 
       const bandWidth = width / dataToVisualize.length;
-      console.log(`andy bandWidth`, bandWidth);
 
       d3.select(svgRef.current)
         .selectAll(`rect`)

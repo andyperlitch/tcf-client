@@ -13,6 +13,8 @@ import { AdminGigSet } from "./AdminGigSet";
 import { GigLeaderPicker } from "./GigLeaderPicker";
 import { GigEventPicker } from "./GigEventPicker";
 import { GigNowPlayingPicker } from "./GigNowPlayingPicker";
+import { Link } from "react-router-dom";
+import { ExternalLinkIcon } from "@radix-ui/react-icons";
 
 const crumbs: CrumbMeta[] = [["/admin/gigs", "Gigs"]];
 
@@ -41,7 +43,12 @@ export function AdminGigPage() {
       <div className="flex flex-col gap-4">
         <div data-name="GIG_HEADER" className="flex flex-col gap-2">
           <SimpleCrumbs crumbs={crumbs} />
-          <h1 className="text-2xl font-bold">{gigData?.gig?.name || "..."}</h1>
+          <h1 className="flex items-center gap-2 text-2xl font-bold">
+            <span>{gigData?.gig?.name || "..."} </span>
+            <Link to={`/gigs/${params.gigId}`} target="_blank">
+              <ExternalLinkIcon />
+            </Link>
+          </h1>
         </div>
         {gigLoading && <Loader />}
         {gigError && <ErrorMessage error={gigError} retry={refetchGig} />}

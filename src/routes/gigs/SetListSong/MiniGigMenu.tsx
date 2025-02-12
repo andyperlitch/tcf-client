@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Beacon } from "@/components/beacon/Beacon";
+import { useAuth } from "@/hooks/useAuth";
 
 export function MiniGigMenu({
   currentSongOrBreak,
@@ -31,6 +32,8 @@ export function MiniGigMenu({
     }
   };
 
+  const { user } = useAuth();
+
   return (
     <div
       data-name="MINI_GIG_MENU"
@@ -43,13 +46,17 @@ export function MiniGigMenu({
       <div data-name="GIG_TITLE">
         <Link to={`/gigs/${gig.id}`}>{gig.name}</Link>
       </div>
-      <div
-        data-name="FOLLOW_LEADER"
-        className={`flex items-center justify-between`}
-      >
-        <Label>Follow Gig Leader</Label>
-        <Switch checked={followLeader} onCheckedChange={setFollowLeader} />
-      </div>
+      {user?.id !== gig.gigLeaderId ? (
+        <div
+          data-name="FOLLOW_LEADER"
+          className={`flex items-center justify-between`}
+        >
+          <Label>Follow Gig Leader</Label>
+          <Switch checked={followLeader} onCheckedChange={setFollowLeader} />
+        </div>
+      ) : (
+        <div>You are the gig leader.</div>
+      )}
       <div
         data-name="VIEW_SELECTOR"
         className={`flex items-center justify-between`}
