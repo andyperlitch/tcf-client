@@ -35,7 +35,6 @@ export function GigNowPlayingPicker({
 
   // get list of engagements which are NowPlaying type
   const engagements = useMemo(() => {
-    debugger;
     return (
       eventData?.eventById?.engagements.filter(
         (engagement) => engagement.type === EngagementType.NowPlaying
