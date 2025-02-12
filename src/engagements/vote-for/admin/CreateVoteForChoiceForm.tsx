@@ -1,12 +1,13 @@
 import { AdminSubmissionFormProps } from "@/engagements/base/EngagementDefinition";
 import { VoteForChoiceForm } from "./VoteForChoiceForm";
-import { useCreateSubmission } from "@/hooks/useCreateSubmission";
+import { useAdminCreateSubmission } from "@/hooks/useAdminCreateSubmission";
 import { VoteForSubmissionData } from "@/gql/graphql";
 
 export function CreateVoteForChoiceForm({
   engagementId,
 }: AdminSubmissionFormProps) {
-  const { createSubmission } = useCreateSubmission<VoteForSubmissionData>();
+  const { createSubmission } =
+    useAdminCreateSubmission<VoteForSubmissionData>();
   return (
     <VoteForChoiceForm
       onSubmit={({ data, uploads }) => {

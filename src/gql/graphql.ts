@@ -252,6 +252,7 @@ export type LeadSheetSection = {
 export type Mutation = {
   __typename?: 'Mutation';
   adminCreatePresignedUrl: PresignedUrlResponse;
+  adminCreateSubmission: Submission;
   adminDeleteFromS3: Scalars['Boolean']['output'];
   adminGenerateImage: GenerateImageResponse;
   changeEventActiveEngagement: Event;
@@ -305,6 +306,12 @@ export type Mutation = {
 
 export type MutationAdminCreatePresignedUrlArgs = {
   mimeType: Scalars['String']['input'];
+};
+
+
+export type MutationAdminCreateSubmissionArgs = {
+  data: Scalars['Json']['input'];
+  engagementId: Scalars['Int']['input'];
 };
 
 
@@ -897,7 +904,7 @@ export type Submission = {
   engagementId: Scalars['Int']['output'];
   hash?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
-  reactions: Array<Reaction>;
+  reactions?: Maybe<Array<Reaction>>;
   user?: Maybe<User>;
   userId?: Maybe<Scalars['Int']['output']>;
 };
@@ -1440,7 +1447,7 @@ export type AdminEngagementFragment = { __typename?: 'Engagement', id: number, c
 
 export type AdminEventFragment = { __typename?: 'Event', id: number, name: string, date?: any | null, live: boolean, location?: string | null, locked: boolean, description?: string | null, slug: string, createdAt: any, updatedAt: any, activeEngagementId?: number | null, stageConfig?: { __typename?: 'EventStageConfig', qrForegroundColor?: string | null, qrBackgroundColor?: string | null, qrTextColor?: string | null, qrWrapperBackgroundColor?: string | null, backgroundImage?: string | null, fontFamily?: Array<string> | null, elements?: Array<{ __typename?: 'ScreenElement', id: string, type: string, name?: string | null, imageUrl?: string | null, defaultStyles?: any | null, engagementStyles?: any | null, defaultClassNames?: string | null, engagementClassNames?: string | null, text?: string | null, fontFamily?: Array<string> | null, linkHref?: string | null }> | null } | null, fanConfig?: { __typename?: 'EventFanConfig', backgroundImage?: string | null, fontFamily?: Array<string> | null, elements?: Array<{ __typename?: 'ScreenElement', id: string, type: string, name?: string | null, imageUrl?: string | null, defaultStyles?: any | null, engagementStyles?: any | null, defaultClassNames?: string | null, engagementClassNames?: string | null, text?: string | null, fontFamily?: Array<string> | null, linkHref?: string | null }> | null } | null, activeEngagement?: { __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, qrCodeCta?: string | null, startTime?: any | null, order: number, endTime?: any | null, type: EngagementType, data?: { __typename?: 'NowPlayingAdminData', currentSong?: number | null } | { __typename?: 'PhotoCarouselAdminData', visibleSubmission?: number | null, rejectedQueue: Array<number>, unapprovedQueue: Array<number>, unseenQueue: Array<number>, seenQueuePointer: number, seenQueue: Array<number> } | { __typename?: 'SlidesAdminData', currentSlide: number } | { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, config?: { __typename?: 'NowPlayingAdminConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselAdminConfig', maxSubmissionsPerUser: number, requireApproval: boolean, askSharePermission?: boolean | null, sharePrompt?: string | null, pollInterval?: number | null } | { __typename?: 'SlidesAdminConfig', autoPlay: boolean } | { __typename?: 'VoteForAdminConfig', votesPerUser: number, allowUserSubmissions: boolean, maxSubmissionsPerUser: number } | null, viewConfig: { __typename?: 'NowPlayingViewConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number, askSharePermission?: boolean | null, sharePrompt?: string | null } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'NowPlayingViewData', currentSong?: number | null } | { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } } | null, engagements: Array<{ __typename?: 'Engagement', id: number, createdAt: any, updatedAt: any, title: string, description?: string | null, qrCodeCta?: string | null, startTime?: any | null, order: number, endTime?: any | null, type: EngagementType, data?: { __typename?: 'NowPlayingAdminData', currentSong?: number | null } | { __typename?: 'PhotoCarouselAdminData', visibleSubmission?: number | null, rejectedQueue: Array<number>, unapprovedQueue: Array<number>, unseenQueue: Array<number>, seenQueuePointer: number, seenQueue: Array<number> } | { __typename?: 'SlidesAdminData', currentSlide: number } | { __typename?: 'VoteForAdminData', startTime?: any | null, endTime?: any | null, votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } | null, config?: { __typename?: 'NowPlayingAdminConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselAdminConfig', maxSubmissionsPerUser: number, requireApproval: boolean, askSharePermission?: boolean | null, sharePrompt?: string | null, pollInterval?: number | null } | { __typename?: 'SlidesAdminConfig', autoPlay: boolean } | { __typename?: 'VoteForAdminConfig', votesPerUser: number, allowUserSubmissions: boolean, maxSubmissionsPerUser: number } | null, viewConfig: { __typename?: 'NowPlayingViewConfig', visualizationType: string, allowComments: boolean, allowedReactions: Array<string> } | { __typename?: 'PhotoCarouselViewConfig', maxSubmissionsPerUser: number, askSharePermission?: boolean | null, sharePrompt?: string | null } | { __typename?: 'SlidesViewConfig', autoPlay: boolean } | { __typename?: 'VoteForViewConfig', votesPerUser: number }, viewData: { __typename?: 'NowPlayingViewData', currentSong?: number | null } | { __typename?: 'PhotoCarouselViewData', visibleSubmission?: number | null } | { __typename?: 'SlidesViewData', currentSlide: number } | { __typename?: 'VoteForViewData', votes: Array<{ __typename?: 'VoteCount', submissionId: number, count: number }> } }> };
 
-export type AdminSubmissionFragment = { __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> };
+export type AdminSubmissionFragment = { __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, type: string }> | null };
 
 export type EventFanConfigFragment = { __typename?: 'EventFanConfig', backgroundImage?: string | null, fontFamily?: Array<string> | null, elements?: Array<{ __typename?: 'ScreenElement', id: string, type: string, name?: string | null, imageUrl?: string | null, defaultStyles?: any | null, engagementStyles?: any | null, defaultClassNames?: string | null, engagementClassNames?: string | null, text?: string | null, fontFamily?: Array<string> | null, linkHref?: string | null }> | null };
 
@@ -1452,7 +1459,7 @@ export type FanEventFragment = { __typename?: 'Event', id: number, name: string,
 
 export type FanReactionFragment = { __typename?: 'Reaction', id: number, type: string, createdAt: any };
 
-export type FanSubmissionFragment = { __typename?: 'Submission', id: number, createdAt: any, engagementId: number, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> };
+export type FanSubmissionFragment = { __typename?: 'Submission', id: number, createdAt: any, engagementId: number, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> | null };
 
 export type ScreenElementFragment = { __typename?: 'ScreenElement', id: string, type: string, name?: string | null, imageUrl?: string | null, defaultStyles?: any | null, engagementStyles?: any | null, defaultClassNames?: string | null, engagementClassNames?: string | null, text?: string | null, fontFamily?: Array<string> | null, linkHref?: string | null };
 
@@ -1462,7 +1469,7 @@ export type StageEventFragment = { __typename?: 'Event', id: number, name: strin
 
 export type StageReactionFragment = { __typename?: 'Reaction', id: number, type: string, createdAt: any };
 
-export type StageSubmissionFragment = { __typename?: 'Submission', id: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> };
+export type StageSubmissionFragment = { __typename?: 'Submission', id: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> | null };
 
 export type UserFragment = { __typename?: 'User', id: number, name?: string | null, email?: string | null, role: Role, username?: string | null, lastLogin?: any | null };
 
@@ -1496,6 +1503,14 @@ export type AdminCreatePresignedUrlMutationVariables = Exact<{
 
 export type AdminCreatePresignedUrlMutation = { __typename?: 'Mutation', adminCreatePresignedUrl: { __typename?: 'PresignedUrlResponse', url: string, key: string } };
 
+export type AdminCreateSubmissionMutationVariables = Exact<{
+  engagementId: Scalars['Int']['input'];
+  data: Scalars['Json']['input'];
+}>;
+
+
+export type AdminCreateSubmissionMutation = { __typename?: 'Mutation', adminCreateSubmission: { __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, type: string }> | null } };
+
 export type AdminDeleteEngagementMutationVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
@@ -1522,7 +1537,7 @@ export type AdminDeleteSubmissionMutationVariables = Exact<{
 }>;
 
 
-export type AdminDeleteSubmissionMutation = { __typename?: 'Mutation', deleteSubmission: { __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> } };
+export type AdminDeleteSubmissionMutation = { __typename?: 'Mutation', deleteSubmission: { __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, type: string }> | null } };
 
 export type AdminGenerateImageMutationVariables = Exact<{
   data: GenerateImageInput;
@@ -1577,7 +1592,7 @@ export type AdminUpdateSubmissionMutationVariables = Exact<{
 }>;
 
 
-export type AdminUpdateSubmissionMutation = { __typename?: 'Mutation', updateSubmission: { __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> } };
+export type AdminUpdateSubmissionMutation = { __typename?: 'Mutation', updateSubmission: { __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, type: string }> | null } };
 
 export type CreateReactionMutationVariables = Exact<{
   submissionId: Scalars['Int']['input'];
@@ -1593,7 +1608,7 @@ export type CreateSubmissionMutationVariables = Exact<{
 }>;
 
 
-export type CreateSubmissionMutation = { __typename?: 'Mutation', createSubmission: { __typename?: 'Submission', id: number, createdAt: any, engagementId: number, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> } };
+export type CreateSubmissionMutation = { __typename?: 'Mutation', createSubmission: { __typename?: 'Submission', id: number, createdAt: any, engagementId: number, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> | null } };
 
 export type CreateSubmissionPresignedUrlMutationVariables = Exact<{
   engagementId: Scalars['Int']['input'];
@@ -1649,14 +1664,14 @@ export type AdminGetSubmissionQueryVariables = Exact<{
 }>;
 
 
-export type AdminGetSubmissionQuery = { __typename?: 'Query', submission?: { __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> } | null };
+export type AdminGetSubmissionQuery = { __typename?: 'Query', submission?: { __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, type: string }> | null } | null };
 
 export type AdminGetSubmissionsQueryVariables = Exact<{
   engagementId: Scalars['Int']['input'];
 }>;
 
 
-export type AdminGetSubmissionsQuery = { __typename?: 'Query', submissions: Array<{ __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string }> }> };
+export type AdminGetSubmissionsQuery = { __typename?: 'Query', submissions: Array<{ __typename?: 'Submission', id: number, engagementId: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, type: string }> | null }> };
 
 export type AdminGetUsersQueryVariables = Exact<{
   filter?: InputMaybe<UserFilter>;
@@ -1684,14 +1699,14 @@ export type FanGetSubmissionQueryVariables = Exact<{
 }>;
 
 
-export type FanGetSubmissionQuery = { __typename?: 'Query', submission?: { __typename?: 'Submission', id: number, createdAt: any, engagementId: number, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> } | null };
+export type FanGetSubmissionQuery = { __typename?: 'Query', submission?: { __typename?: 'Submission', id: number, createdAt: any, engagementId: number, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> | null } | null };
 
 export type FanGetSubmissionsQueryVariables = Exact<{
   engagementId: Scalars['Int']['input'];
 }>;
 
 
-export type FanGetSubmissionsQuery = { __typename?: 'Query', submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, engagementId: number, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> }> };
+export type FanGetSubmissionsQuery = { __typename?: 'Query', submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, engagementId: number, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, type: string, createdAt: any }> | null }> };
 
 export type RandomNameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1722,14 +1737,14 @@ export type StageGetSubmissionQueryVariables = Exact<{
 }>;
 
 
-export type StageGetSubmissionQuery = { __typename?: 'Query', submission?: { __typename?: 'Submission', id: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> } | null };
+export type StageGetSubmissionQuery = { __typename?: 'Query', submission?: { __typename?: 'Submission', id: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> | null } | null };
 
 export type StageGetSubmissionsQueryVariables = Exact<{
   engagementId: Scalars['Int']['input'];
 }>;
 
 
-export type StageGetSubmissionsQuery = { __typename?: 'Query', submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> }> };
+export type StageGetSubmissionsQuery = { __typename?: 'Query', submissions: Array<{ __typename?: 'Submission', id: number, createdAt: any, data: { __typename?: 'NowPlayingSubmissionData', order: number, songAlbumArt?: string | null, songTitle?: string | null, songArtist?: string | null, songNotes?: string | null, songLyrics?: string | null, visualizationType?: string | null } | { __typename?: 'PhotoCarouselSubmissionData', photoUrl: string, caption: string, approved?: boolean | null, sharingPermissionGranted?: boolean | null } | { __typename?: 'SlidesSubmissionData', optionalImageUrl?: string | null, title: string, content: string, order: number } | { __typename?: 'VoteForSubmissionData', title: string, color: string, description: string, optionalImageUrl?: string | null }, reactions?: Array<{ __typename?: 'Reaction', id: number, createdAt: any, type: string, userId?: number | null, user?: { __typename?: 'User', id: number, name?: string | null } | null }> | null }> };
 
 export type ValidateGoogleFontQueryVariables = Exact<{
   fontName: Scalars['String']['input'];
@@ -3631,6 +3646,40 @@ export function useAdminCreatePresignedUrlMutation(baseOptions?: Apollo.Mutation
 export type AdminCreatePresignedUrlMutationHookResult = ReturnType<typeof useAdminCreatePresignedUrlMutation>;
 export type AdminCreatePresignedUrlMutationResult = Apollo.MutationResult<AdminCreatePresignedUrlMutation>;
 export type AdminCreatePresignedUrlMutationOptions = Apollo.BaseMutationOptions<AdminCreatePresignedUrlMutation, AdminCreatePresignedUrlMutationVariables>;
+export const AdminCreateSubmissionDocument = gql`
+    mutation adminCreateSubmission($engagementId: Int!, $data: Json!) {
+  adminCreateSubmission(engagementId: $engagementId, data: $data) {
+    ...AdminSubmission
+  }
+}
+    ${AdminSubmissionFragmentDoc}`;
+export type AdminCreateSubmissionMutationFn = Apollo.MutationFunction<AdminCreateSubmissionMutation, AdminCreateSubmissionMutationVariables>;
+
+/**
+ * __useAdminCreateSubmissionMutation__
+ *
+ * To run a mutation, you first call `useAdminCreateSubmissionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminCreateSubmissionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminCreateSubmissionMutation, { data, loading, error }] = useAdminCreateSubmissionMutation({
+ *   variables: {
+ *      engagementId: // value for 'engagementId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAdminCreateSubmissionMutation(baseOptions?: Apollo.MutationHookOptions<AdminCreateSubmissionMutation, AdminCreateSubmissionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminCreateSubmissionMutation, AdminCreateSubmissionMutationVariables>(AdminCreateSubmissionDocument, options);
+      }
+export type AdminCreateSubmissionMutationHookResult = ReturnType<typeof useAdminCreateSubmissionMutation>;
+export type AdminCreateSubmissionMutationResult = Apollo.MutationResult<AdminCreateSubmissionMutation>;
+export type AdminCreateSubmissionMutationOptions = Apollo.BaseMutationOptions<AdminCreateSubmissionMutation, AdminCreateSubmissionMutationVariables>;
 export const AdminDeleteEngagementDocument = gql`
     mutation adminDeleteEngagement($id: Int!) {
   deleteEngagement(engagementId: $id) {

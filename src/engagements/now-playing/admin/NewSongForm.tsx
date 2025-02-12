@@ -1,6 +1,6 @@
 import { AdminSubmissionFormProps } from "@/engagements/base/EngagementDefinition";
 import { NowPlayingSongForm } from "./NowPlayingSongForm";
-import { useCreateSubmission } from "@/hooks/useCreateSubmission";
+import { useAdminCreateSubmission } from "@/hooks/useAdminCreateSubmission";
 import { NowPlayingSubmissionData } from "@/gql/graphql";
 
 export function NewSongForm({
@@ -9,7 +9,8 @@ export function NewSongForm({
 }: AdminSubmissionFormProps) {
   console.log("NewSongForm", engagementId);
 
-  const { createSubmission } = useCreateSubmission<NowPlayingSubmissionData>();
+  const { createSubmission } =
+    useAdminCreateSubmission<NowPlayingSubmissionData>();
 
   return (
     <NowPlayingSongForm

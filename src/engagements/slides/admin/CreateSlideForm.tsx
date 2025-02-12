@@ -1,6 +1,6 @@
 import { AdminSubmissionFormProps } from "@/engagements/base/EngagementDefinition";
 import { SlideForm, SlideFormProps } from "./SlideForm";
-import { useCreateSubmission } from "@/hooks/useCreateSubmission";
+import { useAdminCreateSubmission } from "@/hooks/useAdminCreateSubmission";
 import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { SlidesSubmissionData } from "@/gql/graphql";
@@ -9,7 +9,7 @@ export function CreateSlideForm({
   engagementId,
   existingSubmissions,
 }: AdminSubmissionFormProps) {
-  const { createSubmission } = useCreateSubmission<SlidesSubmissionData>();
+  const { createSubmission } = useAdminCreateSubmission<SlidesSubmissionData>();
   const { toast } = useToast();
   const [newKey, setNewKey] = useState(0);
 

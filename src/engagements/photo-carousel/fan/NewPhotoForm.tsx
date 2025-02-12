@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { Loader } from "@/components/Loader";
 import { useToast } from "@/hooks/use-toast";
 import { Nice } from "@/components/Nice";
-import { useCreateSubmission } from "@/hooks/useCreateSubmission";
+import { useAdminCreateSubmission } from "@/hooks/useAdminCreateSubmission";
 
 import styles from "@/styles/SwipeUp.module.css";
 
@@ -54,7 +54,7 @@ export function NewPhotoForm({
   const velocityRef = useRef(0);
   const deltaYRef = useRef(0);
   const { createSubmission, loading, errors, succeeded } =
-    useCreateSubmission<PhotoCarouselSubmissionData>();
+    useAdminCreateSubmission<PhotoCarouselSubmissionData>();
 
   // ERROR HANDLING
   useEffect(() => {
