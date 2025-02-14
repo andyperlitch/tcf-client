@@ -75,6 +75,10 @@ const router = createBrowserRouter([
         ),
         children: [
           {
+            path: "/g",
+            element: <Navigate to="/gigs" />,
+          },
+          {
             path: "/sets/*",
             element: <Navigate to="/gigs" />,
           },
