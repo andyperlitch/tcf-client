@@ -1,6 +1,15 @@
 import { AuthContext } from "@/contexts/AuthContext";
-import { User, useWhoamiQuery } from "@/gql/graphql";
+import {
+  User,
+  useWhoamiQuery,
+  useLogoutMutation,
+  useLoginMutation,
+} from "@/gql/graphql";
+import { createLogger } from "@/utils/createLogger";
+import { useCallback } from "react";
 import useLocalStorage from "use-local-storage";
+
+const logger = createLogger("AuthProvider");
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   // trust...
@@ -22,8 +31,59 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     errorPolicy: "all",
   });
 
+  const [logout] = useLogoutMutation();
+  const [login] = useLoginMutation();
+
+  const doLogout = useCallback(async () => {
+    try {
+      const result = await logout();
+      if (result.data?.logout) {
+        setUser(null);
+        return true;
+      } else {
+        logger.error(
+          `Logout failed. result.data: `,
+          JSON.stringify(result.data, null, 2)
+        );
+        return false;
+      }
+    } catch (e) {
+      logger.error(`Logout: error: `, e);
+      return false;
+    }
+  }, [logout, setUser]);
+
+  const doLogin = useCallback(
+    async (emailOrUsername: string, password: string) => {
+      try {
+        const result = await login({
+          variables: {
+            emailOrUsername,
+            password,
+          },
+        });
+
+        if (result.data?.login) {
+          // set the user in the auth context
+          setUser(result.data.login);
+          return true;
+        } else {
+          logger.error(
+            `Login: response from server not in expected format. result.data: `,
+            JSON.stringify(result.data, null, 2)
+          );
+          return false;
+        }
+      } catch (e) {
+        logger.error(`Login: error: `, e);
+        return false;
+      }
+    },
+    [login, setUser]
+  );
+
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, logout: doLogout, login: doLogin }}>
       {children}
     </AuthContext.Provider>
   );

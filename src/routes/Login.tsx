@@ -1,9 +1,9 @@
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { Role, useLoginMutation } from "@/gql/graphql";
+import { Role } from "@/gql/graphql";
 
 const HOME_ROUTES: Record<Role, string> = {
   ADMIN: "/admin",
@@ -14,11 +14,11 @@ const HOME_ROUTES: Record<Role, string> = {
 export function Login() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { setUser, user } = useAuth();
+  const { user, logout, login } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [login, { loading, error }] = useLoginMutation();
 
   const updateEmailOrUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailOrUsername(e.target.value);
@@ -29,30 +29,27 @@ export function Login() {
 
   const doLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const result = await login({
-        variables: {
-          emailOrUsername,
-          password,
-        },
-      });
-
-      if (result.data?.login) {
-        // set the user in the auth context
-        setUser(result.data.login);
+    setLoading(true);
+    const success = await login(emailOrUsername, password);
+    setLoading(false);
+    if (success) {
+      // check for redirect param
+      const redirect = searchParams.get("redirect");
+      if (redirect) {
+        navigate(redirect);
       } else {
-        throw new Error(`Login: response from server not in expected format`);
+        navigate(HOME_ROUTES[user?.role || "ANON"]);
       }
-    } catch (e) {
-      console.error(e);
     }
   };
 
-  useEffect(() => {
-    if (user && user.role) {
-      navigate(searchParams.get("redirect") || HOME_ROUTES[user.role]);
-    }
-  }, [navigate, searchParams, user]);
+  const doLogout = async () => {
+    setLoading(true);
+    await logout();
+    setLoading(false);
+    // refresh the page
+    window.location.reload();
+  };
 
   return (
     <div
@@ -60,27 +57,39 @@ export function Login() {
         relative z-[2] flex min-h-screen flex-col items-center justify-center
       `}
     >
-      <h1 className="mb-4 text-3xl">Login</h1>
-      <form onSubmit={doLogin} className="text-center">
-        {error && <div className="mb-3 text-red-500">{error.message}</div>}
-        <Input
-          className="mb-3"
-          type="text"
-          value={emailOrUsername}
-          placeholder="Email or Username"
-          onChange={updateEmailOrUsername}
-        />
-        <Input
-          className="mb-3"
-          type="password"
-          value={password}
-          placeholder="Password"
-          onChange={updatePassword}
-        />
-        <Button type="submit" disabled={loading}>
-          Login
-        </Button>
-      </form>
+      {user ? (
+        <div>
+          <h1 className="mb-4 text-xl">
+            Logged in as {user.name || user.username || user.email}
+          </h1>
+          <Button onClick={doLogout} disabled={loading}>
+            Logout
+          </Button>
+        </div>
+      ) : (
+        <>
+          <h1 className="mb-4 text-3xl">Login</h1>
+          <form onSubmit={doLogin} className={`text-center`}>
+            <Input
+              className="mb-3"
+              type="text"
+              value={emailOrUsername}
+              placeholder="Email or Username"
+              onChange={updateEmailOrUsername}
+            />
+            <Input
+              className="mb-3"
+              type="password"
+              value={password}
+              placeholder="Password"
+              onChange={updatePassword}
+            />
+            <Button type="submit" disabled={loading}>
+              Login
+            </Button>
+          </form>
+        </>
+      )}
     </div>
   );
 }
