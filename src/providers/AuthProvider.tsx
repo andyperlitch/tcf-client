@@ -4,6 +4,7 @@ import {
   useWhoamiQuery,
   useLogoutMutation,
   useLoginMutation,
+  useFanSignupMutation,
 } from "@/gql/graphql";
 import { createLogger } from "@/utils/createLogger";
 import { useCallback } from "react";
@@ -33,6 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [logout] = useLogoutMutation();
   const [login] = useLoginMutation();
+  const [signup] = useFanSignupMutation();
 
   const doLogout = useCallback(async () => {
     try {
@@ -82,8 +84,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [login, setUser]
   );
 
+  const doSignup = useCallback(
+    async (name: string) => {
+      try {
+        const result = await signup({
+          variables: {
+            data: {
+              name,
+            },
+          },
+        });
+
+        if (result.data?.signup) {
+          setUser(result.data.signup);
+          return true;
+        } else {
+          logger.error(
+            `Signup: response from server not in expected format. result.data: `,
+            JSON.stringify(result.data, null, 2)
+          );
+          return false;
+        }
+      } catch (e) {
+        logger.error(`Signup: error: `, e);
+        return false;
+      }
+    },
+    [signup, setUser]
+  );
+
   return (
-    <AuthContext.Provider value={{ user, logout: doLogout, login: doLogin }}>
+    <AuthContext.Provider
+      value={{ user, logout: doLogout, login: doLogin, signup: doSignup }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,18 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useFanSignupMutation, useRandomNameLazyQuery } from "@/gql/graphql";
+import { useRandomNameLazyQuery } from "@/gql/graphql";
+import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useRef, useState } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
 
 export function QuickSignup() {
   const [searchParams] = useSearchParams();
-  const { user, setUser } = useAuth();
+  const { user, signup } = useAuth();
   const [nickname, setNickname] = useState("");
   const nicknameInputRef = useRef<HTMLInputElement>(null);
-
-  const [signup, { loading }] = useFanSignupMutation();
-
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
   const [fetchNewNickname] = useRandomNameLazyQuery({
     onCompleted: (data) => {
       setNickname(data.randomName);
@@ -32,15 +32,14 @@ export function QuickSignup() {
   }
 
   function doSignup() {
-    signup({
-      variables: {
-        data: {
-          name: nickname,
-        },
-      },
-    }).then((result) => {
-      if (result.data?.signup) {
-        setUser(result.data.signup);
+    setLoading(true);
+    signup(nickname).then((success) => {
+      setLoading(false);
+      if (!success) {
+        toast({
+          title: "Failed to sign up",
+          description: "Please try again",
+        });
       }
     });
   }
