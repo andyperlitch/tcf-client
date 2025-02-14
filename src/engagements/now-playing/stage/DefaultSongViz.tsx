@@ -24,22 +24,22 @@ export function DefaultSongViz({
       <AudioVizBars
         className="absolute left-0 top-full"
         width={width}
-        height={200}
+        height={100}
         frequencyData={frequencyData}
         placement="top"
         // mirrored={true}
         // flipped={true}
-        fillColor="#FFFFFFB3"
+        fillColor="#FFFFFF"
       />
       <AudioVizBars
         className="absolute bottom-full left-0"
         width={width}
-        height={200}
+        height={100}
         frequencyData={frequencyData}
         placement="bottom"
         // mirrored={true}
         // flipped
-        fillColor="#FFFFFFB3"
+        fillColor="#FFFFFF"
       />
       <div className="relative flex items-center gap-4" data-name="SONG_INFO">
         {url ? (

@@ -91,6 +91,7 @@ export function AudioVizBars({
             .attr("width", bandWidth - 2)
             .attr("y", yScale(0))
             .attr("fill", fillColor)
+            .attr("opacity", 0.5)
         )
         .attr("x", (_d, i) => i * bandWidth)
         .attr("width", bandWidth - 2)
