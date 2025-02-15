@@ -22,7 +22,7 @@ interface Photo {
   submissionId: number | undefined;
 }
 
-const MAX_PHOTOS = 20;
+const MAX_PHOTOS = 10;
 const initialStyle = {
   opacity: 0,
   transform: "scale(3) rotate(0deg) translate(0, 25%)",
