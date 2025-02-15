@@ -4,7 +4,7 @@ import useWindowSize from "@/hooks/useWindowSize";
 import { StageEventFragment } from "@/gql/graphql";
 import { StageEngagementTitle } from "../../engagements/StageEngagementTitle";
 import { useEventStageState } from "@/providers/StageStateProvider/EventStageStateContext";
-import { EngagementMode } from "@/types/screen";
+// import { EngagementMode } from "@/types/screen";
 
 interface StageChromeProps {
   children: React.ReactNode;
@@ -17,11 +17,7 @@ export function StageChrome({ children, name, event }: StageChromeProps) {
   const { width } = useWindowSize();
   const { state } = useEventStageState();
 
-  const hasActiveEngagement =
-    state.engagementMode === EngagementMode.Guide ||
-    Boolean(
-      state.engagementMode === EngagementMode.Actual && state.activeEngagement
-    );
+  const hasActiveEngagement = Boolean(state.activeEngagement);
 
   return (
     <div
