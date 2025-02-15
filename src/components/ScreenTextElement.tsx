@@ -36,11 +36,15 @@ export function ScreenTextElement({
   className?: string;
 }) {
   const element = state.savedConfig.elements[elementId];
-  const hasActiveEngagement =
+  let hasActiveEngagement =
     state.engagementMode === EngagementMode.Guide ||
     Boolean(
       state.activeEngagement && state.engagementMode === EngagementMode.Actual
     );
+
+  if (!editor) {
+    hasActiveEngagement = Boolean(state.activeEngagement);
+  }
 
   const { className, styles: activeStyles } = useActiveClassNamesAndStyles(
     element,
