@@ -52,3 +52,7 @@
 - [ ] auto-focus on new chord detail
 - [ ] dragging songs between sets
 - [ ] removing songs from auto-complete that are already in the set
+- [ ] configurable max photos
+- [ ] investigate why photos were getting cut off while rendering
+- [ ] client-side check to see if the photo is visible before adding to the stack
+- [ ] different rendering for carousel: photos slide in on a constant interval like a conveyor belt

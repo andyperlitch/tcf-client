@@ -1,8 +1,6 @@
 import {
   useCreateSubmissionPresignedUrlMutation,
   useCreateSubmissionMutation,
-  AdminGetSubmissionsDocument,
-  AdminGetSubmissionsQuery,
   EngagementSubmissionData,
 } from "@/gql/graphql";
 import { createLogger } from "@/utils/createLogger";
@@ -23,28 +21,7 @@ export function useCreateSubmission<T extends EngagementSubmissionData>() {
   const [loading, setLoading] = useState(false);
   const [uploadProgresses, setUploadProgresses] = useState<number[]>([]);
   const [succeeded, setSucceeded] = useState(false);
-  const [createSubmissionMutation] = useCreateSubmissionMutation({
-    update: (cache, { data }) => {
-      if (!data?.createSubmission) return;
-
-      // Read the existing submissions query
-      const existingData = cache.readQuery<AdminGetSubmissionsQuery>({
-        query: AdminGetSubmissionsDocument,
-        variables: { engagementId: data.createSubmission.engagementId },
-      });
-
-      if (!existingData?.submissions) return;
-
-      // Write the updated submissions to the cache
-      cache.writeQuery<AdminGetSubmissionsQuery>({
-        query: AdminGetSubmissionsDocument,
-        variables: { engagementId: data.createSubmission.engagementId },
-        data: {
-          submissions: [data.createSubmission, ...existingData.submissions],
-        },
-      });
-    },
-  });
+  const [createSubmissionMutation] = useCreateSubmissionMutation();
 
   const createSubmission = useCallback(
     async ({

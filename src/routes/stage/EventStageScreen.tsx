@@ -1,7 +1,7 @@
 import { useHotkeys } from "@shelf/hotkeys";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { FunksGivingStage } from "./Funksgiving/FunksGivingStage";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useState } from "react";
 import { useStageScreenViewport } from "./useStageScreenViewport";
 import { useStageStyles } from "./useStageStyles";
 import { StageActiveEngagement } from "@/engagements/StageActiveEngagement";
@@ -22,7 +22,6 @@ import {
 } from "@/providers/sharedActions";
 import { EngagementMode } from "@/types/screen";
 import { StageGuideEngagement } from "./StageGuideEngagement";
-import useLocalStorage from "use-local-storage";
 
 const CUSTOM_EVENT_PAGES: Record<string, FC> = {
   funksgiving: FunksGivingStage,
@@ -35,9 +34,8 @@ export function EventStageScreen() {
 
   const { data, loading, error } = useStageEvent(slug);
 
-  const [engagementMode, setEngagementMode] = useLocalStorage<EngagementMode>(
-    "engagementMode",
-    EngagementMode.None
+  const [engagementMode, setEngagementMode] = useState<EngagementMode>(
+    EngagementMode.Actual
   );
 
   if (!data?.event) {
