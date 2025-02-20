@@ -1,14 +1,20 @@
 import { useState } from "react";
-import { Badge } from "../ui/badge";
+import { Badge, BadgeProps } from "../ui/badge";
 import styles from "./TempoBadge.module.css";
 
-export function TempoBadge({ tempo }: { tempo: number | null | undefined }) {
+export function TempoBadge({
+  tempo,
+  size = "lg",
+}: {
+  tempo: number | null | undefined;
+  size?: BadgeProps["size"];
+}) {
   const [isPaused, setIsPaused] = useState(true);
 
   return (
     <Badge
       onClick={() => setIsPaused(!isPaused)}
-      size="lg"
+      size={size}
       className={`
         flex cursor-pointer items-baseline gap-1
 

@@ -2,10 +2,12 @@ import {
   GigFragment,
   DetailedGigSongFragment,
   GigSongFragment,
+  Role,
 } from "@/gql/graphql";
 import { SetBreak, SongView } from "./consts";
 import { Link } from "react-router-dom";
 import {
+  Pencil1Icon,
   RowsIcon,
   TrackNextIcon,
   TrackPreviousIcon,
@@ -23,6 +25,8 @@ import { MiniGigMenu } from "./MiniGigMenu";
 import { isCellPhone } from "@/utils/isCellPhone";
 import { getSongOrBreakTitle } from "./utils";
 import { getSongOrBreakUrl } from "./utils";
+import { hasRole } from "@/utils/hasRole";
+import { useAuth } from "@/hooks/useAuth";
 
 const BUTTON_DIMENSION_CLASSES = isCellPhone ? "h-5 w-5" : "h-6 w-6";
 const BUTTON_SIZE = isCellPhone ? "sm" : "lg";
@@ -49,6 +53,8 @@ export function ControlBar({
   followLeader: boolean;
   setFollowLeader: (followLeader: boolean) => void;
 }) {
+  const { user } = useAuth();
+
   const previousButton = (
     <Button
       disabled={!previousSongOrBreak || !gig}
@@ -109,13 +115,22 @@ export function ControlBar({
             className={`
               ${TITLE_FONT_SIZE}
 
-              font-bold
+              flex items-center gap-1 font-bold
             `}
           >
             {gigSongOrBreak?.__typename === "GigSong"
               ? `${gigSongOrBreak.order + 1}.`
               : ""}{" "}
-            {getSongOrBreakTitle(gigSongOrBreak)}
+            <span>{getSongOrBreakTitle(gigSongOrBreak)}</span>
+            {hasRole(user, [Role.Admin, Role.Bandmate]) &&
+              gigSongOrBreak?.__typename === "GigSong" && (
+                <Link
+                  to={`/admin/songs/${gigSongOrBreak.song?.id}`}
+                  target="_blank"
+                >
+                  <Pencil1Icon />
+                </Link>
+              )}
           </h1>
           {gigSongOrBreak?.__typename === "GigSong" && (
             <div data-name="BADGES" className="flex gap-2">

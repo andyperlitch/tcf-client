@@ -8,6 +8,7 @@ gql`
       title
       artist
       leadSheetId
+      tempo
     }
     order
   }

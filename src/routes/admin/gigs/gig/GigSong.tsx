@@ -6,6 +6,7 @@ import { ExternalLinkIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
 import { CSS } from "@dnd-kit/utilities";
 import { InfoIcon } from "@/components/InfoIcon";
+import { TempoBadge } from "@/components/TempoBadge/TempoBadge";
 
 export function GigSong({
   gigId,
@@ -53,6 +54,8 @@ export function GigSong({
         )}
       </div>
       <div className="flex items-center">
+        <TempoBadge size="sm" tempo={gigSong.song?.tempo ?? 0} />
+
         <Link
           to={`/gigs/${gigId}/songs/${gigSong.id}`}
           target="_blank"
@@ -63,7 +66,7 @@ export function GigSong({
           </Button>
         </Link>
         <Link to={`/admin/songs/${gigSong.song?.id}`} target="_blank">
-          <Button variant="ghost" tooltip="View song">
+          <Button variant="ghost" tooltip="Edit song view">
             <ExternalLinkIcon />
           </Button>
         </Link>
