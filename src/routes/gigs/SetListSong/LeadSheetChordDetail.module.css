@@ -1,0 +1,13 @@
+.measure {
+  box-shadow: inset -1px 0 0 hsl(var(--foreground));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  text-indent: 1vw;
+}
+
+.measure:first-child {
+  box-shadow: inset -1px 0 0 hsl(var(--foreground)),
+    inset 1px 0 0 hsl(var(--foreground));
+}

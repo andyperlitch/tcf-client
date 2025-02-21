@@ -1,6 +1,10 @@
-import * as amplitude from "@amplitude/analytics-browser";
+import * as realAmplitude from "@amplitude/analytics-browser";
+import * as mockAmplitude from "../lib/mockAmplitude";
 import { createContext, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
+
+const amplitude =
+  window.location.hostname === "localhost" ? mockAmplitude : realAmplitude;
 
 const AMPLITUDE_API_KEY = "2032f99eade4ad6d54c694c81ff25c9b";
 

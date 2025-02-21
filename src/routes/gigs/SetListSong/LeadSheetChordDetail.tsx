@@ -1,6 +1,7 @@
 import { ChordSymbol } from "@/components/ChordSymbol";
 import { LeadSheetDetailFragment } from "@/gql/graphql";
 import { useChordDetail } from "@/hooks/useLeadsheetDetail";
+import styles from "./LeadSheetChordDetail.module.css";
 
 export function LeadSheetChordDetail({
   detail,
@@ -17,10 +18,9 @@ export function LeadSheetChordDetail({
         <div
           data-name="CHORD_MEASURE"
           className={`
-            mb-2 flex min-h-[2rem] w-1/4 items-center gap-2 border-r-2
-            border-foreground px-2
+            mb-2 flex min-h-[2rem] min-w-[25%] items-center gap-2
 
-            ${measureIndex % 4 === 0 ? "border-l-2" : ""}
+            ${styles.measure}
           `}
           key={measureIndex}
         >
@@ -29,8 +29,15 @@ export function LeadSheetChordDetail({
               key={chordIndex}
               chord={chord}
               className={`
-                ${measures[measureIndex].length > 2 ? "w-1/4" : "w-1/2"}
+                text-sm
+
+                lg:text-lg
+
+                md:text-md
+
+                xl:text-xl
               `}
+              showErrors={false}
             />
           ))}
         </div>

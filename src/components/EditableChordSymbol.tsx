@@ -1,6 +1,15 @@
 import { ChordSymbol } from "./ChordSymbol";
-import { Input } from "./ui/input";
+import { ResizableInput } from "./ResizableInput";
 
+const TEXT_SIZE_CLASSES = `
+  text-sm
+
+  lg:text-lg
+
+  md:text-md
+
+  p-0
+`;
 export function EditableChordSymbol({
   chord,
   editing,
@@ -15,7 +24,6 @@ export function EditableChordSymbol({
 }: {
   chord: string;
   editing: boolean;
-  autoFocus?: boolean;
   onNextChord?: () => void;
   onNextMeasure?: () => void;
   onPreviousChord?: () => void;
@@ -26,15 +34,19 @@ export function EditableChordSymbol({
   className?: string;
 }) {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === " ") {
+    console.log(`andy e.key`, e.key);
+    if (e.key === " " || e.key === "ArrowRight") {
       e.preventDefault();
-      onNextChord?.();
+      onNextMeasure?.();
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      onPreviousChord?.();
     } else if (e.key === "Tab") {
       e.preventDefault();
       if (e.shiftKey) {
         onPreviousChord?.();
       } else {
-        onNextMeasure?.();
+        onNextChord?.();
       }
     } else if ((e.key === "Delete" || e.key === "Backspace") && chord === "") {
       e.preventDefault();
@@ -48,16 +60,21 @@ export function EditableChordSymbol({
   return (
     <div data-name="CHORD_SYMBOL" className={className}>
       {editing ? (
-        <Input
+        <ResizableInput
           selectOnFocus
           autoFocus
           value={chord}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
           onBlur={onBlur}
+          className={TEXT_SIZE_CLASSES}
         />
       ) : (
-        <ChordSymbol chord={chord} onClick={onClick} />
+        <ChordSymbol
+          chord={chord}
+          onClick={onClick}
+          className={TEXT_SIZE_CLASSES}
+        />
       )}
     </div>
   );
