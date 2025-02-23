@@ -34,7 +34,6 @@ export function EditableChordSymbol({
   className?: string;
 }) {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(`andy e.key`, e.key);
     if (e.key === " " || e.key === "ArrowRight") {
       e.preventDefault();
       onNextMeasure?.();
