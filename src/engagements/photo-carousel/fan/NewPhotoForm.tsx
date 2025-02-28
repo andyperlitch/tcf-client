@@ -53,6 +53,7 @@ export function NewPhotoForm({
 
   const velocityRef = useRef(0);
   const deltaYRef = useRef(0);
+
   const { createSubmission, loading, errors, succeeded } =
     useCreateSubmission<PhotoCarouselSubmissionData>();
 
@@ -95,6 +96,7 @@ export function NewPhotoForm({
             engagementId: engagement.id,
             data: {
               caption,
+              sharingPermissionGranted: sharingPermissionGranted === true,
             },
             uploads: [
               {
