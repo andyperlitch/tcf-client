@@ -1,4 +1,4 @@
-import { AdminEngagementFragment, EngagementType } from "@/gql/graphql";
+import { AdminEngagementFragment } from "@/gql/graphql";
 import {
   Table,
   TableBody,
@@ -12,13 +12,17 @@ import { DeleteSubmissionButton } from "./DeleteSubmissionButton";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { Pencil1Icon, ReloadIcon } from "@radix-ui/react-icons";
-import { RandomizeChoiceColorsButton } from "./RandomizeChoiceColorsButton";
 import { DataCellProps } from "@/engagements/base/EngagementDefinition";
 import { engagementDefinitions } from "@/engagements";
 import { useAdminOrderedSubmissions } from "@/hooks/useAdminOrderedSubmissions";
 import { Link } from "react-router-dom";
 import { useParamsSafe } from "@/hooks/useParamsSafe";
 
+/**
+ * Displays a list of submissions for an engagement,
+ * with a form to create new submissions, and a table of submissions
+ * with actions to delete and edit each submission.
+ */
 export function SubmissionsList({
   engagement,
   className,
@@ -52,8 +56,11 @@ export function SubmissionsList({
         >
           <ReloadIcon className="h-4 w-4 text-white" />
         </Button>
-        {engagement.type === EngagementType.VoteFor && (
-          <RandomizeChoiceColorsButton submissions={sortedSubmissions} />
+        {EngagementDefinition.submissionsTableTopLevelActions && (
+          <EngagementDefinition.submissionsTableTopLevelActions
+            engagement={engagement}
+            submissions={sortedSubmissions}
+          />
         )}
       </h2>
 

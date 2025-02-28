@@ -42,8 +42,16 @@ export interface EngagementDefinition<
    */
   submissionsName?: string;
   submissionsTableHeaders?: FC<TableHeaderProps>;
+  submissionsTableTopLevelActions?: FC<{
+    engagement?: AdminEngagementFragment;
+    submissions?: AdminSubmissionFragment[];
+  }>;
   submissionsTableDataCell?: FC<DataCellProps>;
   adminControlView?: FC<{ engagement: AdminEngagementFragment }>;
+  /**
+   * If provided, will be placed in a table row of the TableHead,
+   * above the Row headers (see src/components/SubmissionsList.tsx)
+   */
   adminSubmissionForm?: FC<AdminSubmissionFormProps>;
   /**
    * If provided, replaces the AdminSubmissionPage with a custom component

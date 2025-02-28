@@ -7,8 +7,9 @@ import {
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 import { Fragment } from "react/jsx-runtime";
+import { ReactNode } from "react";
 
-export type CrumbMeta = [string, string];
+export type CrumbMeta = [string, ReactNode];
 
 export function SimpleCrumbs({
   crumbs,

@@ -10,7 +10,7 @@ import { PhotoCarouselDataHeaders } from "./admin/submissions-table";
 import { PhotoCarouselDataCell } from "./admin/submissions-table";
 import { CameraIcon } from "@radix-ui/react-icons";
 import { PhotoCarouselAdminControlView } from "./admin/control-view";
-
+import { DownloadShareablePhotosButton } from "./admin/DownloadShareablePhotosButton";
 export const photoCarouselEngagementDefinition: EngagementDefinition<
   PhotoCarouselAdminConfig,
   PhotoCarouselAdminData
@@ -22,6 +22,7 @@ export const photoCarouselEngagementDefinition: EngagementDefinition<
   fanComponent: FanPhotoCarouselEngagement,
   submissionsTableHeaders: PhotoCarouselDataHeaders,
   submissionsTableDataCell: PhotoCarouselDataCell,
+  submissionsTableTopLevelActions: DownloadShareablePhotosButton,
   adminControlView: PhotoCarouselAdminControlView,
   submissionsName: "Photos",
   getInitialData: () => ({

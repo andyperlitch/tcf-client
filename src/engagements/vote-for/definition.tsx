@@ -10,7 +10,7 @@ import { VoteForDataHeaders } from "./admin/submissions-table";
 import { VoteForDataCell } from "./admin/submissions-table";
 import { BarChartIcon } from "@radix-ui/react-icons";
 import { CreateVoteForChoiceForm } from "./admin/CreateVoteForChoiceForm";
-
+import { RandomizeChoiceColorsButton } from "@/components/RandomizeChoiceColorsButton";
 export const voteForEngagementDefinition: EngagementDefinition<
   VoteForAdminConfig,
   VoteForAdminData
@@ -23,6 +23,7 @@ export const voteForEngagementDefinition: EngagementDefinition<
   submissionsTableHeaders: VoteForDataHeaders,
   submissionsTableDataCell: VoteForDataCell,
   adminSubmissionForm: CreateVoteForChoiceForm,
+  submissionsTableTopLevelActions: RandomizeChoiceColorsButton,
   submissionsName: "Choices",
   getInitialData: () => ({
     votes: [],

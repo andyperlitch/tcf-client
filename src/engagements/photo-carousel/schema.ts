@@ -30,4 +30,12 @@ gql`
     seenQueuePointer
     seenQueue
   }
+
+  query photoCarouselDownload($engagementId: Int!) {
+    photoCarouselDownload(engagementId: $engagementId) {
+      success
+      message
+      downloadUrl
+    }
+  }
 `;

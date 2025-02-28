@@ -70,10 +70,13 @@ export function AdminEventPage() {
   } else if (error) {
     content = <p className="text-red-500">Error: {error.message}</p>;
   } else if (data?.event) {
-    const crumbs: CrumbMeta[] = [["/admin/events", "Events"]];
+    const crumbs: CrumbMeta[] = [
+      ["/admin/events", "Events"],
+      ["event", `Event: ${data.event.name}`],
+    ];
     content = (
       <div data-name="ADMIN-EVENT-PAGE" className="flex flex-col space-y-2">
-        <SimpleCrumbs crumbs={crumbs} />
+        <SimpleCrumbs crumbs={crumbs} trailingSeparator={false} />
         <div data-name="CONTROLS" className="flex flex-col space-y-8">
           <div
             data-name="NAME-SLUG-SWITCHES"

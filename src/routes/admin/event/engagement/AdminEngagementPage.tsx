@@ -12,7 +12,6 @@ import { useParamsSafe } from "@/hooks/useParamsSafe";
 import { ReactNode } from "react";
 import { EditableJson } from "@/components/EditableJson";
 import { useUpdateFns } from "./useUpdateFns";
-import { Badge } from "@/components/ui/badge";
 import { EditableTextarea } from "@/components/EditableTextarea";
 import { isMobile } from "react-device-detect";
 import { engagementDefinitions } from "@/engagements";
@@ -64,12 +63,13 @@ export function AdminEngagementPage() {
     const engagement = data.engagement;
     const crumbs: CrumbMeta[] = [
       ["/admin/events", "Events"],
-      [`/admin/events/${slug}`, event.name],
+      [`/admin/events/${slug}`, `Event: ${event.name}`],
+      ["engagementTitle", `Engagement: ${engagement.title}`],
     ];
     content = (
       <div className="flex flex-col space-y-8">
         <div className="flex flex-col space-y-2">
-          <SimpleCrumbs crumbs={crumbs} />
+          <SimpleCrumbs crumbs={crumbs} trailingSeparator={false} />
           {/* TITLE */}
           <EditableText
             value={engagement.title}
@@ -77,9 +77,6 @@ export function AdminEngagementPage() {
             element="h1"
             className="flex items-baseline space-x-5 text-3xl"
           />
-          <div>
-            <Badge>{engagement.type}</Badge>
-          </div>
         </div>
         {/* DESCRIPTION */}
         <div className="flex flex-col space-y-1">
