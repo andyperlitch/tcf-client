@@ -27,6 +27,7 @@ import { TooltipProvider } from "./components/ui/tooltip";
 import { EventStagesPage } from "./routes/stage/EventStagesPage";
 import { Loader } from "./components/Loader";
 import { adminRoutes } from "./routes/admin";
+import JapanHomePage from "./routes/jp/jp";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,11 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
         errorElement: <ErrorPage />,
+      },
+      // japan sticker QR code
+      {
+        path: "/jp",
+        element: <JapanHomePage />,
       },
       {
         path: "/login",

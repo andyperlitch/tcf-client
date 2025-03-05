@@ -4,7 +4,10 @@ import { createContext, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 
 const amplitude =
-  window.location.hostname === "localhost" ? mockAmplitude : realAmplitude;
+  window.location.hostname === "localhost" ||
+  window.location.hostname.startsWith("192.168")
+    ? mockAmplitude
+    : realAmplitude;
 
 const AMPLITUDE_API_KEY = "2032f99eade4ad6d54c694c81ff25c9b";
 

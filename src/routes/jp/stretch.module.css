@@ -1,0 +1,16 @@
+@keyframes stretch {
+  0%,
+  100% {
+    transform: scale(1);
+    color: inherit;
+  }
+  50% {
+    transform: scale(1.4);
+    color: gold;
+  }
+}
+
+.stretch {
+  display: inline-block;
+  animation: stretch 1.6s ease-in-out;
+}

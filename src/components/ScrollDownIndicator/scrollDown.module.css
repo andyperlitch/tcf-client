@@ -1,0 +1,58 @@
+@keyframes scrollDown {
+  0% {
+    transform: scale(1) translateY(0);
+    animation-timing-function: ease-out;
+  }
+  3% {
+    transform: scale(0.9) translateY(1vh);
+    animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  15% {
+    transform: scale(1) translateY(20vh);
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  17.5% {
+    transform: scale(1) translateY(20vh);
+  }
+  35% {
+    transform: scale(1) translateY(20vh);
+  }
+  36% {
+    transform: scale(1) translateY(0);
+  }
+  95% {
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+.scrollDown {
+  animation: scrollDown 4s forwards infinite;
+  animation-delay: 3s;
+}
+
+@keyframes matchOpacityToScrollDown {
+  0% {
+    opacity: 1;
+  }
+  17.5% {
+    opacity: 1;
+  }
+  35% {
+    opacity: 0;
+  }
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.matchOpacityToScrollDown {
+  opacity: 0;
+  animation: matchOpacityToScrollDown 4s forwards infinite;
+  animation-delay: 3s;
+}

@@ -47,6 +47,7 @@ export function DownloadShareablePhotosButton({
     }
 
     downloadShareablePhotos({
+      fetchPolicy: "network-only",
       variables: { engagementId: engagement.id },
     }).then((result) => {
       if (result.data?.photoCarouselDownload.success) {
