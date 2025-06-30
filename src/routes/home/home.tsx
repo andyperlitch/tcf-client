@@ -4,7 +4,7 @@ import { GigPicker } from "@/components/GigPicker";
 import { hasRole } from "@/utils/hasRole";
 import { Role } from "@/gql/graphql";
 import { useFontLoader } from "@/hooks/useFontLoader";
-// import { EventInfo } from "./EventInfo";
+import { EventInfo } from "./EventInfo";
 
 export default function Home() {
   const { user } = useAuth();
@@ -44,12 +44,12 @@ export default function Home() {
           📍 Santa Cruz, CA
         </h2>
 
-        {/* <EventInfo
-          fbLink="https://www.facebook.com/events/8630281077080340/"
-          imageSrc="/myfunkyvalentine-flyer.png"
-          date="Feb. 14th"
+        <EventInfo
+          fbLink="https://www.facebook.com/events/s/the-funky-8s/692882056980473"
+          imageSrc="/80s_on_the_8s.png"
+          date="Aug. 8th"
           heading="Come check us out on"
-        /> */}
+        />
 
         <div
           data-name="BOTTOM-INFO"
